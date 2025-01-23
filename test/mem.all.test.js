@@ -18,7 +18,7 @@ test('(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.get(jcarb)', (done) => {
+test('(1 pts) all.mem.get(jcarb)', (done) => {
   distribution.mygroup.mem.get('jcarb', (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
@@ -30,7 +30,7 @@ test('(2 pts) all.mem.get(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.del(jcarb)', (done) => {
+test('(1 pts) all.mem.del(jcarb)', (done) => {
   distribution.mygroup.mem.del('jcarb', (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
@@ -42,7 +42,7 @@ test('(2 pts) all.mem.del(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put(jcarb)', (done) => {
+test('(1 pts) all.mem.put(jcarb)', (done) => {
   const user = {first: 'Josiah', last: 'Carberry'};
   const key = 'jcarbmp';
 
@@ -57,7 +57,7 @@ test('(2 pts) all.mem.put(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/get(jcarb)', (done) => {
+test('(1 pts) all.mem.put/get(jcarb)', (done) => {
   const user = {first: 'Josiah', last: 'Carberry'};
   const key = 'jcarbmpg';
 
@@ -74,7 +74,7 @@ test('(2 pts) all.mem.put/get(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/del(jcarb)', (done) => {
+test('(1 pts) all.mem.put/del(jcarb)', (done) => {
   const user = {first: 'Josiah', last: 'Carberry'};
   const key = 'jcarbmpd';
 
@@ -91,7 +91,7 @@ test('(2 pts) all.mem.put/del(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/del/get(jcarb)', (done) => {
+test('(1 pts) all.mem.put/del/get(jcarb)', (done) => {
   const user = {first: 'Josiah', last: 'Carberry'};
   const key = 'jcarbmpdg';
 
@@ -110,7 +110,7 @@ test('(2 pts) all.mem.put/del/get(jcarb)', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put(no key)', (done) => {
+test('(1 pts) all.mem.put(no key)', (done) => {
   const user = {first: 'Josiah', last: 'Carberry'};
 
   distribution.mygroup.mem.put(user, null, (e, v) => {
@@ -127,7 +127,7 @@ test('(2 pts) all.mem.put(no key)', (done) => {
 });
 
 test(
-    '(2 pts) all.mem.put()/local.comm.send(mem.get())',
+    '(1 pts) all.mem.put()/local.comm.send(mem.get())',
     (done) => {
       const user = {first: 'Gus', last: 'Fring'};
       const key = 'gfringmpcs';
@@ -154,7 +154,7 @@ test(
     },
 );
 
-test('(2 pts) all.mem.put()/othergroup.mem.get()', (done) => {
+test('(1 pts) all.mem.put()/othergroup.mem.get()', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
   const key = 'gfringmpmg';
 
@@ -171,7 +171,7 @@ test('(2 pts) all.mem.put()/othergroup.mem.get()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.get()', (done) => {
+test('(1 pts) all.mem.get()', (done) => {
   distribution.mygroup.mem.get('gfring', (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
@@ -183,7 +183,7 @@ test('(2 pts) all.mem.get()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.del()', (done) => {
+test('(1 pts) all.mem.del()', (done) => {
   distribution.mygroup.mem.del('gfring', (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
@@ -195,7 +195,7 @@ test('(2 pts) all.mem.del()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put()', (done) => {
+test('(1 pts) all.mem.put()', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
   const key = 'gfringmp';
 
@@ -210,7 +210,7 @@ test('(2 pts) all.mem.put()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/get()', (done) => {
+test('(1 pts) all.mem.put/get()', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
   const key = 'gfringmpg';
 
@@ -227,7 +227,7 @@ test('(2 pts) all.mem.put/get()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/del()', (done) => {
+test('(1 pts) all.mem.put/del()', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
   const key = 'gfringmpd';
 
@@ -244,7 +244,7 @@ test('(2 pts) all.mem.put/del()', (done) => {
   });
 });
 
-test('(2 pts) all.mem.put/del/get()', (done) => {
+test('(1 pts) all.mem.put/del/get()', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
   const key = 'gfringmpdg';
 
@@ -263,7 +263,7 @@ test('(2 pts) all.mem.put/del/get()', (done) => {
   });
 });
 
-test('(4 pts) all.mem.get(no key)', (done) => {
+test('(3 pts) all.mem.get(no key)', (done) => {
   const users = [
     {first: 'Saul', last: 'Goodman'},
     {first: 'Walter', last: 'White'},
@@ -307,7 +307,7 @@ test('(4 pts) all.mem.get(no key)', (done) => {
   });
 });
 
-test('(4 pts) all.mem.put(no key)', (done) => {
+test('(3 pts) all.mem.put(no key)', (done) => {
   const user = {first: 'Gus', last: 'Fring'};
 
   distribution.mygroup.mem.put(user, null, (e, v) => {

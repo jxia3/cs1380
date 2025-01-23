@@ -95,7 +95,7 @@ test('(4 pts) serializeFunction', () => {
   expect(deserialized(42, 1)).toBe(43);
 });
 
-test('(4 pts) serializeObjectWithFunctions', () => {
+test('(3 pts) serializeObjectWithFunctions', () => {
   const fn = (a, b) => a + b;
   const object = {func: fn};
   const serialized = util.serialize(object);
@@ -104,7 +104,7 @@ test('(4 pts) serializeObjectWithFunctions', () => {
   expect(deserialized.func(42, 1)).toBe(43);
 });
 
-test('(5 pts) serializeObjectWithNameClashFunctions', () => {
+test('(4 pts) serializeObjectWithNameClashFunctions', () => {
   const object = {log: () => 42};
   const serialized = util.serialize(object);
   const deserialized = util.deserialize(serialized);
@@ -112,7 +112,7 @@ test('(5 pts) serializeObjectWithNameClashFunctions', () => {
   expect(deserialized.log()).toBe(42);
 });
 
-test('(5 pts) serializeRainbowObject', () => {
+test('(4 pts) serializeRainbowObject', () => {
   const object = {
     n: 1,
     s: 'Hello, World!',
@@ -130,62 +130,62 @@ test('(5 pts) serializeRainbowObject', () => {
   expect(deserialized).toEqual(object);
 });
 
-test('(5 pts) serialize and deserialize null', () => {
+test('(4 pts) serialize and deserialize null', () => {
   const original = null;
   const serialized = util.serialize(original);
   expect(original).toEqual(util.deserialize(serialized));
 });
 
-test('(5 pts) serialize and deserialize undefined', () => {
+test('(4 pts) serialize and deserialize undefined', () => {
   const original = undefined;
   const serialized = util.serialize(original);
   expect(original).toEqual(util.deserialize(serialized));
 });
 
-test('(5 pts) serialize and deserialize special string', () => {
+test('(4 pts) serialize and deserialize special string', () => {
   const original = '\\string\n\t\r"';
   const serialized = util.serialize(original);
   expect(original).toEqual(util.deserialize(serialized));
 });
 
-test('(5 pts) serialize and deserialize boolean true', () => {
+test('(4 pts) serialize and deserialize boolean true', () => {
   const original = true;
   const serialized = util.serialize(original);
   expect(original).toEqual(util.deserialize(serialized));
 });
 
-test('(5 pts) serialize and deserialize boolean false', () => {
+test('(4 pts) serialize and deserialize boolean false', () => {
   const original = false;
   const serialized = util.serialize(original);
   expect(original).toEqual(util.deserialize(serialized));
 });
 
-test('(5 pts) serialize and deserialize Date object', () => {
+test('(4 pts) serialize and deserialize Date object', () => {
   const original = new Date();
   const serialized = util.serialize(original);
   expect(original.toString()).toEqual(util.deserialize(serialized).toString());
 });
 
-test('(5 pts) serialize and deserialize empty object', () => {
+test('(4 pts) serialize and deserialize empty object', () => {
   const original = {};
   const serialized = util.serialize(original);
   expect(util.deserialize(serialized)).toEqual({});
 });
 
-test('(5 pts) serialize and deserialize empty array', () => {
+test('(4 pts) serialize and deserialize empty array', () => {
   const original = [];
   const serialized = util.serialize(original);
   expect(util.deserialize(serialized)).toEqual([]);
 });
 
-test('(5 pts) serialize and deserialize complex array', () => {
+test('(4 pts) serialize and deserialize complex array', () => {
   const original = [27, null, undefined, 'string', true, false, {}, []];
   const serialized = util.serialize(original);
   expect(util.deserialize(serialized)).toEqual([27,
     null, undefined, 'string', true, false, {}, []]);
 });
 
-test('(5 pts) serialize and deserialize array with functions', () => {
+test('(4 pts) serialize and deserialize array with functions', () => {
   const f = function() {};
   const original = [f];
   const serialized = util.serialize(original);
@@ -193,7 +193,7 @@ test('(5 pts) serialize and deserialize array with functions', () => {
   expect(typeof deserialized[0]).toBe('function');
 });
 
-test('(5 pts) serialize and deserialize array with multiple functions', () => {
+test('(4 pts) serialize and deserialize array with multiple functions', () => {
   const f = function() {};
   const original = [f, function() {}];
   const serialized = util.serialize(original);
@@ -202,7 +202,7 @@ test('(5 pts) serialize and deserialize array with multiple functions', () => {
   expect(typeof deserialized[1]).toBe('function');
 });
 
-test('(5 pts) serialize and deserialize object with function', () => {
+test('(4 pts) serialize and deserialize object with function', () => {
   const f = function() {};
   const original = {f: f};
   const serialized = util.serialize(original);

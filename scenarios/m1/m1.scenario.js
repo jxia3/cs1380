@@ -1,7 +1,7 @@
 const distribution = require('../../config.js');
 const util = distribution.util;
 
-test('(5 pts) (scenario) 40 bytes object', () => {
+test('(3 pts) (scenario) 40 bytes object', () => {
   /*
           Come up with a JavaScript object, which when serialized,
           will result in a string that is 40 bytes in size.
@@ -12,7 +12,7 @@ test('(5 pts) (scenario) 40 bytes object', () => {
   expect(serialized.length).toBe(40);
 });
 
-test('(5 pts) (scenario) object fix', () => {
+test('(3 pts) (scenario) object fix', () => {
   /* Modify the following object so that when serialized,
            results in the expected string. */
 
@@ -23,7 +23,7 @@ test('(5 pts) (scenario) object fix', () => {
   expect(util.serialize(object)).toBe(serializedObject);
 });
 
-test('(5 pts) (scenario) string deserialized into target object', () => {
+test('(3 pts) (scenario) string deserialized into target object', () => {
   /*
           Come up with a string that when deserialized, results in the following object:
           {a: 1, b: "two", c: false}
@@ -37,7 +37,7 @@ test('(5 pts) (scenario) string deserialized into target object', () => {
   expect(object).toEqual(deserialized);
 });
 
-test('(5 pts) (scenario) object with all supported data types', () => {
+test('(3 pts) (scenario) object with all supported data types', () => {
 /* Come up with an object that uses all valid (serializable)
     built-in data types supported by the serialization library. */
   let object = null;
@@ -71,7 +71,7 @@ test('(5 pts) (scenario) object with all supported data types', () => {
   expect(deserialized).toEqual(object);
 });
 
-test('(5 pts) (scenario) malformed serialized string', () => {
+test('(3 pts) (scenario) malformed serialized string', () => {
 /* Come up with a string that is not a valid serialized object. */
 
   let malformedSerializedString = null;

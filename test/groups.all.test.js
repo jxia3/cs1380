@@ -1,7 +1,7 @@
 const distribution = require('../config.js');
 const id = distribution.util.id;
 
-test('(4 pts) all.groups.del(random)', (done) => {
+test('(3 pts) all.groups.del(random)', (done) => {
   distribution.group4.groups.del('random', (e, v) => {
     try {
       Object.keys(group4Group).forEach((sid) => {
@@ -16,7 +16,7 @@ test('(4 pts) all.groups.del(random)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put(browncs)', (done) => {
+test('(2 pts) all.groups.put(browncs)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -35,7 +35,7 @@ test('(4 pts) all.groups.put(browncs)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get(browncs)', (done) => {
+test('(2 pts) all.groups.put/get(browncs)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -56,7 +56,7 @@ test('(4 pts) all.groups.put/get(browncs)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get/del(browncs)', (done) => {
+test('(3 pts) all.groups.put/get/del(browncs)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -79,7 +79,7 @@ test('(4 pts) all.groups.put/get/del(browncs)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get/del/get(browncs)', (done) => {
+test('(3 pts) all.groups.put/get/del/get(browncs)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -105,7 +105,7 @@ test('(4 pts) all.groups.put/get/del/get(browncs)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put(dummy)/add(n1)/get(dummy)', (done) => {
+test('(3 pts) all.groups.put(dummy)/add(n1)/get(dummy)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -134,7 +134,7 @@ test('(4 pts) all.groups.put(dummy)/add(n1)/get(dummy)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put(dummy)/rem(n1)/get(dummy)', (done) => {
+test('(3 pts) all.groups.put(dummy)/rem(n1)/get(dummy)', (done) => {
   const g = {
     '507aa': {ip: '127.0.0.1', port: 8080},
     '14ab0': {ip: '127.0.0.1', port: 8081},
@@ -161,7 +161,7 @@ test('(4 pts) all.groups.put(dummy)/rem(n1)/get(dummy)', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put()', (done) => {
+test('(2 pts) all.groups.put()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},
@@ -178,7 +178,7 @@ test('(4 pts) all.groups.put()', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get()', (done) => {
+test('(3 pts) all.groups.put/get()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},
@@ -197,7 +197,7 @@ test('(4 pts) all.groups.put/get()', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get/del()', (done) => {
+test('(3 pts) all.groups.put/get/del()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},
@@ -218,7 +218,7 @@ test('(4 pts) all.groups.put/get/del()', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put/get/del/get()', (done) => {
+test('(3 pts) all.groups.put/get/del/get()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},
@@ -244,7 +244,7 @@ test('(4 pts) all.groups.put/get/del/get()', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put()/add(n2)/get()', (done) => {
+test('(3 pts) all.groups.put()/add(n2)/get()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},
@@ -271,7 +271,7 @@ test('(4 pts) all.groups.put()/add(n2)/get()', (done) => {
   });
 });
 
-test('(4 pts) all.groups.put()/rem(n2)/get()', (done) => {
+test('(3 pts) all.groups.put()/rem(n2)/get()', (done) => {
   const g = {
     'al57j': {ip: '127.0.0.1', port: 9092},
     'q5mn9': {ip: '127.0.0.1', port: 9093},

@@ -3,7 +3,7 @@ const local = distribution.local;
 const routes = distribution.local.routes;
 
 
-test('(5 pts) local.routes.get(status)', (done) => {
+test('(4 pts) local.routes.get(status)', (done) => {
   const status = local.status;
 
   local.routes.get('status', (e, v) => {
@@ -17,7 +17,7 @@ test('(5 pts) local.routes.get(status)', (done) => {
   });
 });
 
-test('(5 pts) local.routes.get(routes)', (done) => {
+test('(4 pts) local.routes.get(routes)', (done) => {
   local.routes.get('routes', (e, v) => {
     try {
       expect(e).toBeFalsy();

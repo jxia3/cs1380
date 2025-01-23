@@ -1,7 +1,7 @@
 const distribution = require('../config.js');
 const id = distribution.util.id;
 
-test('(2 pts) naiveHash()', (done) => {
+test('(1 pts) naiveHash()', (done) => {
   const key = 'jcarb';
   const nodes = [
     {ip: '127.0.0.1', port: 10000},
@@ -24,7 +24,7 @@ test('(2 pts) naiveHash()', (done) => {
   }
 });
 
-test('(2 pts) consistentHash()', (done) => {
+test('(1 pts) consistentHash()', (done) => {
   const key = 'jcarb';
   const nodes = [
     {ip: '127.0.0.1', port: 10000},
@@ -47,7 +47,7 @@ test('(2 pts) consistentHash()', (done) => {
   }
 });
 
-test('(2 pts) rendezvousHash()', (done) => {
+test('(1 pts) rendezvousHash()', (done) => {
   const key = 'jcarb';
   const nodes = [
     {ip: '127.0.0.1', port: 20000},

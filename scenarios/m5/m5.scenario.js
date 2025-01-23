@@ -14,7 +14,7 @@ const n1 = {ip: '127.0.0.1', port: 7110};
 const n2 = {ip: '127.0.0.1', port: 7111};
 const n3 = {ip: '127.0.0.1', port: 7112};
 
-test('(5 pts) (scenario) all.mr:ncdc', (done) => {
+test('(8 pts) (scenario) all.mr:ncdc', (done) => {
 /* Implement the map and reduce functions.
    The map function should parse the string value and return an object with the year as the key and the temperature as the value.
    The reduce function should return the maximum temperature for each year.
@@ -80,7 +80,7 @@ test('(5 pts) (scenario) all.mr:ncdc', (done) => {
   });
 });
 
-test('(5 pts) (scenario) all.mr:dlib', (done) => {
+test('(8 pts) (scenario) all.mr:dlib', (done) => {
 /*
    Implement the map and reduce functions.
    The map function should parse the string value and return an object with the word as the key and the value as 1.
@@ -150,7 +150,7 @@ test('(5 pts) (scenario) all.mr:dlib', (done) => {
   });
 });
 
-test('(5 pts) (scenario) all.mr:tfidf', (done) => {
+test('(9 pts) (scenario) all.mr:tfidf', (done) => {
 /*
     Implement the map and reduce functions.
     The map function should parse the string value and return an object with the word as the key and the document and count as the value.

@@ -1,6 +1,6 @@
 const distribution = require('../../config.js');
 
-test('(5 pts) (scenario) simple callback practice', () => {
+test('(2 pts) (scenario) simple callback practice', () => {
   /* Collect the result of 3 callback services in list  */
   const results = [];
 
@@ -18,7 +18,7 @@ test('(5 pts) (scenario) simple callback practice', () => {
   expect(results).toEqual([3, 5, 7]);
 });
 
-test('(5 pts) (scenario) collect errors and successful results', (done) => {
+test('(2 pts) (scenario) collect errors and successful results', (done) => {
   /*
           Call each delivery service in a loop, and collect the sucessful results and
           failures in an array.

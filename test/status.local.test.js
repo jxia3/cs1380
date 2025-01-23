@@ -4,7 +4,7 @@ const id = distribution.util.id;
 
 const config = distribution.node.config;
 
-test('(3 pts) local.status.get(sid)', (done) => {
+test('(2 pts) local.status.get(sid)', (done) => {
   local.status.get('sid', (e, v) => {
     try {
       expect(e).toBeFalsy();
@@ -16,7 +16,7 @@ test('(3 pts) local.status.get(sid)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(ip)', (done) => {
+test('(2 pts) local.status.get(ip)', (done) => {
   local.status.get('ip', (e, v) => {
     try {
       expect(e).toBeFalsy();
@@ -28,7 +28,7 @@ test('(3 pts) local.status.get(ip)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(port)', (done) => {
+test('(2 pts) local.status.get(port)', (done) => {
   local.status.get('port', (e, v) => {
     try {
       expect(e).toBeFalsy();
@@ -40,7 +40,7 @@ test('(3 pts) local.status.get(port)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(counts)', (done) => {
+test('(2 pts) local.status.get(counts)', (done) => {
   local.status.get('counts', (e, v) => {
     try {
       expect(e).toBeFalsy();
@@ -52,7 +52,7 @@ test('(3 pts) local.status.get(counts)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(random)', (done) => {
+test('(2 pts) local.status.get(random)', (done) => {
   local.status.get('random', (e, v) => {
     try {
       expect(e).toBeDefined();
@@ -65,7 +65,7 @@ test('(3 pts) local.status.get(random)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(heapTotal)', (done) => {
+test('(2 pts) local.status.get(heapTotal)', (done) => {
   const heapTotal = process.memoryUsage().heapTotal;
 
   local.status.get('heapTotal', (e, v) => {
@@ -79,7 +79,7 @@ test('(3 pts) local.status.get(heapTotal)', (done) => {
   });
 });
 
-test('(3 pts) local.status.get(heapUsed)', (done) => {
+test('(2 pts) local.status.get(heapUsed)', (done) => {
   const heapUsed = process.memoryUsage().heapUsed;
 
   local.status.get('heapUsed', (e, v) => {
