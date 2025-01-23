@@ -47,14 +47,22 @@ const rl = readline.createInterface({
   input: process.stdin,
 });
 
+if (process.argv.length < 3) {
+  console.error('expected global index path');
+  process.exit(1);
+}
+const globalIndexPath = process.argv[2];
+
 // 1. Read the incoming local index data from standard input (stdin) line by line.
-const localIndex = '';
+let localIndex = '';
 rl.on('line', (line) => {
+  localIndex += line + "\n";
 });
 
 rl.on('close', () => {
   // 2. Read the global index name/location, using process.argv
   // and call printMerged as a callback
+  fs.readFile(globalIndexPath, "utf8", printMerged);
 });
 
 const printMerged = (err, data) => {
@@ -75,12 +83,25 @@ const printMerged = (err, data) => {
 
   // 3. For each line in `localIndexLines`, parse them and add them to the `local` object where keys are terms and values contain `url` and `freq`.
   for (const line of localIndexLines) {
+    const parts = line.split(' | ');
+    const term = parts[0];
+    const freq = +parts[1];
+    const url = parts[2];
     local[term] = {url, freq};
   }
 
   // 4. For each line in `globalIndexLines`, parse them and add them to the `global` object where keys are terms and values are arrays of `url` and `freq` objects.
   // Use the .trim() method to remove leading and trailing whitespace from a string.
   for (const line of globalIndexLines) {
+    const [term, urlData] = line.split(' | ');
+    const urlParts = urlData.split(' ');
+    const urlfs = [];
+    for (let u = 0; u < urlParts.length; u += 2) {
+      urlfs.push({
+        url: urlParts[u],
+        freq: +urlParts[u + 1],
+      });
+    }
     global[term] = urlfs; // Array of {url, freq} objects
   }
 
@@ -92,4 +113,30 @@ const printMerged = (err, data) => {
   //     - Add it as a new entry with the local index's data.
   // 6. Print the merged index to the console in the same format as the global index file:
   //    - Each line contains a term, followed by a pipe (`|`), followed by space-separated pairs of `url` and `freq`.
+  for (const term in local) {
+    if (term in global) {
+      let found = false;
+      for (const entry of global[term]) {
+        if (entry.url === local[term].url) {
+          entry.freq += local[term].freq;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        global[term].push(local[term]);
+      }
+    } else {
+      global[term] = [local[term]];
+    }
+  }
+
+  for (const term in global) {
+    global[term].sort(compare);
+    const entries = [];
+    for (const entry of global[term]) {
+      entries.push(entry.url + ' ' + entry.freq);
+    }
+    console.log(term + ' | ' + entries.join(' '));
+  }
 };
