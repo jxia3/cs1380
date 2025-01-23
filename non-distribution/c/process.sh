@@ -9,7 +9,7 @@
 cd "$(dirname "$0")/.." || exit 1
 
 tr -s "[:space:]" "\n" \
-    | tr -dcs "[:alpha:]\n" "\n" \
+    | tr -cs "[:alpha:]\n" "\n" \
     | tr "[:upper:]" "[:lower:]" \
     | iconv -t "ASCII//TRANSLIT" \
     | grep -vxFf "d/stopwords.txt"
