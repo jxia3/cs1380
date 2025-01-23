@@ -18,13 +18,10 @@ test('(9 pts) test student', () => {
   execSync(command).toString().trim();
 });
 
-/*
-todo: restore
 test('(5 pts) lint', () => {
   const command = path.join(__dirname, 'test-lint.sh');
   execSync(command).toString().trim();
 });
-*/
 
 test('(2 pts) test-stem', () => {
   const command = path.join(__dirname, 'test-stem.sh');
@@ -71,13 +68,10 @@ test('(2 pts) test-getText', () => {
   execSync(command).toString().trim();
 });
 
-/*
-todo: restore
 test('(10 pts) test-end_to_end', () => {
   const command = path.join(__dirname, 'test-end_to_end.sh');
   execSync(command, {stdio: ['pipe', 'pipe', 'inherit']}).toString().trim();
 });
-*/
 
 test('(20 pts) test-sandbox_1', () => {
   const command = path.join(__dirname, 'grade-sandbox-1.sh');

@@ -56,13 +56,13 @@ const globalIndexPath = process.argv[2];
 // 1. Read the incoming local index data from standard input (stdin) line by line.
 let localIndex = '';
 rl.on('line', (line) => {
-  localIndex += line + "\n";
+  localIndex += line + '\n';
 });
 
 rl.on('close', () => {
   // 2. Read the global index name/location, using process.argv
   // and call printMerged as a callback
-  fs.readFile(globalIndexPath, "utf8", printMerged);
+  fs.readFile(globalIndexPath, 'utf8', printMerged);
 });
 
 const printMerged = (err, data) => {

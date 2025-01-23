@@ -5,8 +5,12 @@ Extract all URLs from a web page.
 Usage: ./getURLs.js <base_url>
 */
 
+// JSDOM is extremely slow on startup, so I added an additional "fast" mode that
+// uses a simple regex to parse links from HTML.
+const MODE = 'slow';
+
 const readline = require('readline');
-const {JSDOM} = require('jsdom');
+const {JSDOM} = mode === 'slow' ? require('jsdom') : null;
 const {URL} = require('url');
 
 // 1. Read the base URL from the command-line argument using `process.argv`.
@@ -39,10 +43,24 @@ rl.on('close', () => {
   //  - select all anchor (`<a>`) elements) with an `href` attribute using `querySelectorAll`.
   //  - extract the value of the `href` attribute for each anchor element.
   // 5. Print each absolute URL to the console, one per line.
+  if (MODE === 'slow') {
+    findLinksSlow();
+  } else {
+    findLinksFast();
+  }
+});
+
+function findLinksSlow() {
+  // Extract URLs from HTML using jsdom
   const document = new JSDOM(content);
   const links = document.window.document.querySelectorAll('a');
   for (const link of links) {
     const url = new URL(link.href, baseURL).toString();
     console.log(url);
   }
-});
+}
+
+function findLinksFast() {
+  // Extract URLs from HTML using regex
+  throw Error('not implemented');
+}
