@@ -1,0 +1,3 @@
+https://example.com/static/book1.txt
+https://example.com/static/book2.txt
+https://example.com/static/book3.txt

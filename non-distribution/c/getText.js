@@ -11,11 +11,11 @@ const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
 });
-let content = "";
+let content = '';
 
 rl.on('line', (line) => {
   // 1. Read HTML input from standard input, line by line using the `readline` module.
-  content += line + "\n";
+  content += line + '\n';
 });
 
 // 2. after all input is received, use convert to output plain text.

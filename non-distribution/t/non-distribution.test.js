@@ -61,13 +61,10 @@ test('(2 pts) test-invert', () => {
   execSync(command).toString().trim();
 });
 
-/*
-todo: restore
 test('(3 pts) test-getURL', () => {
   const command = path.join(__dirname, 'test-getURLs.sh');
   execSync(command).toString().trim();
 });
-*/
 
 test('(2 pts) test-getText', () => {
   const command = path.join(__dirname, 'test-getText.sh');
