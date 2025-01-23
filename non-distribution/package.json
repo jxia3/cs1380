@@ -2,9 +2,9 @@
   "name": "cs1380:m0",
   "version": "1.0.0",
   "author": {
-    "name": "<first last?>",
-    "email": "<email@brown.edu?>",
-    "cslogin": "<cslogin?>"
+    "name": "Jerry Xia",
+    "email": "jerry_xia1@brown.edu",
+    "cslogin": "jxia31"
   },
   "description": "A set of components for cs1380's search engine.",
   "dependencies": {
