@@ -1,5 +1,14 @@
+const fs = require('fs');
 const execSync = require('child_process').execSync;
 const path = require('path');
+
+test('student tests', () => {
+  const files = fs.readdirSync(path.join(__dirname, 'ts'));
+  for (const file of files) {
+    const command = path.join(__dirname, 'ts', file);
+    execSync(command).toString().trim();
+  }
+});
 
 test('(9 pts) test student', () => {
   const command = path.join(__dirname, 'test-student-provided.sh');
