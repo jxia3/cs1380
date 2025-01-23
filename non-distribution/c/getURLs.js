@@ -32,7 +32,7 @@ rl.on('close', () => {
   // 4. Find all URLs:
   //  - select all anchor (`<a>`) elements) with an `href` attribute using `querySelectorAll`.
   //  - extract the value of the `href` attribute for each anchor element.
-    // 5. Print each absolute URL to the console, one per line.
+  // 5. Print each absolute URL to the console, one per line.
 });
 
 

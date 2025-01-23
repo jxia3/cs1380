@@ -48,7 +48,7 @@ const rl = readline.createInterface({
 });
 
 // 1. Read the incoming local index data from standard input (stdin) line by line.
-let localIndex = '';
+const localIndex = '';
 rl.on('line', (line) => {
 });
 
