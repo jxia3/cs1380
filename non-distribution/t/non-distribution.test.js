@@ -5,6 +5,9 @@ const path = require('path');
 test('student tests', () => {
   const files = fs.readdirSync(path.join(__dirname, 'ts'));
   for (const file of files) {
+    if (!file.endsWith('.sh')) {
+      continue;
+    }
     const command = path.join(__dirname, 'ts', file);
     execSync(command).toString().trim();
   }
