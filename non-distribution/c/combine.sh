@@ -6,7 +6,8 @@
 cd "$(dirname "$0")" || exit 1
 ./combine.js
 
-: ' todo: fix lint
+# shellcheck disable=SC2016
+: '
 p1=$(mktemp -u p1.XXXXXX)
 p2=$(mktemp -u p2.XXXXXX)
 p3=$(mktemp -u p3.XXXXXX)
