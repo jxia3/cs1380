@@ -6,7 +6,7 @@
 cd "$(dirname "$0")" || exit 1
 ./combine.js
 
-: ' // eslint-disable-line
+: ' todo: fix lint
 p1=$(mktemp -u p1.XXXXXX)
 p2=$(mktemp -u p2.XXXXXX)
 p3=$(mktemp -u p3.XXXXXX)

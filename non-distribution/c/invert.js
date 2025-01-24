@@ -24,6 +24,7 @@ rl.on('line', (line) => {
   }
 });
 
+// todo: sort
 rl.on('close', () => {
   const counts = {};
   for (const term of terms) {
