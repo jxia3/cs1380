@@ -17,7 +17,7 @@ const terms = [];
 rl.on('line', (line) => {
   const term = line.trim();
   if (term !== '') {
-    terms.push(line.trim());
+    terms.push(term);
   }
 });
 
@@ -29,7 +29,7 @@ rl.on('close', () => {
       for (let p = 0; p < size; p += 1) {
         ngram.push(terms[t + p]);
       }
-      ngrams.push(ngram.join(' '));
+      ngrams.push(ngram.join('\t'));
     }
   }
 

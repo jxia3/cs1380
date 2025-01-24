@@ -6,13 +6,11 @@ Usage: ./invert.js url < n-grams
 */
 
 const readline = require('readline');
-const {URL} = require('url');
 
-if (process.argv.length < 3) {
-  console.error('expected url');
-  process.exit(1);
+let pageURL = '';
+if (process.argv.length >= 3) {
+  pageURL = process.argv[2];
 }
-const pageURL = process.argv[2];
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -20,26 +18,22 @@ const rl = readline.createInterface({
 const terms = [];
 
 rl.on('line', (line) => {
-  const term = line.trim();
+  const term = line.trim().split(/\s+/).join(' ');
   if (term !== '') {
-    terms.push(line.trim());
+    terms.push(term);
   }
 });
 
 rl.on('close', () => {
-  const ngrams = [];
-  for (const size of NGRAM_SIZES) {
-    for (let t = 0; t < terms.length - size + 1; t += 1) {
-      const ngram = [];
-      for (let p = 0; p < size; p += 1) {
-        ngram.push(terms[t + p]);
-      }
-      ngrams.push(ngram.join(' '));
+  const counts = {};
+  for (const term of terms) {
+    if (term in counts) {
+      counts[term] += 1;
+    } else {
+      counts[term] = 1;
     }
   }
-
-  ngrams.sort();
-  for (const ngram of ngrams) {
-    console.log(ngram);
+  for (const term in counts) {
+    console.log(`${term} | ${counts[term]} | ${pageURL}`);
   }
 });
