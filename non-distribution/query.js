@@ -31,6 +31,34 @@ const path = require('path');
 
 
 function query(indexFile, args) {
+  let words;
+  try {
+    const processScript = path.join(__dirname, 'c', 'process.sh');
+    const stemScript = path.join(__dirname, 'c', 'stem.js');
+    words = execSync(`echo '${args.join(' ')}' | ${processScript} | ${stemScript}`).toString();
+  } catch (error) {
+    console.error('shell script terminated with error');
+    process.exit(1);
+  }
+
+  const term = words.trim().replaceAll('\n', ' ');
+  fs.readFile(indexFile, 'utf8', (error, data) => {
+    if (error) {
+      console.error('Error reading file:', error);
+      return;
+    }
+    searchIndex(data, term);
+  });
+}
+
+function searchIndex(index, term) {
+  const indexLines = index.trim().split('\n');
+  for (const line of indexLines) {
+    const parts = line.split(' | ');
+    if (parts[0].includes(term)) {
+      console.log(line);
+    }
+  }
 }
 
 const args = process.argv.slice(2); // Get command-line arguments
