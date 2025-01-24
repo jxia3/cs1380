@@ -1,0 +1,6 @@
+foobar | https://a.com 3 https://b.com 2 https://c.com 1
+foobar baz | https://a.com 2 https://c.com 1
+foobar baz qux | https://b.com 1 https://c.com 1
+baz | https://d.com 10 https://e.com 5
+baz qux | https://a.com 1 https://b.com 1 https://d.com 1
+qux | https://b.com 2
