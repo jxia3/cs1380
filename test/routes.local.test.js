@@ -1,7 +1,7 @@
-const distribution = require('../config.js');
+const config = {ip: '127.0.0.1', port: 2345};
+const distribution = require('../config.js')(config);
 const local = distribution.local;
 const routes = distribution.local.routes;
-
 
 test('(4 pts) local.routes.get(status)', (done) => {
   const status = local.status;
@@ -97,7 +97,7 @@ test('(8 pts) routes: put() -> get()', (done) => {
 });
 
 test('(8 pts) comm: routes.get()', (done) => {
-  const remote = {node: distribution.node.config, service: 'routes', method: 'get'};
+  const remote = {node: config, service: 'routes', method: 'get'};
   const message = [
     'status',
   ];
@@ -115,5 +115,3 @@ test('(8 pts) comm: routes.get()', (done) => {
     });
   });
 });
-
-
