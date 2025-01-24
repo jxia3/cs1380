@@ -34,7 +34,9 @@ rl.on('close', () => {
       counts[term] = 1;
     }
   }
-  for (const term in counts) {
+
+  const sortedTerms = Object.keys(counts).sort();
+  for (const term of sortedTerms) {
     console.log(`${term} | ${counts[term]} | ${pageURL}`);
   }
 });
