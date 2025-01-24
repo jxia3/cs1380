@@ -1,3 +1,8 @@
+todo: implement js components
+todo: write 1 test for the js files
+todo: end to end test (also for performance)
+todo: performance
+
 # M0: Setup & Centralized Computing
 
 > Add your contact information below and in `package.json`.
