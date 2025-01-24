@@ -1,5 +1,6 @@
 node_modules
 package-lock.json
+.vscode
 
 # in case a student adds an ssh key to the repo
 *.pem
