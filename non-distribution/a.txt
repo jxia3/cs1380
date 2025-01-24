@@ -1,6 +1,0 @@
-hello
-world
-foobar
-bear
-appple
-kitchen
