@@ -1,4 +1,3 @@
-todo: write 1 test for the js files
 todo: end to end test (also for performance)
 todo: performance
 

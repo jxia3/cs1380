@@ -24,8 +24,9 @@
     "jest": "^29.7.0"
   },
   "report": {
-    "hours": 999,
-    "loc": 999,
+    "hours": 15,
+    "jsloc": 300,
+    "sloc": 200,
     "dev": {
       "cpu-no": 999,
       "mem-gb": 999,
