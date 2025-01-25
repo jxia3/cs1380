@@ -90,8 +90,10 @@ fi
 # shellcheck disable=SC2294
 if [ -n "$PATTERN" ]; then
     eval "$JEST_COMMAND --testMatch \"**/*$PATTERN*\""
+    exit $?
 else
     eval "$JEST_COMMAND $JEST_COMMAND_FLAGS"
+    exit $?
 fi
 
 TOP_LEVEL=$(git rev-parse --show-toplevel)
