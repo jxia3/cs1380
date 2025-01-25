@@ -28,15 +28,15 @@
     "jsloc": 300,
     "sloc": 200,
     "dev": {
-      "cpu-no": 999,
-      "mem-gb": 999,
-      "ssd-gb": 999
+      "cpu-no": 20,
+      "mem-gb": 15,
+      "ssd-gb": 1100
     },
     "throughput": {
-      "dev": [],
-      "aws": [],
+      "dev": [["crawl", 1.168], ["index", 8.884], ["query", 0]],
+      "aws": [["crawl", 0], ["index", 0], ["query", 0]],
       "gs": []
     },
-    "dloc": -99
+    "dloc": 10000
   }
 }

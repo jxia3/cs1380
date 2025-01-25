@@ -1,5 +1,4 @@
-todo: end to end test (also for performance)
-todo: performance
+todo: end to end test
 
 # M0: Setup & Centralized Computing
 
@@ -22,9 +21,17 @@ To characterize correctness, we developed `<number of tests>` that test the foll
 
 *Performance*: The throughput of various subsystems is described in the `"throughput"` portion of package.json. The characteristics of my development machines are summarized in the `"dev"` portion of package.json.
 
+I measured the performance of my search engine on the first sandbox (https://cs.brown.edu/courses/csci1380/sandbox/1). Since the engine was prohibitively slow on my local machine, I was unable to run larger scale tests. Because I was running Docker in WSL, the I/O speed of my system was likely reduced and thus the performance I observed was lower than desired.
+
+local crawl time: 11.68
+local index time: 88.84
+local visited: 10
+
 ## Wild Guess
 
 > How many lines of code do you think it will take to build the fully distributed, scalable version of your search engine? Add that number to the `"dloc"` portion of package.json, and justify your answer below.
+
+I think completing the fully distributed search engine will require writing around 10,000 lines of code. Since most parts need to be implemented from scratch, it seems reasonable that the distributed version will need significanly more effort to implement than the current centralized version. Furthermore, utility libraries including serialization and deserialization will add to the amount of code required. There are 6 milestones, and at an estimate of 1,500 lines per milestone, I think that I will write 10,000 lines of code throughout the semester.
 
 # non-distribution
 
