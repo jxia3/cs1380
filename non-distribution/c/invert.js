@@ -24,7 +24,6 @@ rl.on('line', (line) => {
   }
 });
 
-// todo: sort
 rl.on('close', () => {
   const counts = {};
   for (const term of terms) {
@@ -35,7 +34,8 @@ rl.on('close', () => {
     }
   }
 
-  const sortedTerms = Object.keys(counts).sort();
+  const sortedTerms = Object.keys(counts);
+  sortedTerms.sort();
   for (const term of sortedTerms) {
     console.log(`${term} | ${counts[term]} | ${pageURL}`);
   }
