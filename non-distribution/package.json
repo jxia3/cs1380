@@ -33,7 +33,7 @@
       "ssd-gb": 1100
     },
     "throughput": {
-      "dev": [["crawl", 1.168], ["index", 8.884], ["query", 0]],
+      "dev": [["crawl", 0.856], ["index", 0.113], ["query", 0.113]],
       "aws": [["crawl", 0], ["index", 0], ["query", 0]],
       "gs": []
     },
