@@ -16,17 +16,17 @@ while read -r url; do
     break;
   fi
 
-  crawl_start=`date +%s.%N`
+  crawl_start=$(date +%s.%N)
   echo "[engine] crawling $url">/dev/stderr
   ./crawl.sh "$url" >d/content.txt
-  crawl_end=`date +%s.%N`
-  crawl_time=`node -e "console.log($crawl_time + $crawl_end - $crawl_start)"`
+  crawl_end=$(date +%s.%N)
+  crawl_time=$(node -e "console.log($crawl_time + $crawl_end - $crawl_start)")
 
-  index_start=`date +%s.%N`
+  index_start=$(date +%s.%N)
   echo "[engine] indexing $url">/dev/stderr
   ./index.sh d/content.txt "$url"
-  index_end=`date +%s.%N`
-  index_time=`node -e "console.log($index_time + $index_end - $index_start)"`
+  index_end=$(date +%s.%N)
+  index_time=$(node -e "console.log($index_time + $index_end - $index_start)")
 
   if  [[ "$(cat d/visited.txt | wc -l)" -ge "$(cat d/urls.txt | wc -l)" ]]; then
       # stop the engine if it has seen all available URLs

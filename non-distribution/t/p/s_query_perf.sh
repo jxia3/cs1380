@@ -32,13 +32,13 @@ terms=(
   "zone"
 )
 
-query_start=`date +%s.%N`
+query_start=$(date +%s.%N)
 for term in "${terms[@]}"; do
   echo "querying $term"
   ./query.js "$term" >/dev/null
 done
-query_end=`date +%s.%N`
-query_time=`node -e "console.log($query_end - $query_start)"`
+query_end=$(date +%s.%N)
+query_time=$(node -e "console.log($query_end - $query_start)")
 
 echo ""
 echo "query time: $query_time"
