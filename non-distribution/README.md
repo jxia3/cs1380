@@ -23,11 +23,13 @@ To characterize correctness, I developed 11 tests that test the following cases:
 - c
 - d
 
+All of my tests pass locally and on my AWS EC2 t2.micro instance.
+
 *Performance*: The throughput of various subsystems is described in the `"throughput"` portion of package.json. The characteristics of my development machines are summarized in the `"dev"` portion of package.json.
 
-I measured the performance of my search engine on the first sandbox (https://cs.brown.edu/courses/csci1380/sandbox/1). Since the engine was prohibitively slow on my local machine, I was unable to run larger scale tests. Because I was running Docker in WSL, the I/O speed of my system was likely reduced and thus the performance I observed was lower than desired. In fact, I ran some of the JS scripts directly on Windows and observed better performance. In the Docker container, my crawler and indexer took 11.68 seconds and 88.84 seconds respectively to process 10 pages, throughputs of 0.856 and 0.113. My query handler took 231.088 seconds to process 26 queries, a throughput of 0.113.
+I measured the performance of my search engine on the first sandbox (https://cs.brown.edu/courses/csci1380/sandbox/1). Since the engine was prohibitively slow on my local machine, I was unable to run larger scale tests. Because I was running Docker in WSL, the I/O speed of my system was likely reduced and thus the performance I observed was lower than desired. In fact, I ran some of the JS scripts directly on Windows and observed better performance. In my local Docker container, my crawler and indexer took 11.68 seconds and 88.84 seconds respectively to process 10 pages, throughputs of 0.856 and 0.113. My query handler took 231.088 seconds to process 26 queries, a throughput of 0.113.
 
-On my AWS EC2 t2.micro instance, I observed significantly better performance.
+On my AWS EC2 t2.micro instance, I observed significantly better performance without the I/O overhead. My crawler and indexer took 1.850 and 6.885 seconds respectively to process 10 pages, throughputs of 5.405 and 1.452. My query handler took 12.916 seconds to process 26 queries, a throughput of 2.013.
 
 ## Wild Guess
 

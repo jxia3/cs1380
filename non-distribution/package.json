@@ -34,7 +34,7 @@
     },
     "throughput": {
       "dev": [["crawl", 0.856], ["index", 0.113], ["query", 0.113]],
-      "aws": [["crawl", 0], ["index", 0], ["query", 0]],
+      "aws": [["crawl", 5.405], ["index", 1.452], ["query", 2.013]],
       "gs": []
     },
     "dloc": 10000
