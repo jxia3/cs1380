@@ -40,6 +40,10 @@ I measured the performance of my search engine on the first sandbox (https://cs.
 
 On my AWS EC2 t2.micro instance, I observed significantly better performance without the I/O overhead. My crawler and indexer took 1.850 and 6.885 seconds respectively to process 10 pages, throughputs of 5.405 and 1.452. My query handler took 12.916 seconds to process 26 queries, a throughput of 2.013.
 
+*TF-IDF Performance*: The throughput of the TF-IDF subsystems is also described in the `"throughput"` portion of package.json.
+
+xyz
+
 My performance testing scripts are located in the `t/p` directory.
 
 ## Wild Guess
