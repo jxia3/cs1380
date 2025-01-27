@@ -1,5 +1,8 @@
 #!/bin/bash
 # This is the main entry point of the search engine.
+
+ENABLE_TFIDF=false
+
 cd "$(dirname "$0")" || exit 1
 
 while read -r url; do
@@ -12,7 +15,11 @@ while read -r url; do
   echo "[engine] crawling $url">/dev/stderr
   ./crawl.sh "$url" >d/content.txt
   echo "[engine] indexing $url">/dev/stderr
-  ./index-tfidf.js d/content.txt "$url"
+  if $ENABLE_TFIDF; then
+    ./index-tfidf.js d/content.txt "$url"
+  else
+    ./index.sh d/content.txt "$url"
+  fi
 
   if  [[ "$(cat d/visited.txt | wc -l)" -ge "$(cat d/urls.txt | wc -l)" ]]; then
       # stop the engine if it has seen all available URLs

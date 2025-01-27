@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const STOPWORD_FILE = path.join(__dirname, '..', 'd', 'stopwords.txt');
+const STOPWORD_FILE = path.join(__dirname, '../d/stopwords.txt');
 
 const rl = readline.createInterface({
   input: process.stdin,

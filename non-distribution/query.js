@@ -33,8 +33,8 @@ const path = require('path');
 function query(indexFile, args) {
   let words;
   try {
-    const processScript = path.join(__dirname, 'c', 'process.sh');
-    const stemScript = path.join(__dirname, 'c', 'stem.js');
+    const processScript = path.join(__dirname, 'c/process.sh');
+    const stemScript = path.join(__dirname, 'c/stem.js');
     words = execSync(`echo '${args.join(' ')}' | ${processScript} | ${stemScript}`).toString();
   } catch (error) {
     console.error('Shell script terminated with error');
