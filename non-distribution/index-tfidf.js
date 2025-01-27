@@ -66,31 +66,49 @@ function processContent(stopwords, pageContent, pageUrl) {
 
   // Merge document with global indices
   readFile(TFIDF_INDEX, (indexData) => {
-    const termIndex = parseIndex(indexData);
-    mergeDocument(termIndex, termCounts, pageUrl);
+    const [numDocs, termIndex] = parseIndex(indexData);
+    mergeDocument(numDocs, termIndex, termCounts, pageUrl);
   });
 }
 
 /* Merges a document with the TF-IDF and global indices. */
-function mergeDocument(termIndex, termCounts, pageUrl) {
+function mergeDocument(numDocs, termIndex, termCounts, pageUrl) {
   console.log('tfidf:', termIndex);
   console.log('url:', pageUrl);
 }
 
 /* Parses the content of the global TF-IDF index as JSON. */
 function parseIndex(content) {
+  const lines = content.split('\n');
+  const numDocs = lines.length == 0 ? 0 : +lines[0];
+  const termIndex = {};
 
+  for (let l = 1; l < lines.length; l += 1) {
+    const parts = lines[l].split(' | ');
+    const term = parts[0];
+    const docCount = +parts[1];
+    termIndex[term] = {
+      docCount,
+      docs: {},
+    };
+    const docs = parts[2].split(' ');
+    for (let d = 0; d < docs.length; d += 2) {
+      termIndex[term].docs[docs[d]] = +docs[d + 1];
+    }
+  }
+
+  return [numDocs, termIndex];
 }
 
 /* Formats the global TF-IDF index JSON as text. */
-function formatIndex(termIndex) {
-  const lines = [];
+function formatIndex(numDocs, termIndex) {
+  const lines = [numDocs.toString()];
   for (const term of termIndex) {
     const line = `${term} | ${termIndex[term].docCount.toString()}`;
     const docs = [];
-    for (const doc of termIndex[term].docs) {
-      docs.push(doc.url);
-      docs.push(doc.termCount.toString());
+    for (const doc in termIndex[term].docs) {
+      docs.push(doc);
+      docs.push(termIndex[term].docs[doc].toString());
     }
     lines.append(`${line} | ${docs.join(' ')}`);
   }
