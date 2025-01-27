@@ -170,7 +170,7 @@ function createGlobalIndex(termIndex, docRankFn) {
 /* Parses the content of the global TF-IDF index as JSON. */
 function parseIndex(content) {
   const lines = content.split('\n');
-  const numDocs = lines.length == 0 ? 0 : +lines[0];
+  const numDocs = lines.length === 0 ? 0 : +lines[0];
   const termIndex = {};
 
   for (let l = 1; l < lines.length; l += 1) {

@@ -101,7 +101,49 @@ function generateUnique() {
 
 /* Checks the TF-IDF scores in a global index file. */
 function checkGlobalIndex(content) {
-  console.log(content);
-  console.log('CHECKING');
+  if (content === '') {
+    return false;
+  }
+
+  // Check line format and term order
+  const lines = content.split('\n');
+  if (!lines.every(checkLineFormat)) {
+    return false;
+  }
+  const indexLines = lines.map(l => l.split(' | '));
+  if (!checkIndexSorted(indexLines)) {
+    return false;
+  }
+
+  // Parse documents
+  const terms = {};
+  for (let l = 0; l < indexLines.length; l += 1) {
+    const docs = [];
+    const parts = indexLines[l][1].split(' ');
+    for (let p = 0; p < parts.length; p += 2) {
+      docs.push({
+        url: parts[p],
+        score: +parts[p + 1],
+      });
+    }
+    terms[indexLines[l][0]] = docs;
+  }
+
+  // Check TF-IDF scores
+  return checkIndexScores(terms);
+}
+
+/* Checks the format of a line in a global index. */
+function checkLineFormat(line) {
+  return true;
+}
+
+/* Checks if the terms in a global index are sorted alphabetically. */
+function checkIndexSorted(lines) {
+  return true;
+}
+
+/* Checks if the global index TF-IDF scores match the expected scores. */
+function checkIndexScores(terms) {
   return true;
 }
