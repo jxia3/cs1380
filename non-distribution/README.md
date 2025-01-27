@@ -1,6 +1,3 @@
-todo: performance test TF-IDF
-todo: custom corpora test TF-IDF
-
 # M0: Setup & Centralized Computing
 
 > Add your contact information below and in `package.json`.
