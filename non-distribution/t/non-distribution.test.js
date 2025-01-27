@@ -13,6 +13,11 @@ test('student tests', () => {
   }
 });
 
+test('student TF-IDF test', () => {
+  const command = `${path.join(__dirname, 'ts/s_test_index_tfidf.js')}`;
+  execSync(command).toString().trim();
+});
+
 test('(9 pts) test student', () => {
   const command = `"${path.join(__dirname, 'test-student-provided.sh')}"`;
   execSync(command).toString().trim();

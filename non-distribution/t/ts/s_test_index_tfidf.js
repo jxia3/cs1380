@@ -135,11 +135,32 @@ function checkGlobalIndex(content) {
 
 /* Checks the format of a line in a global index. */
 function checkLineFormat(line) {
+  const parts = line.split(' | ');
+  if (parts.length !== 2) {
+    return false;
+  }
+  const docParts = parts[1].split(' ');
+  if (docParts.length % 2 !== 0) {
+    return false;
+  }
+  for (let d = 0; d < docParts.length; d += 2) {
+    if (isNaN(+docParts[d + 1])) {
+      return false;
+    }
+  }
   return true;
 }
 
 /* Checks if the terms in a global index are sorted alphabetically. */
 function checkIndexSorted(lines) {
+  const terms = lines.map(l => l[0]);
+  const sortedTerms = [...terms];
+  sortedTerms.sort();
+  for (let t = 0; t < terms.length; t += 1) {
+    if (terms[t] != sortedTerms[t]) {
+      return false;
+    }
+  }
   return true;
 }
 
