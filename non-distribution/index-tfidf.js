@@ -18,25 +18,26 @@ if (process.argv.length < 4) {
   process.exit(1);
 }
 const contentFile = process.argv[2];
-const pageURL = process.argv[3];
+const pageUrl = process.argv[3];
 
 // Start index pipeline
 readFile(STOPWORD_FILE, (stopwordData) => {
   readFile(contentFile, (contentData) => {
     const stopwords = stopwordData.trim().split('\n');
-    processContent(stopwords, contentData, pageURL);
+    processContent(stopwords, contentData, pageUrl);
   });
 });
 
 /* Extracts terms from page content and updates the TF-IDF index. */
-function processContent(stopwords, pageContent, pageURL) {
+function processContent(stopwords, pageContent, pageUrl) {
   // Process step: convert page content into words and remove stopwords
   const words = pageContent
       .replaceAll(/[^a-zA-Z\n]/g, '\n')
       .replaceAll(/\s+/g, '\n')
       .trim()
       .toLowerCase()
-      .split('\n');
+      .split('\n')
+      .filter((w) => !stopwords.includes(w));
 
   // Stem step: convert words to Porter stems
   const stemmed = words.map(natural.PorterStemmer.stem);
@@ -64,18 +65,36 @@ function processContent(stopwords, pageContent, pageURL) {
   }
 
   // Merge document with global indices
-  readFile(TFIDF_INDEX, tfidfData => {
-    readFile(GLOBAL_INDEX, globalData => {
-      mergeDocument(tfidfData, globalData, termCounts, pageURL);
-    });
+  readFile(TFIDF_INDEX, (indexData) => {
+    const termIndex = parseIndex(indexData);
+    mergeDocument(termIndex, termCounts, pageUrl);
   });
 }
 
 /* Merges a document with the TF-IDF and global indices. */
-function mergeDocument(tfidfIndex, globalIndex, termCounts, pageURL) {
-  console.log("tfidf:", tfidfIndex);
-  console.log("global:", globalIndex);
-  console.log("url:", pageURL);
+function mergeDocument(termIndex, termCounts, pageUrl) {
+  console.log('tfidf:', termIndex);
+  console.log('url:', pageUrl);
+}
+
+/* Parses the content of the global TF-IDF index as JSON. */
+function parseIndex(content) {
+
+}
+
+/* Formats the global TF-IDF index JSON as text. */
+function formatIndex(termIndex) {
+  const lines = [];
+  for (const term of termIndex) {
+    const line = `${term} | ${termIndex[term].docCount.toString()}`;
+    const docs = [];
+    for (const doc of termIndex[term].docs) {
+      docs.push(doc.url);
+      docs.push(doc.termCount.toString());
+    }
+    lines.append(`${line} | ${docs.join(' ')}`);
+  }
+  return lines.join('\n');
 }
 
 /* Reads text content from a file and exits on an error */
