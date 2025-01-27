@@ -1,7 +1,7 @@
 #!/bin/bash
 # This is the main entry point of the search engine.
 
-ENABLE_TFIDF=false
+ENABLE_TFIDF=true
 
 cd "$(dirname "$0")" || exit 1
 

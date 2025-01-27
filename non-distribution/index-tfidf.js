@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 /* An implementation of a TF-IDF indexer. Term frequency and document frequency metrics
-   are tracked in an auxiliary global index file. */
+   are tracked in an auxiliary global index file. A global index is created from the
+   auxiliary index. The script provides two functions: createGlobalIndexTFIDF and
+   createGlobalIndexBasic. The TF-IDF version ranks pages by the TF-IDF rank. The basic
+   version ranks pages by term frequency and passes the basic tests. */
 
 const fs = require('fs');
 const natural = require('natural');
@@ -41,6 +44,7 @@ function processContent(stopwords, pageContent, pageUrl) {
 
   // Stem step: convert words to Porter stems
   const stemmed = words.map(natural.PorterStemmer.stem);
+  const docLen = stemmed.length;
 
   // Combine step: combine words into ngram terms
   const terms = [];
@@ -67,14 +71,92 @@ function processContent(stopwords, pageContent, pageUrl) {
   // Merge document with global indices
   readFile(TFIDF_INDEX, (indexData) => {
     const [numDocs, termIndex] = parseIndex(indexData);
-    mergeDocument(numDocs, termIndex, termCounts, pageUrl);
+    mergeDocument(numDocs, termIndex, docLen, termCounts, pageUrl);
   });
 }
 
 /* Merges a document with the TF-IDF and global indices. */
-function mergeDocument(numDocs, termIndex, termCounts, pageUrl) {
-  console.log('tfidf:', termIndex);
-  console.log('url:', pageUrl);
+function mergeDocument(numDocs, termIndex, docLen, termCounts, pageUrl) {
+  // Increment document counts
+  numDocs += 1;
+  for (const term in termIndex) {
+    if (term in termCounts) {
+      termIndex[term].docCount += 1;
+    }
+  }
+
+  // Add new terms
+  for (const term in termCounts) {
+    if (!(term in termIndex)) {
+      termIndex[term] = {
+        docCount: 1,
+        docs: {},
+      };
+    }
+  }
+
+  // Add documents to terms
+  for (const term in termIndex) {
+    if (term in termCounts) {
+      const termLen = term.split(' ').length;
+      termIndex[term].docs[pageUrl] = {
+        docLen: docLen - termLen + 1, // Document ngram length
+        termCount: termCounts[term], // Term count in document
+      };
+    }
+  }
+
+  // Update index files
+  const globalIndex = createGlobalIndexBasic(termIndex);
+  fs.writeFileSync(TFIDF_INDEX, formatIndex(numDocs, termIndex));
+  fs.writeFileSync(GLOBAL_INDEX, globalIndex);
+}
+
+/* Converts a TF-IDF index to a TF-IDF global index. */
+function createGlobalIndexTFIDF(numDocs, termIndex) {
+  return createGlobalIndex(termIndex, (docCount, doc) => {
+    const tf = doc.termCount / doc.docLen;
+    const idf = Math.log10(numDocs / docCount);
+    return Math.round(tf * idf * 1000) / 1000;
+  });
+}
+
+/* Converts a TF-IDF index to a frequency count global index. This function is
+   equivalent to the basic pipeline and passes all the basic tests. */
+function createGlobalIndexBasic(termIndex) {
+  return createGlobalIndex(termIndex, (docCount, doc) => {
+    return doc.termCount;
+  });
+}
+
+/* Creates a global index with a document rank function. */
+function createGlobalIndex(termIndex, docRankFn) {
+  // Alphabetically sort terms
+  const lines = [];
+  const sortedTerms = Object.keys(termIndex);
+  sortedTerms.sort();
+
+  for (const term of sortedTerms) {
+    // Create document list
+    const docs = [];
+    for (const doc in termIndex[term].docs) {
+      docs.push({
+        url: doc,
+        rank: docRankFn(termIndex[term].docCount, termIndex[term].docs[doc]),
+      });
+    }
+
+    // Sort documents by rank in descending order
+    docs.sort((a, b) => b.rank - a.rank);
+    const parts = [];
+    for (const doc of docs) {
+      parts.push(doc.url);
+      parts.push(doc.rank.toString());
+    }
+    lines.push(`${term} | ${parts.join(' ')}`);
+  }
+
+  return lines.join('\n');
 }
 
 /* Parses the content of the global TF-IDF index as JSON. */
@@ -91,9 +173,13 @@ function parseIndex(content) {
       docCount,
       docs: {},
     };
+
     const docs = parts[2].split(' ');
-    for (let d = 0; d < docs.length; d += 2) {
-      termIndex[term].docs[docs[d]] = +docs[d + 1];
+    for (let d = 0; d < docs.length; d += 3) {
+      termIndex[term].docs[docs[d]] = {
+        docLen: +docs[d + 1],
+        termCount: +docs[d + 2],
+      };
     }
   }
 
@@ -103,14 +189,15 @@ function parseIndex(content) {
 /* Formats the global TF-IDF index JSON as text. */
 function formatIndex(numDocs, termIndex) {
   const lines = [numDocs.toString()];
-  for (const term of termIndex) {
+  for (const term in termIndex) {
     const line = `${term} | ${termIndex[term].docCount.toString()}`;
     const docs = [];
     for (const doc in termIndex[term].docs) {
       docs.push(doc);
-      docs.push(termIndex[term].docs[doc].toString());
+      docs.push(termIndex[term].docs[doc].docLen.toString());
+      docs.push(termIndex[term].docs[doc].termCount.toString());
     }
-    lines.append(`${line} | ${docs.join(' ')}`);
+    lines.push(`${line} | ${docs.join(' ')}`);
   }
   return lines.join('\n');
 }
