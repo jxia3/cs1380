@@ -45,7 +45,7 @@ On my AWS EC2 t2.micro instance, I observed significantly better performance wit
 
 *TF-IDF Performance*: The throughput of the TF-IDF subsystems is also described in the `"throughput"` portion of package.json.
 
-My TF-IDF crawler and query handler achieved roughly the same performance as their non-TF-IDF counterparts since none of their code changed. Locally, my TF-IDF indexer was slower than my basic indexer, taking 95.065 seconds to process 10 pages, which is a throughput of 0.105. On AWS, my TF-IDF indexer achieved a throughput of x by processing 10 pages in x seconds. As expected, the extra work required to maintain a TF-IDF index traded off performance for search result quality.
+My TF-IDF crawler and query handler achieved roughly the same performance as their non-TF-IDF counterparts since none of their code changed. Locally, my TF-IDF indexer was slower than my basic indexer, taking 95.065 seconds to process 10 pages, which is a throughput of 0.105. On AWS, my TF-IDF indexer achieved a throughput of 1.389 by processing 10 pages in 7.201 seconds. The extra work required to maintain a TF-IDF index traded off performance for search result quality, although the difference on AWS was negligible.
 
 My performance testing scripts are located in the `t/p` directory.
 

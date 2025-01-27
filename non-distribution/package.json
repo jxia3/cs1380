@@ -37,7 +37,7 @@
       "aws": [["crawl", 5.405], ["index", 1.452], ["query", 2.013]],
       "gs": [],
       "dev-tfidf": [["crawl", 0.837], ["index", 0.105], ["query", 0.107]],
-      "aws-tfidf": [["crawl", 0], ["index", 0], ["query", 0]],
+      "aws-tfidf": [["crawl", 5.640], ["index", 1.389], ["query", 1.937]],
       "gs-tfidf": []
     },
     "dloc": 10000
