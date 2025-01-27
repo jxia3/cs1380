@@ -25,7 +25,7 @@
   },
   "report": {
     "hours": 15,
-    "jsloc": 500,
+    "jsloc": 700,
     "sloc": 300,
     "dev": {
       "cpu-no": 20,
@@ -40,6 +40,6 @@
       "aws-tfidf": [["crawl", 5.640], ["index", 1.389], ["query", 1.937]],
       "gs-tfidf": []
     },
-    "dloc": 10000
+    "dloc": 12000
   }
 }

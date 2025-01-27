@@ -50,7 +50,7 @@ My performance testing scripts are located in the `t/p` directory.
 
 > How many lines of code do you think it will take to build the fully distributed, scalable version of your search engine? Add that number to the `"dloc"` portion of package.json, and justify your answer below.
 
-I think completing the fully distributed search engine will require writing around 10,000 lines of code. Since most parts need to be implemented from scratch, it seems reasonable that the distributed version will need significanly more effort to implement than the current centralized version. Furthermore, utility libraries including serialization and deserialization will add to the amount of code required. There are 6 milestones, and at an estimate of 1,500 lines per milestone, I think that I will write 10,000 lines of code throughout the semester.
+I think completing the fully distributed search engine will require writing around 12,000 lines of code. Since most parts need to be implemented from scratch, it seems reasonable that the distributed version will need significanly more effort to implement than the current centralized version. Furthermore, utility libraries including serialization and deserialization will add to the amount of code required. There are 6 milestones, and at an estimate of 2,000 lines per milestone, I think that I will write 12,000 lines of code throughout the semester.
 
 # non-distribution
 
