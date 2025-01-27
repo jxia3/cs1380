@@ -73,7 +73,6 @@ test('(10 pts) test-end_to_end', () => {
   execSync(command, {stdio: ['pipe', 'pipe', 'inherit']}).toString().trim();
 });
 
-/* This test is broken
 test('(20 pts) test-sandbox_1', () => {
   const command = `"${path.join(__dirname, 'grade-sandbox-1.sh')}"`;
   execSync(command, {stdio: ['pipe', 'pipe', 'inherit']}).toString().trim();
