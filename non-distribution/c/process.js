@@ -27,7 +27,7 @@ rl.on('close', () => {
   fs.readFile(STOPWORD_FILE, 'utf8', (error, data) => {
     if (error) {
       console.error('Error reading file:', error);
-      return;
+      process.exit(1);
     }
     removeStopwords(data, content);
   });

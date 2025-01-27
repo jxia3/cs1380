@@ -48,7 +48,7 @@ const rl = readline.createInterface({
 });
 
 if (process.argv.length < 3) {
-  console.error('expected global index path');
+  console.error('Expected global index path');
   process.exit(1);
 }
 const globalIndexPath = process.argv[2];

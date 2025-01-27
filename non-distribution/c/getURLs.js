@@ -15,7 +15,7 @@ const {URL} = require('url');
 
 // 1. Read the base URL from the command-line argument using `process.argv`.
 if (process.argv.length < 3) {
-  console.error('expected base URL');
+  console.error('Expected base URL');
   process.exit(1);
 }
 let baseURL = new URL(process.argv[2]).toString();

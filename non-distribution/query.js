@@ -37,7 +37,7 @@ function query(indexFile, args) {
     const stemScript = path.join(__dirname, 'c', 'stem.js');
     words = execSync(`echo '${args.join(' ')}' | ${processScript} | ${stemScript}`).toString();
   } catch (error) {
-    console.error('shell script terminated with error');
+    console.error('Shell script terminated with error');
     process.exit(1);
   }
 
