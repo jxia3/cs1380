@@ -14,6 +14,7 @@ const STOPWORD_FILE = path.join(__dirname, 'd/stopwords.txt');
 const TFIDF_INDEX = path.join(__dirname, 'd/tfidf-index.txt');
 const GLOBAL_INDEX = path.join(__dirname, 'd/global-index.txt');
 const NGRAM_SIZES = [1, 2, 3];
+const DISABLE_TFIDF = false;
 
 // Parse command line arguments
 if (process.argv.length < 4) {
@@ -106,14 +107,20 @@ function mergeDocument(numDocs, termIndex, docLen, termCounts, pageUrl) {
     }
   }
 
+  // Create global index from TF-IDF index
+  let globalIndex;
+  if (DISABLE_TFIDF) {
+    globalIndex = createGlobalIndexBasic(termIndex);
+  } else {
+    globalIndex = createGlobalIndexTFIDF(numDocs, termIndex);
+  }
+
   // Update index files
-  const globalIndex = createGlobalIndexTFIDF(numDocs, termIndex);
   fs.writeFileSync(TFIDF_INDEX, formatIndex(numDocs, termIndex));
   fs.writeFileSync(GLOBAL_INDEX, globalIndex);
 }
 
 /* Converts a TF-IDF index to a TF-IDF global index. */
-// eslint-disable-next-line
 function createGlobalIndexTFIDF(numDocs, termIndex) {
   return createGlobalIndex(termIndex, (docCount, doc) => {
     const tf = doc.termCount / doc.docLen;
@@ -124,7 +131,6 @@ function createGlobalIndexTFIDF(numDocs, termIndex) {
 
 /* Converts a TF-IDF index to a frequency count global index. This function is
    equivalent to the basic pipeline and passes all the basic tests. */
-// eslint-disable-next-line
 function createGlobalIndexBasic(termIndex) {
   return createGlobalIndex(termIndex, (docCount, doc) => {
     return doc.termCount;
