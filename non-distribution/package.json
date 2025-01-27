@@ -36,7 +36,7 @@
       "dev": [["crawl", 0.856], ["index", 0.113], ["query", 0.113]],
       "aws": [["crawl", 5.405], ["index", 1.452], ["query", 2.013]],
       "gs": [],
-      "dev-tfidf": [["crawl", 0], ["index", 0], ["query", 0]],
+      "dev-tfidf": [["crawl", 0.837], ["index", 0.105], ["query", 0.107]],
       "aws-tfidf": [["crawl", 0], ["index", 0], ["query", 0]],
       "gs-tfidf": []
     },

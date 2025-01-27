@@ -1,6 +1,8 @@
 #!/bin/bash
 # The script times the crawler and indexer to measure performance
 
+ENABLE_TFIDF=true
+
 cd "$(dirname "$0")/../.." || exit 1
 
 echo "https://cs.brown.edu/courses/csci1380/sandbox/1" > d/urls.txt
@@ -24,7 +26,11 @@ while read -r url; do
 
   index_start=$(date +%s.%N)
   echo "[engine] indexing $url">/dev/stderr
-  ./index.sh d/content.txt "$url"
+  if $ENABLE_TFIDF; then
+    ./index-tfidf.js d/content.txt "$url"
+  else
+    ./index.sh d/content.txt "$url"
+  fi
   index_end=$(date +%s.%N)
   index_time=$(node -e "console.log($index_time + $index_end - $index_start)")
 
