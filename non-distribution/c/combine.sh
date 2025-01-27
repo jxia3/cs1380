@@ -25,3 +25,4 @@ trigram() {
 }
 
 tee >(sort) >(bigram "$p1") >(trigram "$p2" "$p3") > /dev/null
+'
