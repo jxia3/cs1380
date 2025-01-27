@@ -25,7 +25,7 @@
   },
   "report": {
     "hours": 15,
-    "jsloc": 300,
+    "jsloc": 500,
     "sloc": 300,
     "dev": {
       "cpu-no": 20,
@@ -35,7 +35,10 @@
     "throughput": {
       "dev": [["crawl", 0.856], ["index", 0.113], ["query", 0.113]],
       "aws": [["crawl", 5.405], ["index", 1.452], ["query", 2.013]],
-      "gs": []
+      "gs": [],
+      "dev-tfidf": [["crawl", 0], ["index", 0], ["query", 0]],
+      "aws-tfidf": [["crawl", 0], ["index", 0], ["query", 0]],
+      "gs-tfidf": []
     },
     "dloc": 10000
   }

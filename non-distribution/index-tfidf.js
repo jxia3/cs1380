@@ -107,22 +107,24 @@ function mergeDocument(numDocs, termIndex, docLen, termCounts, pageUrl) {
   }
 
   // Update index files
-  const globalIndex = createGlobalIndexBasic(termIndex);
+  const globalIndex = createGlobalIndexTFIDF(numDocs, termIndex);
   fs.writeFileSync(TFIDF_INDEX, formatIndex(numDocs, termIndex));
   fs.writeFileSync(GLOBAL_INDEX, globalIndex);
 }
 
 /* Converts a TF-IDF index to a TF-IDF global index. */
+// eslint-disable-next-line
 function createGlobalIndexTFIDF(numDocs, termIndex) {
   return createGlobalIndex(termIndex, (docCount, doc) => {
     const tf = doc.termCount / doc.docLen;
     const idf = Math.log10(numDocs / docCount);
-    return Math.round(tf * idf * 1000) / 1000;
+    return tf * idf;
   });
 }
 
 /* Converts a TF-IDF index to a frequency count global index. This function is
    equivalent to the basic pipeline and passes all the basic tests. */
+// eslint-disable-next-line
 function createGlobalIndexBasic(termIndex) {
   return createGlobalIndex(termIndex, (docCount, doc) => {
     return doc.termCount;

@@ -1,4 +1,5 @@
-todo: end to end test
+todo: performance test TF-IDF
+todo: custom corpora test TF-IDF
 
 # M0: Setup & Centralized Computing
 
@@ -14,6 +15,8 @@ todo: end to end test
 My implementation consists of 10 components addressing T1--8: 8 JS/shell components for the core code, 1 student correctness testing component, and 1 performance testing component. I implemented both shell scripts and JS scripts for the core functionality in the `c` directory. For student testing, I developed 11 custom test cases. For performance testing, I developed two scripts: one to measure the crawler and indexer in the engine and one to measure the query handler.
 
 The most challenging aspect was writing the correctness and performance testing scripts because it took me some time to understand how the provided shell scripts worked. I had not looked at bash commands in a while, and I needed to familiarize myself with the many commands used to process text. Additionally, running the scripts was often slow because I used a Docker container in WSL, which limits I/O speed.
+
+Furthermore, integrating TF-IDF with the existing pipeline was an additional challenge. Instead of changing the global index format, I created an auxiliary index file storing the data TF-IDF needs to compute document ranks. When called, the TF-IDF indexer updates the auxiliary index and generates a new global index. I further validated my implementation by adding an option to create a basic term frequency index from the TF-IDF index and checked that my new pipeline could pass all the basic tests.
 
 ## Correctness & Performance Characterization
 
