@@ -70,4 +70,9 @@ done
 if [ $EXIT -eq 0 ]; then
     echo "$0 success: all tests passed"
 fi
+
+cat /dev/null >d/content.txt
+cat /dev/null >d/visited.txt
+cat /dev/null >d/global-index.txt
+
 exit $EXIT

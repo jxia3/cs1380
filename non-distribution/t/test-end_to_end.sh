@@ -33,6 +33,7 @@ else
     EXIT=1
 fi
 
+cat /dev/null >d/content.txt
 cat /dev/null > d/visited.txt
 cat /dev/null > d/global-index.txt
 
