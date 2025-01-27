@@ -1,0 +1,42 @@
+{
+  "name": "cs1380:m0",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jerry Xia",
+    "email": "jerry_xia1@brown.edu",
+    "cslogin": "jxia31"
+  },
+  "description": "A set of components for cs1380's search engine.",
+  "dependencies": {
+    "html-to-text": "^9.0.5",
+    "jsdom": "^23.2.0",
+    "natural": "^6.10.4"
+  },
+  "scripts": {
+    "pretest": "../scripts/pretest.sh",
+    "test": "jest --maxWorkers=1",
+    "lint": "eslint . --config .eslintrc --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-google": "^0.14.0",
+    "javascript-obfuscator": "^4.1.0",
+    "jest": "^29.7.0"
+  },
+  "report": {
+    "hours": 15,
+    "jsloc": 300,
+    "sloc": 300,
+    "dev": {
+      "cpu-no": 20,
+      "mem-gb": 15,
+      "ssd-gb": 1100
+    },
+    "throughput": {
+      "dev": [["crawl", 0.856], ["index", 0.113], ["query", 0.113]],
+      "aws": [["crawl", 5.405], ["index", 1.452], ["query", 2.013]],
+      "gs": []
+    },
+    "dloc": 10000
+  }
+}
