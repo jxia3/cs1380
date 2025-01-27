@@ -1,7 +1,7 @@
 #!/bin/bash
 # The script times the crawler and indexer to measure performance
 
-ENABLE_TFIDF=true
+ENABLE_TFIDF=false
 
 cd "$(dirname "$0")/../.." || exit 1
 
