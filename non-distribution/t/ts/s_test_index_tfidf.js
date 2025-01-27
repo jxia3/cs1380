@@ -33,7 +33,8 @@ for (let w = 0; w < 50; w += 1) {
   const first = Math.floor(w / 26);
   const second = w % 26;
   const startCode = 'a'.charCodeAt(0);
-  UNIQUE_WORDS.push(String.fromCharCode(startCode + first, startCode + second));
+  const uniqueId = String.fromCharCode(startCode + first, startCode + second);
+  UNIQUE_WORDS.push('xyz' + uniqueId + 'xyz');
 }
 
 // Run TF-IDF indexer
@@ -110,7 +111,7 @@ function checkGlobalIndex(content) {
   if (!lines.every(checkLineFormat)) {
     return false;
   }
-  const indexLines = lines.map(l => l.split(' | '));
+  const indexLines = lines.map((l) => l.split(' | '));
   if (!checkIndexSorted(indexLines)) {
     return false;
   }
@@ -153,11 +154,11 @@ function checkLineFormat(line) {
 
 /* Checks if the terms in a global index are sorted alphabetically. */
 function checkIndexSorted(lines) {
-  const terms = lines.map(l => l[0]);
+  const terms = lines.map((l) => l[0]);
   const sortedTerms = [...terms];
   sortedTerms.sort();
   for (let t = 0; t < terms.length; t += 1) {
-    if (terms[t] != sortedTerms[t]) {
+    if (terms[t] !== sortedTerms[t]) {
       return false;
     }
   }
@@ -166,5 +167,76 @@ function checkIndexSorted(lines) {
 
 /* Checks if the global index TF-IDF scores match the expected scores. */
 function checkIndexScores(terms) {
+  // Check single word ngrams
+  for (let s = 1; s <= 3; s += 1) {
+    const term = Array(s).fill(SINGLE_REPEAT).join(' ');
+    if (terms[term].length !== 1 || terms[term][0].url !== DOCUMENT_URLS[0]) {
+      console.error('Incorrect TF-IDF documents');
+      return false;
+    }
+    const singleTf = 1;
+    const singleIdf = Math.log10(4 / 1);
+    for (const doc of terms[term]) {
+      if (!floatEq(doc.score, singleTf * singleIdf)) {
+        console.error('Incorrect TF-IDF score');
+        return false;
+      }
+    }
+  }
+
+  // Check double words
+  for (const term of DOUBLE_REPEAT) {
+    if (terms[term].length !== 2) {
+      console.error('Incorrect TF-IDF documents');
+      return false;
+    }
+    const doubleTf = 25 / 50;
+    const doubleIdf = Math.log10(4 / 2);
+    for (const doc of terms[term]) {
+      if (!floatEq(doc.score, doubleTf * doubleIdf)) {
+        console.error('Incorrect TF-IDF score');
+        return false;
+      }
+    }
+  }
+
+  // Check double word ngrams
+  for (let t = 0; t < 2; t += 1) {
+    const term = DOUBLE_REPEAT[t] + ' ' + DOUBLE_REPEAT[(t + 1) % 2];
+    if (terms[term].length !== 2) {
+      console.error('Incorrect TF-IDF documents');
+      return false;
+    }
+    const doubleTf = (50 - t) / 99;
+    const doubleIdf = Math.log10(4 / 2);
+    for (const doc of terms[term]) {
+      if (!floatEq(doc.score, doubleTf * doubleIdf)) {
+        console.error('Incorrect TF-IDF score');
+        return false;
+      }
+    }
+  }
+
+  // Check unique words
+  for (const term of UNIQUE_WORDS) {
+    if (terms[term].length !== 1) {
+      console.error('Incorrect TF-IDF documents');
+      return false;
+    }
+    const uniqueTf = 1 / 50;
+    const uniqueIdf = Math.log10(4 / 1);
+    for (const doc of terms[term]) {
+      if (!floatEq(doc.score, uniqueTf * uniqueIdf)) {
+        console.error('Incorrect TF-IDF score');
+        return false;
+      }
+    }
+  }
+
   return true;
+}
+
+/* Compare two floating point numbers for equality. */
+function floatEq(a, b) {
+  return Math.abs(a - b) <= 1e-8;
 }
