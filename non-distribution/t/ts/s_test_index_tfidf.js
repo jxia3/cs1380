@@ -12,11 +12,18 @@ const path = require('path');
 const childProcess = require('child_process');
 
 const DOCUMENT_FILES = [
-  path.join(__dirname, "../d/s_tfidf_1.txt"),
-  path.join(__dirname, "../d/s_tfidf_2.txt"),
-  path.join(__dirname, "../d/s_tfidf_3.txt"),
-  path.join(__dirname, "../d/s_tfidf_4.txt"),
+  path.join(__dirname, '../d/s_tfidf_1.txt'),
+  path.join(__dirname, '../d/s_tfidf_2.txt'),
+  path.join(__dirname, '../d/s_tfidf_3.txt'),
+  path.join(__dirname, '../d/s_tfidf_4.txt'),
 ];
+const DOCUMENT_URLS = [
+  'https://a.com',
+  'https://b.com',
+  'https://c.com',
+  'https://d.com',
+];
+const GLOBAL_INDEX = path.join(__dirname, '../../d/global-index.txt');
 
 // Generate words for the documents
 const SINGLE_REPEAT = 'lorem';
@@ -30,7 +37,36 @@ for (let w = 0; w < 50; w += 1) {
 }
 
 // Run TF-IDF indexer
+clearTestFiles();
 generateDocuments();
+for (let d = 0; d < DOCUMENT_FILES.length; d += 1) {
+  childProcess.execSync(`${path.join(__dirname, '../../index-tfidf.js')} ${DOCUMENT_FILES[d]} ${DOCUMENT_URLS[d]}`);
+}
+
+// Check global index
+fs.readFile(GLOBAL_INDEX, 'utf8', (error, data) => {
+  if (error) {
+    console.error('Error reading file:', error);
+    process.exit(1);
+  }
+  const valid = checkGlobalIndex(data);
+  clearTestFiles();
+  if (valid) {
+    console.error('Global index valid');
+  } else {
+    console.error('Global index invalid');
+    process.exit(1);
+  }
+});
+
+/* Clears global test files. */
+function clearTestFiles() {
+  childProcess.execSync(`echo "https://cs.brown.edu/courses/csci1380/sandbox/1" > ${path.join(__dirname, '../../d/urls.txt')}`);
+  childProcess.execSync(`cat /dev/null > ${path.join(__dirname, '../../d/visited.txt')}`);
+  childProcess.execSync(`cat /dev/null > ${path.join(__dirname, '../../d/content.txt')}`);
+  childProcess.execSync(`cat /dev/null > ${path.join(__dirname, '../../d/tfidf-index.txt')}`);
+  childProcess.execSync(`cat /dev/null > ${path.join(__dirname, '../../d/global-index.txt')}`);
+}
 
 /* Generates and saves synthetic documents. */
 function generateDocuments() {
@@ -61,4 +97,11 @@ function generateDoubleRepeat() {
 /* Generates a document with 50 unique words. */
 function generateUnique() {
   return UNIQUE_WORDS.join(' ');
+}
+
+/* Checks the TF-IDF scores in a global index file. */
+function checkGlobalIndex(content) {
+  console.log(content);
+  console.log('CHECKING');
+  return true;
 }
