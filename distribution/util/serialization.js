@@ -13,11 +13,11 @@
     10. Serialize native functions
 */
 
-
+/* Serializes a JavaScript object as a string. */
 function serialize(object) {
 }
 
-
+/* Deserializes a string into a JavaScript object. */
 function deserialize(string) {
 }
 
