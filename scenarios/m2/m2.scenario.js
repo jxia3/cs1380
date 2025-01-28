@@ -89,7 +89,7 @@ test('(2 pts) (scenario) collect errors and successful results', (done) => {
 
 test('(5 pts) (scenario) use rpc', (done) => {
   let n = 0;
-  let addOne = () => {
+  const addOne = () => {
     return ++n;
   };
 

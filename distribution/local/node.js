@@ -44,16 +44,14 @@ const start = function(callback) {
     // Write some code...
 
 
-      /* Here, you can handle the service requests. */
+    /* Here, you can handle the service requests. */
 
-      // Write some code...
+    // Write some code...
 
-      const serviceName = service;
+    const serviceName = service;
 
 
-
-        // Write some code...
-
+    // Write some code...
   });
 
 

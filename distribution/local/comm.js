@@ -2,7 +2,6 @@
 /** @typedef {import("../types").Node} Node */
 
 
-
 /**
  * @typedef {Object} Target
  * @property {string} service
