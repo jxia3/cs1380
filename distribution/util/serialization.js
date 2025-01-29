@@ -374,7 +374,7 @@ function resolveReferences(root, value) {
     value.cause = resolveReferences(root, value.cause);
   } else if (value instanceof Array) {
     for (let e = 0; e < value.length; e += 1) {
-      value[e] = resolveReferences(value[e]);
+      value[e] = resolveReferences(root, value[e]);
     }
   } else if (typeof value === 'object') {
     for (const property in value) {
