@@ -11,6 +11,8 @@
    9. Serialize circular objects and arrays
    10. Serialize native functions */
 
+// Enable global object discovery
+const ENABLE_GLOBAL = true;
 // Enable native object discovery
 const ENABLE_NATIVE = true;
 // Excluded native objects
@@ -49,32 +51,50 @@ class ReferencePath {
 
 // Discover native objects
 const nativeIds = new Map();
-const nativeObjects = [];
-if (ENABLE_NATIVE) {
+const nativeObjects = {};
+
+if (ENABLE_GLOBAL) {
+  nativeIds.set(global, 'global');
+  nativeObjects['global'] = global;
+  const path = ['global'];
   for (const property of Object.getOwnPropertyNames(global)) {
-    exploreNative(global[property]);
+    if (typeof global[property] === 'function' || typeof global[property] === 'object') {
+      path.push(property);
+      exploreNative(global[property], path);
+      path.pop();
+    }
   }
+}
+
+if (ENABLE_NATIVE) {
+  const path = [];
   for (const item in process.binding('natives')) {
     try {
       if (EXCLUDED_MODULES.includes(item)) {
         continue;
       }
       const module = require(item);
-      exploreNative(module);
+      path.push(item);
+      exploreNative(module, path);
+      path.pop();
     } catch (error) {}
   }
 }
 
 /* Traverses a native object to discover native functionality. */
-function exploreNative(object) {
+function exploreNative(object, path) {
   if (nativeIds.has(object)) {
     return;
   }
-  nativeIds.set(object, nativeObjects.length);
-  nativeObjects.push(object);
+  const id = path.join('.');
+  nativeIds.set(object, id);
+  nativeObjects[id] = object;
+
   for (const property in object) {
     if (typeof object[property] === 'function' || typeof object[property] === 'object') {
-      exploreNative(object[property]);
+      path.push(property);
+      exploreNative(object[property], path);
+      path.pop();
     }
   }
 }
@@ -143,7 +163,7 @@ function encodeDate(date) {
 
 /* Encodes a native object as its discovered ID. */
 function encodeNative(object) {
-  return LeafTag.Native + '_' + nativeIds.get(object).toString();
+  return LeafTag.Native + '_' + nativeIds.get(object);
 }
 
 /* Encodes a function as its string body or a reference to an existing function. */
@@ -344,16 +364,16 @@ function decodeString(str) {
 function decodeDate(str) {
   const timestamp = +str.slice(LEAF_TAG_LEN + 1);
   if (isNaN(timestamp)) {
-    throw new Error('Cannot deserialize invalid date: ' + str.slice(2));
+    throw new Error('Cannot deserialize invalid date: ' + str.slice(LEAF_TAG_LEN + 1));
   }
   return new Date(timestamp);
 }
 
 /* Decodes a serialized native object. */
 function decodeNative(str) {
-  const id = +str.slice(LEAF_TAG_LEN + 1);
-  if (isNaN(id) || id < 0 || id >= nativeObjects.length) {
-    throw new Error('Cannot deserialize invalid native object: ' + str.slice(2));
+  const id = str.slice(LEAF_TAG_LEN + 1);
+  if (!(id in nativeObjects)) {
+    throw new Error('Cannot deserialize invalid native object: ' + id);
   }
   return nativeObjects[id];
 }
