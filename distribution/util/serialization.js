@@ -31,6 +31,7 @@ const ObjectType = {
   Error: 'error',
   Array: 'array',
   Object: 'object',
+  Reference: 'reference',
 };
 
 /* Serializes a JavaScript object as a string. Cyclical references to functions, errors,
@@ -62,8 +63,6 @@ function encode(object, path, seen) {
     return encodeDate(object);
   }
 
-  throw Error('unsupported');
-  /*
   // Encode reference types
   if (object instanceof Function) {
     return encodeFunction(object, path, seen);
@@ -71,9 +70,8 @@ function encode(object, path, seen) {
     return encodeError(object, path, seen);
   } else if (object instanceof Array) {
     return encodeArray(object, path, seen);
-  } else {
-    return encodeObject(object, path, seen);
-  }*/
+  }
+  return encodeObject(object, path, seen);
 }
 
 /* Encodes a number as its leaf tag and string representation. */
@@ -94,6 +92,102 @@ function encodeString(str) {
 /* Encodes a date as its leaf tag and epoch timestamp. */
 function encodeDate(date) {
   return LeafTag.Date + '_' + date.valueOf().toString();
+}
+
+/* Encodes a function as its string body or a reference to an existing function. */
+function encodeFunction(fn, path, seen) {
+  // Create reference to existing function
+  if (seen.has(fn)) {
+    return {
+      type: ObjectType.Reference,
+      value: seen.get(fn),
+    };
+  }
+
+  // Add path to seen and convert function body to string
+  seen.set(fn, [...path]);
+  return {
+    type: ObjectType.Function,
+    value: fn.toString(),
+  };
+}
+
+/* Encodes an error as its name, message, and cause or a reference to an existing error. */
+function encodeError(error, path, seen) {
+  // Create reference to existing error
+  if (seen.has(error)) {
+    return {
+      type: ObjectType.Reference,
+      value: seen.get(error),
+    };
+  }
+
+  // Add path to seen and encode error fields
+  seen.set(error, [...path]);
+  path.push('name');
+  const name = encode(error.name, path, seen);
+  path.pop();
+  path.push('message');
+  const message = encode(error.message, path, seen);
+  path.pop();
+  path.push('cause');
+  const cause = encode(error.cause, path, seen);
+  path.pop();
+
+  return {
+    type: ObjectType.Error,
+    value: {name, message, cause},
+  };
+}
+
+/* Encodes each element in an array or creates a reference to an existing array. */
+function encodeArray(array, path, seen) {
+  // Create reference to existing array
+  if (seen.has(array)) {
+    return {
+      type: ObjectType.Reference,
+      value: seen.get(array),
+    };
+  }
+
+  // Add path to seen and encode elements
+  seen.set(array, [...path]);
+  const elements = [];
+  for (let e = 0; e < array.length; e += 1) {
+    path.push(e.toString());
+    elements.push(encode(array[e], path, seen));
+    path.pop();
+  }
+
+  return {
+    type: ObjectType.Array,
+    value: elements,
+  };
+}
+
+/* Encodes each property of an object or creates a reference to an existing object. */
+function encodeObject(object, path, seen) {
+  // Create reference to existing object
+  if (seen.has(object)) {
+    return {
+      type: ObjectType.Reference,
+      value: seen.get(object),
+    };
+  }
+
+  // Add path to seen and encode properties
+  seen.set(object, [...path]);
+  const properties = {};
+  for (const property in object) {
+    path.push(property);
+    properties[property] = encode(object[property], path, seen);
+    path.pop();
+  }
+
+  return {
+    type: ObjectType.Object,
+    value: properties,
+  };
 }
 
 /* Deserializes a string into a JavaScript object. The resulting object may contain
