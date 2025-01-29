@@ -13,6 +13,8 @@
 
 // Length of leaf tag string prefixes
 const LEAF_TAG_LEN = 1;
+// Excluded native objects
+const EXCLUDED_MODULES = ['sys', 'wasi', '_stream_wrap'];
 
 // Tag at the beginning of leaf type serializations
 const LeafTag = {
@@ -22,6 +24,7 @@ const LeafTag = {
   Boolean: 'b',
   String: 's',
   Date: 'd',
+  Native: 'i',
 };
 
 // Non-leaf type flags
@@ -39,6 +42,33 @@ const ObjectType = {
 class ReferencePath {
   constructor(path) {
     this.path = path;
+  }
+}
+
+// Discover native objects
+const nativeIds = new Map();
+const nativeObjects = [];
+for (const item in process.binding('natives')) {
+  try {
+    if (EXCLUDED_MODULES.includes(item)) {
+      continue;
+    }
+    const module = require(item);
+    exploreNative(module);
+  } catch (error) {}
+}
+
+/* Traverses a native object to discover native functionality. */
+function exploreNative(object) {
+  if (nativeIds.has(object)) {
+    return;
+  }
+  nativeIds.set(object, nativeObjects.length);
+  nativeObjects.push(object);
+  for (const property in object) {
+    if (typeof object[property] === 'function' || typeof object[property] === 'object') {
+      exploreNative(object[property]);
+    }
   }
 }
 
@@ -69,6 +99,8 @@ function encode(object, path, seen) {
     return encodeString(object);
   } else if (object instanceof Date) {
     return encodeDate(object);
+  } else if (nativeIds.has(object)) {
+    return encodeNative(object);
   }
 
   // Encode reference types
@@ -100,6 +132,11 @@ function encodeString(str) {
 /* Encodes a date as its leaf tag and epoch timestamp. */
 function encodeDate(date) {
   return LeafTag.Date + '_' + date.valueOf().toString();
+}
+
+/* Encodes a native object as its discovered ID. */
+function encodeNative(object) {
+  return LeafTag.Native + '_' + nativeIds.get(object).toString();
 }
 
 /* Encodes a function as its string body or a reference to an existing function. */
@@ -237,6 +274,8 @@ function decode(object) {
       return decodeString(object);
     } else if (object.startsWith(LeafTag.Date)) {
       return decodeDate(object);
+    } else if (object.startsWith(LeafTag.Native)) {
+      return decodeNative(object);
     }
     throw new Error('Cannot deserialize invalid leaf object: ' + object);
   }
@@ -301,6 +340,15 @@ function decodeDate(str) {
     throw new Error('Cannot deserialize invalid date: ' + str.slice(2));
   }
   return new Date(timestamp);
+}
+
+/* Decodes a serialized native object. */
+function decodeNative(str) {
+  const id = +str.slice(LEAF_TAG_LEN + 1);
+  if (isNaN(id) || id < 0 || id >= nativeObjects.length) {
+    throw new Error('Cannot deserialize invalid native object: ' + str.slice(2));
+  }
+  return nativeObjects[id];
 }
 
 /* Decodes a serialized function body as a function. */
