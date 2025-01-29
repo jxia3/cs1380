@@ -13,6 +13,8 @@
     10. Serialize native functions
 */
 
+const LEAF_TAG_LEN = 1;
+
 // Tag at the beginning of leaf type serializations
 const LeafTag = {
   Undefined: 'u',
@@ -37,6 +39,9 @@ function serialize(object) {
   const path = [];
   const seen = new Map();
   const result = encode(object, path, seen);
+  if (typeof result === 'string') {
+    return result;
+  }
   return JSON.stringify(result);
 }
 
@@ -150,7 +155,7 @@ function decode(object) {
 /* Decodes a serialized number string as a number. */
 function decodeNumber(str) {
   // Check for special numbers
-  const content = str.slice(2);
+  const content = str.slice(LEAF_TAG_LEN + 1);
   if (content === 'Infinity') {
     return Infinity;
   } else if (content === 'NaN') {
@@ -163,6 +168,31 @@ function decodeNumber(str) {
     throw new Error('Cannot deserialize invalid number: ' + content);
   }
   return num;
+}
+
+/* Decodes a serialized boolean string as a boolean. */
+function decodeBoolean(str) {
+  const content = str.slice(LEAF_TAG_LEN + 1);
+  if (content === 'true') {
+    return true;
+  } else if (content === 'false') {
+    return false;
+  }
+  throw new Error('Cannot deserialize invalid boolean: ' + content);
+}
+
+/* Decodes a serialized string. */
+function decodeString(str) {
+  return str.slice(LEAF_TAG_LEN + 1);
+}
+
+/* Decodes a serialized date as a date object. */
+function decodeDate(str) {
+  const timestamp = +str.slice(LEAF_TAG_LEN + 1);
+  if (isNaN(timestamp)) {
+    throw new Error('Cannot deserialize invalid date: ' + str.slice(2));
+  }
+  return new Date(timestamp);
 }
 
 module.exports = {
