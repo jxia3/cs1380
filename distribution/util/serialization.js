@@ -1,5 +1,5 @@
 /* A module for serializing and deserializing JavaScript objects. All items in the
-  checklist are supported:
+   checklist are supported:
    1. Serialize strings
    2. Serialize numbers
    3. Serialize booleans
@@ -11,10 +11,12 @@
    9. Serialize circular objects and arrays
    10. Serialize native functions */
 
-// Length of leaf tag string prefixes
-const LEAF_TAG_LEN = 1;
+// Enable native object discovery
+const ENABLE_NATIVE = true;
 // Excluded native objects
 const EXCLUDED_MODULES = ['sys', 'wasi', '_stream_wrap'];
+// Length of leaf tag string prefixes
+const LEAF_TAG_LEN = 1;
 
 // Tag at the beginning of leaf type serializations
 const LeafTag = {
@@ -48,14 +50,19 @@ class ReferencePath {
 // Discover native objects
 const nativeIds = new Map();
 const nativeObjects = [];
-for (const item in process.binding('natives')) {
-  try {
-    if (EXCLUDED_MODULES.includes(item)) {
-      continue;
-    }
-    const module = require(item);
-    exploreNative(module);
-  } catch (error) {}
+if (ENABLE_NATIVE) {
+  for (const property of Object.getOwnPropertyNames(global)) {
+    exploreNative(global[property]);
+  }
+  for (const item in process.binding('natives')) {
+    try {
+      if (EXCLUDED_MODULES.includes(item)) {
+        continue;
+      }
+      const module = require(item);
+      exploreNative(module);
+    } catch (error) {}
+  }
 }
 
 /* Traverses a native object to discover native functionality. */
