@@ -13,6 +13,24 @@
     10. Serialize native functions
 */
 
+// Tag at the beginning of leaf type serializations
+const LeafTag = {
+  Undefined: 'u',
+  Null: 'l',
+  Number: 'n',
+  Boolean: 'b',
+  String: 's',
+  Date: 'd',
+  Error: 'e',
+};
+
+// Non-leaf type flags
+const ObjectType = {
+  Function: 'function',
+  Array: 'array',
+  Object: 'object',
+};
+
 /* Serializes a JavaScript object as a string. */
 function serialize(object) {
 }
