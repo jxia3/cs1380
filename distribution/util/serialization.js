@@ -40,7 +40,7 @@ function serialize(object) {
   return JSON.stringify(result);
 }
 
-/* Converts an object to a string or serializable JSON representation. */
+/* Converts an object to a string or serializable JSON value. */
 function encode(object, path, seen) {
   // Encode leaf types
   if (object === undefined) {
@@ -99,40 +99,52 @@ function deserialize(string) {
     return decode(string);
   }
 
-  // Parse string as JSON
-  let value;
+  // Decode JSON value and resolve references
+  let object;
   try {
-    value = JSON.parse(string);
+    object = JSON.parse(string);
   } catch {
-    throw new Error('Unable to parse serialized value as JSON');
+    throw new Error('Cannot deserialize invalid JSON: ' + string);
   }
-
-  // Decode value and resolve references
-  const object = decode(value);
-  return resolveReferences(object);
+  const value = decode(object);
+  return resolveReferences(value);
 }
 
 /* Converts a serialized string or JSON value to an object. */
-function decode(value) {
+function decode(object) {
   // Decode leaf types
-  if (typeof value === 'string') {
-    if (value === LeafTag.Undefined) {
+  if (typeof object === 'string') {
+    if (object === LeafTag.Undefined) {
       return undefined;
-    } else if (value === LeafTag.Null) {
+    } else if (object === LeafTag.Null) {
       return null;
-    } else if (value.startsWith(LeafTag.Number)) {
-      return decodeNumber(value);
-    } else if (value.startsWith(LeafTag.Boolean)) {
-      return decodeBoolean(value);
-    } else if (value.startsWith(LeafTag.String)) {
-      return decodeString(value);
-    } else if (value.startsWith(LeafTag.Date)) {
-      return decodeDate(value);
+    } else if (object.startsWith(LeafTag.Number)) {
+      return decodeNumber(object);
+    } else if (object.startsWith(LeafTag.Boolean)) {
+      return decodeBoolean(object);
+    } else if (object.startsWith(LeafTag.String)) {
+      return decodeString(object);
+    } else if (object.startsWith(LeafTag.Date)) {
+      return decodeDate(object);
     }
+    throw new Error('Cannot deserialize invalid leaf object: ' + object);
   }
 
   // Decode reference types
-  throw new Error('unsupported');
+  if (object.type === ObjectType.Function) {
+
+  } else if (object.type == ObjectType.Error) {
+
+  } else if (object.type === ObjectType.Array) {
+
+  } else if (object.type == ObjectType.Object) {
+
+  }
+
+  if ('type' in object) {
+    throw new Error('Cannot deserialize invalid type: ' + object.type.toString());
+  }
+  throw new Error('Cannot deserialize invalid object: ' + object.toString());
 }
 
 /* Decodes a serialized number string as a number. */
@@ -148,7 +160,7 @@ function decodeNumber(str) {
   // Ensure regular number is not NaN
   const num = +content;
   if (isNaN(num)) {
-    throw new Error('Unable to deserialize invalid number value');
+    throw new Error('Cannot deserialize invalid number: ' + content);
   }
   return num;
 }
