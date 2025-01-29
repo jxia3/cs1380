@@ -34,6 +34,15 @@ const ObjectType = {
   Reference: 'reference',
 };
 
+/* An internal type used to track reference nodes during deserialization. Since references
+   are resolved after all owned properties have been resolved, this type is used as an
+   intermediate representation for reference paths. */
+class ReferencePath {
+  constructor(path) {
+    this.path = path;
+  }
+}
+
 /* Serializes a JavaScript object as a string. Cyclical references to functions, errors,
    arrays, and objects are supported. Other reference types are not explicitly supported. */
 function serialize(object) {
@@ -233,13 +242,13 @@ function decode(object) {
   if (object.type === ObjectType.Function) {
     return decodeFunction(object.value);
   } else if (object.type === ObjectType.Error) {
-
+    return decodeError(object.value);
   } else if (object.type === ObjectType.Array) {
-
+    return decodeArray(object.value);
   } else if (object.type === ObjectType.Object) {
-
+    return decodeObject(object.value);
   } else if (object.type === ObjectType.Reference) {
-
+    return decodeReference(object.value);
   }
 
   if ('type' in object) {
@@ -297,6 +306,63 @@ function decodeFunction(body) {
     throw new Error('Cannot deserialize invalid function body: ' + body.toString());
   }
   return (new Function('return ' + body))();
+}
+
+/* Decodes a serialized error as an error object. */
+function decodeError({name, message, cause}) {
+  if (typeof name !== 'object') {
+    throw new Error('Cannot deserialize invalid error name: ' + name.toString());
+  }
+  if (typeof message !== 'object') {
+    throw new Error('Cannot deserialize invalid error message: ' + message.toString());
+  }
+  if (typeof cause !== 'object') {
+    throw new Error('Cannot deserialize invalid error cause: ' + cause.toString());
+  }
+
+  // Decode error components
+  const errorName = decode(name);
+  const errorMessage = decode(message);
+  const errorCause = decode(cause);
+
+  // Create error object
+  let error;
+  if (errorCause === undefined) {
+    error = new Error(errorMessage);
+  } else {
+    error = new Error(errorMessage, {cause: errorCause});
+  }
+  error.name = errorName;
+
+  return error;
+}
+
+/* Decodes serialized array elements as an array. */
+function decodeArray(elements) {
+  if (!(elements instanceof Array)) {
+    throw new Error('Cannot deserialize invalid array: ' + elements.toString());
+  }
+  return elements.map(decode);
+}
+
+/* Decodes serialized object properties as an object. */
+function decodeObject(properties) {
+  if (typeof properties !== 'object') {
+    throw new Error('Cannot deserialize invalid object: ' + properties.toString());
+  }
+  const object = {};
+  for (const property in properties) {
+    object[property] = decode(properties[property]);
+  }
+  return object;
+}
+
+/* Converts a serialized reference path to an intermediate path object. */
+function decodeReference(path) {
+  if (!(path instanceof Array)) {
+    throw new Error('Cannot deserialize invalid reference: ' + path.toString());
+  }
+  return new ReferencePath(path);
 }
 
 /* Resolves cyclic references in a value object. */
