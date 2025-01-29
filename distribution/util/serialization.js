@@ -40,13 +40,13 @@ function serialize(object) {
   return JSON.stringify(result);
 }
 
-/* Converts an object to a serializable JSON representation. */
+/* Converts an object to a string or serializable JSON representation. */
 function encode(object, path, seen) {
   // Encode leaf types
   if (object === undefined) {
-    return encodeUndefined();
+    return LeafTag.Undefined;
   } else if (object === null) {
-    return encodeNull();
+    return LeafTag.Null;
   } else if (typeof object === 'number') {
     return encodeNumber(object);
   } else if (typeof object === 'boolean') {
@@ -57,6 +57,8 @@ function encode(object, path, seen) {
     return encodeDate(object);
   }
 
+  throw Error('unsupported');
+  /*
   // Encode reference types
   if (object instanceof Function) {
     return encodeFunction(object, path, seen);
@@ -66,22 +68,89 @@ function encode(object, path, seen) {
     return encodeArray(object, path, seen);
   } else {
     return encodeObject(object, path, seen);
-  }
+  }*/
 }
 
-/* Encodes an undefined object as its leaf tag. */
-function encodeUndefined() {
-  return LeafTag.Undefined;
+/* Encodes a number as its leaf tag and string representation. */
+function encodeNumber(num) {
+  return LeafTag.Number + '_' + num.toString();
 }
 
-/* Encodes a null object as its leaf tag. */
-function encodeNull() {
-  return LeafTag.Null;
+/* Encodes a boolean as its leaf tag and string representation. */
+function encodeBoolean(bool) {
+  return LeafTag.Boolean + '_' + bool.toString();
+}
+
+/* Encodes a string as its leaf tag and content. */
+function encodeString(str) {
+  return LeafTag.String + '_' + str;
+}
+
+/* Encodes a date as its leaf tag and epoch timestamp. */
+function encodeDate(date) {
+  return LeafTag.Date + '_' + date.valueOf().toString();
 }
 
 /* Deserializes a string into a JavaScript object. The resulting object may contain
    cyclical references in child functions, errors, arrays, and objects. */
 function deserialize(string) {
+  // Decode leaf type encoded as a string
+  if (!string.startsWith('{')) {
+    return decode(string);
+  }
+
+  // Parse string as JSON
+  let value;
+  try {
+    value = JSON.parse(string);
+  } catch {
+    throw new Error('Unable to parse serialized value as JSON');
+  }
+
+  // Decode value and resolve references
+  const object = decode(value);
+  return resolveReferences(object);
+}
+
+/* Converts a serialized string or JSON value to an object. */
+function decode(value) {
+  // Decode leaf types
+  if (typeof value === 'string') {
+    if (value === LeafTag.Undefined) {
+      return undefined;
+    } else if (value === LeafTag.Null) {
+      return null;
+    } else if (value.startsWith(LeafTag.Number)) {
+      return decodeNumber(value);
+    } else if (value.startsWith(LeafTag.Boolean)) {
+      return decodeBoolean(value);
+    } else if (value.startsWith(LeafTag.String)) {
+      return decodeString(value);
+    } else if (value.startsWith(LeafTag.Date)) {
+      return decodeDate(value);
+    }
+  }
+
+  // Decode reference types
+  throw new Error('unsupported');
+}
+
+/* Decodes a serialized number string as a number. */
+function decodeNumber(str) {
+  // Check for special numbers
+  const content = str.slice(2);
+  if (content === 'Infinity') {
+    return Infinity;
+  } else if (content === 'NaN') {
+    return NaN;
+  }
+
+  // Ensure regular number is not NaN
+  const num = +content;
+  if (isNaN(num)) {
+    throw new Error('Unable to deserialize invalid number value');
+  }
+  return num;
 }
 
 module.exports = {
