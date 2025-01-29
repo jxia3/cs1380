@@ -187,7 +187,7 @@ function stopAllNodes(callback) {
   const remote = {method: 'stop', service: 'status'};
 
   function stopStep(step) {
-    if (step == allNodes.length) {
+    if (step === allNodes.length) {
       callback();
       return;
     }

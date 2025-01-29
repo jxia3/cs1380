@@ -45,9 +45,9 @@ test('(3 pts) (scenario) object with all supported data types', () => {
   const setTypes = new Set();
   for (const k in object) {
     setTypes.add(typeof object[k]);
-    if (typeof object[k] == 'object' && object[k] != null) {
+    if (typeof object[k] === 'object' && object[k] != null) {
       setTypes.add(object[k].constructor.name);
-    } else if (typeof object[k] == 'object' && object[k] == null) {
+    } else if (typeof object[k] === 'object' && object[k] === null) {
       setTypes.add('null');
     }
   }
@@ -63,7 +63,7 @@ test('(3 pts) (scenario) object with all supported data types', () => {
 
   // Deleting functions because they are not treated as equivalent by Jest
   for (const k in object) {
-    if (typeof object[k] == 'function') {
+    if (typeof object[k] === 'function') {
       delete object[k];
       delete deserialized[k];
     }

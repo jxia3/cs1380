@@ -231,12 +231,14 @@ function decode(object) {
 
   // Decode reference types
   if (object.type === ObjectType.Function) {
-
-  } else if (object.type == ObjectType.Error) {
+    return decodeFunction(object.value);
+  } else if (object.type === ObjectType.Error) {
 
   } else if (object.type === ObjectType.Array) {
 
-  } else if (object.type == ObjectType.Object) {
+  } else if (object.type === ObjectType.Object) {
+
+  } else if (object.type === ObjectType.Reference) {
 
   }
 
@@ -287,6 +289,14 @@ function decodeDate(str) {
     throw new Error('Cannot deserialize invalid date: ' + str.slice(2));
   }
   return new Date(timestamp);
+}
+
+/* Decodes a serialized function body as a function. */
+function decodeFunction(body) {
+  if (typeof body !== 'string') {
+    throw new Error('Cannot deserialize invalid function body: ' + body.toString());
+  }
+  return (new Function('return ' + body))();
 }
 
 /* Resolves cyclic references in a value object. */
