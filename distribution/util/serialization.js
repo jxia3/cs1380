@@ -220,6 +220,10 @@ function deserialize(string) {
 
 /* Converts a serialized string or JSON value to an object. */
 function decode(object) {
+  if (typeof object !== 'string' && typeof object !== 'object') {
+    throw new Error('Cannot deserialize malformed object: ' + object.toString());
+  }
+
   // Decode leaf types
   if (typeof object === 'string') {
     if (object === LeafTag.Undefined) {
@@ -310,13 +314,13 @@ function decodeFunction(body) {
 
 /* Decodes a serialized error as an error object. */
 function decodeError({name, message, cause}) {
-  if (typeof name !== 'object') {
+  if (typeof name !== 'string' && typeof name !== 'object') {
     throw new Error('Cannot deserialize invalid error name: ' + name.toString());
   }
-  if (typeof message !== 'object') {
+  if (typeof name !== 'string' && typeof message !== 'object') {
     throw new Error('Cannot deserialize invalid error message: ' + message.toString());
   }
-  if (typeof cause !== 'object') {
+  if (typeof name !== 'string' && typeof cause !== 'object') {
     throw new Error('Cannot deserialize invalid error cause: ' + cause.toString());
   }
 
