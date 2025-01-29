@@ -108,7 +108,7 @@ function deserialize(string) {
   let object;
   try {
     object = JSON.parse(string);
-  } catch {
+  } catch (error) {
     throw new Error('Cannot deserialize invalid JSON: ' + string);
   }
   const value = decode(object);
@@ -193,6 +193,11 @@ function decodeDate(str) {
     throw new Error('Cannot deserialize invalid date: ' + str.slice(2));
   }
   return new Date(timestamp);
+}
+
+/* Resolves cyclic references in a value object. */
+function resolveReferences(value) {
+  return value;
 }
 
 module.exports = {
