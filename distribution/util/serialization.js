@@ -215,7 +215,7 @@ function deserialize(string) {
     throw new Error('Cannot deserialize invalid JSON: ' + string);
   }
   const value = decode(object);
-  return resolveReferences(value);
+  return resolveReferences(value, value);
 }
 
 /* Converts a serialized string or JSON value to an object. */
@@ -366,7 +366,30 @@ function decodeReference(path) {
 }
 
 /* Resolves cyclic references in a value object. */
-function resolveReferences(value) {
+function resolveReferences(root, value) {
+  if (value instanceof ReferencePath) {
+    return resolvePath(root, value.path);
+  } else if (value instanceof Error) {
+    value.name = resolveReferences(root, value.name);
+    value.cause = resolveReferences(root, value.cause);
+  } else if (value instanceof Array) {
+    for (let e = 0; e < value.length; e += 1) {
+      value[e] = resolveReferences(value[e]);
+    }
+  } else if (typeof value === 'object') {
+    for (const property in value) {
+      value[property] = resolveReferences(root, value[property]);
+    }
+  }
+  return value;
+}
+
+/* Resolves a path of properties in an object. */
+function resolvePath(object, path) {
+  let value = object;
+  for (const property of path) {
+    value = value[property];
+  }
   return value;
 }
 
