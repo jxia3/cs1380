@@ -15,29 +15,29 @@
 const ENABLE_GLOBAL = true;
 // Enable native object discovery
 const ENABLE_NATIVE = true;
+// Enable optimized type flags
+const OPTIMIZE_FLAGS = true;
 // Excluded native objects
 const EXCLUDED_MODULES = ['sys', 'wasi', '_stream_wrap'];
-// Length of leaf tag string prefixes
-const LEAF_TAG_LEN = 1;
 
 // Tag at the beginning of leaf type serializations
 const LeafTag = {
-  Undefined: 'u',
-  Null: 'l',
-  Number: 'n',
-  Boolean: 'b',
-  String: 's',
-  Date: 'd',
-  Native: 'i',
+  Undefined: OPTIMIZE_FLAGS ? 'u' : 'undefined',
+  Null: OPTIMIZE_FLAGS ? 'l' : 'null',
+  Number: OPTIMIZE_FLAGS ? 'n' : 'num',
+  Boolean: OPTIMIZE_FLAGS ? 'b' : 'bool',
+  String: OPTIMIZE_FLAGS ? 's' : 'str',
+  Date: OPTIMIZE_FLAGS ? 'd' : 'date',
+  Native: OPTIMIZE_FLAGS ? 'i' : 'native',
 };
 
 // Non-leaf type flags
 const ObjectType = {
-  Function: 'function',
-  Error: 'error',
-  Array: 'array',
-  Object: 'object',
-  Reference: 'reference',
+  Function: OPTIMIZE_FLAGS ? 'f' : 'function',
+  Error: OPTIMIZE_FLAGS ? 'e' : 'error',
+  Array: OPTIMIZE_FLAGS ? 'a' : 'array',
+  Object: OPTIMIZE_FLAGS ? 'o' : 'object',
+  Reference: OPTIMIZE_FLAGS ? 'r' : 'reference',
 };
 
 /* An internal type used to track reference nodes during deserialization. Since references
@@ -329,7 +329,7 @@ function decode(object) {
 /* Decodes a serialized number string as a number. */
 function decodeNumber(str) {
   // Check for special numbers
-  const content = str.slice(LEAF_TAG_LEN + 1);
+  const content = str.slice(LeafTag.Number.length + 1);
   if (content === 'Infinity') {
     return Infinity;
   } else if (content === 'NaN') {
@@ -346,7 +346,7 @@ function decodeNumber(str) {
 
 /* Decodes a serialized boolean string as a boolean. */
 function decodeBoolean(str) {
-  const content = str.slice(LEAF_TAG_LEN + 1);
+  const content = str.slice(LeafTag.Boolean.length + 1);
   if (content === 'true') {
     return true;
   } else if (content === 'false') {
@@ -357,21 +357,21 @@ function decodeBoolean(str) {
 
 /* Decodes a serialized string. */
 function decodeString(str) {
-  return str.slice(LEAF_TAG_LEN + 1);
+  return str.slice(LeafTag.String.length + 1);
 }
 
 /* Decodes a serialized date as a date object. */
 function decodeDate(str) {
-  const timestamp = +str.slice(LEAF_TAG_LEN + 1);
+  const timestamp = +str.slice(LeafTag.Date.length + 1);
   if (isNaN(timestamp)) {
-    throw new Error('Cannot deserialize invalid date: ' + str.slice(LEAF_TAG_LEN + 1));
+    throw new Error('Cannot deserialize invalid date: ' + str.slice(LeafTag.Date.length + 1));
   }
   return new Date(timestamp);
 }
 
 /* Decodes a serialized native object. */
 function decodeNative(str) {
-  const id = str.slice(LEAF_TAG_LEN + 1);
+  const id = str.slice(LeafTag.Native.length + 1);
   if (!(id in nativeObjects)) {
     throw new Error('Cannot deserialize invalid native object: ' + id);
   }
