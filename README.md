@@ -10,7 +10,14 @@ My implementation comprises `<number>` software components, totaling `<number>` 
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness*: I wrote `<number>` tests; these tests take `<time>` to execute. This includes objects with `<certain kinds of features>`.
+*Correctness*: I wrote 5 tests; these tests take `<time>` to execute. The tests cover:
+- Each primitive type, including a floating point number and a string with special characters
+- Date and Error types
+- Named and anonymous functions
+- An array containing objects
+- An object containing arrays
+
+Additionally, I tested my implementation for both performance and correctness on randomly generated objects in my performance tests. Deatils about how the objects are generated are located in the script in the `perf` directory.
 
 *Performance*: The latency of various subsystems is described in the `"latency"` portion of package.json. The characteristics of my development machines are summarized in the `"dev"` portion of package.json.
 
