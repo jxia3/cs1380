@@ -21,6 +21,11 @@ Additionally, I tested my implementation for both performance and correctness on
 
 *Performance*: The latency of various subsystems is described in the `"latency"` portion of package.json. The characteristics of my development machines are summarized in the `"dev"` portion of package.json.
 
+I designed three workloads to benchmark my implementation:
+1. Serializing and deserializing a list of 1,000,000 primtive values (numbers, booleans, etc.).
+2. Serializing and deserializing a list of 100,000 relatively small and simple objects.
+3. Serializing and deserializing a list of 1,000 large and complex objects.
+
 # M0: Setup & Centralized Computing
 
 > Add your contact information below and in `package.json`.
