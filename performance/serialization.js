@@ -11,8 +11,31 @@ const random = require('./random.js');
 // const util = distribution.util;
 random.setSeed(1000);
 
-for (let p = 0; p < 1000; p += 1) {
-  console.log(generateObject(3, 2));
+/* Generates a workload with 10,000 primitive values. */
+function generatePrimitives() {
+  const values = [];
+  for (let v = 0; v < 10_000; v += 1) {
+    values.push(generatePrimitive());
+  }
+  return values;
+}
+
+/* Generates a workload with 10,000 simple objects. */
+function generateSimple() {
+  const values = [];
+  for (let v = 0; v < 10_000; v += 1) {
+    values.push(generateObject(3, 2));
+  }
+  return values;
+}
+
+/* Generates a workload with 1,000 complex objects. */
+function generateComplex() {
+  const values = [];
+  for (let v = 0; v < 1_000; v += 1) {
+    values.push(generateObject(5, 4));
+  }
+  return values;
 }
 
 /* Generates a random array or object. */
@@ -20,7 +43,10 @@ function generateObject(maxLen, maxDepth) {
   if (maxDepth === 0) {
     return generateLeaf();
   }
-  const len = Math.floor(random.next() * maxLen);
+  let len = Math.floor(random.next() * maxLen);
+  if (len === 0 && maxDepth > 1) {
+    len = Math.floor(random.next() * maxLen);
+  }
   const values = [];
   for (let p = 0; p < len; p += 1) {
     values.push(generateObject(maxLen, maxDepth - 1));
