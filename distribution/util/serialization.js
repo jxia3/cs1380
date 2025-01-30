@@ -81,6 +81,8 @@ if (ENABLE_NATIVE) {
   }
 }
 
+console.log('got:', nativeIds)
+
 /* Traverses a native object to discover native functionality. */
 function exploreNative(object, path) {
   if (nativeIds.has(object)) {
