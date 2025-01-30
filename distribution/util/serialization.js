@@ -91,7 +91,7 @@ function exploreNative(object, path) {
   nativeObjects[id] = object;
 
   for (const property in object) {
-    if (global[property] instanceof Function || typeof object[property] === 'object') {
+    if (object[property] instanceof Function || typeof object[property] === 'object') {
       path.push(property);
       exploreNative(object[property], path);
       path.pop();

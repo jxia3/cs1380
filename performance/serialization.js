@@ -1,23 +1,56 @@
 /* A script that generates random workloads and benchmarks the serialization
    implementation. Each workload is generated from a random seed:
-   - 10,000 primitive types (undefined, null, numbers, booleans, and strings).
-   - 10,000 simple arrays and objects that do not contain cycles.
-   - 1,000 large arrays and objects that contain complex types.
+   - 100,000 primitive types (undefined, null, numbers, booleans, and strings).
+   - 100,000 simple arrays and objects that do not contain cycles.
+   - 10,000 large arrays and objects that contain complex types.
    Deserialized results are compared to the initial objects for correctness. */
 
-// const distribution = require('../config.js');
+const distribution = require('../config.js');
 const random = require('./random.js');
 
 const {performance} = require('perf_hooks');
-console.log(performance.now());
 
-// const util = distribution.util;
+const util = distribution.util;
 random.setSeed(1000);
+
+testWorkload(generatePrimitives());
+testWorkload(generateSimple());
+testWorkload(generateComplex());
+
+/* Tests a workload for performance and correctness. */
+function testWorkload(values) {
+  const serializeStart = performance.now();
+  const serialized = [];
+  for (const value of values) {
+    serialized.push(util.serialize(value));
+  }
+  const serializeTime = performance.now() - serializeStart;
+
+  const deserializeStart = performance.now();
+  const deserialized = [];
+  for (const str of serialized) {
+    deserialized.push(util.deserialize(str));
+  }
+  const deserializeTime = performance.now() - deserializeStart;
+
+  let correct = true;
+  for (let v = 0; v < values.length; v += 1) {
+    if (!checkEq(values[v], deserialized[v])) {
+      correct = false;
+      break;
+    }
+  }
+
+  console.log('Serialize time:', serializeTime);
+  console.log('Deserialize time:', deserializeTime);
+  console.log('Correct:', correct);
+  console.log();
+}
 
 /* Generates a workload with 10,000 primitive values. */
 function generatePrimitives() {
   const values = [];
-  for (let v = 0; v < 10_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generatePrimitive());
   }
   return values;
@@ -26,7 +59,7 @@ function generatePrimitives() {
 /* Generates a workload with 10,000 simple objects. */
 function generateSimple() {
   const values = [];
-  for (let v = 0; v < 10_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generateObject(3, 2));
   }
   return values;
@@ -35,7 +68,7 @@ function generateSimple() {
 /* Generates a workload with 1,000 complex objects. */
 function generateComplex() {
   const values = [];
-  for (let v = 0; v < 1_000; v += 1) {
+  for (let v = 0; v < 10_000; v += 1) {
     values.push(generateObject(5, 4));
   }
   return values;
@@ -143,7 +176,9 @@ function checkEq(a, b) {
   if (typeof a !== typeof b) {
     return false;
   }
-  if (a instanceof Date && b instanceof Date) {
+  if (a === undefined || a === null || b === undefined || b === null) {
+    return a === b;
+  } else if (a instanceof Date && b instanceof Date) {
     return a.valueOf() === b.valueOf();
   } else if (a instanceof Function && b instanceof Function) {
     return a.toString() === b.toString();
