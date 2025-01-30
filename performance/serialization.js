@@ -69,7 +69,7 @@ function generateSimple() {
 function generateComplex() {
   const values = [];
   for (let v = 0; v < 1000; v += 1) {
-    values.push(generateObject(6, 5));
+    values.push(generateObject(6, 6));
   }
   return values;
 }
