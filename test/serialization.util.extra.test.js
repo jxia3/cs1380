@@ -21,7 +21,6 @@ test('(5 pts) serializeCircularObject', () => {
 test('(5 pts) serializeNativeFunction', () => {
   const fn = fs.readFile;
   const serialized = util.serialize(fn);
-  console.log('serialized:', serialized)
   const deserialized = util.deserialize(serialized);
   // Native function serialization might not work as expected
   expect(deserialized).toBe(fs.readFile);
@@ -30,7 +29,6 @@ test('(5 pts) serializeNativeFunction', () => {
 test('(5 pts) serializeAnotherNativeFunction', () => {
   const fn = console.log;
   const serialized = util.serialize(fn);
-  console.log('serialized:', serialized)
   const deserialized = util.deserialize(serialized);
   // Native function serialization might not work as expected
   expect(deserialized).toBe(console.log);

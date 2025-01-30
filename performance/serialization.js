@@ -180,7 +180,7 @@ function checkEq(a, b) {
     return a === b;
   } else if (a instanceof Date && b instanceof Date) {
     return a.valueOf() === b.valueOf();
-  } else if (a instanceof Function && b instanceof Function) {
+  } else if (typeof a === 'function' && typeof b === 'function') {
     return a.toString() === b.toString();
   } else if (a instanceof Error && b instanceof Error) {
     return a.message === b.message;

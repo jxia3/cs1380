@@ -58,7 +58,7 @@ if (ENABLE_GLOBAL) {
   nativeObjects['global'] = global;
   const path = ['global'];
   for (const property of Object.getOwnPropertyNames(global)) {
-    if (global[property] instanceof Function || typeof global[property] === 'object') {
+    if (typeof global[property] === 'function' || typeof global[property] === 'object') {
       path.push(property);
       exploreNative(global[property], path);
       path.pop();
@@ -91,7 +91,7 @@ function exploreNative(object, path) {
   nativeObjects[id] = object;
 
   for (const property in object) {
-    if (object[property] instanceof Function || typeof object[property] === 'object') {
+    if (typeof object[property] === 'function' || typeof object[property] === 'object') {
       path.push(property);
       exploreNative(object[property], path);
       path.pop();
@@ -131,7 +131,7 @@ function encode(object, path, seen) {
   }
 
   // Encode reference types
-  if (object instanceof Function) {
+  if (typeof object === 'function') {
     return encodeFunction(object, path, seen);
   } else if (object instanceof Error) {
     return encodeError(object, path, seen);
