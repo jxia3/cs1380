@@ -17,7 +17,7 @@ My implementation comprises `<number>` software components, totaling `<number>` 
 - An array containing objects
 - An object containing arrays
 
-Additionally, I tested my implementation for both performance and correctness on randomly generated objects in my performance tests. Deatils about how the objects are generated are located in the script in the `perf` directory.
+Additionally, I tested my implementation for both performance and correctness on randomly generated objects in my performance tests. Deatils about how the objects are generated are located in the script in the `performance` directory.
 
 *Performance*: The latency of various subsystems is described in the `"latency"` portion of package.json. The characteristics of my development machines are summarized in the `"dev"` portion of package.json.
 
