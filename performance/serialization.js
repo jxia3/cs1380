@@ -50,7 +50,7 @@ function testWorkload(values) {
 /* Generates a workload with 100,000 primitive values. */
 function generatePrimitives() {
   const values = [];
-  for (let v = 0; v < 500_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generatePrimitive());
   }
   return values;
@@ -59,7 +59,7 @@ function generatePrimitives() {
 /* Generates a workload with 100,000 simple objects. */
 function generateSimple() {
   const values = [];
-  for (let v = 0; v < 500_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generateObject(3, 2));
   }
   return values;
@@ -68,7 +68,7 @@ function generateSimple() {
 /* Generates a workload with 1,000 complex objects. */
 function generateComplex() {
   const values = [];
-  for (let v = 0; v < 5000; v += 1) {
+  for (let v = 0; v < 1000; v += 1) {
     values.push(generateObject(6, 5));
   }
   return values;
