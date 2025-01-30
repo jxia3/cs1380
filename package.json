@@ -33,7 +33,7 @@
       "totalLoc": 750,
       "latency": {
         "dev": [["primitive", 0.210, 0.127], ["simple", 2.92, 4.95], ["complex", 213, 396]],
-        "aws": [["primitive", 0], ["simple", 0], ["complex", 0]],
+        "aws": [["primitive", 0.480, 0.582], ["simple", 0], ["complex", 0]],
         "unit": "microseconds"
       }
     },

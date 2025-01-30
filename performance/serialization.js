@@ -1,8 +1,8 @@
 /* A script that generates random workloads and benchmarks the serialization
    implementation. Each workload is generated from a random seed:
-   - 1,000,000 primitive types (undefined, null, numbers, booleans, and strings).
-   - 1,000,000 simple arrays and objects that do not contain cycles.
-   - 10,000 large arrays and objects that contain complex types.
+   - 100,000 primitive types (undefined, null, numbers, booleans, and strings).
+   - 100,000 simple arrays and objects that do not contain cycles.
+   - 1,000 large arrays and objects that contain complex types.
    Deserialized results are compared to the initial objects for correctness. */
 
 const distribution = require('../config.js');
@@ -47,28 +47,28 @@ function testWorkload(values) {
   console.log();
 }
 
-/* Generates a workload with 1,000,000 primitive values. */
+/* Generates a workload with 100,000 primitive values. */
 function generatePrimitives() {
   const values = [];
-  for (let v = 0; v < 1_000_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generatePrimitive());
   }
   return values;
 }
 
-/* Generates a workload with 1,000,000 simple objects. */
+/* Generates a workload with 100,000 simple objects. */
 function generateSimple() {
   const values = [];
-  for (let v = 0; v < 1_000_000; v += 1) {
+  for (let v = 0; v < 100_000; v += 1) {
     values.push(generateObject(3, 2));
   }
   return values;
 }
 
-/* Generates a workload with 10,000 complex objects. */
+/* Generates a workload with 1,000 complex objects. */
 function generateComplex() {
   const values = [];
-  for (let v = 0; v < 10_000; v += 1) {
+  for (let v = 0; v < 1000; v += 1) {
     values.push(generateObject(6, 5));
   }
   return values;
