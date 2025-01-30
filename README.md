@@ -10,7 +10,7 @@ My implementation comprises `<number>` software components, totaling `<number>` 
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness*: I wrote 5 tests; these tests take `<time>` to execute. The tests cover:
+*Correctness*: I wrote 5 tests; these tests take less than a second to execute. The tests cover:
 - Each primitive type, including a floating point number and a string with special characters
 - Date and Error types
 - Named and anonymous functions
