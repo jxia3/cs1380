@@ -58,7 +58,7 @@ if (ENABLE_GLOBAL) {
   nativeObjects['global'] = global;
   const path = ['global'];
   for (const property of Object.getOwnPropertyNames(global)) {
-    if (typeof global[property] === 'function' || typeof global[property] === 'object') {
+    if (global[property] instanceof Function || typeof global[property] === 'object') {
       path.push(property);
       exploreNative(global[property], path);
       path.pop();
@@ -91,7 +91,7 @@ function exploreNative(object, path) {
   nativeObjects[id] = object;
 
   for (const property in object) {
-    if (typeof object[property] === 'function' || typeof object[property] === 'object') {
+    if (global[property] instanceof Function || typeof object[property] === 'object') {
       path.push(property);
       exploreNative(object[property], path);
       path.pop();

@@ -8,6 +8,9 @@
 // const distribution = require('../config.js');
 const random = require('./random.js');
 
+const {performance} = require('perf_hooks');
+console.log(performance.now());
+
 // const util = distribution.util;
 random.setSeed(1000);
 
@@ -133,4 +136,31 @@ function generateNative() {
     return console.log;
   }
   return console.error;
+}
+
+/* Compares two objects for equality. */
+function checkEq(a, b) {
+  if (typeof a !== typeof b) {
+    return false;
+  }
+  if (a instanceof Date && b instanceof Date) {
+    return a.valueOf() === b.valueOf();
+  } else if (a instanceof Function && b instanceof Function) {
+    return a.toString() === b.toString();
+  } else if (a instanceof Error && b instanceof Error) {
+    return a.message === b.message;
+  } else if (a instanceof Array && b instanceof Array) {
+    return a.length === b.length && a.every((v, i) => checkEq(v, b[i]));
+  } else if (typeof a === 'object' && typeof b === 'object') {
+    if (!checkEq(Object.keys(a), Object.keys(b))) {
+      return false;
+    }
+    for (const property in a) {
+      if (!checkEq(a[property], b[property])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return a === b;
 }

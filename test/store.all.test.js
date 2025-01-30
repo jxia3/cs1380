@@ -418,7 +418,7 @@ beforeAll((done) => {
                     .put(mygroupConfig, mygroupGroup, (e, v) => {
                       distribution.mygroup.store.get(null, (e, k) => {
                         const step = (idx) => {
-                          if (idx == k.length) {
+                          if (idx === k.length) {
                             done();
                             return;
                           }
@@ -427,7 +427,7 @@ beforeAll((done) => {
                             step(++idx);
                           });
                         };
-                        if (k.length == 0) {
+                        if (k.length === 0) {
                           done();
                           return;
                         }
