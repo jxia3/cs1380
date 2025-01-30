@@ -2,7 +2,7 @@
    implementation. Each workload is generated from a random seed:
    - 10,000 primitive types (undefined, null, numbers, booleans, and strings).
    - 10,000 simple arrays and objects that do not contain cycles.
-   - 1,000 large objects that contain complex types.
+   - 1,000 large arrays and objects that contain complex types.
    Deserialized results are compared to the initial objects for correctness. */
 
 // const distribution = require('../config.js');
@@ -12,17 +12,41 @@ const random = require('./random.js');
 random.setSeed(1000);
 
 for (let p = 0; p < 1000; p += 1) {
-  console.log(generatePrimitive());
+  console.log(generateObject(3, 2));
 }
 
 /* Generates a random array or object. */
 function generateObject(maxLen, maxDepth) {
+  if (maxDepth === 0) {
+    return generateLeaf();
+  }
+  const len = Math.floor(random.next() * maxLen);
+  const values = [];
+  for (let p = 0; p < len; p += 1) {
+    values.push(generateObject(maxLen, maxDepth - 1));
+  }
 
+  if (random.chance(0.5)) {
+    const object = {};
+    for (const value of values) {
+      object[generateString()] = value;
+    }
+    return object;
+  } else {
+    return values;
+  }
 }
 
 /* Generates a random leaf value. */
 function generateLeaf() {
-
+  const entropy = random.next();
+  if (entropy < 0.9) {
+    return generatePrimitive();
+  } else if (entropy < 0.95) {
+    return generateDate();
+  } else {
+    return generateNative();
+  }
 }
 
 /* Generates a random primitive value. */
