@@ -3,7 +3,7 @@
 const FACTOR = 16807;
 const MOD = 2147483647;
 
-let state = Math.floor(Math.random() * 1_000_000);
+let state = Math.floor(Math.random() * 1_000_000) + 1;
 
 function next() {
   /* Returns a random number between 0 and 1 and advances the PRNG. */
@@ -21,4 +21,4 @@ module.exports = {
   setSeed: (seed) => state = seed,
   next,
   chance,
-}
+};

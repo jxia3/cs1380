@@ -6,7 +6,7 @@
         "jest": true
     },
     "parserOptions": {
-        "ecmaVersion": 2018, // Update ECMAScript version to at least 6 or later for arrow functions
+        "ecmaVersion": 2021, // Update ECMAScript version to at least 6 or later for arrow functions
         "sourceType": "script" // Set to "module" if you are using ES6 modules
     },
     "rules": {
