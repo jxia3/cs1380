@@ -32,8 +32,8 @@
       "loc": [50, 100, 50, 100, 200, 0, 100, 0, 0, 150],
       "totalLoc": 750,
       "latency": {
-        "dev": [["primitive", 0.226, 0.240], ["simple", 3.13, 4.81], ["complex", 213, 396]],
-        "aws": [["primitive", 0.480, 0.582], ["simple", 0], ["complex", 0]],
+        "dev": [["primitive", 0.220, 0.155], ["simple", 2.72, 4.95], ["complex", 605, 1170]],
+        "aws": [["primitive", 0.476, 0.596], ["simple", 6.45, 12.8], ["complex", 1340, 3670]],
         "unit": "microseconds"
       }
     },
