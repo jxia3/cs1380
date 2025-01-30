@@ -1,6 +1,6 @@
 /* A script that generates random workloads and benchmarks the serialization
    implementation. Each workload is generated from a random seed:
-   - 100,000 primitive types (undefined, null, numbers, booleans, and strings).
+   - 1,000,000 primitive types (undefined, null, numbers, booleans, and strings).
    - 100,000 simple arrays and objects that do not contain cycles.
    - 1,000 large arrays and objects that contain complex types.
    Deserialized results are compared to the initial objects for correctness. */
@@ -47,10 +47,10 @@ function testWorkload(values) {
   console.log();
 }
 
-/* Generates a workload with 100,000 primitive values. */
+/* Generates a workload with 1,000,000 primitive values. */
 function generatePrimitives() {
   const values = [];
-  for (let v = 0; v < 100_000; v += 1) {
+  for (let v = 0; v < 1_000_000; v += 1) {
     values.push(generatePrimitive());
   }
   return values;
