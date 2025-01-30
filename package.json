@@ -24,5 +24,20 @@
   "dependencies": {
     "yargs": "^17.7.2",
     "@brown-ds/distribution": "latest"
+  },
+  "report": {
+    "m1": {
+      "hours": 10,
+      "loc": [],
+      "latency": {
+        "dev": [],
+        "aws": []
+      }
+    },
+    "dev": {
+      "cpu-no": 20,
+      "mem-gb": 15,
+      "ssd-gb": 1100
+    }
   }
 }
