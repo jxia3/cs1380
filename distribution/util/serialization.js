@@ -148,7 +148,11 @@ function encodeNumber(num) {
 
 /* Encodes a boolean as its leaf tag and string representation. */
 function encodeBoolean(bool) {
-  return LeafTag.Boolean + '_' + bool.toString();
+  if (bool) {
+    return LeafTag.Boolean + '_t';
+  } else {
+    return LeafTag.Boolean + '_f';
+  }
 }
 
 /* Encodes a string as its leaf tag and content. */
@@ -347,9 +351,9 @@ function decodeNumber(str) {
 /* Decodes a serialized boolean string as a boolean. */
 function decodeBoolean(str) {
   const content = str.slice(LeafTag.Boolean.length + 1);
-  if (content === 'true') {
+  if (content === 't') {
     return true;
-  } else if (content === 'false') {
+  } else if (content === 'f') {
     return false;
   }
   throw new Error('Cannot deserialize invalid boolean: ' + content);
