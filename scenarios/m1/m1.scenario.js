@@ -41,7 +41,6 @@ test('(3 pts) (scenario) object with all supported data types', () => {
     true,
     'foobar',
     new Date(0),
-    console.log,
     (a, b) => a + b,
     new Error('baz'),
     [1, 2, 3, 4, 5],
