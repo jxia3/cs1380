@@ -4,7 +4,13 @@
 
 > Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M1 (`hours`) and the lines of code per task.
 
-My implementation comprises `<number>` software components, totaling `<number>` lines of code. Key challenges included `<1, 2, 3 + how you solved them>`.
+My implementation comprises 3 software components, totaling 750 lines of code. I implemented a serialization and deserialization library that supports cyclic objects and dynamically discovers native functionality. Improving upon the provided implementation, I optimized my representation to reduce serialization overhead on small primitive objects including numbers, booleans, and strings. Furthermore, I benchmarked my implementation on synthetic workloads to confirm that my implementation achieves a lower latency than the provided library.
+
+To improve efficiency, I decided to serialize primitive leaf types as strings instead of objects with metadata. As the first character, I added a type tag to identify the primitive type. For instance, the number `37` is serialized as `n_37` instead of an object with a type property. As such, my implementation reduces the overhead of serializing primitive types, which are the most common types.
+
+One key challenge was serializing cyclic objects. While traversing the object graph with a depth-first search, I stored references in a map to avoid falling into cycles. Instead of generating a unique identifier for each node, I simply encoded references to objects as the path from the root to the owned object, or the first instance of the object encountered during the traversal. This design choice supports efficient deserialization since references can be directly resolved by traversing the path.
+
+Another key challenge was discovering native functionality. Since the `process.binding` function is internal to Node.js, I could not find much documentation about it online. Furthermore, some modules exposed by the internal API are deprecated and need to be excluded from object discovery. I added all objects from both the global object and from internal modules to a lookup table that maps native functions to their unique access path.
 
 ## Correctness & Performance Characterization
 
@@ -25,6 +31,10 @@ I designed three workloads to benchmark my implementation:
 1. Serializing and deserializing a list of 1,000,000 primtive values (numbers, booleans, etc.).
 2. Serializing and deserializing a list of 100,000 relatively small and simple objects.
 3. Serializing and deserializing a list of 1,000 large and complex objects.
+
+On my local machine, my implementation achieved a serialization/deserialization latency of 0.220/0.155 microseconds per item on primitives, 2.72/4.95 microseconds per item on simple objects, and 605/1170 microseconds per item on complex objects. Since my local CPU is more powerful than the CPU on my AWS instance, I observed lower performance numbers when testing on EC2: 0.476/0.596 microseconds per item on primitives, 6.45/12.8 microseconds per item on simple objects, and 1340/3670 microseconds per item on complex objects. I also informally benchmarked the provided implementation and found that my version is roughly twice as fast.
+
+My benchmarking script is located in the `performance` directory.
 
 # M0: Setup & Centralized Computing
 
