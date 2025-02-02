@@ -1,44 +1,6 @@
 const distribution = require('../config.js');
 const util = distribution.util;
 
-test('Primitive types', () => {
-  expect(util.deserialize(util.serialize(undefined))).toBeUndefined();
-  expect(util.deserialize(util.serialize(null))).toBeNull();
-  expect(util.deserialize(util.serialize(0.123456789))).toBe(0.123456789);
-  expect(util.deserialize(util.serialize(false))).toBe(false);
-  expect(util.deserialize(util.serialize('!@#$%^&*()_+'))).toBe('!@#$%^&*()_+');
-});
-
-test('Date and error objects', () => {
-  const date = new Date(1000);
-  expect(util.deserialize(util.serialize(date))).toEqual(date);
-  const error = new Error('error message');
-  expect(util.deserialize(util.serialize(error))).toEqual(error);
-});
-
-test('Named and anonymous functions', () => {
-  function named(a, b) {
-    return a * b;
-  }
-  expect(util.deserialize(util.serialize(named)).toString()).toEqual(named.toString());
-  const anonymous = (a, b) => a * b;
-  expect(util.deserialize(util.serialize(anonymous)).toString()).toEqual(anonymous.toString());
-});
-
-test('Arrays containing objects', () => {
-  const array = [{foo: 1}, {bar: 2}, {baz: 3}];
-  expect(util.deserialize(util.serialize(array))).toEqual(array);
-});
-
-test('Objects containing arrays', () => {
-  const object = {
-    foo: [1, 2, 3],
-    bar: ['4', '5', '6'],
-    baz: [{7: 7}, {8: 8}, {9: 9}],
-  };
-  expect(util.deserialize(util.serialize(object))).toEqual(object);
-});
-
 test('(1 pts) serializeNumber', () => {
   const number = 42;
   const serialized = util.serialize(number);

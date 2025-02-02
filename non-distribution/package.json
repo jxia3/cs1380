@@ -39,7 +39,7 @@
       "dev-tfidf": [["crawl", 0.837], ["index", 0.105], ["query", 0.107]],
       "aws-tfidf": [["crawl", 5.640], ["index", 1.389], ["query", 1.937]],
       "gs-tfidf": [],
-      "unit": "seconds"
+      "unit": "items/second"
     },
     "dloc": 12000
   }

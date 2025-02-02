@@ -29,10 +29,15 @@
     "m1": {
       "hours": 8,
       "loc": 750,
+      "throughput": {
+        "dev": [["primitive", 4.55, 6.45], ["simple", 0.368, 0.202], ["complex", 0.00165, 0.00085]],
+        "aws": [["primitive", 2.10, 1.68], ["simple", 0.155, 0.078], ["complex", 0.00075, 0.00027]],
+        "unit": "items/microsecond"
+      },
       "latency": {
         "dev": [["primitive", 0.220, 0.155], ["simple", 2.72, 4.95], ["complex", 605, 1170]],
         "aws": [["primitive", 0.476, 0.596], ["simple", 6.45, 12.8], ["complex", 1340, 3670]],
-        "unit": "microseconds"
+        "unit": "microseconds/item"
       }
     },
     "dev": {
