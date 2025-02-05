@@ -1,8 +1,8 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const local = distribution.local;
 const comm = distribution.local.comm;
 
-test('(10 pts) local.status.spawn/stop using local.comm', (done) => {
+test("(10 pts) local.status.spawn/stop using local.comm", (done) => {
   try {
     expect(local.status.spawn).toBeDefined();
     expect(local.status.stop).toBeDefined();
@@ -13,7 +13,7 @@ test('(10 pts) local.status.spawn/stop using local.comm', (done) => {
   }
 
   const node = {
-    ip: '127.0.0.1',
+    ip: "127.0.0.1",
     port: 9090,
   };
 
@@ -21,12 +21,12 @@ test('(10 pts) local.status.spawn/stop using local.comm', (done) => {
     ip: node.ip,
     port: node.port,
     onStart: () => {
-      console.log('Node is started!');
+      console.log("Node is started!");
     },
   };
 
   const cleanup = (server, done) => {
-    comm.send([], {service: 'status', method: 'stop', node: node}, (e, v) => {
+    comm.send([], {service: "status", method: "stop", node: node}, (e, v) => {
       server.close();
       try {
         expect(e).toBeFalsy();

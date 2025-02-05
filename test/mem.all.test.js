@@ -1,9 +1,9 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test('(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)', (done) => {
-  const user = {first: 'John', last: 'Carberry'};
-  const key = 'jcarbmpmg';
+test("(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)", (done) => {
+  const user = {first: "John", last: "Carberry"};
+  const key = "jcarbmpmg";
 
   distribution.all.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.get(key, (e, v) => {
@@ -18,8 +18,8 @@ test('(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.get(jcarb)', (done) => {
-  distribution.mygroup.mem.get('jcarb', (e, v) => {
+test("(1 pts) all.mem.get(jcarb)", (done) => {
+  distribution.mygroup.mem.get("jcarb", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -30,8 +30,8 @@ test('(1 pts) all.mem.get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.del(jcarb)', (done) => {
-  distribution.mygroup.mem.del('jcarb', (e, v) => {
+test("(1 pts) all.mem.del(jcarb)", (done) => {
+  distribution.mygroup.mem.del("jcarb", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -42,9 +42,9 @@ test('(1 pts) all.mem.del(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmp';
+test("(1 pts) all.mem.put(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmp";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     try {
@@ -57,9 +57,9 @@ test('(1 pts) all.mem.put(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/get(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpg';
+test("(1 pts) all.mem.put/get(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpg";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.get(key, (e, v) => {
@@ -74,9 +74,9 @@ test('(1 pts) all.mem.put/get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/del(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpd';
+test("(1 pts) all.mem.put/del(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpd";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.del(key, (e, v) => {
@@ -91,9 +91,9 @@ test('(1 pts) all.mem.put/del(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/del/get(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpdg';
+test("(1 pts) all.mem.put/del/get(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpdg";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.del(key, (e, v) => {
@@ -110,8 +110,8 @@ test('(1 pts) all.mem.put/del/get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put(no key)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
+test("(1 pts) all.mem.put(no key)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
 
   distribution.mygroup.mem.put(user, null, (e, v) => {
     distribution.mygroup.mem.get(id.getID(user), (e, v) => {
@@ -127,10 +127,10 @@ test('(1 pts) all.mem.put(no key)', (done) => {
 });
 
 test(
-    '(1 pts) all.mem.put()/local.comm.send(mem.get())',
+    "(1 pts) all.mem.put()/local.comm.send(mem.get())",
     (done) => {
-      const user = {first: 'Gus', last: 'Fring'};
-      const key = 'gfringmpcs';
+      const user = {first: "Gus", last: "Fring"};
+      const key = "gfringmpcs";
       const kid = id.getID(key);
       const nodes = Object.values(group1Group);
       const nids = nodes.map((node) => id.getNID(node));
@@ -138,8 +138,8 @@ test(
       distribution.group1.mem.put(user, key, (e, v) => {
         const nid = id.consistentHash(kid, nids);
         const pickedNode = nodes.filter((node) => id.getNID(node) === nid)[0];
-        const remote = {node: pickedNode, service: 'mem', method: 'get'};
-        const message = [{gid: 'group1', key: key}];
+        const remote = {node: pickedNode, service: "mem", method: "get"};
+        const message = [{gid: "group1", key: key}];
 
         distribution.local.comm.send(message, remote, (e, v) => {
           try {
@@ -154,9 +154,9 @@ test(
     },
 );
 
-test('(1 pts) all.mem.put()/othergroup.mem.get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringmpmg';
+test("(1 pts) all.mem.put()/othergroup.mem.get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringmpmg";
 
   distribution.all.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.get(key, (e, v) => {
@@ -171,8 +171,8 @@ test('(1 pts) all.mem.put()/othergroup.mem.get()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.get()', (done) => {
-  distribution.mygroup.mem.get('gfring', (e, v) => {
+test("(1 pts) all.mem.get()", (done) => {
+  distribution.mygroup.mem.get("gfring", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -183,8 +183,8 @@ test('(1 pts) all.mem.get()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.del()', (done) => {
-  distribution.mygroup.mem.del('gfring', (e, v) => {
+test("(1 pts) all.mem.del()", (done) => {
+  distribution.mygroup.mem.del("gfring", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -195,9 +195,9 @@ test('(1 pts) all.mem.del()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringmp';
+test("(1 pts) all.mem.put()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringmp";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     expect(e).toBeFalsy();
@@ -210,9 +210,9 @@ test('(1 pts) all.mem.put()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringmpg';
+test("(1 pts) all.mem.put/get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringmpg";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.get(key, (e, v) => {
@@ -227,9 +227,9 @@ test('(1 pts) all.mem.put/get()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/del()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringmpd';
+test("(1 pts) all.mem.put/del()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringmpd";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.del(key, (e, v) => {
@@ -244,9 +244,9 @@ test('(1 pts) all.mem.put/del()', (done) => {
   });
 });
 
-test('(1 pts) all.mem.put/del/get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringmpdg';
+test("(1 pts) all.mem.put/del/get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringmpdg";
 
   distribution.mygroup.mem.put(user, key, (e, v) => {
     distribution.mygroup.mem.del(key, (e, v) => {
@@ -263,16 +263,16 @@ test('(1 pts) all.mem.put/del/get()', (done) => {
   });
 });
 
-test('(3 pts) all.mem.get(no key)', (done) => {
+test("(3 pts) all.mem.get(no key)", (done) => {
   const users = [
-    {first: 'Saul', last: 'Goodman'},
-    {first: 'Walter', last: 'White'},
-    {first: 'Jesse', last: 'Pinkman'},
+    {first: "Saul", last: "Goodman"},
+    {first: "Walter", last: "White"},
+    {first: "Jesse", last: "Pinkman"},
   ];
   const keys = [
-    'sgoodmanmgnk',
-    'wwhitemgnk',
-    'jpinkmanmgnk',
+    "sgoodmanmgnk",
+    "wwhitemgnk",
+    "jpinkmanmgnk",
   ];
 
   distribution.mygroup.mem.put(users[0], keys[0], (e, v) => {
@@ -307,8 +307,8 @@ test('(3 pts) all.mem.get(no key)', (done) => {
   });
 });
 
-test('(3 pts) all.mem.put(no key)', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
+test("(3 pts) all.mem.put(no key)", (done) => {
+  const user = {first: "Gus", last: "Fring"};
 
   distribution.mygroup.mem.put(user, null, (e, v) => {
     distribution.mygroup.mem.get(id.getID(user), (e, v) => {
@@ -345,17 +345,17 @@ const group4Group = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 8000};
-const n2 = {ip: '127.0.0.1', port: 8001};
-const n3 = {ip: '127.0.0.1', port: 8002};
-const n4 = {ip: '127.0.0.1', port: 8003};
-const n5 = {ip: '127.0.0.1', port: 8004};
-const n6 = {ip: '127.0.0.1', port: 8005};
+const n1 = {ip: "127.0.0.1", port: 8000};
+const n2 = {ip: "127.0.0.1", port: 8001};
+const n3 = {ip: "127.0.0.1", port: 8002};
+const n4 = {ip: "127.0.0.1", port: 8003};
+const n5 = {ip: "127.0.0.1", port: 8004};
+const n6 = {ip: "127.0.0.1", port: 8005};
 
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -401,11 +401,11 @@ beforeAll((done) => {
     localServer = server;
 
     const groupInstantiation = (e, v) => {
-      const mygroupConfig = {gid: 'mygroup'};
-      const group1Config = {gid: 'group1', hash: id.naiveHash};
-      const group2Config = {gid: 'group2', hash: id.consistentHash};
-      const group3Config = {gid: 'group3', hash: id.rendezvousHash};
-      const group4Config = {gid: 'group4'};
+      const mygroupConfig = {gid: "mygroup"};
+      const group1Config = {gid: "group1", hash: id.naiveHash};
+      const group2Config = {gid: "group2", hash: id.consistentHash};
+      const group3Config = {gid: "group3", hash: id.rendezvousHash};
+      const group4Config = {gid: "group4"};
 
       // Create some groups
       distribution.local.groups
@@ -443,7 +443,7 @@ beforeAll((done) => {
 
 afterAll((done) => {
   distribution.mygroup.status.stop((e, v) => {
-    const remote = {service: 'status', method: 'stop'};
+    const remote = {service: "status", method: "stop"};
     remote.node = n1;
     distribution.local.comm.send([], remote, (e, v) => {
       remote.node = n2;

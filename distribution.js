@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const util = require('./distribution/util/util.js');
-const log = require('./distribution/util/log.js');
-const args = require('yargs').argv;
+const util = require("./distribution/util/util.js");
+const log = require("./distribution/util/log.js");
+const args = require("yargs").argv;
 
 // Default configuration
 global.nodeConfig = global.nodeConfig || {
-  ip: '127.0.0.1',
+  ip: "127.0.0.1",
   port: 1234,
   onStart: () => {
-    console.log(`Node started!`);
+    console.log("Node started!");
   },
 };
 
@@ -47,30 +47,30 @@ const distribution = function(config) {
 };
 
 global.distribution = distribution;
-distribution.util = require('./distribution/util/util.js');
-distribution.local = require('./distribution/local/local.js');
-distribution.node = require('./distribution/local/node.js');
+distribution.util = require("./distribution/util/util.js");
+distribution.local = require("./distribution/local/local.js");
+distribution.node = require("./distribution/local/node.js");
 
 for (const key in distribution.local) {
   distribution.local.routes.put(distribution.local[key], key);
 }
 
 /* Initialize distribution object */
-distribution['all'] = {};
-distribution['all'].status =
-    require('./distribution/all/status')({gid: 'all'});
-distribution['all'].comm =
-    require('./distribution/all/comm')({gid: 'all'});
-distribution['all'].gossip =
-    require('./distribution/all/gossip')({gid: 'all'});
-distribution['all'].groups =
-    require('./distribution/all/groups')({gid: 'all'});
-distribution['all'].routes =
-    require('./distribution/all/routes')({gid: 'all'});
-distribution['all'].mem =
-    require('./distribution/all/mem')({gid: 'all'});
-distribution['all'].store =
-    require('./distribution/all/store')({gid: 'all'});
+distribution["all"] = {};
+distribution["all"].status =
+    require("./distribution/all/status")({gid: "all"});
+distribution["all"].comm =
+    require("./distribution/all/comm")({gid: "all"});
+distribution["all"].gossip =
+    require("./distribution/all/gossip")({gid: "all"});
+distribution["all"].groups =
+    require("./distribution/all/groups")({gid: "all"});
+distribution["all"].routes =
+    require("./distribution/all/routes")({gid: "all"});
+distribution["all"].mem =
+    require("./distribution/all/mem")({gid: "all"});
+distribution["all"].store =
+    require("./distribution/all/store")({gid: "all"});
 
 distribution.node.config = global.nodeConfig;
 module.exports = global.distribution;

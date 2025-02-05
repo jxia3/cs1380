@@ -31,8 +31,8 @@ merge into the NEW global index:
 Remember to error gracefully, particularly when reading the global index file.
 */
 
-const fs = require('fs');
-const readline = require('readline');
+const fs = require("fs");
+const readline = require("readline");
 // The `compare` function can be used for sorting.
 const compare = (a, b) => {
   if (a.freq > b.freq) {
@@ -48,32 +48,32 @@ const rl = readline.createInterface({
 });
 
 if (process.argv.length < 3) {
-  console.error('Expected global index path');
+  console.error("Expected global index path");
   process.exit(1);
 }
 const globalIndexPath = process.argv[2];
 
 // 1. Read the incoming local index data from standard input (stdin) line by line.
-let localIndex = '';
-rl.on('line', (line) => {
-  localIndex += line + '\n';
+let localIndex = "";
+rl.on("line", (line) => {
+  localIndex += line + "\n";
 });
 
-rl.on('close', () => {
+rl.on("close", () => {
   // 2. Read the global index name/location, using process.argv
   // and call printMerged as a callback
-  fs.readFile(globalIndexPath, 'utf8', printMerged);
+  fs.readFile(globalIndexPath, "utf8", printMerged);
 });
 
 const printMerged = (err, data) => {
   if (err) {
-    console.error('Error reading file:', err);
+    console.error("Error reading file:", err);
     return;
   }
 
   // Split the data into an array of lines
-  const localIndexLines = localIndex.split('\n');
-  const globalIndexLines = data.split('\n');
+  const localIndexLines = localIndex.split("\n");
+  const globalIndexLines = data.split("\n");
 
   localIndexLines.pop();
   globalIndexLines.pop();
@@ -83,7 +83,7 @@ const printMerged = (err, data) => {
 
   // 3. For each line in `localIndexLines`, parse them and add them to the `local` object where keys are terms and values contain `url` and `freq`.
   for (const line of localIndexLines) {
-    const parts = line.split(' | ');
+    const parts = line.split(" | ");
     const term = parts[0];
     const freq = +parts[1];
     const url = parts[2];
@@ -93,8 +93,8 @@ const printMerged = (err, data) => {
   // 4. For each line in `globalIndexLines`, parse them and add them to the `global` object where keys are terms and values are arrays of `url` and `freq` objects.
   // Use the .trim() method to remove leading and trailing whitespace from a string.
   for (const line of globalIndexLines) {
-    const [term, urlData] = line.split(' | ');
-    const urlParts = urlData.split(' ');
+    const [term, urlData] = line.split(" | ");
+    const urlParts = urlData.split(" ");
     const urlfs = [];
     for (let u = 0; u < urlParts.length; u += 2) {
       urlfs.push({
@@ -135,8 +135,8 @@ const printMerged = (err, data) => {
     global[term].sort(compare);
     const entries = [];
     for (const entry of global[term]) {
-      entries.push(entry.url + ' ' + entry.freq);
+      entries.push(entry.url + " " + entry.freq);
     }
-    console.log(term + ' | ' + entries.join(' '));
+    console.log(term + " | " + entries.join(" "));
   }
 };

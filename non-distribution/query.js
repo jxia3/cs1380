@@ -25,26 +25,26 @@ For example, `execSync(`echo "${input}" | ./c/process.sh`, {encoding: 'utf-8'});
 */
 
 
-const fs = require('fs');
-const {execSync} = require('child_process');
-const path = require('path');
+const fs = require("fs");
+const {execSync} = require("child_process");
+const path = require("path");
 
 
 function query(indexFile, args) {
   let words;
   try {
-    const processScript = path.join(__dirname, 'c/process.sh');
-    const stemScript = path.join(__dirname, 'c/stem.js');
-    words = execSync(`echo '${args.join(' ')}' | ${processScript} | ${stemScript}`).toString();
+    const processScript = path.join(__dirname, "c/process.sh");
+    const stemScript = path.join(__dirname, "c/stem.js");
+    words = execSync(`echo '${args.join(" ")}' | ${processScript} | ${stemScript}`).toString();
   } catch (error) {
-    console.error('Shell script terminated with error');
+    console.error("Shell script terminated with error");
     process.exit(1);
   }
 
-  const term = words.trim().replaceAll('\n', ' ');
-  fs.readFile(indexFile, 'utf8', (error, data) => {
+  const term = words.trim().replaceAll("\n", " ");
+  fs.readFile(indexFile, "utf8", (error, data) => {
     if (error) {
-      console.error('Error reading file:', error);
+      console.error("Error reading file:", error);
       return;
     }
     searchIndex(data, term);
@@ -52,9 +52,9 @@ function query(indexFile, args) {
 }
 
 function searchIndex(index, term) {
-  const indexLines = index.trim().split('\n');
+  const indexLines = index.trim().split("\n");
   for (const line of indexLines) {
-    const parts = line.split(' | ');
+    const parts = line.split(" | ");
     if (parts[0].includes(term)) {
       console.log(line);
     }
@@ -63,9 +63,9 @@ function searchIndex(index, term) {
 
 const args = process.argv.slice(2); // Get command-line arguments
 if (args.length < 1) {
-  console.error('Usage: ./query.js [query_strings...]');
+  console.error("Usage: ./query.js [query_strings...]");
   process.exit(1);
 }
 
-const indexFile = 'd/global-index.txt'; // Path to the global index file
+const indexFile = "d/global-index.txt"; // Path to the global index file
 query(indexFile, args);

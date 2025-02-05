@@ -1,6 +1,6 @@
 const groups = function(config) {
   const context = {};
-  context.gid = config.gid || 'all';
+  context.gid = config.gid || "all";
 
   return {
     put: (config, group, callback) => {

@@ -1,11 +1,11 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const local = distribution.local;
 const id = distribution.util.id;
 
 const config = distribution.node.config;
 
-test('(2 pts) local.status.get(sid)', (done) => {
-  local.status.get('sid', (e, v) => {
+test("(2 pts) local.status.get(sid)", (done) => {
+  local.status.get("sid", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBe(id.getSID(config));
@@ -16,8 +16,8 @@ test('(2 pts) local.status.get(sid)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(ip)', (done) => {
-  local.status.get('ip', (e, v) => {
+test("(2 pts) local.status.get(ip)", (done) => {
+  local.status.get("ip", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBe(config.ip);
@@ -28,8 +28,8 @@ test('(2 pts) local.status.get(ip)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(port)', (done) => {
-  local.status.get('port', (e, v) => {
+test("(2 pts) local.status.get(port)", (done) => {
+  local.status.get("port", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBe(config.port);
@@ -40,8 +40,8 @@ test('(2 pts) local.status.get(port)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(counts)', (done) => {
-  local.status.get('counts', (e, v) => {
+test("(2 pts) local.status.get(counts)", (done) => {
+  local.status.get("counts", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBeDefined();
@@ -52,8 +52,8 @@ test('(2 pts) local.status.get(counts)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(random)', (done) => {
-  local.status.get('random', (e, v) => {
+test("(2 pts) local.status.get(random)", (done) => {
+  local.status.get("random", (e, v) => {
     try {
       expect(e).toBeDefined();
       expect(e).toBeInstanceOf(Error);
@@ -65,10 +65,10 @@ test('(2 pts) local.status.get(random)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(heapTotal)', (done) => {
+test("(2 pts) local.status.get(heapTotal)", (done) => {
   const heapTotal = process.memoryUsage().heapTotal;
 
-  local.status.get('heapTotal', (e, v) => {
+  local.status.get("heapTotal", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBeGreaterThanOrEqual(heapTotal);
@@ -79,10 +79,10 @@ test('(2 pts) local.status.get(heapTotal)', (done) => {
   });
 });
 
-test('(2 pts) local.status.get(heapUsed)', (done) => {
+test("(2 pts) local.status.get(heapUsed)", (done) => {
   const heapUsed = process.memoryUsage().heapUsed;
 
-  local.status.get('heapUsed', (e, v) => {
+  local.status.get("heapUsed", (e, v) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toBeGreaterThanOrEqual(heapUsed);

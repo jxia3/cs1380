@@ -2,8 +2,8 @@
 
 /* Global Index Diff Checker */
 
-const fs = require('fs');
-const {exit} = require('process');
+const fs = require("fs");
+const {exit} = require("process");
 
 const identical = (l1, l2) => {
   // console.log(l1);
@@ -131,17 +131,17 @@ const identical = (l1, l2) => {
 try {
   let wrong = 0;
   let total = 0;
-  const slack = parseInt(process.env['DIFF_PERCENT'], 10); // percentage
+  const slack = parseInt(process.env["DIFF_PERCENT"], 10); // percentage
   if (isNaN(slack)) {
-    console.error('environment variable DIFF_PERCENT is not defined');
+    console.error("environment variable DIFF_PERCENT is not defined");
     exit(1);
   }
 
-  const file1 = fs.readFileSync(process.argv[2], 'utf8');
-  const file2 = fs.readFileSync(process.argv[3], 'utf8');
+  const file1 = fs.readFileSync(process.argv[2], "utf8");
+  const file2 = fs.readFileSync(process.argv[3], "utf8");
 
-  const lines1 = file1.split('\n').filter((line) => line.trim().length !== 0);
-  const lines2 = file2.split('\n').filter((line) => line.trim().length !== 0);
+  const lines1 = file1.split("\n").filter((line) => line.trim().length !== 0);
+  const lines2 = file2.split("\n").filter((line) => line.trim().length !== 0);
 
   if (lines1.length !== lines2.length) {
     exit(1);

@@ -1,10 +1,10 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test('(2 pts) all.status.get(nid)', (done) => {
+test("(2 pts) all.status.get(nid)", (done) => {
   const nids = Object.values(mygroupGroup).map((node) => id.getNID(node));
 
-  distribution.mygroup.status.get('nid', (e, v) => {
+  distribution.mygroup.status.get("nid", (e, v) => {
     try {
       expect(e).toEqual({});
       expect(Object.values(v).length).toBe(nids.length);
@@ -16,8 +16,8 @@ test('(2 pts) all.status.get(nid)', (done) => {
   });
 });
 
-test('(2 pts) all.status.get(random)', (done) => {
-  distribution.mygroup.status.get('random', (e, v) => {
+test("(2 pts) all.status.get(random)", (done) => {
+  distribution.mygroup.status.get("random", (e, v) => {
     try {
       Object.keys(mygroupGroup).forEach((sid) => {
         expect(e[sid]).toBeDefined();
@@ -44,17 +44,17 @@ const group4Group = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 8000};
-const n2 = {ip: '127.0.0.1', port: 8001};
-const n3 = {ip: '127.0.0.1', port: 8002};
-const n4 = {ip: '127.0.0.1', port: 8003};
-const n5 = {ip: '127.0.0.1', port: 8004};
-const n6 = {ip: '127.0.0.1', port: 8005};
+const n1 = {ip: "127.0.0.1", port: 8000};
+const n2 = {ip: "127.0.0.1", port: 8001};
+const n3 = {ip: "127.0.0.1", port: 8002};
+const n4 = {ip: "127.0.0.1", port: 8003};
+const n5 = {ip: "127.0.0.1", port: 8004};
+const n6 = {ip: "127.0.0.1", port: 8005};
 
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -88,8 +88,8 @@ beforeAll((done) => {
     localServer = server;
 
     const groupInstantiation = (e, v) => {
-      const mygroupConfig = {gid: 'mygroup'};
-      const group4Config = {gid: 'group4'};
+      const mygroupConfig = {gid: "mygroup"};
+      const group4Config = {gid: "group4"};
 
       // Create some groups
       distribution.local.groups
@@ -118,7 +118,7 @@ beforeAll((done) => {
 
 afterAll((done) => {
   distribution.mygroup.status.stop((e, v) => {
-    const remote = {service: 'status', method: 'stop'};
+    const remote = {service: "status", method: "stop"};
     remote.node = n1;
     distribution.local.comm.send([], remote, (e, v) => {
       remote.node = n2;

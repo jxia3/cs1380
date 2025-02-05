@@ -1,4 +1,4 @@
-const log = require('../util/log');
+const log = require("../util/log");
 
 
 function createRPC(func) {
@@ -10,7 +10,7 @@ function createRPC(func) {
   which accepts a callback as its final argument and passes the value to the callback.
 */
 function toAsync(func) {
-  log(`Converting function to async: ${func.name}: ${func.toString().replace(/\n/g, '|')}`);
+  log(`Converting function to async: ${func.name}: ${func.toString().replace(/\n/g, "|")}`);
 
   // It's the caller's responsibility to provide a callback
   const asyncFunc = (...args) => {

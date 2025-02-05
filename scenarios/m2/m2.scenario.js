@@ -1,6 +1,6 @@
-const distribution = require('../../config.js');
+const distribution = require("../../config.js");
 
-test('(2 pts) (scenario) simple callback practice', () => {
+test("(2 pts) (scenario) simple callback practice", () => {
   /* Collect the result of 3 callback services in list  */
   const results = [];
 
@@ -18,7 +18,7 @@ test('(2 pts) (scenario) simple callback practice', () => {
   expect(results).toEqual([3, 5, 7]);
 });
 
-test('(2 pts) (scenario) collect errors and successful results', (done) => {
+test("(2 pts) (scenario) collect errors and successful results", (done) => {
   /*
           Call each delivery service in a loop, and collect the sucessful results and
           failures in an array.
@@ -53,16 +53,16 @@ test('(2 pts) (scenario) collect errors and successful results', (done) => {
   const doneAndAssert = (es, vs) => {
     try {
       expect(vs.length).toBe(3);
-      expect(vs).toContain('good apples');
-      expect(vs).toContain('good bananas');
-      expect(vs).toContain('good peaches');
+      expect(vs).toContain("good apples");
+      expect(vs).toContain("good bananas");
+      expect(vs).toContain("good peaches");
       for (const e of es) {
         expect(e instanceof Error).toBe(true);
       }
       const messages = es.map((e) => e.message);
       expect(messages.length).toBe(2);
-      expect(messages).toContain('bad pineapples');
-      expect(messages).toContain('bad mangoes');
+      expect(messages).toContain("bad pineapples");
+      expect(messages).toContain("bad mangoes");
       done();
     } catch (e) {
       done(e);
@@ -87,13 +87,13 @@ test('(2 pts) (scenario) collect errors and successful results', (done) => {
   }
 });
 
-test('(5 pts) (scenario) use rpc', (done) => {
+test("(5 pts) (scenario) use rpc", (done) => {
   let n = 0;
   const addOne = () => {
     return ++n;
   };
 
-  const node = {ip: '127.0.0.1', port: 9009};
+  const node = {ip: "127.0.0.1", port: 9009};
 
   // ...
 
@@ -105,24 +105,24 @@ test('(5 pts) (scenario) use rpc', (done) => {
     function cleanup(callback) {
       server.close();
       distribution.local.comm.send([],
-          {node: node, service: 'status', method: 'stop'},
+          {node: node, service: "status", method: "stop"},
           callback);
     }
 
     // Spawn the remote node.
     distribution.local.status.spawn(node, (e, v) => {
       // Install the addOne service on the remote node with the name 'addOneService'.
-      distribution.local.comm.send([rpcService, 'addOneService'],
-          {node: node, service: 'routes', method: 'put'}, (e, v) => {
+      distribution.local.comm.send([rpcService, "addOneService"],
+          {node: node, service: "routes", method: "put"}, (e, v) => {
             // Call the addOne service on the remote node. This should actually call the addOne function on this code using RPC.
             distribution.local.comm.send([],
-                {node: node, service: 'addOneService', method: 'addOne'}, (e, v) => {
+                {node: node, service: "addOneService", method: "addOne"}, (e, v) => {
                   // Call the addOne service on the remote node again.
                   distribution.local.comm.send([],
-                      {node: node, service: 'addOneService', method: 'addOne'}, (e, v) => {
+                      {node: node, service: "addOneService", method: "addOne"}, (e, v) => {
                         // Call the addOne service on the remote node again. Since we called the addOne function three times, the result should be 3.
                         distribution.local.comm.send([],
-                            {node: node, service: 'addOneService', method: 'addOne'}, (e, v) => {
+                            {node: node, service: "addOneService", method: "addOne"}, (e, v) => {
                               try {
                                 expect(e).toBeFalsy();
                                 expect(v).toBe(3);

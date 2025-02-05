@@ -1,8 +1,8 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test('(3 pts) all.groups.del(random)', (done) => {
-  distribution.group4.groups.del('random', (e, v) => {
+test("(3 pts) all.groups.del(random)", (done) => {
+  distribution.group4.groups.del("random", (e, v) => {
     try {
       Object.keys(group4Group).forEach((sid) => {
         expect(e[sid]).toBeDefined();
@@ -16,13 +16,13 @@ test('(3 pts) all.groups.del(random)', (done) => {
   });
 });
 
-test('(2 pts) all.groups.put(browncs)', (done) => {
+test("(2 pts) all.groups.put(browncs)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('browncsgp', g, (e, v) => {
+  distribution.group4.groups.put("browncsgp", g, (e, v) => {
     try {
       expect(e).toEqual({});
       Object.keys(group4Group).forEach((sid) => {
@@ -35,14 +35,14 @@ test('(2 pts) all.groups.put(browncs)', (done) => {
   });
 });
 
-test('(2 pts) all.groups.put/get(browncs)', (done) => {
+test("(2 pts) all.groups.put/get(browncs)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('browncsgpg', g, (e, v) => {
-    distribution.group4.groups.get('browncsgpg', (e, v) => {
+  distribution.group4.groups.put("browncsgpg", g, (e, v) => {
+    distribution.group4.groups.get("browncsgpg", (e, v) => {
       try {
         expect(e).toEqual({});
         Object.keys(group4Group).forEach((sid) => {
@@ -56,15 +56,15 @@ test('(2 pts) all.groups.put/get(browncs)', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put/get/del(browncs)', (done) => {
+test("(3 pts) all.groups.put/get/del(browncs)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('browncsgpgd', g, (e, v) => {
-    distribution.group4.groups.get('browncsgpgd', (e, v) => {
-      distribution.group4.groups.del('browncsgpgd', (e, v) => {
+  distribution.group4.groups.put("browncsgpgd", g, (e, v) => {
+    distribution.group4.groups.get("browncsgpgd", (e, v) => {
+      distribution.group4.groups.del("browncsgpgd", (e, v) => {
         try {
           expect(e).toEqual({});
           Object.keys(group4Group).forEach((sid) => {
@@ -79,16 +79,16 @@ test('(3 pts) all.groups.put/get/del(browncs)', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put/get/del/get(browncs)', (done) => {
+test("(3 pts) all.groups.put/get/del/get(browncs)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('browncsgpgdg', g, (e, v) => {
-    distribution.group4.groups.get('browncsgpgdg', (e, v) => {
-      distribution.group4.groups.del('browncsgpgdg', (e, v) => {
-        distribution.group4.groups.get('browncsgpgdg', (e, v) => {
+  distribution.group4.groups.put("browncsgpgdg", g, (e, v) => {
+    distribution.group4.groups.get("browncsgpgdg", (e, v) => {
+      distribution.group4.groups.del("browncsgpgdg", (e, v) => {
+        distribution.group4.groups.get("browncsgpgdg", (e, v) => {
           try {
             expect(e).toBeDefined();
             Object.keys(group4Group).forEach((sid) => {
@@ -105,21 +105,21 @@ test('(3 pts) all.groups.put/get/del/get(browncs)', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put(dummy)/add(n1)/get(dummy)', (done) => {
+test("(3 pts) all.groups.put(dummy)/add(n1)/get(dummy)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('dummygpag', g, (e, v) => {
-    const n1 = {ip: '127.0.0.1', port: 8082};
+  distribution.group4.groups.put("dummygpag", g, (e, v) => {
+    const n1 = {ip: "127.0.0.1", port: 8082};
 
-    distribution.group4.groups.add('dummygpag', n1, (e, v) => {
+    distribution.group4.groups.add("dummygpag", n1, (e, v) => {
       const expectedGroup = {
         ...g, ...{[id.getSID(n1)]: n1},
       };
 
-      distribution.group4.groups.get('dummygpag', (e, v) => {
+      distribution.group4.groups.get("dummygpag", (e, v) => {
         try {
           expect(e).toEqual({});
           Object.keys(group4Group).forEach((sid) => {
@@ -134,19 +134,19 @@ test('(3 pts) all.groups.put(dummy)/add(n1)/get(dummy)', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put(dummy)/rem(n1)/get(dummy)', (done) => {
+test("(3 pts) all.groups.put(dummy)/rem(n1)/get(dummy)", (done) => {
   const g = {
-    '507aa': {ip: '127.0.0.1', port: 8080},
-    '14ab0': {ip: '127.0.0.1', port: 8081},
+    "507aa": {ip: "127.0.0.1", port: 8080},
+    "14ab0": {ip: "127.0.0.1", port: 8081},
   };
 
-  distribution.group4.groups.put('dummygprg', g, (e, v) => {
-    distribution.group4.groups.rem('dummygprg', '507aa', (e, v) => {
+  distribution.group4.groups.put("dummygprg", g, (e, v) => {
+    distribution.group4.groups.rem("dummygprg", "507aa", (e, v) => {
       const expectedGroup = {
-        '14ab0': {ip: '127.0.0.1', port: 8081},
+        "14ab0": {ip: "127.0.0.1", port: 8081},
       };
 
-      distribution.group4.groups.get('dummygprg', (e, v) => {
+      distribution.group4.groups.get("dummygprg", (e, v) => {
         try {
           expect(e).toEqual({});
           Object.keys(group4Group).forEach((sid) => {
@@ -161,13 +161,13 @@ test('(3 pts) all.groups.put(dummy)/rem(n1)/get(dummy)', (done) => {
   });
 });
 
-test('(2 pts) all.groups.put()', (done) => {
+test("(2 pts) all.groups.put()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
+  distribution.group4.groups.put("atlas", g, (e, v) => {
     try {
       expect(e).toEqual({});
       expect(v[id.getSID(n1)]).toEqual(g);
@@ -178,14 +178,14 @@ test('(2 pts) all.groups.put()', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put/get()', (done) => {
+test("(3 pts) all.groups.put/get()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
-    distribution.group4.groups.get('atlas', (e, v) => {
+  distribution.group4.groups.put("atlas", g, (e, v) => {
+    distribution.group4.groups.get("atlas", (e, v) => {
       try {
         expect(e).toEqual({});
         expect(v[id.getSID(n1)]).toEqual(g);
@@ -197,15 +197,15 @@ test('(3 pts) all.groups.put/get()', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put/get/del()', (done) => {
+test("(3 pts) all.groups.put/get/del()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
-    distribution.group4.groups.get('atlas', (e, v) => {
-      distribution.group4.groups.del('atlas', (e, v) => {
+  distribution.group4.groups.put("atlas", g, (e, v) => {
+    distribution.group4.groups.get("atlas", (e, v) => {
+      distribution.group4.groups.del("atlas", (e, v) => {
         try {
           expect(e).toEqual({});
           expect(v[id.getSID(n1)]).toEqual(g);
@@ -218,16 +218,16 @@ test('(3 pts) all.groups.put/get/del()', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put/get/del/get()', (done) => {
+test("(3 pts) all.groups.put/get/del/get()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
-    distribution.group4.groups.get('atlas', (e, v) => {
-      distribution.group4.groups.del('atlas', (e, v) => {
-        distribution.group4.groups.get('atlas', (e, v) => {
+  distribution.group4.groups.put("atlas", g, (e, v) => {
+    distribution.group4.groups.get("atlas", (e, v) => {
+      distribution.group4.groups.del("atlas", (e, v) => {
+        distribution.group4.groups.get("atlas", (e, v) => {
           try {
             expect(e).toBeDefined();
             Object.keys(e).forEach((k) => {
@@ -244,21 +244,21 @@ test('(3 pts) all.groups.put/get/del/get()', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put()/add(n2)/get()', (done) => {
+test("(3 pts) all.groups.put()/add(n2)/get()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
-    const n2 = {ip: '127.0.0.1', port: 9094};
+  distribution.group4.groups.put("atlas", g, (e, v) => {
+    const n2 = {ip: "127.0.0.1", port: 9094};
 
-    distribution.group4.groups.add('atlas', n2, (e, v) => {
+    distribution.group4.groups.add("atlas", n2, (e, v) => {
       const expectedGroup = {
         ...g, ...{[id.getSID(n2)]: n2},
       };
 
-      distribution.group4.groups.get('atlas', (e, v) => {
+      distribution.group4.groups.get("atlas", (e, v) => {
         try {
           expect(e).toEqual({});
           expect(v[id.getSID(n1)]).toEqual(expectedGroup);
@@ -271,19 +271,19 @@ test('(3 pts) all.groups.put()/add(n2)/get()', (done) => {
   });
 });
 
-test('(3 pts) all.groups.put()/rem(n2)/get()', (done) => {
+test("(3 pts) all.groups.put()/rem(n2)/get()", (done) => {
   const g = {
-    'al57j': {ip: '127.0.0.1', port: 9092},
-    'q5mn9': {ip: '127.0.0.1', port: 9093},
+    "al57j": {ip: "127.0.0.1", port: 9092},
+    "q5mn9": {ip: "127.0.0.1", port: 9093},
   };
 
-  distribution.group4.groups.put('atlas', g, (e, v) => {
-    distribution.group4.groups.rem('atlas', 'q5mn9', (e, v) => {
+  distribution.group4.groups.put("atlas", g, (e, v) => {
+    distribution.group4.groups.rem("atlas", "q5mn9", (e, v) => {
       const expectedGroup = {
-        'al57j': {ip: '127.0.0.1', port: 9092},
+        "al57j": {ip: "127.0.0.1", port: 9092},
       };
 
-      distribution.group4.groups.get('atlas', (e, v) => {
+      distribution.group4.groups.get("atlas", (e, v) => {
         try {
           expect(e).toEqual({});
           expect(v[id.getSID(n1)]).toEqual(expectedGroup);
@@ -314,17 +314,17 @@ const group3Group = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 8000};
-const n2 = {ip: '127.0.0.1', port: 8001};
-const n3 = {ip: '127.0.0.1', port: 8002};
-const n4 = {ip: '127.0.0.1', port: 8003};
-const n5 = {ip: '127.0.0.1', port: 8004};
-const n6 = {ip: '127.0.0.1', port: 8005};
+const n1 = {ip: "127.0.0.1", port: 8000};
+const n2 = {ip: "127.0.0.1", port: 8001};
+const n3 = {ip: "127.0.0.1", port: 8002};
+const n4 = {ip: "127.0.0.1", port: 8003};
+const n5 = {ip: "127.0.0.1", port: 8004};
+const n6 = {ip: "127.0.0.1", port: 8005};
 
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -370,11 +370,11 @@ beforeAll((done) => {
     localServer = server;
 
     const groupInstantiation = (e, v) => {
-      const mygroupConfig = {gid: 'mygroup'};
-      const group1Config = {gid: 'group1', hash: id.naiveHash};
-      const group2Config = {gid: 'group2', hash: id.consistentHash};
-      const group3Config = {gid: 'group3', hash: id.rendezvousHash};
-      const group4Config = {gid: 'group4'};
+      const mygroupConfig = {gid: "mygroup"};
+      const group1Config = {gid: "group1", hash: id.naiveHash};
+      const group2Config = {gid: "group2", hash: id.consistentHash};
+      const group3Config = {gid: "group3", hash: id.rendezvousHash};
+      const group4Config = {gid: "group4"};
 
       // Create some groups
       distribution.local.groups
@@ -412,7 +412,7 @@ beforeAll((done) => {
 
 afterAll((done) => {
   distribution.mygroup.status.stop((e, v) => {
-    const remote = {service: 'status', method: 'stop'};
+    const remote = {service: "status", method: "stop"};
     remote.node = n1;
     distribution.local.comm.send([], remote, (e, v) => {
       remote.node = n2;

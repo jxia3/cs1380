@@ -6,19 +6,19 @@
    createGlobalIndexBasic. The TF-IDF version ranks pages by the TF-IDF rank. The basic
    version ranks pages by term frequency and passes the basic tests. */
 
-const fs = require('fs');
-const natural = require('natural');
-const path = require('path');
+const fs = require("fs");
+const natural = require("natural");
+const path = require("path");
 
-const STOPWORD_FILE = path.join(__dirname, 'd/stopwords.txt');
-const TFIDF_INDEX = path.join(__dirname, 'd/tfidf-index.txt');
-const GLOBAL_INDEX = path.join(__dirname, 'd/global-index.txt');
+const STOPWORD_FILE = path.join(__dirname, "d/stopwords.txt");
+const TFIDF_INDEX = path.join(__dirname, "d/tfidf-index.txt");
+const GLOBAL_INDEX = path.join(__dirname, "d/global-index.txt");
 const NGRAM_SIZES = [1, 2, 3];
 const DISABLE_TFIDF = false;
 
 // Parse command line arguments
 if (process.argv.length < 4) {
-  console.error('Expected content file and page URL');
+  console.error("Expected content file and page URL");
   process.exit(1);
 }
 const contentFile = process.argv[2];
@@ -27,7 +27,7 @@ const pageUrl = process.argv[3];
 // Start index pipeline
 readFile(STOPWORD_FILE, (stopwordData) => {
   readFile(contentFile, (contentData) => {
-    const stopwords = stopwordData.trim().split('\n');
+    const stopwords = stopwordData.trim().split("\n");
     processContent(stopwords, contentData, pageUrl);
   });
 });
@@ -36,11 +36,11 @@ readFile(STOPWORD_FILE, (stopwordData) => {
 function processContent(stopwords, pageContent, pageUrl) {
   // Process step: convert page content into words and remove stopwords
   const words = pageContent
-      .replaceAll(/[^a-zA-Z\n]/g, '\n')
-      .replaceAll(/\s+/g, '\n')
+      .replaceAll(/[^a-zA-Z\n]/g, "\n")
+      .replaceAll(/\s+/g, "\n")
       .trim()
       .toLowerCase()
-      .split('\n')
+      .split("\n")
       .filter((w) => !stopwords.includes(w));
 
   // Stem step: convert words to Porter stems
@@ -55,7 +55,7 @@ function processContent(stopwords, pageContent, pageUrl) {
       for (let p = 0; p < size; p += 1) {
         term.push(stemmed[w + p]);
       }
-      terms.push(term.join(' '));
+      terms.push(term.join(" "));
     }
   }
 
@@ -99,7 +99,7 @@ function mergeDocument(numDocs, termIndex, docLen, termCounts, pageUrl) {
   // Add documents to terms
   for (const term in termIndex) {
     if (term in termCounts) {
-      const termLen = term.split(' ').length;
+      const termLen = term.split(" ").length;
       termIndex[term].docs[pageUrl] = {
         docLen: docLen - termLen + 1, // Document ngram length
         termCount: termCounts[term], // Term count in document
@@ -161,20 +161,20 @@ function createGlobalIndex(termIndex, docRankFn) {
       parts.push(doc.url);
       parts.push(doc.rank.toString());
     }
-    lines.push(`${term} | ${parts.join(' ')}`);
+    lines.push(`${term} | ${parts.join(" ")}`);
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /* Parses the content of the global TF-IDF index as JSON. */
 function parseIndex(content) {
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   const numDocs = lines.length === 0 ? 0 : +lines[0];
   const termIndex = {};
 
   for (let l = 1; l < lines.length; l += 1) {
-    const parts = lines[l].split(' | ');
+    const parts = lines[l].split(" | ");
     const term = parts[0];
     const docCount = +parts[1];
     termIndex[term] = {
@@ -182,7 +182,7 @@ function parseIndex(content) {
       docs: {},
     };
 
-    const docs = parts[2].split(' ');
+    const docs = parts[2].split(" ");
     for (let d = 0; d < docs.length; d += 3) {
       termIndex[term].docs[docs[d]] = {
         docLen: +docs[d + 1],
@@ -205,16 +205,16 @@ function formatIndex(numDocs, termIndex) {
       docs.push(termIndex[term].docs[doc].docLen.toString());
       docs.push(termIndex[term].docs[doc].termCount.toString());
     }
-    lines.push(`${line} | ${docs.join(' ')}`);
+    lines.push(`${line} | ${docs.join(" ")}`);
   }
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /* Reads text content from a file and exits on an error */
 function readFile(path, callback) {
-  fs.readFile(path, 'utf8', (error, data) => {
+  fs.readFile(path, "utf8", (error, data) => {
     if (error) {
-      console.error('Error reading file:', error);
+      console.error("Error reading file:", error);
       process.exit(1);
     }
     callback(data);

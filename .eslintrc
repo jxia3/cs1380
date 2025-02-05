@@ -19,6 +19,7 @@
         "object-shorthand": "off", // Do not enforce object method shorthand
         "require-jsdoc": "off", // Do not require JSDoc
         "guard-for-in": "off", // Do not require guard clauses in for...in loops
+        "quotes": ["error", "double"], // Prefer double quotes over single quotes
         "no-restricted-syntax": [
             "error",
             {

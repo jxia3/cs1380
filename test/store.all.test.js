@@ -1,9 +1,9 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test('(1 pts) all.store.put(jcarb)/mygroup.store.get(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbspsg';
+test("(1 pts) all.store.put(jcarb)/mygroup.store.get(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbspsg";
 
   distribution.all.store.put(user, key, (e, v) => {
     distribution.mygroup.store.get(key, (e, v) => {
@@ -18,8 +18,8 @@ test('(1 pts) all.store.put(jcarb)/mygroup.store.get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.get(jcarb)', (done) => {
-  distribution.mygroup.store.get('jcarb', (e, v) => {
+test("(1 pts) all.store.get(jcarb)", (done) => {
+  distribution.mygroup.store.get("jcarb", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -30,8 +30,8 @@ test('(1 pts) all.store.get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.del(jcarb)', (done) => {
-  distribution.mygroup.store.del('jcarb', (e, v) => {
+test("(1 pts) all.store.del(jcarb)", (done) => {
+  distribution.mygroup.store.del("jcarb", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -42,9 +42,9 @@ test('(1 pts) all.store.del(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmp';
+test("(1 pts) all.store.put(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmp";
 
   distribution.mygroup.store.put(user, key, (e, v) => {
     try {
@@ -57,9 +57,9 @@ test('(1 pts) all.store.put(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/get(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpg';
+test("(1 pts) all.store.put/get(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpg";
 
   distribution.mygroup.store.put(user, key, (e, v) => {
     distribution.mygroup.store.get(key, (e, v) => {
@@ -74,9 +74,9 @@ test('(1 pts) all.store.put/get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/del(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpd';
+test("(1 pts) all.store.put/del(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpd";
 
   distribution.mygroup.store.put(user, key, (e, v) => {
     distribution.mygroup.store.del(key, (e, v) => {
@@ -91,9 +91,9 @@ test('(1 pts) all.store.put/del(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/del/get(jcarb)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
-  const key = 'jcarbmpdg';
+test("(1 pts) all.store.put/del/get(jcarb)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
+  const key = "jcarbmpdg";
 
   distribution.mygroup.store.put(user, key, (e, v) => {
     distribution.mygroup.store.del(key, (e, v) => {
@@ -110,8 +110,8 @@ test('(1 pts) all.store.put/del/get(jcarb)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put(no key)', (done) => {
-  const user = {first: 'Josiah', last: 'Carberry'};
+test("(1 pts) all.store.put(no key)", (done) => {
+  const user = {first: "Josiah", last: "Carberry"};
 
   distribution.mygroup.store.put(user, null, (e, v) => {
     distribution.mygroup.store.get(id.getID(user), (e, v) => {
@@ -126,10 +126,10 @@ test('(1 pts) all.store.put(no key)', (done) => {
   });
 });
 
-test('(2 pts) all.store.put(jcarb)/local.comm.send(store.get(jcarb))',
+test("(2 pts) all.store.put(jcarb)/local.comm.send(store.get(jcarb))",
     (done) => {
-      const user = {first: 'Josiah', last: 'Carberry'};
-      const key = 'jcarbspcs';
+      const user = {first: "Josiah", last: "Carberry"};
+      const key = "jcarbspcs";
       const kid = id.getID(key);
       const nodes = [n1, n2, n3, n4, n5];
       const nids = nodes.map((node) => id.getNID(node));
@@ -137,8 +137,8 @@ test('(2 pts) all.store.put(jcarb)/local.comm.send(store.get(jcarb))',
       distribution.mygroup.store.put(user, key, (e, v) => {
         const nid = id.naiveHash(kid, nids);
         const pickedNode = nodes.filter((node) => id.getNID(node) === nid)[0];
-        const remote = {node: pickedNode, service: 'store', method: 'get'};
-        const message = [{gid: 'mygroup', key: key}];
+        const remote = {node: pickedNode, service: "store", method: "get"};
+        const message = [{gid: "mygroup", key: key}];
 
         distribution.local.comm.send(message, remote, (e, v) => {
           try {
@@ -155,10 +155,10 @@ test('(2 pts) all.store.put(jcarb)/local.comm.send(store.get(jcarb))',
 
 
 test(
-    '(2 pts) all.store.put()/local.comm.send(store.get())',
+    "(2 pts) all.store.put()/local.comm.send(store.get())",
     (done) => {
-      const user = {first: 'Gus', last: 'Fring'};
-      const key = 'gfringspcs';
+      const user = {first: "Gus", last: "Fring"};
+      const key = "gfringspcs";
       const kid = id.getID(key);
       const nodes = Object.values(mygroupBGroup);
       const nids = nodes.map((node) => id.getNID(node));
@@ -166,8 +166,8 @@ test(
       distribution.mygroupB.store.put(user, key, (e, v) => {
         const nid = id.rendezvousHash(kid, nids);
         const pickedNode = nodes.filter((node) => id.getNID(node) === nid)[0];
-        const remote = {node: pickedNode, service: 'store', method: 'get'};
-        const message = [{gid: 'mygroupB', key: key}];
+        const remote = {node: pickedNode, service: "store", method: "get"};
+        const message = [{gid: "mygroupB", key: key}];
 
         distribution.local.comm.send(message, remote, (e, v) => {
           try {
@@ -182,9 +182,9 @@ test(
     },
 );
 
-test('(1 pts) all.store.put()/othergroup.store.get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringspsg';
+test("(1 pts) all.store.put()/othergroup.store.get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringspsg";
 
   distribution.all.store.put(user, key, (e, v) => {
     distribution.mygroupB.store.get(key, (e, v) => {
@@ -199,8 +199,8 @@ test('(1 pts) all.store.put()/othergroup.store.get()', (done) => {
   });
 });
 
-test('(1 pts) all.store.get()', (done) => {
-  distribution.mygroupB.store.get('gfringsg', (e, v) => {
+test("(1 pts) all.store.get()", (done) => {
+  distribution.mygroupB.store.get("gfringsg", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -211,8 +211,8 @@ test('(1 pts) all.store.get()', (done) => {
   });
 });
 
-test('(1 pts) all.store.del()', (done) => {
-  distribution.mygroupB.store.del('gfringsd', (e, v) => {
+test("(1 pts) all.store.del()", (done) => {
+  distribution.mygroupB.store.del("gfringsd", (e, v) => {
     try {
       expect(e).toBeInstanceOf(Error);
       expect(v).toBeFalsy();
@@ -223,9 +223,9 @@ test('(1 pts) all.store.del()', (done) => {
   });
 });
 
-test('(1 pts) all.store.put()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringsp';
+test("(1 pts) all.store.put()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringsp";
 
   distribution.mygroupB.store.put(user, key, (e, v) => {
     try {
@@ -238,9 +238,9 @@ test('(1 pts) all.store.put()', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringspg';
+test("(1 pts) all.store.put/get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringspg";
 
   distribution.mygroupB.store.put(user, key, (e, v) => {
     distribution.mygroupB.store.get(key, (e, v) => {
@@ -255,9 +255,9 @@ test('(1 pts) all.store.put/get()', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/del()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringspd';
+test("(1 pts) all.store.put/del()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringspd";
 
   distribution.mygroupB.store.put(user, key, (e, v) => {
     distribution.mygroupB.store.del(key, (e, v) => {
@@ -272,9 +272,9 @@ test('(1 pts) all.store.put/del()', (done) => {
   });
 });
 
-test('(1 pts) all.store.put/del/get()', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
-  const key = 'gfringspdg';
+test("(1 pts) all.store.put/del/get()", (done) => {
+  const user = {first: "Gus", last: "Fring"};
+  const key = "gfringspdg";
 
   distribution.mygroupB.store.put(user, key, (e, v) => {
     distribution.mygroupB.store.del(key, (e, v) => {
@@ -291,16 +291,16 @@ test('(1 pts) all.store.put/del/get()', (done) => {
   });
 });
 
-test('(1 pts) all.store.get(no key)', (done) => {
+test("(1 pts) all.store.get(no key)", (done) => {
   const users = [
-    {first: 'Saul', last: 'Goodman'},
-    {first: 'Walter', last: 'White'},
-    {first: 'Jesse', last: 'Pinkman'},
+    {first: "Saul", last: "Goodman"},
+    {first: "Walter", last: "White"},
+    {first: "Jesse", last: "Pinkman"},
   ];
   const keys = [
-    'sgoodmansgnk',
-    'jkrasinskisgnk',
-    'jbowensgnk',
+    "sgoodmansgnk",
+    "jkrasinskisgnk",
+    "jbowensgnk",
   ];
 
   distribution.mygroupB.store.put(users[0], keys[0], (e, v) => {
@@ -320,8 +320,8 @@ test('(1 pts) all.store.get(no key)', (done) => {
   });
 });
 
-test('(1 pts) all.store.put(no key)', (done) => {
-  const user = {first: 'Gus', last: 'Fring'};
+test("(1 pts) all.store.put(no key)", (done) => {
+  const user = {first: "Gus", last: "Fring"};
 
   distribution.mygroupB.store.put(user, null, (e, v) => {
     distribution.mygroupB.store.get(id.getID(user), (e, v) => {
@@ -352,22 +352,22 @@ const mygroupBGroup = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 9001};
-const n2 = {ip: '127.0.0.1', port: 9002};
-const n3 = {ip: '127.0.0.1', port: 9003};
-const n4 = {ip: '127.0.0.1', port: 9004};
-const n5 = {ip: '127.0.0.1', port: 9005};
-const n6 = {ip: '127.0.0.1', port: 9006};
+const n1 = {ip: "127.0.0.1", port: 9001};
+const n2 = {ip: "127.0.0.1", port: 9002};
+const n3 = {ip: "127.0.0.1", port: 9003};
+const n4 = {ip: "127.0.0.1", port: 9004};
+const n5 = {ip: "127.0.0.1", port: 9005};
+const n6 = {ip: "127.0.0.1", port: 9006};
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
-  const fs = require('fs');
-  const path = require('path');
+  const fs = require("fs");
+  const path = require("path");
 
-  fs.rmSync(path.join(__dirname, '../store'), {recursive: true, force: true});
-  fs.mkdirSync(path.join(__dirname, '../store'));
+  fs.rmSync(path.join(__dirname, "../store"), {recursive: true, force: true});
+  fs.mkdirSync(path.join(__dirname, "../store"));
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -407,8 +407,8 @@ beforeAll((done) => {
       localServer = server;
 
       const groupInstantiation = () => {
-        const mygroupConfig = {gid: 'mygroup'};
-        const mygroupBConfig = {gid: 'mygroupB', hash: id.rendezvousHash};
+        const mygroupConfig = {gid: "mygroup"};
+        const mygroupBConfig = {gid: "mygroupB", hash: id.rendezvousHash};
 
         // Create the groups
         distribution.local.groups.put(mygroupBConfig, mygroupBGroup, (e, v) => {
@@ -457,7 +457,7 @@ beforeAll((done) => {
 });
 
 afterAll((done) => {
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
     remote.node = n2;

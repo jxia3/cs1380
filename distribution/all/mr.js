@@ -31,7 +31,7 @@
 
 function mr(config) {
   const context = {
-    gid: config.gid || 'all',
+    gid: config.gid || "all",
   };
 
   /**

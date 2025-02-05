@@ -1,5 +1,5 @@
-const id = require('../util/id');
-const log = require('../util/log');
+const id = require("../util/id");
+const log = require("../util/log");
 
 const status = {};
 
@@ -14,15 +14,15 @@ status.get = function(configuration, callback) {
   // TODO: implement remaining local status items
 
 
-  if (configuration === 'heapTotal') {
+  if (configuration === "heapTotal") {
     callback(null, process.memoryUsage().heapTotal);
     return;
   }
-  if (configuration === 'heapUsed') {
+  if (configuration === "heapUsed") {
     callback(null, process.memoryUsage().heapUsed);
     return;
   }
-  callback(new Error('Status key not found'));
+  callback(new Error("Status key not found"));
 };
 
 

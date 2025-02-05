@@ -5,10 +5,10 @@
    - 1,000 large arrays and objects that contain complex types.
    Deserialized results are compared to the initial objects for correctness. */
 
-const distribution = require('../config.js');
-const random = require('./random.js');
+const distribution = require("../config.js");
+const random = require("./random.js");
 
-const {performance} = require('perf_hooks');
+const {performance} = require("perf_hooks");
 
 const util = distribution.util;
 random.setSeed(1000);
@@ -41,9 +41,9 @@ function testWorkload(values) {
     }
   }
 
-  console.log('Serialize time:', serializeTime);
-  console.log('Deserialize time:', deserializeTime);
-  console.log('Correct:', correct);
+  console.log("Serialize time:", serializeTime);
+  console.log("Deserialize time:", deserializeTime);
+  console.log("Correct:", correct);
   console.log();
 }
 
@@ -180,13 +180,13 @@ function checkEq(a, b) {
     return a === b;
   } else if (a instanceof Date && b instanceof Date) {
     return a.valueOf() === b.valueOf();
-  } else if (typeof a === 'function' && typeof b === 'function') {
+  } else if (typeof a === "function" && typeof b === "function") {
     return a.toString() === b.toString();
   } else if (a instanceof Error && b instanceof Error) {
     return a.message === b.message;
   } else if (a instanceof Array && b instanceof Array) {
     return a.length === b.length && a.every((v, i) => checkEq(v, b[i]));
-  } else if (typeof a === 'object' && typeof b === 'object') {
+  } else if (typeof a === "object" && typeof b === "object") {
     if (!checkEq(Object.keys(a), Object.keys(b))) {
       return false;
     }

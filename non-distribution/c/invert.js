@@ -5,9 +5,9 @@ Invert index to create a mapping from a term to all URLs containing the term.
 Usage: ./invert.js url < n-grams
 */
 
-const readline = require('readline');
+const readline = require("readline");
 
-let pageURL = '';
+let pageURL = "";
 if (process.argv.length >= 3) {
   pageURL = process.argv[2];
 }
@@ -17,14 +17,14 @@ const rl = readline.createInterface({
 });
 const terms = [];
 
-rl.on('line', (line) => {
-  const term = line.trim().split(/\s+/).join(' ');
-  if (term !== '') {
+rl.on("line", (line) => {
+  const term = line.trim().split(/\s+/).join(" ");
+  if (term !== "") {
     terms.push(term);
   }
 });
 
-rl.on('close', () => {
+rl.on("close", () => {
   const counts = {};
   for (const term of terms) {
     if (term in counts) {

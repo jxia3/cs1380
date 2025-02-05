@@ -1,9 +1,9 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test('(10 pts) all.status.spawn/stop()', (done) => {
+test("(10 pts) all.status.spawn/stop()", (done) => {
   // Spawn a node
-  const nodeToSpawn = {ip: '127.0.0.1', port: 8008};
+  const nodeToSpawn = {ip: "127.0.0.1", port: 8008};
 
   // Spawn the node
   distribution.group4.status.spawn(nodeToSpawn, (e, v) => {
@@ -14,10 +14,10 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
     } catch (error) {
       done(error);
     }
-    let remote = {node: nodeToSpawn, service: 'status', method: 'get'};
+    let remote = {node: nodeToSpawn, service: "status", method: "get"};
 
     // Ping the node, it should respond
-    distribution.local.comm.send(['nid'], remote, (e, v) => {
+    distribution.local.comm.send(["nid"], remote, (e, v) => {
       try {
         expect(e).toBeFalsy();
         expect(v).toBe(id.getNID(nodeToSpawn));
@@ -25,7 +25,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
         done(error);
       }
 
-      distribution.local.groups.get('group4', (e, v) => {
+      distribution.local.groups.get("group4", (e, v) => {
         try {
           expect(e).toBeFalsy();
           expect(v[id.getSID(nodeToSpawn)]).toBeDefined();
@@ -33,7 +33,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
           done(error);
         }
 
-        remote = {node: nodeToSpawn, service: 'status', method: 'stop'};
+        remote = {node: nodeToSpawn, service: "status", method: "stop"};
 
         // Stop the node
         distribution.local.comm.send([], remote, (e, v) => {
@@ -44,10 +44,10 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
           } catch (error) {
             done(error);
           }
-          remote = {node: nodeToSpawn, service: 'status', method: 'get'};
+          remote = {node: nodeToSpawn, service: "status", method: "get"};
 
           // Ping the node again, it shouldn't respond
-          distribution.local.comm.send(['nid'],
+          distribution.local.comm.send(["nid"],
               remote, (e, v) => {
                 try {
                   expect(e).toBeDefined();
@@ -78,17 +78,17 @@ const group4Group = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 8000};
-const n2 = {ip: '127.0.0.1', port: 8001};
-const n3 = {ip: '127.0.0.1', port: 8002};
-const n4 = {ip: '127.0.0.1', port: 8003};
-const n5 = {ip: '127.0.0.1', port: 8004};
-const n6 = {ip: '127.0.0.1', port: 8005};
+const n1 = {ip: "127.0.0.1", port: 8000};
+const n2 = {ip: "127.0.0.1", port: 8001};
+const n3 = {ip: "127.0.0.1", port: 8002};
+const n4 = {ip: "127.0.0.1", port: 8003};
+const n5 = {ip: "127.0.0.1", port: 8004};
+const n6 = {ip: "127.0.0.1", port: 8005};
 
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -122,8 +122,8 @@ beforeAll((done) => {
     localServer = server;
 
     const groupInstantiation = (e, v) => {
-      const mygroupConfig = {gid: 'mygroup'};
-      const group4Config = {gid: 'group4'};
+      const mygroupConfig = {gid: "mygroup"};
+      const group4Config = {gid: "group4"};
 
       // Create some groups
       distribution.local.groups
@@ -152,7 +152,7 @@ beforeAll((done) => {
 
 afterAll((done) => {
   distribution.mygroup.status.stop((e, v) => {
-    const remote = {service: 'status', method: 'stop'};
+    const remote = {service: "status", method: "stop"};
     remote.node = n1;
     distribution.local.comm.send([], remote, (e, v) => {
       remote.node = n2;

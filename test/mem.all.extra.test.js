@@ -1,17 +1,17 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const id = distribution.util.id;
 
 
-test('(2.5 pts) all.mem.get(no key)', (done) => {
+test("(2.5 pts) all.mem.get(no key)", (done) => {
   const users = [
-    {first: 'Emma', last: 'Watson'},
-    {first: 'John', last: 'Krasinski'},
-    {first: 'Julie', last: 'Bowen'},
+    {first: "Emma", last: "Watson"},
+    {first: "John", last: "Krasinski"},
+    {first: "Julie", last: "Bowen"},
   ];
   const keys = [
-    'ewatson',
-    'jkrasinski',
-    'jbowen',
+    "ewatson",
+    "jkrasinski",
+    "jbowen",
   ];
 
   distribution.mygroup.mem.put(users[0], keys[0], (e, v) => {
@@ -50,24 +50,24 @@ test('(2.5 pts) all.mem.get(no key)', (done) => {
   });
 });
 
-test('(15 pts) all.mem.reconf', (done) => {
+test("(15 pts) all.mem.reconf", (done) => {
   // First, we check where the keys should be placed
   // before we change the group's nodes.
   // mygroup uses the specified hash function for item placement,
   // so we test using the same hash function
   const users = [
-    {first: 'Emma', last: 'Watson'},
-    {first: 'John', last: 'Krasinski'},
-    {first: 'Julie', last: 'Bowen'},
-    {first: 'Sasha', last: 'Spielberg'},
-    {first: 'Tim', last: 'Nelson'},
+    {first: "Emma", last: "Watson"},
+    {first: "John", last: "Krasinski"},
+    {first: "Julie", last: "Bowen"},
+    {first: "Sasha", last: "Spielberg"},
+    {first: "Tim", last: "Nelson"},
   ];
   const keys = [
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
   ];
 
   // The keys at first will be placed in nodes n2, n4, and n5
@@ -77,13 +77,13 @@ test('(15 pts) all.mem.reconf', (done) => {
   // This function will be called after we put items in nodes
   const checkPlacement = (e, v) => {
     try {
-      const remote = {node: n2, service: 'mem', method: 'get'};
+      const remote = {node: n2, service: "mem", method: "get"};
       const messages = [
-        [{key: keys[0], gid: 'mygroup'}],
-        [{key: keys[1], gid: 'mygroup'}],
-        [{key: keys[2], gid: 'mygroup'}],
-        [{key: keys[3], gid: 'mygroup'}],
-        [{key: keys[4], gid: 'mygroup'}],
+        [{key: keys[0], gid: "mygroup"}],
+        [{key: keys[1], gid: "mygroup"}],
+        [{key: keys[2], gid: "mygroup"}],
+        [{key: keys[3], gid: "mygroup"}],
+        [{key: keys[4], gid: "mygroup"}],
       ];
 
       distribution.local.comm.send(messages[0], remote, (e, v) => {
@@ -156,9 +156,9 @@ test('(15 pts) all.mem.reconf', (done) => {
             // Then, we remove n3 from the list of nodes,
             // and run reconf() with the new list of nodes
             // Note: In this scenario, we are removing a node that has no items in it.
-            distribution.local.groups.rem('mygroup', id.getSID(n3), (e, v) => {
+            distribution.local.groups.rem("mygroup", id.getSID(n3), (e, v) => {
               distribution.mygroup.groups.rem(
-                  'mygroup',
+                  "mygroup",
                   id.getSID(n3),
                   (e, v) => {
                     distribution.mygroup.mem.reconf(groupCopy, (e, v) => {
@@ -188,22 +188,22 @@ const mygroupGroup = {};
 */
 let localServer = null;
 
-const n1 = {ip: '127.0.0.1', port: 9001};
-const n2 = {ip: '127.0.0.1', port: 9002};
-const n3 = {ip: '127.0.0.1', port: 9003};
-const n4 = {ip: '127.0.0.1', port: 9004};
-const n5 = {ip: '127.0.0.1', port: 9005};
-const n6 = {ip: '127.0.0.1', port: 9006};
+const n1 = {ip: "127.0.0.1", port: 9001};
+const n2 = {ip: "127.0.0.1", port: 9002};
+const n3 = {ip: "127.0.0.1", port: 9003};
+const n4 = {ip: "127.0.0.1", port: 9004};
+const n5 = {ip: "127.0.0.1", port: 9005};
+const n6 = {ip: "127.0.0.1", port: 9006};
 
 beforeAll((done) => {
   // First, stop the nodes if they are running
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
 
-  const fs = require('fs');
-  const path = require('path');
+  const fs = require("fs");
+  const path = require("path");
 
-  fs.rmSync(path.join(__dirname, '../store'), {recursive: true, force: true});
-  fs.mkdirSync(path.join(__dirname, '../store'));
+  fs.rmSync(path.join(__dirname, "../store"), {recursive: true, force: true});
+  fs.mkdirSync(path.join(__dirname, "../store"));
 
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
@@ -237,7 +237,7 @@ beforeAll((done) => {
       localServer = server;
 
       const groupInstantiation = () => {
-        const mygroupConfig = {gid: 'mygroup'};
+        const mygroupConfig = {gid: "mygroup"};
 
         // Create the groups
         distribution.local.groups.put(mygroupConfig, mygroupGroup, (e, v) => {
@@ -267,7 +267,7 @@ beforeAll((done) => {
 });
 
 afterAll((done) => {
-  const remote = {service: 'status', method: 'stop'};
+  const remote = {service: "status", method: "stop"};
   remote.node = n1;
   distribution.local.comm.send([], remote, (e, v) => {
     remote.node = n2;

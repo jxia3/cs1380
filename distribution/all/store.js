@@ -4,7 +4,7 @@ const util = distribution.util;
 
 const store = function(config) {
   const context = {};
-  context.gid = config.gid || 'all';
+  context.gid = config.gid || "all";
   context.hash = config.hash || util.id.naiveHash;
   return {
     get: (configuration, callback) => {
