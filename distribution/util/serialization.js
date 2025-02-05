@@ -14,7 +14,7 @@
 // Enable global object discovery
 const ENABLE_GLOBAL = true;
 // Enable native object discovery
-const ENABLE_NATIVE = true;
+const ENABLE_NATIVE = false;
 // Enable optimized type flags
 const OPTIMIZE_FLAGS = true;
 // Excluded native objects

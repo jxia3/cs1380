@@ -1,4 +1,7 @@
-fetch("http://127.0.0.1:1234/", {
-  method: "POST",
-  body: JSON.stringify({a: "b"}),
+const distribution = require("./distribution.js");
+const util = distribution.util;
+
+fetch("http://127.0.0.1:1234/status/get", {
+  method: "PUT",
+  body: util.serialize(["nid"]),
 }).then((r) => r.text()).then(console.log);
