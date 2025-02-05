@@ -9,7 +9,11 @@ function start(callback) {
   server.listen(global.nodeConfig.port, global.nodeConfig.ip, () => {
     log(`Server running at http://${global.nodeConfig.ip}:${global.nodeConfig.port}`);
     global.distribution.node.server = server;
-    callback(server);
+    if (typeof callback === "function") {
+      callback(server);
+    } else {
+      log("Received a start callback that is not a function");
+    }
   });
 
   server.on("error", (error) => {
@@ -21,7 +25,10 @@ function start(callback) {
 /* Handles an incoming HTTP request. If the request is a message, then the corresponding
    service is called to process the message. */
 function handleRequest(request, response) {
-
+  console.log("got request", request);
+  response.writeHead(200);
+  response.write("hello");
+  response.end();
 }
 
 module.exports = {

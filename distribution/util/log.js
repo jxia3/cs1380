@@ -2,6 +2,9 @@
 const fs = require("fs");
 const path = require("path");
 
+const PRINT_MESSAGES = true;
+const SAVE_MESSAGES = false;
+
 const logFile = path.join(__dirname, "../../", "log.txt");
 
 function log(message, severity) {
@@ -16,8 +19,16 @@ function log(message, severity) {
       .format(now)}.${String(now.getMilliseconds() * 1000).padStart(6, "0")}`;
 
   global.distribution.local.status.get("sid", (e, sid) => {
-    fs.appendFileSync(logFile, `${date} [${global.nodeConfig.ip}:${global.nodeConfig.port}\
-(${sid})] [${severity}] ${message}\n`);
+    if (sid === undefined) {
+      sid = "unknown";
+    }
+    const data = `${date} [${global.nodeConfig.ip}:${global.nodeConfig.port} (${sid})] [${severity}] ${message}`;
+    if (PRINT_MESSAGES) {
+      console.log(data);
+    }
+    if (SAVE_MESSAGES) {
+      fs.appendFileSync(logFile, data + "\n");
+    }
   });
 }
 
