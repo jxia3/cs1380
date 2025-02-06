@@ -4,6 +4,9 @@
 /* Provides an interface to call a service on a remote node. */
 
 const log = require("../util/log.js");
+const util = require("../util/util.js");
+
+const REQUEST_TIMEOUT = 60000;
 
 /**
  * @typedef {Object} Target
@@ -26,17 +29,27 @@ function send(message, remote, callback) {
     callback(new Error("Invalid remote node configuration"), null);
     return;
   }
-  if (message === undefined) {
-    message = [];
-  }
   if (!(message instanceof Array)) {
     callback(new Error("Message does not contain an argument list"), null);
     return;
   }
 
+  // Send HTTP request and parse response
   try {
     const url = `http://${remote.node.ip}:${remote.node.port}/${remote.service}/${remote.method}`;
     log(`Sending service call to ${url}`);
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: util.serialize(message),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    })
+        .then((data) => data.text())
+        .then((data) => util.deserialize(data))
+        .then((data) => callback(data.error, data.result))
+        .catch((error) => callback(error, null));
   } catch (error) {
     callback(error, null);
   }
