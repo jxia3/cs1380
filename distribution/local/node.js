@@ -59,11 +59,16 @@ function handleRequest(request, response) {
         data = util.deserialize(content);
       } catch (error) {
         sendError(400, new Error("Unable to deserialize request body"), response);
+        return;
       }
-      global.statusState.messageCount += 1;
-      log(`Handling request to service '${urlParts[0]}'`);
+      if (!(data instanceof Array)) {
+        sendError(400, new Error("Request body is not an argument list"), response);
+        return;
+      }
 
       // Call service and send result
+      global.statusState.messageCount += 1;
+      log(`Handling request to service '${urlParts[0]}'`);
       try {
         service[urlParts[1]](...data, (error, result) => {
           response.writeHead(200, {"Content-Type": "application/json"});

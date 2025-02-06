@@ -29,10 +29,10 @@ if (args.port) {
 if (args.config) {
   const nodeConfig = util.deserialize(args.config);
   global.nodeConfig.ip = nodeConfig.ip ? nodeConfig.ip : global.nodeConfig.ip;
-  global.nodeConfig.port = nodeConfig.port ?
-        nodeConfig.port : global.nodeConfig.port;
-  global.nodeConfig.onStart = nodeConfig.onStart ?
-        nodeConfig.onStart : global.nodeConfig.onStart;
+  global.nodeConfig.port = nodeConfig.port
+        ? nodeConfig.port : global.nodeConfig.port;
+  global.nodeConfig.onStart = nodeConfig.onStart
+        ? nodeConfig.onStart : global.nodeConfig.onStart;
 }
 
 const distribution = function(config) {
@@ -55,20 +55,20 @@ for (const key in distribution.local) {
 
 /* Initialize distribution object */
 distribution["all"] = {};
-distribution["all"].status =
-    require("./distribution/all/status")({gid: "all"});
-distribution["all"].comm =
-    require("./distribution/all/comm")({gid: "all"});
-distribution["all"].gossip =
-    require("./distribution/all/gossip")({gid: "all"});
-distribution["all"].groups =
-    require("./distribution/all/groups")({gid: "all"});
-distribution["all"].routes =
-    require("./distribution/all/routes")({gid: "all"});
-distribution["all"].mem =
-    require("./distribution/all/mem")({gid: "all"});
-distribution["all"].store =
-    require("./distribution/all/store")({gid: "all"});
+distribution["all"].status
+    = require("./distribution/all/status")({gid: "all"});
+distribution["all"].comm
+    = require("./distribution/all/comm")({gid: "all"});
+distribution["all"].gossip
+    = require("./distribution/all/gossip")({gid: "all"});
+distribution["all"].groups
+    = require("./distribution/all/groups")({gid: "all"});
+distribution["all"].routes
+    = require("./distribution/all/routes")({gid: "all"});
+distribution["all"].mem
+    = require("./distribution/all/mem")({gid: "all"});
+distribution["all"].store
+    = require("./distribution/all/store")({gid: "all"});
 
 distribution.node.config = global.nodeConfig;
 module.exports = global.distribution;
