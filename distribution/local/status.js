@@ -1,35 +1,41 @@
+/* Tracks the current state of the node. Note that the node ID is computed once
+   on startup, and subsequent changes to the node configuration are not reflected.*/
+
 const id = require("../util/id");
-const log = require("../util/log");
 
-const status = {};
-
-global.moreStatus = {
-  sid: id.getSID(global.nodeConfig),
+const state = {
   nid: id.getNID(global.nodeConfig),
-  counts: 0,
+  sid: id.getSID(global.nodeConfig),
+  messageCount: 0,
 };
+global.statusState = state;
 
-status.get = function(configuration, callback) {
-  callback = callback || function() { };
-  // TODO: implement remaining local status items
-
-
-  if (configuration === "heapTotal") {
+/* Retrieves a status value on the current node. */
+function get(configuration, callback) {
+  if (callback === undefined) {
+    return;
+  }
+  if (configuration === "nid") {
+    callback(null, state.nid);
+  } else if (configuration === "sid") {
+    callback(null, state.sid);
+  } else if (configuration === "ip") {
+    callback(null, global.nodeConfig.ip);
+  } else if (configuration === "port") {
+    callback(null, global.nodeConfig.port);
+  } else if (configuration === "counts") {
+    callback(null, state.messageCount);
+  } else if (configuration === "heapTotal") {
     callback(null, process.memoryUsage().heapTotal);
-    return;
-  }
-  if (configuration === "heapUsed") {
+  } else if (configuration === "heapUsed") {
     callback(null, process.memoryUsage().heapUsed);
-    return;
+  } else {
+    callback(new Error(`Status '${configuration}' not found`), null);
   }
-  callback(new Error("Status key not found"));
-};
+}
 
+function spawn(configuration, callback) {}
 
-status.spawn = function(configuration, callback) {
-};
+function stop(callback) {}
 
-status.stop = function(callback) {
-};
-
-module.exports = status;
+module.exports = {get, spawn, stop};

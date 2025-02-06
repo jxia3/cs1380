@@ -6,6 +6,7 @@
 const services = {};
 
 /**
+ * Retrieves a dynamic service on the current node.
  * @param {string} configuration
  * @param {Callback} callback
  * @return {void}
@@ -22,6 +23,7 @@ function get(configuration, callback) {
 }
 
 /**
+ * Sets a dynamic service on the current node.
  * @param {object} service
  * @param {string} configuration
  * @param {Callback} callback
@@ -35,6 +37,7 @@ function put(service, configuration, callback) {
 }
 
 /**
+ * Deletes a dynamic service on the current node.
  * @param {string} configuration
  * @param {Callback} callback
  */

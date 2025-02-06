@@ -48,12 +48,23 @@ function handleRequest(request, response) {
       return;
     }
 
-    // Call service with data and send response
+    // Read request data
     let content = "";
     request.on("data", (chunk) => content += chunk);
+
     request.on("end", () => {
+      // Deserialize request data
+      let data;
       try {
-        const data = util.deserialize(content);
+        data = util.deserialize(content);
+      } catch (error) {
+        sendError(400, new Error("Unable to deserialize request body"), response);
+      }
+      log(`Handling request to service '${urlParts[0]}'`);
+
+      // Call service and send result
+      try {
+        global.statusState.messageCount += 1;
         const result = service[urlParts[1]](data);
         response.writeHead(200, {"Content-Type": "application/json"});
         response.end(util.serialize(result));
