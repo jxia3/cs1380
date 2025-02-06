@@ -30,7 +30,7 @@ test("(2 pts) (scenario) collect errors and successful results", (done) => {
   };
 
   const pineappleDeliveryService = (callback) => {
-    callback("bad pineapples", null);
+    callback(new Error("bad pineapples"), null);
   };
 
   const bananaDeliveryService = (callback) => {
@@ -42,7 +42,7 @@ test("(2 pts) (scenario) collect errors and successful results", (done) => {
   };
 
   const mangoDeliveryService = (callback) => {
-    callback("bad mangoes", null);
+    callback(new Error("bad mangoes"), null);
   };
 
   const services = [
@@ -95,7 +95,8 @@ test("(5 pts) (scenario) use rpc", (done) => {
 
   const node = {ip: "127.0.0.1", port: 9009};
 
-  let addOneRPC = '?';
+  const asyncAddOne = distribution.util.wire.toAsync(addOne);
+  const addOneRPC = distribution.util.wire.createRPC(asyncAddOne);
 
   const rpcService = {
     addOne: addOneRPC,
