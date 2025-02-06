@@ -58,7 +58,7 @@ function handleRequest(request, response) {
         response.writeHead(200, {"Content-Type": "application/json"});
         response.end(util.serialize(result));
       } catch (error) {
-        sendError(400, error, response);
+        sendError(500, error, response);
       }
     });
   });
