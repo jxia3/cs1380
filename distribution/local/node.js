@@ -48,10 +48,8 @@ function handleRequest(request, response) {
       return;
     }
 
-    // Read request data
     let content = "";
     request.on("data", (chunk) => content += chunk);
-
     request.on("end", () => {
       // Deserialize request data
       let data;
@@ -70,6 +68,7 @@ function handleRequest(request, response) {
       global.statusState.messageCount += 1;
       log(`Handling request to service '${urlParts[0]}'`);
       try {
+        // todo: add metaprogramming
         service[urlParts[1]](...data, (error, result) => {
           response.writeHead(200, {"Content-Type": "application/json"});
           response.end(util.serialize({error, result}));
@@ -84,7 +83,7 @@ function handleRequest(request, response) {
 /* Responds to an HTTP request with an error. */
 function sendError(code, error, response) {
   response.writeHead(code, {"Content-Type": "application/json"});
-  response.end(util.serialize(error));
+  response.end(util.serialize({error, result: null}));
 }
 
 module.exports = {

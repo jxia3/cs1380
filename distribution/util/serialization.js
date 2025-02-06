@@ -13,12 +13,12 @@
 
 // Enable global object discovery
 const ENABLE_GLOBAL = true;
+const EXCLUDED_GLOBAL = ["sys", "wasi"];
 // Enable native object discovery
 const ENABLE_NATIVE = false;
+const EXCLUDED_NATIVE = ["sys", "wasi", "_stream_wrap"];
 // Enable optimized type flags
 const OPTIMIZE_FLAGS = true;
-// Excluded native objects
-const EXCLUDED_MODULES = ["sys", "wasi", "_stream_wrap"];
 
 // Marker flags that indicate structure
 const Marker = {
@@ -64,6 +64,9 @@ if (ENABLE_GLOBAL) {
   nativeObjects["global"] = global;
   const path = ["global"];
   for (const property of Object.getOwnPropertyNames(global)) {
+    if (EXCLUDED_GLOBAL.includes(property)) {
+      continue;
+    }
     if (typeof global[property] === "function" || typeof global[property] === "object") {
       path.push(property);
       exploreNative(global[property], path);
@@ -76,7 +79,7 @@ if (ENABLE_NATIVE) {
   const path = [];
   for (const item in process.binding("natives")) {
     try {
-      if (EXCLUDED_MODULES.includes(item)) {
+      if (EXCLUDED_NATIVE.includes(item)) {
         continue;
       }
       const module = require(item);
