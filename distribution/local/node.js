@@ -60,14 +60,15 @@ function handleRequest(request, response) {
       } catch (error) {
         sendError(400, new Error("Unable to deserialize request body"), response);
       }
+      global.statusState.messageCount += 1;
       log(`Handling request to service '${urlParts[0]}'`);
 
       // Call service and send result
       try {
-        global.statusState.messageCount += 1;
-        const result = service[urlParts[1]](data);
-        response.writeHead(200, {"Content-Type": "application/json"});
-        response.end(util.serialize(result));
+        service[urlParts[1]](...data, (error, result) => {
+          response.writeHead(200, {"Content-Type": "application/json"});
+          response.end(util.serialize({error, result}));
+        });
       } catch (error) {
         sendError(500, error, response);
       }

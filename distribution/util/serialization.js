@@ -20,6 +20,12 @@ const OPTIMIZE_FLAGS = true;
 // Excluded native objects
 const EXCLUDED_MODULES = ["sys", "wasi", "_stream_wrap"];
 
+// Marker flags that indicate structure
+const Marker = {
+  Type: OPTIMIZE_FLAGS ? "t" : "type",
+  Value: OPTIMIZE_FLAGS ? "v" : "value",
+};
+
 // Tag at the beginning of leaf type serializations
 const LeafTag = {
   Undefined: OPTIMIZE_FLAGS ? "u" : "undefined",
@@ -175,16 +181,16 @@ function encodeFunction(fn, path, seen) {
   // Create reference to existing function
   if (seen.has(fn)) {
     return {
-      type: ObjectType.Reference,
-      value: seen.get(fn),
+      [Marker.Type]: ObjectType.Reference,
+      [Marker.Value]: seen.get(fn),
     };
   }
 
   // Add path to seen and convert function body to string
   seen.set(fn, [...path]);
   return {
-    type: ObjectType.Function,
-    value: fn.toString(),
+    [Marker.Type]: ObjectType.Function,
+    [Marker.Value]: fn.toString(),
   };
 }
 
@@ -193,8 +199,8 @@ function encodeError(error, path, seen) {
   // Create reference to existing error
   if (seen.has(error)) {
     return {
-      type: ObjectType.Reference,
-      value: seen.get(error),
+      [Marker.Type]: ObjectType.Reference,
+      [Marker.Value]: seen.get(error),
     };
   }
 
@@ -211,8 +217,8 @@ function encodeError(error, path, seen) {
   path.pop();
 
   return {
-    type: ObjectType.Error,
-    value: {name, message, cause},
+    [Marker.Type]: ObjectType.Error,
+    [Marker.Value]: {name, message, cause},
   };
 }
 
@@ -221,8 +227,8 @@ function encodeArray(array, path, seen) {
   // Create reference to existing array
   if (seen.has(array)) {
     return {
-      type: ObjectType.Reference,
-      value: seen.get(array),
+      [Marker.Type]: ObjectType.Reference,
+      [Marker.Value]: seen.get(array),
     };
   }
 
@@ -236,8 +242,8 @@ function encodeArray(array, path, seen) {
   }
 
   return {
-    type: ObjectType.Array,
-    value: elements,
+    [Marker.Type]: ObjectType.Array,
+    [Marker.Value]: elements,
   };
 }
 
@@ -246,8 +252,8 @@ function encodeObject(object, path, seen) {
   // Create reference to existing object
   if (seen.has(object)) {
     return {
-      type: ObjectType.Reference,
-      value: seen.get(object),
+      [Marker.Type]: ObjectType.Reference,
+      [Marker.Value]: seen.get(object),
     };
   }
 
@@ -261,8 +267,8 @@ function encodeObject(object, path, seen) {
   }
 
   return {
-    type: ObjectType.Object,
-    value: properties,
+    [Marker.Type]: ObjectType.Object,
+    [Marker.Value]: properties,
   };
 }
 
@@ -312,20 +318,20 @@ function decode(object) {
   }
 
   // Decode reference types
-  if (object.type === ObjectType.Function) {
-    return decodeFunction(object.value);
-  } else if (object.type === ObjectType.Error) {
-    return decodeError(object.value);
-  } else if (object.type === ObjectType.Array) {
-    return decodeArray(object.value);
-  } else if (object.type === ObjectType.Object) {
-    return decodeObject(object.value);
-  } else if (object.type === ObjectType.Reference) {
-    return decodeReference(object.value);
+  if (object[Marker.Type] === ObjectType.Function) {
+    return decodeFunction(object[Marker.Value]);
+  } else if (object[Marker.Type] === ObjectType.Error) {
+    return decodeError(object[Marker.Value]);
+  } else if (object[Marker.Type] === ObjectType.Array) {
+    return decodeArray(object[Marker.Value]);
+  } else if (object[Marker.Type] === ObjectType.Object) {
+    return decodeObject(object[Marker.Value]);
+  } else if (object[Marker.Type] === ObjectType.Reference) {
+    return decodeReference(object[Marker.Value]);
   }
 
-  if ("type" in object) {
-    throw new Error("Cannot deserialize invalid type: " + object.type.toString());
+  if (Marker.Type in object) {
+    throw new Error("Cannot deserialize invalid type: " + object[Marker.Type].toString());
   }
   throw new Error("Cannot deserialize invalid object: " + object.toString());
 }
