@@ -6,43 +6,43 @@
 const services = {};
 
 /**
- * @param {string} name
+ * @param {string} configuration
  * @param {Callback} callback
  * @return {void}
  */
-function get(name, callback) {
+function get(configuration, callback) {
   if (callback === undefined) {
     return;
   }
-  if (name in services) {
-    callback(null, services[name]);
+  if (configuration in services) {
+    callback(null, services[configuration]);
   } else {
-    callback(new Error(`Service '${name}' not found`), null);
+    callback(new Error(`Service '${configuration}' not found`), null);
   }
 }
 
 /**
  * @param {object} service
- * @param {string} name
+ * @param {string} configuration
  * @param {Callback} callback
  * @return {void}
  */
-function put(service, name, callback) {
-  services[name] = service;
+function put(service, configuration, callback) {
+  services[configuration] = service;
   if (callback !== undefined) {
     callback(null, service);
   }
 }
 
 /**
- * @param {string} name
+ * @param {string} configuration
  * @param {Callback} callback
  */
-function rem(name, callback) {
+function rem(configuration, callback) {
   let service = null;
-  if (name in services) {
-    service = services[name];
-    delete services[name];
+  if (configuration in services) {
+    service = services[configuration];
+    delete services[configuration];
   }
   if (callback !== undefined) {
     callback(null, service);
