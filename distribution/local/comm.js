@@ -6,6 +6,8 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
+const http = require("http");
+
 const REQUEST_TIMEOUT = 20000;
 
 /**
