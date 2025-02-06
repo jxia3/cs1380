@@ -12,10 +12,8 @@ function start(callback) {
   server.listen(global.nodeConfig.port, global.nodeConfig.ip, () => {
     log(`Server running at http://${global.nodeConfig.ip}:${global.nodeConfig.port}`);
     global.distribution.node.server = server;
-    if (typeof callback === "function") {
+    if (callback !== undefined) {
       callback(server);
-    } else {
-      log("Received a start callback that is not a function");
     }
   });
 
@@ -28,40 +26,48 @@ function start(callback) {
 /* Handles an incoming HTTP request. If the request is a message, then the corresponding
    service is called to process the message. */
 function handleRequest(request, response) {
-  // Check request type and URL
+  // Check request type and URL format
   if (request.method !== "PUT") {
-    sendError(400, "Invalid request type", response);
+    sendError(400, new Error("Invalid request type"), response);
+    return;
   }
   const urlParts = request.url.slice(1).split("/");
-  if (urlParts.length !== 2 || !(urlParts[0] in local)) {
-    sendError(400, "Service not found", response);
-  }
-  if (!(urlParts[1] in local[urlParts[0]])) {
-    sendError(400, "Service method not found", response);
+  if (urlParts.length !== 2) {
+    sendError(400, new Error("Invalid URL path format"), response);
+    return;
   }
 
-  // Read and parse request content
-  let content = "";
-  request.on("data", (chunk) => content += chunk);
-  request.on("end", () => {
-    try {
-      const data = util.deserialize(content);
-      dispatchService(urlParts[0], urlParts[1], data);
-    } catch (error) {
-      sendError(400, error.message, response);
+  // Find node service
+  local.routes.get(urlParts[0], (error, service) => {
+    if (error) {
+      sendError(400, error, response);
+      return;
     }
+    if (!(urlParts[1] in service)) {
+      sendError(400, new Error(`Method '${urlParts[1]}' not in service`), response);
+      return;
+    }
+
+    // Call service with data and send response
+    let content = "";
+    request.on("data", (chunk) => content += chunk);
+    request.on("end", () => {
+      try {
+        const data = util.deserialize(content);
+        const result = service[urlParts[1]](data);
+        response.writeHead(200, {"Content-Type": "application/json"});
+        response.end(util.serialize(result));
+      } catch (error) {
+        sendError(400, error, response);
+      }
+    });
   });
 }
 
 /* Responds to an HTTP request with an error. */
-function sendError(code, message, response) {
+function sendError(code, error, response) {
   response.writeHead(code, {"Content-Type": "application/json"});
-  response.end(util.serialize(new Error(message)));
-}
-
-/* Calls a service method to handle a message. */
-function dispatchService(service, method, data) {
-  console.log("got message:", service, method, data);
+  response.end(util.serialize(error));
 }
 
 module.exports = {
