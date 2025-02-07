@@ -6,7 +6,8 @@ const log = require("../util/log.js");
 const rpcFns = {};
 let rpcCount = 0;
 
-/* Creates a local RPC function and returns the stub. */
+/* Creates a local RPC function and returns the stub. Note that external nodes can
+   only create RPC functions that are stateless. */
 function create(fn, callback) {
   try {
     const stub = _createRPC(fn);
@@ -19,13 +20,13 @@ function create(fn, callback) {
 /* Calls an RPC function and returns the result. */
 function call(config, ...args) {
   if (config in rpcFns) {
-    rpcFns(config)(...args);
-  } else if (args.length > 0) {
-    try {
-      args[args.length - 1](new Error(`RPC '${config}' not found`), null);
-    } catch (error) {
-      log(`RPC call to '${config}' failed: ${error.message}`);
-    }
+    rpcFns[config](...args);
+    return;
+  }
+  try {
+    args[args.length - 1](new Error(`RPC '${config}' not found`), null);
+  } catch (error) {
+    log(`RPC call to '${config}' failed: ${error.message}`);
   }
 }
 
