@@ -96,8 +96,8 @@ test("(8 pts) routes: put() -> get()", (done) => {
   });
 });
 
-test("(8 pts) comm: routes.get()", (done) => {
-  const remote = {node: config, service: "routes", method: "get"};
+test('(3 pts) comm: routes.get()', (done) => {
+  const remote = {node: config, service: 'routes', method: 'get'};
   const message = [
     "status",
   ];
