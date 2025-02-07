@@ -6,7 +6,7 @@ function add(a, b, callback) {
   callback(a + b);
 }
 
-const result = util.wire.createRPC(add);
-console.log(node);
-console.log(result);
-console.log(result.toString());
+util.comm.send();
+
+result(1, 2, console.log);
+result(2, 3, console.log);

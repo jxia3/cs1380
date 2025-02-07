@@ -1,39 +1,9 @@
 const log = require("./log.js");
 const rpc = require("../local/rpc.js");
 
-let rpcCount = 0;
-
 /* Adds an RPC call for a local function. The function must accept a callback parameter. */
 function createRPC(fn) {
-  // Register RPC function
-  const id = rpcCount.toString();
-  log(`Creating RPC function with ID ${id}`);
-  rpcCount += 1;
-  rpc.put(fn, id, (error, result) => {
-    // Safety: it is guaranteed that the call is synchronous so there is no race condition
-    if (error) {
-      throw error;
-    }
-  });
-
-  // Create RPC stub
-  function stub(...args) {
-    const remote = {
-      node: "__NODE_INFO__",
-      service: "rpc",
-      method: "call",
-    };
-    const callback = args.pop();
-    args.unshift("__RPC_ID__");
-    global.distribution.local.comm.send(args, remote, callback);
-  }
-  const nodeInfo = `{ ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port} }`;
-  const stubText = stub
-      .toString()
-      .replaceAll("\"__NODE_INFO__\"", nodeInfo)
-      .replaceAll("\"__RPC_ID__\"", `"${id}"`);
-
-  return (new Function(`return ${stubText}`))();
+  return rpc._createRPC(fn);
 }
 
 /* Converts a synchronous function that returns a value to an asynchronous function that
@@ -58,7 +28,4 @@ function toAsync(fn) {
   return asyncFn;
 }
 
-module.exports = {
-  createRPC: createRPC,
-  toAsync: toAsync,
-};
+module.exports = {createRPC, toAsync};

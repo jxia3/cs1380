@@ -4,24 +4,28 @@
 const log = require("../util/log.js");
 
 const rpcFns = {};
+let rpcCount = 0;
 
-/* Retrieves a registered RPC function. */
-function get(config, callback) {
-  if (callback === undefined) {
-    return;
-  }
-  if (config in rpcFns) {
-    callback(null, rpcFns[config]);
-  } else {
-    callback(new Error(`RPC '${config}' not found`), null);
+/* Creates a local RPC function and returns the stub. */
+function create(fn, callback) {
+  try {
+    const stub = _createRPC(fn);
+    callback(null, stub);
+  } catch (error) {
+    callback(error, null);
   }
 }
 
-/* Registers an RPC function. */
-function put(fn, config, callback) {
-  rpcFns[config] = fn;
-  if (callback !== undefined) {
-    callback(null, fn);
+/* Calls an RPC function and returns the result. */
+function call(config, ...args) {
+  if (config in rpcFns) {
+    rpcFns(config)(...args);
+  } else if (args.length > 0) {
+    try {
+      args[args.length - 1](new Error(`RPC '${config}' not found`), null);
+    } catch (error) {
+      log(`RPC call to '${config}' failed: ${error.message}`);
+    }
   }
 }
 
@@ -37,17 +41,33 @@ function rem(config, callback) {
   }
 }
 
-/* Calls an RPC function. */
-function call(config, ...args) {
-  if (config in rpcFns) {
-    rpcFns(config)(...args);
-  } else if (args.length > 0) {
-    try {
-      args[args.length - 1](new Error(`RPC '${config}' not found`), null);
-    } catch (error) {
-      log(`RPC call to '${config}' failed: ${error.message}`);
-    }
+/* Registers an RPC function and creates an RPC stub. This internal function does
+   not accept a callback and should not be called by external services. */
+function _createRPC(fn) {
+  // Register RPC function
+  const id = rpcCount.toString();
+  log(`Creating RPC function with ID ${id}`);
+  rpcCount += 1;
+  rpcFns[id] = fn;
+
+  // Create RPC stub
+  function stub(...args) {
+    const remote = {
+      node: "__NODE_INFO__",
+      service: "rpc",
+      method: "call",
+    };
+    const callback = args.pop();
+    args.unshift("__RPC_ID__");
+    global.distribution.local.comm.send(args, remote, callback);
   }
+  const nodeInfo = `{ ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port} }`;
+  const stubText = stub
+      .toString()
+      .replaceAll("\"__NODE_INFO__\"", nodeInfo)
+      .replaceAll("\"__RPC_ID__\"", `"${id}"`);
+
+  return (new Function(`return ${stubText}`))();
 }
 
-module.exports = {call, get, put, rem};
+module.exports = {create, call, rem, _createRPC};
