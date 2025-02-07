@@ -7,6 +7,8 @@
 */
 
 const distribution = require("../../config.js");
+const local = distribution.local;
+const util = distribution.util;
 
 test("(1 pts) student test", (done) => {
   // Fill out this test case...
@@ -18,7 +20,6 @@ test("(1 pts) student test", (done) => {
   done(new Error("Not implemented"));
 });
 
-
 test("(1 pts) student test", (done) => {
   // Fill out this test case...
   done(new Error("Not implemented"));
@@ -30,6 +31,35 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  let value = 0;
+  function increment(amount, callback) {
+    value += amount;
+    callback(null, value);
+  }
+  const stub = util.wire.createRPC(increment);
+  expect(typeof stub).toBe("function");
+
+  stub(1, (error, value) => {
+    expect(error).toBeFalsy();
+    expect(value).toBe(1);
+    stub(2, (error, value) => {
+      expect(error).toBeFalsy();
+      expect(value).toBe(3);
+      done();
+    });
+  });
+});
+
+let localServer = null;
+
+beforeAll((done) => {
+  distribution.node.start((server) => {
+    localServer = server;
+    done();
+  });
+});
+
+afterAll((done) => {
+  localServer.close();
+  done();
 });
