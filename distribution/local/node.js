@@ -47,6 +47,7 @@ function handleRequest(request, response) {
       sendError(400, new Error(`Method '${urlParts[1]}' not in service`), response);
       return;
     }
+    const method = service[urlParts[1]];
 
     let content = "";
     request.on("data", (chunk) => content += chunk);
@@ -63,13 +64,15 @@ function handleRequest(request, response) {
         sendError(400, new Error("Request body is not an argument list"), response);
         return;
       }
+      if (data.length < method.length - 1) {
+        sendError(400, new Error(`Expected ${method.length - 1} method arguments`), response);
+      }
 
       // Call service and send result
       global.statusState.messageCount += 1;
       log(`Handling request to service '${urlParts[0]}'`);
       try {
-        // todo: add metaprogramming
-        service[urlParts[1]](...data, (error, result) => {
+        method(...data, (error, result) => {
           response.writeHead(200, {"Content-Type": "application/json"});
           response.end(util.serialize({error, result}));
         });
