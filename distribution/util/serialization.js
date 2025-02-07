@@ -86,7 +86,7 @@ if (ENABLE_NATIVE) {
       path.push(item);
       exploreNative(module, path);
       path.pop();
-    } catch (error) {}
+    } catch {}
   }
 }
 
