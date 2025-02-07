@@ -66,6 +66,7 @@ function handleRequest(request, response) {
       }
       if (data.length < method.length - 1) {
         sendError(400, new Error(`Expected ${method.length - 1} method arguments`), response);
+        return;
       }
 
       // Call service and send result

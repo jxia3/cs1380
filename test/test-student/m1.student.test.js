@@ -17,14 +17,12 @@ test("(1 pts) student test", () => {
   expect(util.deserialize(util.serialize("!@#$%^&*()_+"))).toBe("!@#$%^&*()_+");
 });
 
-
 test("(1 pts) student test", () => {
   const date = new Date(1000);
   expect(util.deserialize(util.serialize(date))).toEqual(date);
   const error = new Error("error message");
   expect(util.deserialize(util.serialize(error))).toEqual(error);
 });
-
 
 test("(1 pts) student test", () => {
   function named(a, b) {
