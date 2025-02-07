@@ -32,7 +32,7 @@ function get(configuration, callback) {
 function put(service, configuration, callback) {
   services[configuration] = service;
   if (callback !== undefined) {
-    callback(null, service);
+    callback(null, configuration);
   }
 }
 

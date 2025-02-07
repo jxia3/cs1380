@@ -33,13 +33,50 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  local.routes.get("foobar", (error, result) => {
+    expect(error).toBeInstanceOf(Error);
+    expect(result).toBeFalsy();
+    local.routes.put(37, "foobar", (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toBe("foobar");
+      local.routes.get("foobar", (error, result) => {
+        expect(error).toBeFalsy();
+        expect(result).toBe(37);
+        local.routes.rem("foobar", (error, result) => {
+          expect(error).toBeFalsy();
+          expect(result).toBe(37);
+          local.routes.get("foobar", (error, result) => {
+            expect(error).toBeInstanceOf(Error);
+            expect(result).toBeFalsy();
+            done();
+          });
+        });
+      });
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  const service = {get: (configuration, callback) => callback(null, null)};
+  const remote = {node: node.config, service: "status", method: "get"};
+  local.routes.get("status", (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toBe(local.status);
+    local.routes.put(service, "status", (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toBe("status");
+      local.comm.send(["nid"], remote, (error, result) => {
+        expect(error).toBeNull();
+        expect(result).toBeNull();
+        local.status.get("nid", (error, result) => {
+          expect(error).toBeFalsy();
+          expect(result).toBe(id.getNID(node.config));
+          local.routes.put(local.status, "status");
+          done();
+        });
+      });
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
