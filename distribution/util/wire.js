@@ -1,32 +1,30 @@
-const log = require("../util/log");
+const log = require("./log.js");
 
-
+/* Adds an RPC call for a local function. The function must accept a callback parameter. */
 function createRPC(func) {
   // Write some code...
 }
 
-/*
-  The toAsync function transforms a synchronous function that returns a value into an asynchronous one,
-  which accepts a callback as its final argument and passes the value to the callback.
-*/
-function toAsync(func) {
-  log(`Converting function to async: ${func.name}: ${func.toString().replace(/\n/g, "|")}`);
-
-  // It's the caller's responsibility to provide a callback
-  const asyncFunc = (...args) => {
+/* Converts a synchronous function that returns a value to an asynchronous function that
+   accepts a callback. The return value is passed into the callback. */
+function toAsync(fn) {
+  function asyncFn(...args) {
+    if (args.length < fn.length + 1) {
+      throw new Error("Called an asynchronous function with insufficient argments");
+    }
     const callback = args.pop();
+    if (callback === undefined) {
+      throw new Error("Called an asynchronous function without a callback");
+    }
     try {
-      const result = func(...args);
+      const result = fn(...args);
       callback(null, result);
     } catch (error) {
-      callback(error);
+      callback(error, null);
     }
-  };
-
-  /* Overwrite toString to return the original function's code.
-   Otherwise, all functions passed through toAsync would have the same id. */
-  asyncFunc.toString = () => func.toString();
-  return asyncFunc;
+  }
+  asyncFn.toString = () => fn.toString();
+  return asyncFn;
 }
 
 module.exports = {
