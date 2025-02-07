@@ -1,5 +1,5 @@
-const local = require("../local/local.js");
 const log = require("./log.js");
+const rpc = require("../local/rpc.js");
 
 let rpcCount = 0;
 
@@ -9,12 +9,14 @@ function createRPC(fn) {
   const id = rpcCount.toString();
   log(`Creating RPC function with ID ${id}`);
   rpcCount += 1;
-  local.rpc.putInternal(fn, id);
+  rpc.put(fn, id, (error, result) => {
+    // Safety: it is guaranteed that the call is synchronous so there is no race condition
+    if (error) {
+      throw error;
+    }
+  });
 
   // Create RPC stub
-  if (fn.toString().includes("__NODE_INFO__")) {
-    throw new Error("Function includes internal node token");
-  }
   function stub(...args) {
     const remote = {
       node: "__NODE_INFO__",
@@ -24,8 +26,10 @@ function createRPC(fn) {
     const callback = args.pop();
     global.distribution.local.comm.send(args, remote, callback);
   }
+  const nodeInfo = `{ ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port} }`;
+  const stubText = stub.toString().replaceAll("\"__NODE_INFO__\"", nodeInfo);
 
-  return stub;
+  return (new Function(`return ${stubText}`))();
 }
 
 /* Converts a synchronous function that returns a value to an asynchronous function that

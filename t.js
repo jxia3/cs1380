@@ -1,5 +1,12 @@
 const distribution = require("./distribution.js");
-const local = distribution.local;
 const node = distribution.node.config;
+const util = distribution.util;
 
-distribution.local.comm.send([], {node, service: "status", method: "get"}, console.log);
+function add(a, b, callback) {
+  callback(a + b);
+}
+
+const result = util.wire.createRPC(add);
+console.log(node);
+console.log(result);
+console.log(result.toString());
