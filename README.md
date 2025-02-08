@@ -18,6 +18,8 @@ My implementation comprises `<number>` software components, totaling `<number>` 
 
 > How would you explain the implementation of `createRPC` to someone who has no background in computer science — i.e., with the minimum jargon possible?
 
+When you have internet services running across multiple machines, it might be useful to request to run a procedure on a different machine. The procedure may need access to data that is stored on a specific machine, or the procedure may be computationally expensive. The `createRPC` function packages a procedure so that other machines can request to run the procedure on the current machine. At a high level, `createRPC` creates a receipt that can be sent over the network, and anyone with the receipt can request the creator to run a procedure.
+
 # M1: Serialization / Deserialization
 
 ## Summary

@@ -42,7 +42,7 @@
     },
     "m2": {
       "hours": 8,
-      "loc": 0,
+      "loc": 400,
       "throughput": {
         "dev": [["comm", 2.26], ["rpc", 2.22]],
         "aws": [["comm", 1.02], ["rpc", 1.07]],
