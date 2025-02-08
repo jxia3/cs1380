@@ -40,6 +40,20 @@
         "unit": "microseconds/item"
       }
     },
+    "m2": {
+      "hours": 8,
+      "loc": 0,
+      "throughput": {
+        "dev": [],
+        "aws": [],
+        "unit": ""
+      },
+      "latency": {
+        "dev": [],
+        "aws": [],
+        "unit": ""
+      }
+    },
     "dev": {
       "cpu-no": 20,
       "mem-gb": 15,

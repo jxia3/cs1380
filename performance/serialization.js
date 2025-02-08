@@ -1,5 +1,5 @@
-/* A script that generates random workloads and benchmarks the serialization
-   implementation. Each workload is generated from a random seed:
+/* A script that generates random workloads and benchmarks the serialization implementation.
+   Each workload is generated from a random seed:
    - 1,000,000 primitive types (undefined, null, numbers, booleans, and strings).
    - 100,000 simple arrays and objects that do not contain cycles.
    - 1,000 large arrays and objects that contain complex types.
