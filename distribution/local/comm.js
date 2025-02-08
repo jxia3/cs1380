@@ -50,11 +50,11 @@ function send(message, remote, callback) {
 function createGuardedCallback(callback) {
   let callCount = 0;
   function guardedCallback(error, result) {
-    if (callCount > 0) {
+    callCount += 1;
+    if (callCount > 1) {
       log(`Guarded callback called ${callCount} times`);
       return;
     }
-    callCount += 1;
     if (callback !== undefined) {
       callback(error, result);
     }

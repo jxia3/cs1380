@@ -11,15 +11,13 @@ const local = distribution.local;
 const node = distribution.node;
 const util = distribution.util;
 
-// Prepare tests
-//if (distribution.disableLogs) {
-//  distribution.disableLogs();
-//}
-
-function add(a, b, callback) {
-  callback(a, b);
+if (distribution.disableLogs) {
+  distribution.disableLogs();
 }
 
+function add(a, b, callback) {
+  callback(null, a + b);
+}
 const addStub = util.wire.createRPC(add);
 
 /* A control function that performs no operations. */
