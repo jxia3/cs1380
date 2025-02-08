@@ -4,15 +4,24 @@
 
 > Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M2 (`hours`) and the lines of code per task.
 
-My implementation comprises `<number>` software components, totaling `<number>` lines of code. Key challenges included `<1, 2, 3 + how you solved them>`.
+My implementation comprises 5 software components, totaling 400 lines of code. First, I implemented the node HTTP server and the `status`, `routes`, and `rpc` components. In addition to the required functionality, I added an `rpc` service to support creating and calling local RPC functions. As an extension, it is possible for external nodes to request a host node to create an RPC function from a serialized message. Finally, I created a throughput and latency testing framework to measure the performance of communication tasks.
+
+A key challenge was implementing communication with callbacks. The `local.comm` module needs to coordinate with the node HTTP server to send and receive messages with the correct format. Furthermore, errors in the number of arguments to service methods can be difficult to catch since variadic parameter lists are used frequently. To mitigate this issue, I added an additional safety check in the HTTP server to ensure that a callback is never set as undefined. Otherwise, requests could hang and become hard to debug.
+
+After implementing communication, I created an RPC service to support the `wire.createRPC` method. The local method simply calls the service to register a local function as an RPC function. A key challenge was ensuring that a stub could be properly serialized and transferred to a remote node. I used text replacement to populate the remote node fields with the current node's configuration and also the ID of the RPC function.
 
 ## Correctness & Performance Characterization
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness*: I wrote `<number>` tests; these tests take `<time>` to execute.
+*Correctness*: I wrote 5 tests; these tests take less than a second to execute. The tests cover:
+- Incrementing the global message count when a message is received.
+- Adding and removing a service in the routes registry.
+- Overwriting a default service and restoring a default service.
+- Creating a stateful RPC function.
+- Creating an RPC function that communicates with other nodes.
 
-*Performance*: I characterized the performance of comm and RPC by sending 1000 service requests in a tight loop. Average throughput and latency is recorded in `package.json`.
+*Performance*: I characterized the performance of comm and RPC by sending 1000 service requests in a tight loop. Average throughput and latency is recorded in `package.json`. My communication module achieved a throughput of 2.26 requests per millisecond and a latency of 0.441 milliseconds per request in my local environment. My RPC module achieved a similar throughput, which is reasonable because an RPC stub calls the communication module. On AWS, I observed worse performance at a throughput of 1.02 requests per millisecond and a latency of 0.979 milliseconds per request for my communication module, possibly because the AWS instance has less compute power than my local machine. Further details about the test can be found in the `performance` directory.
 
 ## Key Feature
 
