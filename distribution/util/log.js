@@ -3,8 +3,8 @@ const path = require("path");
 
 /* Logs messages to the console and a log file. */
 
-const PRINT_MESSAGES = true;
-const SAVE_MESSAGES = false;
+let PRINT_MESSAGES = true;
+let SAVE_MESSAGES = false;
 const LOG_FILE = "log.txt";
 
 const logFile = path.join(__dirname, "../../", LOG_FILE);
@@ -41,3 +41,7 @@ function log(message, severity) {
 }
 
 module.exports = log;
+log.disable = () => {
+  PRINT_MESSAGES = false;
+  SAVE_MESSAGES = false;
+}

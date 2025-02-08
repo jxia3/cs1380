@@ -48,6 +48,7 @@ global.distribution = distribution;
 distribution.util = require("./distribution/util/util.js");
 distribution.local = require("./distribution/local/local.js");
 distribution.node = require("./distribution/local/node.js");
+distribution.disableLogs = log.disable;
 
 for (const key in distribution.local) {
   distribution.local.routes.put(distribution.local[key], key);
