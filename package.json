@@ -44,14 +44,14 @@
       "hours": 8,
       "loc": 0,
       "throughput": {
-        "dev": [],
-        "aws": [],
-        "unit": ""
+        "dev": [["comm", 2.26], ["rpc", 2.22]],
+        "aws": [["comm", 0], ["rpc", 0]],
+        "unit": "items/millisecond"
       },
       "latency": {
-        "dev": [],
-        "aws": [],
-        "unit": ""
+        "dev": [["comm", 0.441], ["rpc", 0.450]],
+        "aws": [["comm", 0], ["rpc", 0]],
+        "unit": "milliseconds/item"
       }
     },
     "dev": {
