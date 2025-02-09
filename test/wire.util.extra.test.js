@@ -2,7 +2,7 @@ const distribution = require("../config.js");
 const local = distribution.local;
 
 test("(25 pts) rpc", (done) => {
-  let n = 0;
+  const n = 0;
 
   const addOne = () => {
     return ++localVar;
@@ -15,7 +15,7 @@ test("(25 pts) rpc", (done) => {
     addOneRemote: addOneRPC,
   };
 
-  distribution.local.routes.put(addOneService, 'rpcService', (e, v) => {
+  distribution.local.routes.put(addOneService, "rpcService", (e, v) => {
     // Call the RPC stub locally
     addOneRPC((e, v) => {
       try {
@@ -24,7 +24,7 @@ test("(25 pts) rpc", (done) => {
         expect(localVar).toBe(1);
         // Simulate a remote call
         distribution.local.comm.send([],
-            {node: distribution.node.config, service: 'rpcService', method: 'addOneRemote'}, (e, v) => {
+            {node: distribution.node.config, service: "rpcService", method: "addOneRemote"}, (e, v) => {
               try {
                 expect(e).toBeFalsy();
                 expect(v).toBe(2);
@@ -57,14 +57,14 @@ test("(25 pts) rpc w/ arguments", (done) => {
     addSthRemote: addSthRPC,
   };
 
-  distribution.local.routes.put(addSthService, 'rpcService', (e, v) => {
+  distribution.local.routes.put(addSthService, "rpcService", (e, v) => {
     addSthRPC(42, (e, v) => {
       try {
         expect(e).toBeFalsy();
         expect(v).toBe(47);
         expect(localVar).toBe(47);
         distribution.local.comm.send([3],
-            {node: distribution.node.config, service: 'rpcService', method: 'addSthRemote'}, (e, v) => {
+            {node: distribution.node.config, service: "rpcService", method: "addSthRemote"}, (e, v) => {
               try {
                 expect(e).toBeFalsy();
                 expect(v).toBe(50);

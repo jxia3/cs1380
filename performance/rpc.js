@@ -27,7 +27,7 @@ function control(iter, callback) {
 
 /* Sends a communication request to the local node. */
 function communicationRequest(iter, callback) {
-  const remote = { node: node.config, service: "status", method: "get" };
+  const remote = {node: node.config, service: "status", method: "get"};
   local.comm.send(["counts"], remote, (error, result) => {
     if (error) {
       throw error;
@@ -60,7 +60,7 @@ node.start((server) => {
       measurePerformance(rpcRequest, 100, () => {
         console.log("RPC test done\n");
         server.close();
-      })
+      });
     });
   });
 });
@@ -69,7 +69,7 @@ node.start((server) => {
    callback. The function is run over a number of iterations. */
 function measurePerformance(fn, iters, callback) {
   let totalLatency = 0;
-  let startTime = performance.now();
+  const startTime = performance.now();
   loop(iters);
 
   function loop(iter) {
@@ -77,7 +77,7 @@ function measurePerformance(fn, iters, callback) {
       endTest();
       return;
     }
-    let iterStart = performance.now();
+    const iterStart = performance.now();
     fn(iters - iter + 1, () => {
       totalLatency += performance.now() - iterStart;
       loop(iter - 1);

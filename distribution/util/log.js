@@ -27,6 +27,9 @@ function log(message, severity) {
   const timestamp = `${date}.${(now.getMilliseconds() * 1000).toString().padStart(6, "0")}`;
 
   global.distribution.local.status.get("sid", (error, sid) => {
+    if (error) {
+      throw error;
+    }
     if (sid === undefined) {
       sid = "unknown";
     }
@@ -44,4 +47,4 @@ module.exports = log;
 log.disable = () => {
   PRINT_MESSAGES = false;
   SAVE_MESSAGES = false;
-}
+};
