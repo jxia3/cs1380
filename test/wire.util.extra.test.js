@@ -2,7 +2,7 @@ const distribution = require("../config.js");
 const local = distribution.local;
 
 test("(25 pts) rpc", (done) => {
-  const n = 0;
+  let localVar = 0;
 
   const addOne = () => {
     return ++localVar;
@@ -44,7 +44,7 @@ test("(25 pts) rpc", (done) => {
 });
 
 test("(25 pts) rpc w/ arguments", (done) => {
-  let localVar = 0;
+  let localVar = 5;
 
   function addSth(n) {
     return localVar += n;
