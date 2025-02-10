@@ -3,8 +3,9 @@
 
 const groups = {};
 
+/* Retrieves the node group associated with a name. */
 function get(name, callback) {
-  callback = typeof callback === "undefined" ? (error, result) => {} : callback;
+  callback = callback === undefined ? (error, result) => {} : callback;
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
@@ -12,7 +13,12 @@ function get(name, callback) {
   }
 }
 
+/* Adds a new node group with a name. */
 function put(name, group, callback) {
+  groups[name] = group;
+  if (callback !== undefined) {
+    callback(group);
+  }
 }
 
 function del(name, callback) {
