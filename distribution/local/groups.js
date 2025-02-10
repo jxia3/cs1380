@@ -45,7 +45,15 @@ function add(name, node, callback) {
   }
 }
 
-function rem(name, node, callback) {
+/* Removes a node from a group using its SID. */
+function rem(name, nodeSID, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!(name in groups)) {
+    callback(new Error(`Group '${name}' not found`), null);
+  } else {
+    delete groups[name][nodeSID];
+    callback(null, groups[name]);
+  }
 }
 
 module.exports = {get, put, del, add, rem};
