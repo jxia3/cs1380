@@ -64,8 +64,10 @@ function createStartFn(onStart, callback) {
       nodeStart(server);
     } catch {}
     try {
-      externalStart(global.nodeConfig, (error, result) => {});
-    } catch {}
+      externalStart(null, global.nodeConfig, (error, result) => {});
+    } catch (error) {
+      externalStart(error, null, (error, result) => {});
+    }
   }
   const startText = startFn.toString()
       .replaceAll("\"__NODE_START__\"", nodeStart.toString())
@@ -74,7 +76,7 @@ function createStartFn(onStart, callback) {
   return (new Function(`return ${startText}`))();
 }
 
-/* Stops the node after a 2 second cooldown. */
+/* Stops the node after a 100 millisecond cooldown. */
 function stop(callback) {
   if (global.distribution.node.server === undefined) {
     callback(new Error("Node server is not active"), null);
@@ -91,7 +93,7 @@ function stop(callback) {
       } catch {
         process.exit(1);
       }
-    }, 2000);
+    }, 100);
     log("Scheduled node shutdown");
   }
   callback(null, global.nodeConfig);
