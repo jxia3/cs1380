@@ -26,7 +26,11 @@ function start(callback) {
 /* Handles an incoming HTTP request. If the request is a message, then the corresponding
    service is called to process the message. */
 function handleRequest(request, response) {
-  // Check request type and URL format
+  // Check node status and request format
+  if (global.shuttingDown) {
+    sendError(500, new Error("Node shutting down"), response);
+    return;
+  }
   if (request.method !== "PUT") {
     sendError(400, new Error("Invalid request type"), response);
     return;

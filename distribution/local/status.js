@@ -2,6 +2,7 @@
    on startup, and subsequent changes to the node configuration are not reflected.*/
 
 const id = require("../util/id.js");
+const log = require("../util/log.js");
 
 const state = {
   nid: id.getNID(global.nodeConfig),
@@ -36,6 +37,21 @@ function get(configuration, callback) {
 
 function spawn(configuration, callback) {}
 
-function stop(callback) {}
+/* Stops the node after a 2 second cooldown. */
+function stop(callback) {
+  if (!global.shuttingDown) {
+    log("Scheduling node shutdown");
+    setTimeout(() => {
+      if (global.distribution.node.server !== undefined) {
+        global.distribution.node.server.close(() => {
+          log("Shut down node");
+          process.exit(0);
+        });
+      }
+    }, 2000);
+  }
+  global.shuttingDown = true;
+  callback(null, global.nodeConfig);
+}
 
 module.exports = {get, spawn, stop};
