@@ -39,18 +39,24 @@ function spawn(configuration, callback) {}
 
 /* Stops the node after a 2 second cooldown. */
 function stop(callback) {
+  if (global.distribution.node.server === undefined) {
+    callback(new Error("Node server is not active"), null);
+    return;
+  }
   if (!global.shuttingDown) {
-    log("Scheduling node shutdown");
+    global.shuttingDown = true;
     setTimeout(() => {
-      if (global.distribution.node.server !== undefined) {
+      try {
         global.distribution.node.server.close(() => {
           log("Shut down node");
           process.exit(0);
         });
+      } catch {
+        process.exit(1);
       }
     }, 2000);
+    log("Scheduled node shutdown");
   }
-  global.shuttingDown = true;
   callback(null, global.nodeConfig);
 }
 
