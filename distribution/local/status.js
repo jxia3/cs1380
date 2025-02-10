@@ -1,7 +1,7 @@
 /* Tracks the current state of the node. Note that the node ID is computed once
    on startup, and subsequent changes to the node configuration are not reflected.*/
 
-const id = require("../util/id");
+const id = require("../util/id.js");
 
 const state = {
   nid: id.getNID(global.nodeConfig),

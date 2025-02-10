@@ -1,6 +1,8 @@
 /* Manages the groups known on a node. Group names are local to the node, so different
    nodes may have different groups with the same name. */
 
+const id = require("../util/id.js");
+
 const groups = {};
 
 /* Retrieves the node group associated with a name. */
@@ -21,10 +23,26 @@ function put(name, group, callback) {
   }
 }
 
+/* Removes the group associated with a name. */
 function del(name, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!(name in groups)) {
+    callback(new Error(`Group '${name}' not found`), null);
+  } else {
+    callback(null, groups[name]);
+  }
 }
 
+/* Adds a node to a group. The node SID is computed locally. */
 function add(name, node, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!(name in groups)) {
+    callback(new Error(`Group '${name}' not found`), null);
+  } else {
+    const sid = id.getSID(node);
+    groups[name][sid] = node;
+    callback(null, groups[name]);
+  }
 }
 
 function rem(name, node, callback) {
