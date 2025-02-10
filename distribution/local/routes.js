@@ -20,6 +20,13 @@ function get(config, callback) {
   if (typeof config === "string") {
     config = {service: config, gid: "local"};
   }
+  if (config.service === undefined) {
+    callback(new Error("Service not specified"), null);
+    return;
+  }
+  if (config.gid === undefined) {
+    config.gid = "local";
+  }
 
   if (config.gid === "local") {
     // Find local service
@@ -43,31 +50,35 @@ function get(config, callback) {
 /**
  * Sets a dynamic service on the current node.
  * @param {object} service
- * @param {any} config
+ * @param {string} config
  * @param {Callback} callback
  * @return {void}
  */
 function put(service, config, callback) {
-  services[config] = service;
-  if (callback !== undefined) {
-    callback(null, config);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (typeof config !== "string") {
+    callback(new Error("Service name must be a string"), null);
   }
+  services[config] = service;
+  callback(null, config); // todo: check
 }
 
 /**
  * Deletes a dynamic service on the current node.
- * @param {any} config
+ * @param {string} config
  * @param {Callback} callback
  */
 function rem(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (typeof config !== "string") {
+    callback(new Error("Service name must be a string"), null);
+  }
   let service = null;
   if (config in services) {
     service = services[config];
     delete services[config];
   }
-  if (callback !== undefined) {
-    callback(null, service);
-  }
+  callback(null, service);
 };
 
 module.exports = {get, put, rem};
