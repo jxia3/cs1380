@@ -1,19 +1,27 @@
+/* Manages the groups known on a node. Group names are local to the node, so different
+   nodes may have different groups with the same name. */
 
 const groups = {};
 
-groups.get = function(name, callback) {
-};
+function get(name, callback) {
+  callback = typeof callback === "undefined" ? (error, result) => {} : callback;
+  if (!(name in groups)) {
+    callback(new Error(`Group '${name}' not found`), null);
+  } else {
+    callback(null, groups[name]);
+  }
+}
 
-groups.put = function(config, group, callback) {
-};
+function put(name, group, callback) {
+}
 
-groups.del = function(name, callback) {
-};
+function del(name, callback) {
+}
 
-groups.add = function(name, node, callback) {
-};
+function add(name, node, callback) {
+}
 
-groups.rem = function(name, node, callback) {
-};
+function rem(name, node, callback) {
+}
 
-module.exports = groups;
+module.exports = {get, put, del, add, rem};

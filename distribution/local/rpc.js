@@ -18,24 +18,24 @@ function create(fn, callback) {
 }
 
 /* Calls an RPC function and returns the result. */
-function call(config, ...args) {
-  if (config in rpcFns) {
-    rpcFns[config](...args);
+function call(id, ...args) {
+  if (id in rpcFns) {
+    rpcFns[id](...args);
     return;
   }
   try {
-    args[args.length - 1](new Error(`RPC '${config}' not found`), null);
+    args[args.length - 1](new Error(`RPC '${id}' not found`), null);
   } catch (error) {
-    log(`RPC call to '${config}' failed: ${error.message}`);
+    log(`RPC call to '${id}' failed: ${error.message}`);
   }
 }
 
 /* Deletes an RPC function. */
-function rem(config, callback) {
+function rem(id, callback) {
   let fn = null;
-  if (config in rpcFns) {
-    fn = rpcFns[config];
-    delete rpcFns[config];
+  if (id in rpcFns) {
+    fn = rpcFns[id];
+    delete rpcFns[id];
   }
   if (callback !== undefined) {
     callback(null, fn);
