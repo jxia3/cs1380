@@ -35,10 +35,10 @@ function mr(config) {
   };
 
   /**
-   * @param {MRConfig} configuration
+   * @param {MRConfig} config
    * @param {Callback} cb
    */
-  function exec(configuration, cb) {
+  function exec(config, cb) {
   }
 
   return {exec};

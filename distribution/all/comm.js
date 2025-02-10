@@ -17,10 +17,10 @@ function comm(config) {
 
   /**
    * @param {Array} message
-   * @param {object} configuration
+   * @param {object} config
    * @param {Callback} callback
    */
-  function send(message, configuration, callback) {
+  function send(message, config, callback) {
   }
 
   return {send};

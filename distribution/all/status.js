@@ -4,10 +4,10 @@ const status = function(config) {
   context.gid = config.gid || "all";
 
   return {
-    get: (configuration, callback) => {
+    get: (config, callback) => {
     },
 
-    spawn: (configuration, callback) => {
+    spawn: (config, callback) => {
     },
 
     stop: (callback) => {

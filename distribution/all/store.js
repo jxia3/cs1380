@@ -7,16 +7,16 @@ const store = function(config) {
   context.gid = config.gid || "all";
   context.hash = config.hash || util.id.naiveHash;
   return {
-    get: (configuration, callback) => {
+    get: (config, callback) => {
     },
 
-    put: (state, configuration, callback) => {
+    put: (state, config, callback) => {
     },
 
-    del: (configuration, callback) => {
+    del: (config, callback) => {
     },
 
-    reconf: (configuration, callback) => {
+    reconf: (config, callback) => {
     },
 
   };

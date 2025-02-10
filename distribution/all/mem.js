@@ -10,16 +10,16 @@ function mem(config) {
   /* For the distributed mem service, the configuration will
           always be a string */
   return {
-    get: (configuration, callback) => {
+    get: (config, callback) => {
     },
 
-    put: (state, configuration, callback) => {
+    put: (state, config, callback) => {
     },
 
-    del: (configuration, callback) => {
+    del: (config, callback) => {
     },
 
-    reconf: (configuration, callback) => {
+    reconf: (config, callback) => {
     },
   };
 };

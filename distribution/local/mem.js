@@ -1,11 +1,11 @@
 
-function put(state, configuration, callback) {
+function put(state, config, callback) {
 };
 
-function get(configuration, callback) {
+function get(config, callback) {
 }
 
-function del(configuration, callback) {
+function del(config, callback) {
 };
 
 module.exports = {put, get, del};

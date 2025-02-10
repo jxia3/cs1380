@@ -16,34 +16,34 @@ const state = {
 global.statusState = state;
 
 /* Retrieves a status value on the current node. */
-function get(configuration, callback) {
+function get(config, callback) {
   if (callback === undefined) {
     return;
   }
-  if (configuration === "nid") {
+  if (config === "nid") {
     callback(null, state.nid);
-  } else if (configuration === "sid") {
+  } else if (config === "sid") {
     callback(null, state.sid);
-  } else if (configuration === "ip") {
+  } else if (config === "ip") {
     callback(null, global.nodeConfig.ip);
-  } else if (configuration === "port") {
+  } else if (config === "port") {
     callback(null, global.nodeConfig.port);
-  } else if (configuration === "counts") {
+  } else if (config === "counts") {
     callback(null, state.messageCount);
-  } else if (configuration === "heapTotal") {
+  } else if (config === "heapTotal") {
     callback(null, process.memoryUsage().heapTotal);
-  } else if (configuration === "heapUsed") {
+  } else if (config === "heapUsed") {
     callback(null, process.memoryUsage().heapUsed);
   } else {
-    callback(new Error(`Status '${configuration}' not found`), null);
+    callback(new Error(`Status '${config}' not found`), null);
   }
 }
 
 /* Creates a new node in a child process with a configuration. */
-function spawn(configuration, callback) {
-  configuration.onStart = createStartFn(configuration.onStart, callback);
+function spawn(config, callback) {
+  config.onStart = createStartFn(config.onStart, callback);
   const file = path.join(__dirname, "../../distribution.js");
-  childProcess.spawn("node", [file, "--config", util.serialize(configuration)], {
+  childProcess.spawn("node", [file, "--config", util.serialize(config)], {
     detached: true,
     stdio: "inherit",
   });
