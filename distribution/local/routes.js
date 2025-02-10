@@ -31,7 +31,7 @@ function get(config, callback) {
   if (config.gid === "local") {
     // Find local service
     if (config.service in services) {
-      callback(null, services[config]);
+      callback(null, services[config.service]);
     } else {
       callback(new Error(`Service '${config.service}' not found in group 'local'`), null);
     }
