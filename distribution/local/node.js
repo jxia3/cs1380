@@ -1,4 +1,3 @@
-const local = require("./local.js");
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
@@ -42,7 +41,7 @@ function handleRequest(request, response) {
   }
 
   // Find node service
-  local.routes.get(urlParts[0], (error, service) => {
+  global.distribution.local.routes.get(urlParts[0], (error, service) => {
     if (error) {
       sendError(400, error, response);
       return;

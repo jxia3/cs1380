@@ -1,4 +1,3 @@
-const log = require("./log.js");
 const rpc = require("../local/rpc.js");
 
 /* Adds an RPC call for a local function. The function must accept a callback parameter. */
