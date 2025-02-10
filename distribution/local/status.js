@@ -3,6 +3,10 @@
 
 const id = require("../util/id.js");
 const log = require("../util/log.js");
+const util = require("../util/util.js");
+
+const childProcess = require("child_process");
+const path = require("path");
 
 const state = {
   nid: id.getNID(global.nodeConfig),
@@ -35,7 +39,40 @@ function get(configuration, callback) {
   }
 }
 
-function spawn(configuration, callback) {}
+/* Creates a new node in a child process with a configuration. */
+function spawn(configuration, callback) {
+  configuration.onStart = createStartFn(configuration.onStart, callback);
+  const file = path.join(__dirname, "../../distribution.js");
+  childProcess.spawn("node", [file, "--config", util.serialize(configuration)], {
+    detached: true,
+    stdio: "inherit",
+  });
+}
+
+/* Creates a start hook that calls a locally registered RPC function. */
+function createStartFn(onStart, callback) {
+  if (callback === undefined) {
+    return;
+  }
+  const nodeStart = onStart === undefined ? () => {} : onStart;
+  const externalStart = util.wire.createRPC(callback);
+
+  function startFn(server) {
+    const nodeStart = "__NODE_START__";
+    const externalStart = "__EXTERNAL_START__";
+    try {
+      nodeStart(server);
+    } catch {}
+    try {
+      externalStart(global.nodeConfig, (error, result) => {});
+    } catch {}
+  }
+  const startText = startFn.toString()
+      .replaceAll("\"__NODE_START__\"", nodeStart.toString())
+      .replaceAll("\"__EXTERNAL_START__\"", externalStart.toString());
+
+  return (new Function(`return ${startText}`))();
+}
 
 /* Stops the node after a 2 second cooldown. */
 function stop(callback) {
