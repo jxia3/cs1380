@@ -50,33 +50,33 @@ function get(config, callback) {
 /**
  * Sets a dynamic service on the current node.
  * @param {object} service
- * @param {string} config
+ * @param {string} name
  * @param {Callback} callback
  * @return {void}
  */
-function put(service, config, callback) {
+function put(service, name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (typeof config !== "string") {
-    callback(new Error("Service name must be a string"), null);
+  if (typeof name === "object") {
+    callback(new Error("Service name cannot be an object"), null);
   }
-  services[config] = service;
-  callback(null, config); // todo: check
+  services[name] = service;
+  callback(null, name); // todo: check
 }
 
 /**
  * Deletes a dynamic service on the current node.
- * @param {string} config
+ * @param {string} name
  * @param {Callback} callback
  */
-function rem(config, callback) {
+function rem(name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (typeof config !== "string") {
-    callback(new Error("Service name must be a string"), null);
+  if (typeof name === "object") {
+    callback(new Error("Service name cannot be an object"), null);
   }
   let service = null;
-  if (config in services) {
-    service = services[config];
-    delete services[config];
+  if (name in services) {
+    service = services[name];
+    delete services[name];
   }
   callback(null, service);
 };
