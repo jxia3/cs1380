@@ -21,21 +21,25 @@ function get(name, callback) {
 /**
  * Adds a new node group with a name. Distributed methods are bound to the new group.
  */
-function put(name, group, callback) {
+function put(config, group, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
+  const name = typeof config === "string" ? config : config?.gid;
   if (typeof name !== "string" || name === "local") {
     callback(new Error(`Invalid group name '${name}'`, null));
-  } else if (name in global.distribution && !global.distribution[name]._isGroup) {
-    callback(new Error(`Global object already exists with name '${name}'`), null);
-  } else {
-    groups[name] = group;
-    distribution[name] = {_isGroup: true};
-    for (const service in all) {
-      distribution[name][service] = all[service]({gid: name});
-    }
-    computeAllGroup();
-    callback(null, group);
+    return;
   }
+  if (name in global.distribution && !global.distribution[name]._isGroup) {
+    callback(new Error(`Global object already exists with name '${name}'`), null);
+    return;
+  }
+
+  groups[name] = group;
+  distribution[name] = {_isGroup: true};
+  for (const service in all) {
+    distribution[name][service] = all[service]({gid: name});
+  }
+  computeAllGroup();
+  callback(null, group);
 }
 
 /**
