@@ -31,7 +31,7 @@ function put(name, group, callback) {
     groups[name] = group;
     distribution[name] = {};
     for (const service in all) {
-      distribution[name][service] = all[service]({ gid: name });
+      distribution[name][service] = all[service]({gid: name});
     }
     callback(null, group);
   }
