@@ -5,13 +5,16 @@ const all = require("../all/all.js");
 const id = require("../util/id.js");
 
 const groups = {};
+const allNodes = {};
 
 /**
  * Retrieves the node group associated with a name.
  */
 function get(name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (!(name in groups)) {
+  if (name === "all") {
+    callback(null, allNodes);
+  } else if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
     callback(null, groups[name]);
@@ -33,6 +36,7 @@ function put(name, group, callback) {
     for (const service in all) {
       distribution[name][service] = all[service]({gid: name});
     }
+    computeAllGroup();
     callback(null, group);
   }
 }
@@ -47,6 +51,7 @@ function del(name, callback) {
   } else {
     const group = groups[name];
     delete groups[name];
+    computeAllGroup();
     callback(null, group);
   }
 }
@@ -61,6 +66,7 @@ function add(name, node, callback) {
   } else {
     const sid = id.getSID(node);
     groups[name][sid] = node;
+    computeAllGroup();
     callback(null, groups[name]);
   }
 }
@@ -74,7 +80,23 @@ function rem(name, nodeSID, callback) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
     delete groups[name][nodeSID];
+    computeAllGroup();
     callback(null, groups[name]);
+  }
+}
+
+/**
+ * Recomputes the group of all nodes. Note that it is possible to efficiently update
+ * the all mapping with extra accounting.
+ */
+function computeAllGroup() {
+  for (const sid in allNodes) {
+    delete allNodes[sid];
+  }
+  for (const name in groups) {
+    for (const sid in groups[name]) {
+      allNodes[sid] = groups[name][sid];
+    }
   }
 }
 
