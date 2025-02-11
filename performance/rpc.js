@@ -32,7 +32,7 @@ function communicationRequest(iter, callback) {
     if (error) {
       throw error;
     }
-    if (result != iter) {
+    if (result !== iter) {
       throw new Error(`Expected count ${iter} but received ${result}`);
     }
     callback();
@@ -45,7 +45,7 @@ function rpcRequest(iter, callback) {
     if (error) {
       throw error;
     }
-    if (result != 2 * iter + 1) {
+    if (result !== 2 * iter + 1) {
       throw new Error(`Expected value ${2 * iter + 1} but received ${result}`);
     }
     callback();
@@ -73,7 +73,7 @@ function measurePerformance(fn, iters, callback) {
   loop(iters);
 
   function loop(iter) {
-    if (iter == 0) {
+    if (iter === 0) {
       endTest();
       return;
     }

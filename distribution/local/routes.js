@@ -35,7 +35,7 @@ function get(config, callback) {
     } else {
       callback(new Error(`Service '${config.service}' not found in group 'local'`), null);
     }
-  } else if (config.gid in global.distribution) {
+  } else if (config.gid in global.distribution && global.distribution[config.gid]?._isGroup) {
     // Find distributed service
     if (config.service in global.distribution[config.gid]) {
       callback(null, global.distribution[config.gid][config.service]);
