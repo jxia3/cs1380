@@ -105,8 +105,8 @@ function stop(callback) {
         global.distribution.node.server.close(() => {
           if (process.env.JEST_WORKER_ID === undefined) {
             log("Shut down node");
+            process.exit(0);
           }
-          process.exit(0);
         });
       } catch {
         process.exit(1);
