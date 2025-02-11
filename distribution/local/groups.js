@@ -1,6 +1,7 @@
 /* Manages the groups known on a node. Group names are local to the node, so different
    nodes may have different groups with the same name. */
 
+const all = require("../all/all.js");
 const id = require("../util/id.js");
 
 const groups = {};
@@ -18,11 +19,20 @@ function get(name, callback) {
 }
 
 /**
- * Adds a new node group with a name.
+ * Adds a new node group with a name. Distributed methods are bound to the new group.
  */
 function put(name, group, callback) {
-  groups[name] = group;
-  if (callback !== undefined) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (typeof name !== "string" || name === "local" || name === "all") {
+    callback(new Error(`Invalid group name '${name}'`, null));
+  } else if (name in global.distribution && !global.distribution[name]._isGroup) {
+    callback(new Error(`Global object already exists with name '${name}'`), null);
+  } else {
+    groups[name] = group;
+    distribution[name] = {};
+    for (const service in all) {
+      distribution[name][service] = all[service]({ gid: name });
+    }
     callback(null, group);
   }
 }
