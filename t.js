@@ -1,8 +1,8 @@
 const d1 = require("./distribution.js");
 const d2 = require("@brown-ds/distribution");
 
-global.distribution = d1;
-const distribution = d1;
+global.distribution = d2;
+const distribution = d2;
 
 const basePort = 2000;
 const nodes = [
@@ -29,9 +29,10 @@ function runTest() {
   for (const node of nodes) {
     group[distribution.util.id.getSID(node)] = node;
   }
-  console.log("adding group", group);
   distribution.local.groups.put("test", group, (error, result) => {
-    console.log(error, result);
-    distribution.test.status.get("sid", console.log);
+    console.log("put result:", error, result);
+    distribution.local.groups.del("test", (error, result) => {
+      console.log("del result:", error, result);
+    });
   });
 }
