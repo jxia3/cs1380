@@ -13,11 +13,11 @@ const nodes = [
 
 distribution.node.start(() => {
   distribution.local.status.spawn(nodes[0], (error, result) => {
-    console.log("spawned first node");
+    console.log("spawned first node", result);
     distribution.local.status.spawn(nodes[1], (error, result) => {
-      console.log("spawned second node");
+      console.log("spawned second node", result);
       distribution.local.status.spawn(nodes[2], (error, result) => {
-        console.log("spawned third node");
+        console.log("spawned third node", result);
         runTest();
       });
     });
