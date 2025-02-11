@@ -1,26 +1,12 @@
-/** @typedef {import("../types").Callback} Callback */
+/* Manages the routes known by the current node group. */
 
-function routes(config) {
+const createRemoteMethod = require("./remote.js");
+
+module.exports = (config) => {
   const context = {};
-  context.gid = config.gid || "all";
-
-  /**
-   * @param {object} service
-   * @param {string} name
-   * @param {Callback} callback
-   */
-  function put(service, name, callback = () => { }) {
-  }
-
-  /**
-   * @param {object} service
-   * @param {string} name
-   * @param {Callback} callback
-   */
-  function rem(service, name, callback = () => { }) {
-  }
-
-  return {put, rem};
-}
-
-module.exports = routes;
+  context.gid = config?.gid === undefined ? "all" : config.gid;
+  return {
+    put: createRemoteMethod("routes", "put", 2).bind(context), // put(service, name, [callback])
+    rem: createRemoteMethod("routes", "rem", 1).bind(context), // rem(name, [callback])
+  };
+};
