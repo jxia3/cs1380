@@ -15,6 +15,7 @@ const REQUEST_TIMEOUT = 20000;
  * @property {string} service
  * @property {string} method
  * @property {Node} node
+ * @property {string} gid
  */
 
 /**
@@ -39,7 +40,8 @@ function send(message, remote, callback) {
 
   // Send HTTP request and parse response
   try {
-    const url = `http://${remote.node.ip}:${remote.node.port}/${remote.service}/${remote.method}`;
+    const gid = remote.gid === undefined ? "local" : remote.gid;
+    const url = `http://${remote.node.ip}:${remote.node.port}/${gid}/${remote.service}/${remote.method}`;
     callService(url, util.serialize(message), callback);
   } catch (error) {
     callback(error, null);
