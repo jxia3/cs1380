@@ -16,26 +16,26 @@ const state = {
 global.statusState = state;
 
 /* Retrieves a status value on the current node. */
-function get(config, callback) {
+function get(item, callback) {
   if (callback === undefined) {
     return;
   }
-  if (config === "nid") {
+  if (item === "nid") {
     callback(null, state.nid);
-  } else if (config === "sid") {
+  } else if (item === "sid") {
     callback(null, state.sid);
-  } else if (config === "ip") {
+  } else if (item === "ip") {
     callback(null, global.nodeConfig.ip);
-  } else if (config === "port") {
+  } else if (item === "port") {
     callback(null, global.nodeConfig.port);
-  } else if (config === "counts") {
+  } else if (item === "counts") {
     callback(null, state.messageCount);
-  } else if (config === "heapTotal") {
+  } else if (item === "heapTotal") {
     callback(null, process.memoryUsage().heapTotal);
-  } else if (config === "heapUsed") {
+  } else if (item === "heapUsed") {
     callback(null, process.memoryUsage().heapUsed);
   } else {
-    callback(new Error(`Status '${config}' not found`), null);
+    callback(new Error(`Status item '${item}' not found`), null);
   }
 }
 

@@ -19,7 +19,7 @@ function get(name, callback) {
 function put(name, group, callback) {
   groups[name] = group;
   if (callback !== undefined) {
-    callback(group);
+    callback(null, group);
   }
 }
 
@@ -29,7 +29,9 @@ function del(name, callback) {
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
-    callback(null, groups[name]);
+    const group = groups[name];
+    delete groups[name];
+    callback(null, group);
   }
 }
 
