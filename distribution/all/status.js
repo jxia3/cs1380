@@ -40,7 +40,14 @@ function spawn(config, callback) {
  * Stops all the nodes in the current group including the current node.
  */
 function stop(callback) {
-
+  remote.checkGroup(this.gid);
+  const service = {service: "status", method: "stop"};
+  global.distribution[this.gid].comm.send([], service, (error, result) => {
+    if (callback !== undefined) {
+      callback(error, result);
+    }
+  });
+  global.distribution.local.status.stop();
 }
 
 module.exports = (config) => {

@@ -98,12 +98,14 @@ function handleResponse(response, callback) {
   let content = "";
   response.on("data", (chunk) => content += chunk);
   response.on("end", () => {
+    let data = null;
     try {
-      const data = util.deserialize(content);
-      callback(data?.error, data?.result);
+      data = util.deserialize(content);
     } catch (error) {
       callback(new Error("Unable to deserialize response body"), null);
+      return;
     }
+    callback(data?.error, data?.result);
   });
 }
 

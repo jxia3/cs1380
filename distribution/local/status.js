@@ -92,10 +92,12 @@ function createStartFn(onStart, callback) {
  * Stops the node after a 100 millisecond cooldown.
  */
 function stop(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
   if (global.distribution.node.server === undefined) {
     callback(new Error("Node server is not active"), null);
     return;
   }
+
   if (!global.shuttingDown) {
     global.shuttingDown = true;
     setTimeout(() => {
@@ -110,6 +112,7 @@ function stop(callback) {
     }, 100);
     log("Scheduled node shutdown");
   }
+
   callback(null, global.nodeConfig);
 }
 

@@ -8,11 +8,14 @@ const http = require("http");
  * is called when the server is alive.
  */
 function start(callback) {
+  if (global.distribution.node?.server !== undefined) {
+    throw new Error("Server already started");
+  }
   const server = http.createServer(handleRequest);
+  global.distribution.node.server = server;
 
   server.listen(global.nodeConfig.port, global.nodeConfig.ip, () => {
     log(`Server running at http://${global.nodeConfig.ip}:${global.nodeConfig.port}`);
-    global.distribution.node.server = server;
     if (callback !== undefined) {
       callback(server);
     }

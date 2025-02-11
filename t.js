@@ -33,6 +33,9 @@ function runTest() {
     console.log("put result:", error, result);
     distribution.all.groups.put("test", group, (error, result) => {
       console.log("put result", error, result);
+      distribution.all.status.stop((error, result) => {
+        console.log(error, result);
+      });
     });
   });
 }
