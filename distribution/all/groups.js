@@ -1,15 +1,11 @@
 /* Manages the groups known by the current node group. */
 
-const createRemoteMethod = require("./remote.js");
+const remote = require("./remote.js");
 
-module.exports = (config) => {
-  const context = {};
-  context.gid = config?.gid === undefined ? "all" : config.gid;
-  return {
-    get: createRemoteMethod("groups", "get", 1).bind(context), // get(name, [callback])
-    put: createRemoteMethod("groups", "put", 2).bind(context), // put(name, group, [callback])
-    del: createRemoteMethod("groups", "del", 1).bind(context), // del(name, [callback])
-    add: createRemoteMethod("groups", "add", 2).bind(context), // add(name, node, [callback])
-    rem: createRemoteMethod("groups", "rem", 2).bind(context), // rem(name, node, [callback])
-  };
-};
+module.exports = remote.createConstructor({
+  get: remote.createMethod("groups", "get", 1), // get(name, [callback])
+  put: remote.createMethod("groups", "put", 2), // put(name, group, [callback])
+  del: remote.createMethod("groups", "del", 1), // del(name, [callback])
+  add: remote.createMethod("groups", "add", 2), // add(name, node, [callback])
+  rem: remote.createMethod("groups", "rem", 2), // rem(name, node, [callback])
+});

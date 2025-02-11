@@ -1,15 +1,15 @@
 /* Queries or modifies the state of all the nodes in a group. */
 
+const remote = require("./remote.js");
+
 const ACCUMULATE_ITEMS = ["counts", "heapTotal", "heapUsed"];
 
 /**
  * Retrieves a status value for each node in the current group.
  */
 function get(item, callback) {
+  remote.checkGroup(this.gid);
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (this.gid === undefined || !global.distribution[this.gid]?._isGroup) {
-    throw new Error(`Group '${this.gid}' does not exist`);
-  }
   const service = {service: "status", method: "get"};
   global.distribution[this.gid].comm.send([item], service, (error, result) => {
     if (error || !ACCUMULATE_ITEMS.includes(item)) {

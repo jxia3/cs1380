@@ -1,12 +1,8 @@
 /* Manages the routes known by the current node group. */
 
-const createRemoteMethod = require("./remote.js");
+const remote = require("./remote.js");
 
-module.exports = (config) => {
-  const context = {};
-  context.gid = config?.gid === undefined ? "all" : config.gid;
-  return {
-    put: createRemoteMethod("routes", "put", 2).bind(context), // put(service, name, [callback])
-    rem: createRemoteMethod("routes", "rem", 1).bind(context), // rem(name, [callback])
-  };
-};
+module.exports = remote.createConstructor({
+  put: remote.createMethod("routes", "put", 2), // put(service, name, [callback])
+  rem: remote.createMethod("routes", "rem", 1), // rem(name, [callback])
+});

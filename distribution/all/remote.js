@@ -1,15 +1,34 @@
 /**
+ * Creates a binding constructor for a function module.
+ */
+function createConstructor(module) {
+  if (typeof module !== "object") {
+    throw new Error("Invalid module");
+  }
+
+  function constructor(config) {
+    const context = {};
+    context.gid = config?.gid === undefined ? "all" : config.gid;
+    const fns = {};
+    for (const name in module) {
+      fns[name] = module[name].bind(context);
+    }
+    return fns;
+  }
+
+  return constructor;
+}
+
+/**
  * Creates a method that sends requests to all nodes in the current group.
  */
-function createRemoteMethod(service, method, numArgs) {
+function createMethod(service, method, numArgs) {
   if (service === undefined || method === undefined || numArgs === undefined) {
     throw new Error("Invalid remote method parameters");
   }
 
   function remoteMethod(...args) {
-    if (this.gid === undefined || !global.distribution[this.gid]?._isGroup) {
-      throw new Error(`Group '${this.gid}' does not exist`);
-    }
+    checkGroup(this.gid);
     const params = args.slice(0, numArgs);
     while (params.length < numArgs) {
       params.push(undefined);
@@ -24,4 +43,13 @@ function createRemoteMethod(service, method, numArgs) {
   return remoteMethod;
 }
 
-module.exports = createRemoteMethod;
+/**
+ * Checks if a group ID is valid.
+ */
+function checkGroup(gid) {
+  if (gid === undefined || !global.distribution[gid]?._isGroup) {
+    throw new Error(`Group '${gid}' does not exist`);
+  }
+}
+
+module.exports = {createConstructor, createMethod, checkGroup};
