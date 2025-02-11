@@ -13,11 +13,11 @@ const nodes = [
 
 distribution.node.start(() => {
   distribution.local.status.spawn(nodes[0], (error, result) => {
-    console.log("spawned first node")
+    console.log("spawned first node");
     distribution.local.status.spawn(nodes[1], (error, result) => {
-      console.log("spawned second node")
+      console.log("spawned second node");
       distribution.local.status.spawn(nodes[2], (error, result) => {
-        console.log("spawned third node")
+        console.log("spawned third node");
         runTest();
       });
     });
@@ -25,5 +25,13 @@ distribution.node.start(() => {
 });
 
 function runTest() {
-  console.log("hello");
+  const group = {};
+  for (const node of nodes) {
+    group[distribution.util.id.getSID(node)] = node;
+  }
+  console.log("adding group", group);
+  distribution.local.groups.put("test", group, (error, result) => {
+    console.log(error, result);
+    distribution.test.status.get(["sid"], console.log);
+  });
 }
