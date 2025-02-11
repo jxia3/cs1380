@@ -5,14 +5,18 @@ const MOD = 2147483647;
 
 let state = Math.floor(Math.random() * 1_000_000) + 1;
 
+/**
+ * Returns a random number between 0 and 1 and advances the PRNG.
+ */
 function next() {
-  /* Returns a random number between 0 and 1 and advances the PRNG. */
   state = (state * FACTOR) % MOD;
   return state / (MOD - 1);
 }
 
+/**
+ * Returns true with a random chance and advances the PRNG.
+ */
 function chance(threshold) {
-  /* Returns true with a random chance and advances the PRNG. */
   const entropy = next();
   return entropy < threshold;
 }

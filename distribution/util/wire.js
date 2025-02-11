@@ -1,12 +1,16 @@
 const rpc = require("../local/rpc.js");
 
-/* Adds an RPC call for a local function. The function must accept a callback parameter. */
+/**
+ * Adds an RPC call for a local function. The function must accept a callback parameter.
+ */
 function createRPC(fn) {
   return rpc._createRPC(fn);
 }
 
-/* Converts a synchronous function that returns a value to an asynchronous function that
-   accepts a callback. The return value is passed into the callback. */
+/**
+ * Converts a synchronous function that returns a value to an asynchronous function that
+ * accepts a callback. The return value is passed into the callback.
+ */
 function toAsync(fn) {
   function asyncFn(...args) {
     if (args.length < fn.length + 1) {

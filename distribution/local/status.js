@@ -15,7 +15,9 @@ const state = {
 };
 global.statusState = state;
 
-/* Retrieves a status value on the current node. */
+/**
+ * Retrieves a status value on the current node.
+ */
 function get(item, callback) {
   if (callback === undefined) {
     return;
@@ -39,7 +41,9 @@ function get(item, callback) {
   }
 }
 
-/* Creates a new node in a child process with a configuration. */
+/**
+ * Creates a new node in a child process with a configuration.
+ */
 function spawn(config, callback) {
   config.onStart = createStartFn(config.onStart, callback);
   const file = path.join(__dirname, "../../distribution.js");
@@ -49,7 +53,9 @@ function spawn(config, callback) {
   });
 }
 
-/* Creates a start hook that calls a locally registered RPC function. */
+/**
+ * Creates a start hook that calls a locally registered RPC function.
+ */
 function createStartFn(onStart, callback) {
   if (callback === undefined) {
     return;
@@ -76,7 +82,9 @@ function createStartFn(onStart, callback) {
   return (new Function(`return ${startText}`))();
 }
 
-/* Stops the node after a 100 millisecond cooldown. */
+/**
+ * Stops the node after a 100 millisecond cooldown.
+ */
 function stop(callback) {
   if (global.distribution.node.server === undefined) {
     callback(new Error("Node server is not active"), null);

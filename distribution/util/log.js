@@ -9,7 +9,9 @@ const LOG_FILE = "log.txt";
 
 const logFile = path.join(__dirname, "../../", LOG_FILE);
 
-/* Appends timestamp and node information to a message and logs the message. */
+/**
+ * Appends timestamp and node information to a message and logs the message.
+ */
 function log(message, severity) {
   if (severity === undefined) {
     severity = "info";

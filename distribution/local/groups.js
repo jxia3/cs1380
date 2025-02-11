@@ -5,7 +5,9 @@ const id = require("../util/id.js");
 
 const groups = {};
 
-/* Retrieves the node group associated with a name. */
+/**
+ * Retrieves the node group associated with a name.
+ */
 function get(name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   if (!(name in groups)) {
@@ -15,7 +17,9 @@ function get(name, callback) {
   }
 }
 
-/* Adds a new node group with a name. */
+/**
+ * Adds a new node group with a name.
+ */
 function put(name, group, callback) {
   groups[name] = group;
   if (callback !== undefined) {
@@ -23,7 +27,9 @@ function put(name, group, callback) {
   }
 }
 
-/* Removes the group associated with a name. */
+/**
+ * Removes the group associated with a name.
+ */
 function del(name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   if (!(name in groups)) {
@@ -35,7 +41,9 @@ function del(name, callback) {
   }
 }
 
-/* Adds a node to a group. The node SID is computed locally. */
+/**
+ * Adds a node to a group. The node SID is computed locally.
+ */
 function add(name, node, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   if (!(name in groups)) {
@@ -47,7 +55,9 @@ function add(name, node, callback) {
   }
 }
 
-/* Removes a node from a group using its SID. */
+/**
+ * Removes a node from a group using its SID.
+ */
 function rem(name, nodeSID, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   if (!(name in groups)) {

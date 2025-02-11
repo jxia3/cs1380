@@ -46,9 +46,11 @@ const ObjectType = {
   Reference: OPTIMIZE_FLAGS ? "r" : "reference",
 };
 
-/* An internal type used to track reference nodes during deserialization. Since references
-   are resolved after all owned properties have been resolved, this type is used as an
-   intermediate representation for reference paths. */
+/**
+ * An internal type used to track reference nodes during deserialization. Since references
+ * are resolved after all owned properties have been resolved, this type is used as an
+ * intermediate representation for reference paths.
+ */
 class ReferencePath {
   constructor(path) {
     this.path = path;
@@ -90,7 +92,9 @@ if (ENABLE_NATIVE) {
   }
 }
 
-/* Traverses a native object to discover native functionality. */
+/**
+ * Traverses a native object to discover native functionality.
+ */
 function exploreNative(object, path) {
   if (nativeIds.has(object)) {
     return;
@@ -108,8 +112,10 @@ function exploreNative(object, path) {
   }
 }
 
-/* Serializes a JavaScript object as a string. Cyclical references to functions, errors,
-   arrays, and objects are supported. Other reference types are not explicitly supported. */
+/**
+ * Serializes a JavaScript object as a string. Cyclical references to functions, errors,
+ * arrays, and objects are supported. Other reference types are not explicitly supported.
+ */
 function serialize(object) {
   const path = [];
   const seen = new Map();
@@ -120,7 +126,9 @@ function serialize(object) {
   return JSON.stringify(result);
 }
 
-/* Converts an object to a string or serializable JSON value. */
+/**
+ * Converts an object to a string or serializable JSON value.
+ */
 function encode(object, path, seen) {
   // Encode leaf types
   if (object === undefined) {
@@ -150,12 +158,16 @@ function encode(object, path, seen) {
   return encodeObject(object, path, seen);
 }
 
-/* Encodes a number as its leaf tag and string representation. */
+/**
+ * Encodes a number as its leaf tag and string representation.
+ */
 function encodeNumber(num) {
   return LeafTag.Number + "_" + num.toString();
 }
 
-/* Encodes a boolean as its leaf tag and string representation. */
+/**
+ * Encodes a boolean as its leaf tag and string representation.
+ */
 function encodeBoolean(bool) {
   if (bool) {
     return LeafTag.Boolean + "_t";
@@ -164,22 +176,30 @@ function encodeBoolean(bool) {
   }
 }
 
-/* Encodes a string as its leaf tag and content. */
+/**
+ * Encodes a string as its leaf tag and content.
+ */
 function encodeString(str) {
   return LeafTag.String + "_" + str;
 }
 
-/* Encodes a date as its leaf tag and epoch timestamp. */
+/**
+ * Encodes a date as its leaf tag and epoch timestamp.
+ */
 function encodeDate(date) {
   return LeafTag.Date + "_" + date.valueOf().toString();
 }
 
-/* Encodes a native object as its discovered ID. */
+/**
+ * Encodes a native object as its discovered ID.
+ */
 function encodeNative(object) {
   return LeafTag.Native + "_" + nativeIds.get(object);
 }
 
-/* Encodes a function as its string body or a reference to an existing function. */
+/**
+ * Encodes a function as its string body or a reference to an existing function.
+ */
 function encodeFunction(fn, path, seen) {
   // Create reference to existing function
   if (seen.has(fn)) {
@@ -197,7 +217,9 @@ function encodeFunction(fn, path, seen) {
   };
 }
 
-/* Encodes an error as its name, message, and cause or a reference to an existing error. */
+/**
+ * Encodes an error as its name, message, and cause or a reference to an existing error.
+ */
 function encodeError(error, path, seen) {
   // Create reference to existing error
   if (seen.has(error)) {
@@ -225,7 +247,9 @@ function encodeError(error, path, seen) {
   };
 }
 
-/* Encodes each element in an array or creates a reference to an existing array. */
+/**
+ * Encodes each element in an array or creates a reference to an existing array.
+ */
 function encodeArray(array, path, seen) {
   // Create reference to existing array
   if (seen.has(array)) {
@@ -250,7 +274,9 @@ function encodeArray(array, path, seen) {
   };
 }
 
-/* Encodes each property of an object or creates a reference to an existing object. */
+/**
+ * Encodes each property of an object or creates a reference to an existing object.
+ */
 function encodeObject(object, path, seen) {
   // Create reference to existing object
   if (seen.has(object)) {
@@ -275,8 +301,10 @@ function encodeObject(object, path, seen) {
   };
 }
 
-/* Deserializes a string into a JavaScript object. The resulting object may contain
-   cyclical references in child functions, errors, arrays, and objects. */
+/**
+ * Deserializes a string into a JavaScript object. The resulting object may contain
+ * cyclical references in child functions, errors, arrays, and objects.
+ */
 function deserialize(string) {
   // Decode leaf type encoded as a string
   if (!string.startsWith("{")) {
@@ -294,7 +322,9 @@ function deserialize(string) {
   return resolveReferences(value, value);
 }
 
-/* Converts a serialized string or JSON value to an object. */
+/**
+ * Converts a serialized string or JSON value to an object.
+ */
 function decode(object) {
   if (typeof object !== "string" && typeof object !== "object") {
     throw new Error("Cannot deserialize malformed object: " + object.toString());
@@ -339,7 +369,9 @@ function decode(object) {
   throw new Error("Cannot deserialize invalid object: " + object.toString());
 }
 
-/* Decodes a serialized number string as a number. */
+/**
+ * Decodes a serialized number string as a number.
+ */
 function decodeNumber(str) {
   // Check for special numbers
   const content = str.slice(LeafTag.Number.length + 1);
@@ -357,7 +389,9 @@ function decodeNumber(str) {
   return num;
 }
 
-/* Decodes a serialized boolean string as a boolean. */
+/**
+ * Decodes a serialized boolean string as a boolean.
+ */
 function decodeBoolean(str) {
   const content = str.slice(LeafTag.Boolean.length + 1);
   if (content === "t") {
@@ -368,12 +402,16 @@ function decodeBoolean(str) {
   throw new Error("Cannot deserialize invalid boolean: " + content);
 }
 
-/* Decodes a serialized string. */
+/**
+ * Decodes a serialized string.
+ */
 function decodeString(str) {
   return str.slice(LeafTag.String.length + 1);
 }
 
-/* Decodes a serialized date as a date object. */
+/**
+ * Decodes a serialized date as a date object.
+ */
 function decodeDate(str) {
   const timestamp = +str.slice(LeafTag.Date.length + 1);
   if (isNaN(timestamp)) {
@@ -382,7 +420,9 @@ function decodeDate(str) {
   return new Date(timestamp);
 }
 
-/* Decodes a serialized native object. */
+/**
+ * Decodes a serialized native object.
+ */
 function decodeNative(str) {
   const id = str.slice(LeafTag.Native.length + 1);
   if (!(id in nativeObjects)) {
@@ -391,7 +431,9 @@ function decodeNative(str) {
   return nativeObjects[id];
 }
 
-/* Decodes a serialized function body as a function. */
+/**
+ * Decodes a serialized function body as a function.
+ */
 function decodeFunction(body) {
   if (typeof body !== "string") {
     throw new Error("Cannot deserialize invalid function body: " + body.toString());
@@ -399,7 +441,9 @@ function decodeFunction(body) {
   return (new Function("return " + body))();
 }
 
-/* Decodes a serialized error as an error object. */
+/**
+ * Decodes a serialized error as an error object.
+ */
 function decodeError({name, message, cause}) {
   if (typeof name !== "string" && typeof name !== "object") {
     throw new Error("Cannot deserialize invalid error name: " + name.toString());
@@ -428,7 +472,9 @@ function decodeError({name, message, cause}) {
   return error;
 }
 
-/* Decodes serialized array elements as an array. */
+/**
+ * Decodes serialized array elements as an array.
+ */
 function decodeArray(elements) {
   if (!(elements instanceof Array)) {
     throw new Error("Cannot deserialize invalid array: " + elements.toString());
@@ -436,7 +482,9 @@ function decodeArray(elements) {
   return elements.map(decode);
 }
 
-/* Decodes serialized object properties as an object. */
+/**
+ * Decodes serialized object properties as an object.
+ */
 function decodeObject(properties) {
   if (typeof properties !== "object") {
     throw new Error("Cannot deserialize invalid object: " + properties.toString());
@@ -448,7 +496,9 @@ function decodeObject(properties) {
   return object;
 }
 
-/* Converts a serialized reference path to an intermediate path object. */
+/**
+ * Converts a serialized reference path to an intermediate path object.
+ */
 function decodeReference(path) {
   if (!(path instanceof Array)) {
     throw new Error("Cannot deserialize invalid reference: " + path.toString());
@@ -456,7 +506,9 @@ function decodeReference(path) {
   return new ReferencePath(path);
 }
 
-/* Resolves cyclic references in a value object. */
+/**
+ * Resolves cyclic references in a value object.
+ */
 function resolveReferences(root, value) {
   if (value instanceof ReferencePath) {
     return resolvePath(root, value.path);
@@ -475,7 +527,9 @@ function resolveReferences(root, value) {
   return value;
 }
 
-/* Resolves a path of properties in an object. */
+/**
+ * Resolves a path of properties in an object.
+ */
 function resolvePath(object, path) {
   let value = object;
   for (const property of path) {

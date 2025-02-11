@@ -48,7 +48,9 @@ function send(message, remote, callback) {
   }
 }
 
-/* Creates a callback function that can only be called once. */
+/**
+ * Creates a callback function that can only be called once.
+ */
 function createGuardedCallback(callback) {
   let callCount = 0;
   function guardedCallback(error, result) {
@@ -64,7 +66,9 @@ function createGuardedCallback(callback) {
   return guardedCallback;
 }
 
-/* Sends an HTTP request to call a service on a remote node. */
+/**
+ * Sends an HTTP request to call a service on a remote node.
+ */
 function callService(url, body, callback) {
   log(`Sending service call to ${url}`);
   const request = http.request(url, {
@@ -87,7 +91,9 @@ function callService(url, body, callback) {
   request.end(body);
 }
 
-/* Handles an HTTP response for a service request. */
+/**
+ * Handles an HTTP response for a service request.
+ */
 function handleResponse(response, callback) {
   let content = "";
   response.on("data", (chunk) => content += chunk);

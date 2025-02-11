@@ -20,12 +20,16 @@ function add(a, b, callback) {
 }
 const addStub = util.wire.createRPC(add);
 
-/* A control function that performs no operations. */
+/**
+ * A control function that performs no operations.
+ */
 function control(iter, callback) {
   callback();
 }
 
-/* Sends a communication request to the local node. */
+/**
+ * Sends a communication request to the local node.
+ */
 function communicationRequest(iter, callback) {
   const remote = {node: node.config, service: "status", method: "get"};
   local.comm.send(["counts"], remote, (error, result) => {
@@ -39,7 +43,9 @@ function communicationRequest(iter, callback) {
   });
 }
 
-/* Sends an RPC request to the local node. */
+/**
+ * Sends an RPC request to the local node.
+ */
 function rpcRequest(iter, callback) {
   addStub(iter, iter + 1, (error, result) => {
     if (error) {
@@ -65,8 +71,10 @@ node.start((server) => {
   });
 });
 
-/* Measures the throughput and latency of an asynchronous function that accepts a
-   callback. The function is run over a number of iterations. */
+/**
+ * Measures the throughput and latency of an asynchronous function that accepts a
+ * callback. The function is run over a number of iterations.
+ */
 function measurePerformance(fn, iters, callback) {
   let totalLatency = 0;
   const startTime = performance.now();

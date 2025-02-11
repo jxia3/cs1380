@@ -3,8 +3,10 @@ const util = require("../util/util.js");
 
 const http = require("http");
 
-/* Starts the node's HTTP server to begin handling messages. The callback function
-   is called when the server is alive. */
+/**
+ * Starts the node's HTTP server to begin handling messages. The callback function
+ * is called when the server is alive.
+ */
 function start(callback) {
   const server = http.createServer(handleRequest);
 
@@ -22,8 +24,10 @@ function start(callback) {
   });
 }
 
-/* Handles an incoming HTTP request. If the request is a message, then the corresponding
-   service is called to process the message. */
+/**
+ * Handles an incoming HTTP request. If the request is a message, then the corresponding
+ * service is called to process the message.
+ */
 function handleRequest(request, response) {
   // Check node status and request format
   if (global.shuttingDown) {
@@ -65,7 +69,9 @@ function handleRequest(request, response) {
   });
 }
 
-/* Parses serialized request data and calls a service method. */
+/**
+ * Parses serialized request data and calls a service method.
+ */
 function callService(query, method, request, response) {
   let content = "";
   request.on("data", (chunk) => content += chunk);
@@ -101,7 +107,9 @@ function callService(query, method, request, response) {
   });
 }
 
-/* Responds to an HTTP request with an error. */
+/**
+ * Responds to an HTTP request with an error.
+ */
 function sendError(code, error, response) {
   response.writeHead(code, {"Content-Type": "application/json"});
   response.end(util.serialize({error, result: null}));

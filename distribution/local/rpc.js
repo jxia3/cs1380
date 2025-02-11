@@ -6,8 +6,10 @@ const log = require("../util/log.js");
 const rpcFns = {};
 let rpcCount = 0;
 
-/* Creates a local RPC function and returns the stub. Note that external nodes can
-   only create RPC functions that are stateless. */
+/**
+ * Creates a local RPC function and returns the stub. Note that external nodes can
+ * only create RPC functions that are stateless.
+ */
 function create(fn, callback) {
   try {
     const stub = _createRPC(fn);
@@ -17,7 +19,9 @@ function create(fn, callback) {
   }
 }
 
-/* Calls an RPC function and returns the result. */
+/**
+ * Calls an RPC function and returns the result.
+ */
 function call(id, ...args) {
   if (id in rpcFns) {
     rpcFns[id](...args);
@@ -30,7 +34,9 @@ function call(id, ...args) {
   }
 }
 
-/* Deletes an RPC function. */
+/**
+ * Deletes an RPC function.
+ */
 function rem(id, callback) {
   let fn = null;
   if (id in rpcFns) {
@@ -42,8 +48,10 @@ function rem(id, callback) {
   }
 }
 
-/* Registers an RPC function and creates an RPC stub. This internal function does
-   not accept a callback and should not be called by external services. */
+/**
+ * Registers an RPC function and creates an RPC stub. This internal function does
+ * not accept a callback and should not be called by external services.
+ */
 function _createRPC(fn) {
   // Register RPC function
   const id = rpcCount.toString();
