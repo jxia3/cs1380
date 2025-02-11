@@ -38,20 +38,25 @@ function send(message, config, callback) {
  */
 function sendRequests(group, config, message, callback) {
   const ids = Object.keys(group);
+  const errors = {};
   const results = {};
   let active = ids.length;
   if (active === 0) {
-    callback(null, results);
+    callback(errors, results);
     return;
   }
 
   for (const id of ids) {
     const remote = {...config, node: group[id]};
     global.distribution.local.comm.send(message, remote, (error, result) => {
-      results[id] = error || result;
+      if (error) {
+        errors[id] = error;
+      } else {
+        results[id] = result;
+      }
       active -= 1;
       if (active === 0) {
-        callback(null, results);
+        callback(errors, results);
       }
     });
   }
