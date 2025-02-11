@@ -41,32 +41,32 @@ function handleRequest(request, response) {
   }
 
   // Convert URL parts to service query
-  const serviceQuery = {};
+  const query = {};
   let method = null;
   if (urlParts.length === 2) {
-    serviceQuery.service = urlParts[0];
-    serviceQuery.gid = "local";
+    query.service = urlParts[0];
+    query.gid = "local";
     method = urlParts[1];
   } else {
-    serviceQuery.service = urlParts[1];
-    serviceQuery.gid = urlParts[0];
+    query.service = urlParts[1];
+    query.gid = urlParts[0];
     method = urlParts[2];
   }
 
   // Find and call node service
-  global.distribution.local.routes.get(serviceQuery, (error, service) => {
+  global.distribution.local.routes.get(query, (error, service) => {
     if (error) {
       sendError(400, error, response);
     } else if (!(method in service)) {
       sendError(400, new Error(`Method '${method}' not in service`), response);
     } else {
-      callService(service[method], request, response);
+      callService(query, service[method], request, response);
     }
   });
 }
 
 /* Parses serialized request data and calls a service method. */
-function callService(method, request, response) {
+function callService(query, method, request, response) {
   let content = "";
   request.on("data", (chunk) => content += chunk);
   request.on("end", () => {
@@ -89,7 +89,7 @@ function callService(method, request, response) {
 
     // Call service and send result
     global.statusState.messageCount += 1;
-    log(`Handling request to service '${urlParts[0]}'`);
+    log(`Handling request to service '${query.service}' on group '${query.gid}'`);
     try {
       method(...data, (error, result) => {
         response.writeHead(200, {"Content-Type": "application/json"});
