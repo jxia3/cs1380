@@ -33,7 +33,28 @@ function get(item, callback) {
  * sent to all the nodes in the current group.
  */
 function spawn(config, callback) {
+  remote.checkGroup(this.gid);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  global.distribution.local.status.spawn(config, (error, node) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    if (node.onStart !== undefined) {
+      delete node.onStart;
+    }
 
+    global.distribution.local.groups.add(this.gid, node, (addError, result) => {
+      const service = {service: "groups", method: "add"};
+      global.distribution[this.gid].comm.send([this.gid, node], service, (sendError, result) => {
+        if (addError || sendError) {
+          callback(addError || sendError, null);
+        } else {
+          callback(null, node);
+        }
+      });
+    });
+  });
 }
 
 /**

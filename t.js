@@ -32,9 +32,12 @@ function runTest() {
   distribution.local.groups.put("all", group, (error, result) => {
     console.log("put result:", error, result);
     distribution.all.groups.put("test", group, (error, result) => {
-      console.log("put result", error, result);
-      distribution.all.status.stop((error, result) => {
-        console.log(error, result);
+      console.log("put result:", error, result);
+      distribution.all.status.spawn({ip: "127.0.0.1", port: basePort + 3}, (error, result) => {
+        console.log("spawn result:", error, result);
+        distribution.all.groups.get("all", (error, result) => {
+          console.log("get result:", error, result);
+        });
       });
     });
   });
