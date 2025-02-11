@@ -11,20 +11,21 @@ function get(item, callback) {
   remote.checkGroup(this.gid);
   callback = callback === undefined ? (error, result) => {} : callback;
   const service = {service: "status", method: "get"};
-  global.distribution[this.gid].comm.send([item], service, (error, result) => {
-    if (error || !ACCUMULATE_ITEMS.includes(item)) {
-      callback(error, result);
+  global.distribution[this.gid].comm.send([item], service, (errors, results) => {
+    if (!ACCUMULATE_ITEMS.includes(item)) {
+      callback(errors, results);
       return;
     }
     let total = 0;
     for (const id in result) {
-      if (result[id] instanceof Error) {
-        callback(new Error(`Node ${id} failed with '${result[id].message}'`), null);
-        return;
+      if (typeof result[id] === "number") {
+        total += result[id];
+      } else {
+        errors[id] = new Error(`Returned value ${result[id]} is not a number`);
+        delete results[id];
       }
-      total += result[id];
     }
-    callback(null, total);
+    callback(errors, total);
   });
 }
 
@@ -46,9 +47,9 @@ function spawn(config, callback) {
 
     global.distribution.local.groups.add(this.gid, node, (addError, result) => {
       const service = {service: "groups", method: "add"};
-      global.distribution[this.gid].comm.send([this.gid, node], service, (sendError, result) => {
-        if (addError || sendError) {
-          callback(addError || sendError, null);
+      global.distribution[this.gid].comm.send([this.gid, node], service, (errors, results) => {
+        if (addError) {
+          callback(addError, null);
         } else {
           callback(null, node);
         }
@@ -63,9 +64,9 @@ function spawn(config, callback) {
 function stop(callback) {
   remote.checkGroup(this.gid);
   const service = {service: "status", method: "stop"};
-  global.distribution[this.gid].comm.send([], service, (error, result) => {
+  global.distribution[this.gid].comm.send([], service, (errors, results) => {
     if (callback !== undefined) {
-      callback(error, result);
+      callback(errors, results);
     }
   });
   global.distribution.local.status.stop();

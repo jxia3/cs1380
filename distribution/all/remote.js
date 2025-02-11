@@ -33,9 +33,9 @@ function createMethod(service, method, numArgs) {
     while (params.length < numArgs) {
       params.push(undefined);
     }
-    global.distribution[this.gid].comm.send(params, {service, method}, (error, result) => {
+    global.distribution[this.gid].comm.send(params, {service, method}, (errors, results) => {
       if (args.length > numArgs && args[numArgs] !== undefined) {
-        args[numArgs](error, result);
+        args[numArgs](errors, results);
       }
     });
   }
