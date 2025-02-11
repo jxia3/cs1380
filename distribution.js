@@ -55,7 +55,7 @@ for (const key in distribution.local) {
 }
 
 /* Initialize distribution object */
-distribution["all"] = {};
+distribution["all"] = {_isGroup: true};
 distribution["all"].status
     = require("./distribution/all/status")({gid: "all"});
 distribution["all"].comm

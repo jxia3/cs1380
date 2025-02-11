@@ -63,9 +63,7 @@ function createStartFn(onStart, callback) {
   const nodeStart = onStart === undefined ? () => {} : onStart;
   const externalStart = util.wire.createRPC((...args) => {
     const remoteCallback = args.pop();
-    try {
-      callback(...args);
-    } catch {}
+    callback(...args);
     remoteCallback(null, null);
   });
 
@@ -74,7 +72,9 @@ function createStartFn(onStart, callback) {
     const externalStart = "__EXTERNAL_START__";
     try {
       nodeStart(server);
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
     try {
       externalStart(null, global.nodeConfig, (error, result) => {});
     } catch (error) {

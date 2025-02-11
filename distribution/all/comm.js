@@ -41,6 +41,10 @@ function sendRequests(group, config, message, callback) {
   const ids = Object.keys(group);
   const results = {};
   let active = ids.length;
+  if (active === 0) {
+    callback(null, results);
+    return;
+  }
 
   for (const id of ids) {
     const remote = {...config, node: group[id]};

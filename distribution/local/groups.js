@@ -4,17 +4,14 @@
 const all = require("../all/all.js");
 const id = require("../util/id.js");
 
-const groups = {};
-const allNodes = {};
+const groups = {all: {}};
 
 /**
  * Retrieves the node group associated with a name.
  */
 function get(name, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (name === "all") {
-    callback(null, allNodes);
-  } else if (!(name in groups)) {
+  if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
     callback(null, groups[name]);
@@ -26,7 +23,7 @@ function get(name, callback) {
  */
 function put(name, group, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (typeof name !== "string" || name === "local" || name === "all") {
+  if (typeof name !== "string" || name === "local") {
     callback(new Error(`Invalid group name '${name}'`, null));
   } else if (name in global.distribution && !global.distribution[name]._isGroup) {
     callback(new Error(`Global object already exists with name '${name}'`), null);
@@ -90,14 +87,13 @@ function rem(name, nodeSID, callback) {
  * the all mapping with extra accounting.
  */
 function computeAllGroup() {
-  for (const sid in allNodes) {
-    delete allNodes[sid];
-  }
+  const allNodes = {};
   for (const name in groups) {
     for (const sid in groups[name]) {
       allNodes[sid] = groups[name][sid];
     }
   }
+  groups.all = allNodes;
 }
 
 module.exports = {get, put, del, add, rem};
