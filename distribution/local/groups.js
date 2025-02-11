@@ -29,7 +29,7 @@ function put(name, group, callback) {
     callback(new Error(`Global object already exists with name '${name}'`), null);
   } else {
     groups[name] = group;
-    distribution[name] = {};
+    distribution[name] = {_isGroup: true};
     for (const service in all) {
       distribution[name][service] = all[service]({gid: name});
     }

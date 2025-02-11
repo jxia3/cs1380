@@ -4,7 +4,14 @@
  * Retrieves a status value for each node in the current group.
  */
 function get(item, callback) {
-
+  if (this.gid === undefined || !global.distribution[this.gid]?._isGroup) {
+    throw new Error(`Group '${this.gid}' does not exist`);
+  }
+  const service = {service: "status", method: "get"};
+  global.distribution[this.gid].comm.send([item], service, (error, result) => {
+    console.log("got result", error, result);
+    process.exit(0);
+  });
 }
 
 /**
