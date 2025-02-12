@@ -72,14 +72,20 @@ function shuffle(array) {
  * Schedules a function to be run in a periodic interval.
  */
 function at(interval, fn, callback) {
-  checkContext(this.gid, this.subset);
+  const id = setInterval(fn, interval);
+  if (callback !== undefined) {
+    callback(null, id);
+  }
 }
 
 /**
  * Deletes a scheduled function.
  */
-function del(fnId, callback) {
-  checkContext(this.gid, this.subset);
+function del(intervalId, callback) {
+  clearInterval(intervalId);
+  if (callback !== null) {
+    callback(null, intervalId);
+  }
 }
 
 /* Checks if the current function context is valid. */
