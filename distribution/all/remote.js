@@ -1,4 +1,13 @@
 /**
+ * Checks if a group ID is valid.
+ */
+function checkGroup(gid) {
+  if (gid === undefined || !global.distribution[gid]?._isGroup) {
+    throw new Error(`Group '${gid}' does not exist`);
+  }
+}
+
+/**
  * Creates a binding constructor for a function module.
  */
 function createConstructor(module) {
@@ -44,12 +53,33 @@ function createMethod(service, method, numArgs) {
 }
 
 /**
- * Checks if a group ID is valid.
+ * Sends a message to all the nodes in a group and collects the results. Note that
+ * the service configuration must be valid and the callback must be a function.
  */
-function checkGroup(gid) {
-  if (gid === undefined || !global.distribution[gid]?._isGroup) {
-    throw new Error(`Group '${gid}' does not exist`);
+function sendRequests(group, config, message, callback) {
+  const ids = Object.keys(group);
+  const errors = {};
+  const results = {};
+  let active = ids.length;
+  if (active === 0) {
+    callback(errors, results);
+    return;
+  }
+
+  for (const id of ids) {
+    const remote = {...config, node: group[id]};
+    global.distribution.local.comm.send(message, remote, (error, result) => {
+      if (error) {
+        errors[id] = error;
+      } else {
+        results[id] = result;
+      }
+      active -= 1;
+      if (active === 0) {
+        callback(errors, results);
+      }
+    });
   }
 }
 
-module.exports = {createConstructor, createMethod, checkGroup};
+module.exports = {checkGroup, createConstructor, createMethod, sendRequests};

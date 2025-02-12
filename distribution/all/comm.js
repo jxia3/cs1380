@@ -28,38 +28,9 @@ function send(message, config, callback) {
     if (error) {
       callback(error, null);
     } else {
-      sendRequests(group, config, message, callback);
+      remote.sendRequests(group, config, message, callback);
     }
   });
-}
-
-/**
- * Sends a message to all the nodes in a group and collects the results.
- */
-function sendRequests(group, config, message, callback) {
-  const ids = Object.keys(group);
-  const errors = {};
-  const results = {};
-  let active = ids.length;
-  if (active === 0) {
-    callback(errors, results);
-    return;
-  }
-
-  for (const id of ids) {
-    const remote = {...config, node: group[id]};
-    global.distribution.local.comm.send(message, remote, (error, result) => {
-      if (error) {
-        errors[id] = error;
-      } else {
-        results[id] = result;
-      }
-      active -= 1;
-      if (active === 0) {
-        callback(errors, results);
-      }
-    });
-  }
 }
 
 module.exports = remote.createConstructor({send});

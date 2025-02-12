@@ -1,8 +1,8 @@
 const d1 = require("./distribution.js");
 const d2 = require("@brown-ds/distribution");
 
-global.distribution = d1;
-const distribution = d1;
+global.distribution = d2;
+const distribution = d2;
 
 const basePort = 2000;
 const nodes = [
@@ -31,13 +31,10 @@ function runTest() {
   }
   distribution.local.groups.put("all", group, (error, result) => {
     console.log("put result:", error, result);
-    distribution.all.groups.put("test", group, (error, result) => {
+    distribution.all.groups.put("all", group, (error, result) => {
       console.log("put result:", error, result);
-      distribution.all.status.spawn({ip: "127.0.0.1", port: basePort + 3}, (error, result) => {
-        console.log("spawn result:", error, result);
-        distribution.all.groups.get("all", (error, result) => {
-          console.log("get result:", error, result);
-        });
+      distribution.all.gossip.send(["sid"], {service: "status", method: "get"}, (error, result) => {
+        console.log("gossip result:", error, result);
       });
     });
   });
