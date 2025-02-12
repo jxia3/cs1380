@@ -1,7 +1,7 @@
 /* Sends messages to all nodes in the current group probabilistically. */
 
 const remote = require("./remote.js");
-const util = reqiure("../util/util.js");
+const util = require("../util/util.js");
 
 /**
  * Sends a message to random nodes in the current group.
@@ -26,6 +26,7 @@ function send(message, config, callback) {
  * Sends a gossip message to a subset of the nodes in a group.
  */
 function sendGossip(group, config, message, callback) {
+  // Select recipient nodes
   const groupIds = Object.keys(group);
   shuffle(groupIds);
   const nodeIds = groupIds.slice(0, this.subset(groupIds));
@@ -33,7 +34,9 @@ function sendGossip(group, config, message, callback) {
   for (const id of nodeIds) {
     nodes[id] = group[id];
   }
+  console.log("sending gossip", nodes, message);
 
+  // Send gossip message
   const gossipMessage = {config, message, groupId: this.gid};
   gossipMessage.gossipId = util.id.getMID(gossipMessage);
   const service = {service: "gossip", method: "recv"};

@@ -75,7 +75,11 @@ function createStartFn(onStart, callback) {
       console.error(error);
     }
     try {
-      externalStart(null, global.nodeConfig, (error, result) => {});
+      const config = {...global.nodeConfig};
+      if (config.onStart !== undefined) {
+        delete config.onStart;
+      }
+      externalStart(null, config, (error, result) => {});
     } catch (error) {
       externalStart(error, null, (error, result) => {});
     }

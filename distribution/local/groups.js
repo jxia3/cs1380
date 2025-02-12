@@ -33,12 +33,21 @@ function put(config, group, callback) {
     return;
   }
 
+  // Remove start functions from nodes
+  for (const id in group) {
+    if (group[id].onStart !== undefined) {
+      delete group[id].onStart;
+    }
+  }
+
+  // Add group and recompute the all group
   groups[name] = group;
   distribution[name] = {_isGroup: true};
   for (const service in all) {
     distribution[name][service] = all[service]({gid: name});
   }
   computeAllGroup();
+
   callback(null, group);
 }
 
@@ -65,6 +74,9 @@ function add(name, node, callback) {
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
+    if (node.onStart !== undefined) {
+      delete node.onStart;
+    }
     const sid = util.id.getSID(node);
     groups[name][sid] = node;
     computeAllGroup();

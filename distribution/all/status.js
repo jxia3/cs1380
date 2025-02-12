@@ -41,10 +41,6 @@ function spawn(config, callback) {
       callback(error, null);
       return;
     }
-    if (node.onStart !== undefined) {
-      delete node.onStart;
-    }
-
     global.distribution.local.groups.add(this.gid, node, (addError, result) => {
       const service = {service: "groups", method: "add"};
       global.distribution[this.gid].comm.send([this.gid, node], service, (errors, results) => {
