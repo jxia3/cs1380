@@ -1,7 +1,6 @@
 /* Tracks the current state of the node. Note that the node ID is computed once
    on startup, and subsequent changes to the node configuration are not reflected.*/
 
-const id = require("../util/id.js");
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
@@ -9,8 +8,8 @@ const childProcess = require("child_process");
 const path = require("path");
 
 const state = {
-  nid: id.getNID(global.nodeConfig),
-  sid: id.getSID(global.nodeConfig),
+  nid: util.id.getNID(global.nodeConfig),
+  sid: util.id.getSID(global.nodeConfig),
   messageCount: 0,
 };
 global.statusState = state;

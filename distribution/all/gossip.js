@@ -1,6 +1,7 @@
 /* Sends messages to all nodes in the current group probabilistically. */
 
 const remote = require("./remote.js");
+const util = reqiure("../util/util.js");
 
 /**
  * Sends a message to random nodes in the current group.
@@ -16,7 +17,7 @@ function send(message, config, callback) {
     if (error) {
       callback(error, null);
     } else {
-      sendGossip(group, this.subset, config, message, callback);
+      sendGossip.call(this, group, config, message, callback);
     }
   });
 }
@@ -24,9 +25,31 @@ function send(message, config, callback) {
 /**
  * Sends a gossip message to a subset of the nodes in a group.
  */
-function sendGossip(group, subsetFn, config, message, callback) {
-  console.log("sending gossip", group, subsetFn.toString());
-  process.exit()
+function sendGossip(group, config, message, callback) {
+  const groupIds = Object.keys(group);
+  shuffle(groupIds);
+  const nodeIds = groupIds.slice(0, this.subset(groupIds));
+  const nodes = {};
+  for (const id of nodeIds) {
+    nodes[id] = group[id];
+  }
+
+  const gossipMessage = {config, message, groupId: this.gid};
+  gossipMessage.gossipId = util.id.getMID(gossipMessage);
+  const service = {service: "gossip", method: "recv"};
+  remote.sendRequests(nodes, service, [gossipMessage], callback);
+}
+
+/**
+ * Shuffles an array in-place.
+ */
+function shuffle(array) {
+  for (let a = array.length - 1; a > 0; a -= 1) {
+    const b = Math.floor(Math.random() * (a + 1));
+    const temp = array[a];
+    array[a] = array[b];
+    array[b] = temp;
+  }
 }
 
 /**

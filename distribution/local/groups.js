@@ -2,7 +2,7 @@
    nodes may have different groups with the same name. */
 
 const all = require("../all/all.js");
-const id = require("../util/id.js");
+const util = require("../util/util.js");
 
 const groups = {all: {}};
 
@@ -65,7 +65,7 @@ function add(name, node, callback) {
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
-    const sid = id.getSID(node);
+    const sid = util.id.getSID(node);
     groups[name][sid] = node;
     computeAllGroup();
     callback(null, groups[name]);
