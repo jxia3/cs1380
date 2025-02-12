@@ -105,6 +105,7 @@ function callService(query, method, request, response) {
         response.end(util.serialize({error, result}));
       });
     } catch (error) {
+      console.error(error);
       sendError(500, error, response);
     }
   });
