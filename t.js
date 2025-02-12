@@ -1,8 +1,8 @@
 const d1 = require("./distribution.js");
 const d2 = require("@brown-ds/distribution");
 
-global.distribution = d2;
-const distribution = d2;
+global.distribution = d1;
+const distribution = d1;
 
 const basePort = 2000;
 const nodes = [

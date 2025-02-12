@@ -7,6 +7,26 @@ const remote = require("./remote.js");
  */
 function send(message, config, callback) {
   checkContext(this.gid, this.subset);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (config?.service === undefined || config?.method === undefined) {
+    callback(new Error("Service or method not provided"), null);
+    return;
+  }
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      sendGossip(group, this.subset, config, message, callback);
+    }
+  });
+}
+
+/**
+ * Sends a gossip message to a subset of the nodes in a group.
+ */
+function sendGossip(group, subsetFn, config, message, callback) {
+  console.log("sending gossip", group, subsetFn.toString());
+  process.exit()
 }
 
 /**
