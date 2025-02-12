@@ -1,3 +1,23 @@
+# M3: Node Groups & Gossip Protocols
+
+## Summary
+
+> Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M3 (`hours`) and the lines of code per task.
+
+My implementation comprises `<number>` new software components, totaling `<number>` added lines of code over the previous implementation. Key challenges included `<1, 2, 3 + how you solved them>`.
+
+## Correctness & Performance Characterization
+
+> Describe how you characterized the correctness and performance of your implementation
+
+*Correctness* -- number of tests and time they take.
+
+*Performance* -- spawn times (all students) and gossip (lab/ec-only).
+
+## Key Feature
+
+> What is the point of having a gossip protocol? Why doesn't a node just send the message to _all_ other nodes in its group?
+
 # M2: Actors and Remote Procedure Calls (RPC)
 
 ## Summary
