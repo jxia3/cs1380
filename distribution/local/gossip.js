@@ -19,11 +19,12 @@ function receive(payload, callback) {
   }
   if (checkReceived(payload.gossipId)) {
     callback(null, null);
+    return;
   }
-  const remote = {...payload.config, ip: global.nodeConfig.ip, port: global.nodeConfig.port};
+  const remote = {...payload.config, node: global.nodeConfig};
   global.distribution.local.comm.send(payload.message, remote, callback);
   if (global.distribution[payload.groupId]?._isGroup) {
-    global.distribution[payload.groupId].gossip.send(payload.message, payload.config);
+    global.distribution[payload.groupId].gossip.sendPayload(payload);
   }
 }
 
@@ -40,6 +41,7 @@ function checkReceived(gossipId) {
     const removed = receivedQueue.shift();
     receivedSet.delete(removed);
   }
+  return false;
 }
 
 module.exports = {recv: receive};

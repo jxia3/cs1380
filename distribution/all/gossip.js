@@ -4,7 +4,7 @@ const remote = require("./remote.js");
 const util = require("../util/util.js");
 
 /**
- * Sends a message to random nodes in the current group.
+ * Sends a gossip message to random nodes in the current group.
  */
 function send(message, config, callback) {
   checkContext(this.gid, this.subset);
@@ -13,11 +13,28 @@ function send(message, config, callback) {
     callback(new Error("Service or method not provided"), null);
     return;
   }
+  const payload = {config, message, groupId: this.gid};
+  payload.gossipId = util.id.getMID(payload);
+  sendPayload.call(this, payload, callback);
+}
+
+/**
+ * Sends a gossip payload to random nodes in the current group.
+ */
+function sendPayload(payload, callback) {
+  checkContext(this.gid, this.subset);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (payload?.gossipId === undefined || payload?.config?.service === undefined
+      || payload?.config?.method === undefined || payload?.message === undefined
+      || payload?.groupId === undefined) {
+    callback(new Error("Invalid gossip payload"), null);
+    return;
+  }
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
       callback(error, null);
     } else {
-      sendGossip.call(this, group, config, message, callback);
+      sendGossip.call(this, group, payload, callback);
     }
   });
 }
@@ -25,7 +42,7 @@ function send(message, config, callback) {
 /**
  * Sends a gossip message to a subset of the nodes in a group.
  */
-function sendGossip(group, config, message, callback) {
+function sendGossip(group, payload, callback) {
   // Select recipient nodes
   const groupIds = Object.keys(group);
   shuffle(groupIds);
@@ -34,13 +51,8 @@ function sendGossip(group, config, message, callback) {
   for (const id of nodeIds) {
     nodes[id] = group[id];
   }
-  console.log("sending gossip", nodes, message);
-
-  // Send gossip message
-  const gossipMessage = {config, message, groupId: this.gid};
-  gossipMessage.gossipId = util.id.getMID(gossipMessage);
   const service = {service: "gossip", method: "recv"};
-  remote.sendRequests(nodes, service, [gossipMessage], callback);
+  remote.sendRequests(nodes, service, [payload], callback);
 }
 
 /**
@@ -86,6 +98,7 @@ module.exports = (config) => {
   }
   return {
     send: send.bind(context),
+    sendPayload: sendPayload.bind(context),
     at: at.bind(context),
     del: del.bind(context),
   };
