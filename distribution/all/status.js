@@ -16,15 +16,17 @@ function get(item, callback) {
       callback(errors, results);
       return;
     }
+
     let total = 0;
-    for (const id in result) {
-      if (typeof result[id] === "number") {
-        total += result[id];
+    for (const id in results) {
+      if (typeof results[id] === "number") {
+        total += results[id];
       } else {
-        errors[id] = new Error(`Returned value ${result[id]} is not a number`);
+        errors[id] = new Error(`Returned value ${results[id]} is not a number`);
         delete results[id];
       }
     }
+
     callback(errors, total);
   });
 }
@@ -41,6 +43,7 @@ function spawn(config, callback) {
       callback(error, null);
       return;
     }
+
     global.distribution.local.groups.add(this.gid, node, (addError, result) => {
       const service = {service: "groups", method: "add"};
       global.distribution[this.gid].comm.send([this.gid, node], service, (errors, results) => {

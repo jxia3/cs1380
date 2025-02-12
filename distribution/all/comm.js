@@ -24,6 +24,7 @@ function send(message, config, callback) {
     callback(new Error("Service or method not provided"), null);
     return;
   }
+
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
       callback(error, null);

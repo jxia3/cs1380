@@ -42,9 +42,9 @@ function put(config, group, callback) {
 
   // Add group and recompute the all group
   groups[name] = group;
-  distribution[name] = {_isGroup: true};
+  global.distribution[name] = {_isGroup: true};
   for (const service in all) {
-    distribution[name][service] = all[service]({gid: name});
+    global.distribution[name][service] = all[service]({gid: name});
   }
   computeAllGroup();
 

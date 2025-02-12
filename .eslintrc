@@ -21,6 +21,7 @@
         "guard-for-in": "off", // Do not require guard clauses in for...in loops
         "quotes": ["error", "double"], // Prefer double quotes over single quotes
         "operator-linebreak": ["error", "before"], // Place conditional operators before each line
+        "valid-jsdoc": "off", // Ignore JSDoc without parameter annotations
         "no-restricted-syntax": [
             "error",
             {

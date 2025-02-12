@@ -17,6 +17,7 @@ function receive(payload, callback) {
     callback(new Error("Invalid gossip payload"), null);
     return;
   }
+
   if (checkReceived(payload.gossipId)) {
     callback(null, null);
     return;

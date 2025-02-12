@@ -13,6 +13,7 @@ function send(message, config, callback) {
     callback(new Error("Service or method not provided"), null);
     return;
   }
+
   const payload = {config, message, groupId: this.gid};
   payload.gossipId = util.id.getMID(payload);
   sendPayload.call(this, payload, callback);
@@ -30,6 +31,7 @@ function sendPayload(payload, callback) {
     callback(new Error("Invalid gossip payload"), null);
     return;
   }
+
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
       callback(error, null);
@@ -43,7 +45,6 @@ function sendPayload(payload, callback) {
  * Sends a gossip message to a subset of the nodes in a group.
  */
 function sendGossip(group, payload, callback) {
-  // Select recipient nodes
   const groupIds = Object.keys(group);
   shuffle(groupIds);
   const nodeIds = groupIds.slice(0, this.subset(groupIds));
@@ -96,6 +97,7 @@ module.exports = (config) => {
   if (typeof context.subset !== "function") {
     context.subset = (nodes) => Math.ceil(Math.log(nodes.length));
   }
+
   return {
     send: send.bind(context),
     sendPayload: sendPayload.bind(context),
