@@ -34,14 +34,24 @@ function put(config, group, callback) {
   }
 
   // Construct node mapping
-  const keys = Object.keys(group);
-  const nodes = {};
-  for (const key of keys) {
-    if (group[key]?.onStart !== undefined) {
-      delete group[key].onStart;
+  let nodes = {};
+  if (group instanceof Array) {
+    for (const node of group) {
+      const sid = util.id.getSID(node);
+      nodes[sid] = node;
     }
-    const sid = util.id.getSID(group[key]);
-    nodes[sid] = group[key];
+  } else if (typeof nodes === "object") {
+    nodes = group;
+  } else {
+    callback(new Error("Invalid nodes object"), null);
+    return;
+  }
+
+  // Remove start functions
+  for (const id in nodes) {
+    if (nodes[id]?.onStart !== undefined) {
+      delete nodes[id]?.onStart;
+    }
   }
 
   // Add group and recompute the all group
