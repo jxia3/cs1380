@@ -52,7 +52,7 @@ function put(config, group, callback) {
   }
   computeAllGroup();
 
-  callback(null, group);
+  callback(null, nodes);
 }
 
 /**
