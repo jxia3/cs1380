@@ -73,21 +73,25 @@ test("(5 pts) (scenario) group relativity", (done) => {
     distribution.groupC.groups.put(config, groupC, (e, v) => {
       // Modify the local 'view' of the group...
       distribution.local.groups.rem("groupC", id.getSID(n1), (e, v) => {
-        distribution.groupC.groups.get("groupC", (e, v) => {
-          const n1View = v[id.getSID(n1)];
-          const n2View = v[id.getSID(n2)];
-          try {
-            expect(Object.keys(n2View)).toEqual(expect.arrayContaining(
-                [id.getSID(n1), id.getSID(n2)],
-            ));
-            expect(Object.keys(n1View)).toEqual(expect.arrayContaining(
-                [id.getSID(n2)],
-            ));
-            done();
-          } catch (error) {
-            done(error);
-          }
-        });
+        distribution.local.comm.send(
+            ["groupC"],
+            {node: n2, gid: "groupC", service: "groups", method: "get"},
+            (e, v) => {
+              const n1View = v[id.getSID(n1)];
+              const n2View = v[id.getSID(n2)];
+              try {
+                expect(Object.keys(n2View)).toEqual(expect.arrayContaining(
+                    [id.getSID(n1), id.getSID(n2)],
+                ));
+                expect(Object.keys(n1View)).toEqual(expect.arrayContaining(
+                    [id.getSID(n2)],
+                ));
+                done();
+              } catch (error) {
+                done(error);
+              }
+            },
+        );
       });
     });
   });
