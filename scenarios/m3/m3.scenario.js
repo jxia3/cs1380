@@ -8,22 +8,25 @@ const allNodes = [n1, n2, n3];
 
 
 test("(5 pts) (scenario) create group", (done) => {
-/*
-    Create a group with the nodes n1, n2, and n3.
-    Then, fetch their NIDs using the distributed status service.
-*/
+  /* Create a group with the nodes n1, n2, and n3.
+     Then, fetch their NIDs using the distributed status service. */
 
   const groupA = {};
   groupA[id.getSID(n1)] = n1;
+
   // Add nodes n2 and n3 to the group...
+  groupA[id.getSID(n2)] = n2;
+  groupA[id.getSID(n3)] = n3;
 
   const nids = Object.values(allNodes).map((node) => id.getNID(node));
 
   // Use distribution.local.groups.put to add groupA to the local node
   // Note: The groupA.status.get call should be inside the put method's callback.
-  distribution.groupA.status.get("nid", (e, v) => {
-    expect(Object.values(v)).toEqual(expect.arrayContaining(nids));
-    done();
+  distribution.local.groups.put("groupA", groupA, (e, v) => {
+    distribution.groupA.status.get("nid", (e, v) => {
+      expect(Object.values(v)).toEqual(expect.arrayContaining(nids));
+      done();
+    });
   });
 });
 
