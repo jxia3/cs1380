@@ -33,15 +33,19 @@ function put(config, group, callback) {
     return;
   }
 
-  // Remove start functions from nodes
-  for (const id in group) {
-    if (group[id].onStart !== undefined) {
-      delete group[id].onStart;
+  // Construct node mapping
+  const keys = Object.keys(group);
+  const nodes = {};
+  for (const key of keys) {
+    if (group[key]?.onStart !== undefined) {
+      delete group[key].onStart;
     }
+    const sid = util.id.getSID(group[key]);
+    nodes[sid] = group[key];
   }
 
   // Add group and recompute the all group
-  groups[name] = group;
+  groups[name] = nodes;
   global.distribution[name] = {_isGroup: true};
   for (const service in all) {
     global.distribution[name][service] = all[service]({gid: name});

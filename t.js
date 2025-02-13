@@ -29,9 +29,9 @@ function runTest() {
   for (const node of nodes) {
     group[distribution.util.id.getSID(node)] = node;
   }
-  distribution.local.groups.put("all", group, (error, result) => {
+  distribution.local.groups.put("all", nodes, (error, result) => {
     console.log("put result:", error, result);
-    distribution.all.groups.put("all", group, (error, result) => {
+    distribution.all.groups.put("all", nodes, (error, result) => {
       console.log("put result:", error, result);
       distribution.all.gossip.send(["sid"], {service: "status", method: "get"}, (error, result) => {
         console.log("gossip result:", error, result);
