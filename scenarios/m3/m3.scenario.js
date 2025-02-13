@@ -10,7 +10,6 @@ const allNodes = [n1, n2, n3];
 test("(5 pts) (scenario) create group", (done) => {
   /* Create a group with the nodes n1, n2, and n3.
      Then, fetch their NIDs using the distributed status service. */
-
   const groupA = {};
   groupA[id.getSID(n1)] = n1;
 
@@ -31,42 +30,39 @@ test("(5 pts) (scenario) create group", (done) => {
 });
 
 test("(5 pts) (scenario) dynamic group membership", (done) => {
-/*
-  Dynamically add a node (n3) to groupB after the group is initially created
-  with nodes n1 and n2. Validate that the distributed status service reflects
-  the updated group membership on all nodes.
-*/
+  /* Dynamically add a node (n3) to groupB after the group is initially created
+     with nodes n1 and n2. Validate that the distributed status service reflects
+     the updated group membership on all nodes. */
   const groupB = {};
   const initialNodes = [n1, n2];
   const allNodes = [n1, n2, n3];
 
   // Create groupB...
-
   const config = {gid: "groupB"};
 
   // Create the group with initial nodes
   distribution.local.groups.put(config, initialNodes, (e, v) => {
     // Add a new node dynamically to the group
-
-    distribution.groupB.status.get("nid", (e, v) => {
-      try {
-        expect(Object.values(v)).toEqual(expect.arrayContaining(
-            allNodes.map((node) => id.getNID(node))));
-        done();
-      } catch (error) {
-        done(error);
-      }
+    distribution.local.groups.add("groupB", n3, (e, v) => {
+      distribution.groupB.status.get("nid", (e, v) => {
+        try {
+          expect(Object.values(v)).toEqual(expect.arrayContaining(
+              allNodes.map((node) => id.getNID(node))));
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
     });
   });
 });
 
 
 test("(5 pts) (scenario) group relativity", (done) => {
-/*
-    Make it so that node n1 sees group groupC as containing only n2.
-    while node n2 sees group groupC as containing n1 and n2.
-*/
+  /* Make it so that node n1 sees group groupC as containing only n2.
+     while node n2 sees group groupC as containing n1 and n2. */
   const groupC = {};
+
   // Create groupC in an appropriate way...
 
 
