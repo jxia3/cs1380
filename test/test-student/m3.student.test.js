@@ -54,8 +54,9 @@ test("(1 pts) student test", (done) => {
     expect(result?.ip).toBe(extraNode.ip);
     expect(result?.port).toBe(extraNode.port);
     distribution.foobar.groups.get("foobar", (error, result) => {
-      expect(error).toEqual({});
-      expect(Object.keys(result).length).toBe(5);
+      expect(Object.keys(error).length).toBe(1);
+      expect(Object.values(error).every((e) => e instanceof Error)).toBe(true);
+      expect(Object.keys(result).length).toBe(4);
       for (const id in result) {
         expect(Object.keys(result[id]).length).toBe(5);
         expect(Object.values(result[id]).map((n) => n?.port))
