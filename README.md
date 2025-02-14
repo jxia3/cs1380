@@ -10,7 +10,12 @@ My implementation comprises `<number>` new software components, totaling `<numbe
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness* -- number of tests and time they take.
+*Correctness*: I wrote 5 tests; these tests take a few seconds to execute. The tests cover:
+- Adding nodes to the all group when a new group is created.
+- Adding groups to remote nodes with a distributed service.
+- Spawning a node in a group with a distributed service.
+- Adding a new service to all the nodes in a group.
+- Sending a gossip message to all the nodes in a group.
 
 *Performance* -- spawn times (all students) and gossip (lab/ec-only).
 
