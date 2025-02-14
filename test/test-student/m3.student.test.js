@@ -57,12 +57,16 @@ test("(1 pts) student test", (done) => {
       expect(Object.keys(error).length).toBe(1);
       expect(Object.values(error).every((e) => e instanceof Error)).toBe(true);
       expect(Object.keys(result).length).toBe(4);
-      for (const id in result) {
-        expect(Object.keys(result[id]).length).toBe(5);
-        expect(Object.values(result[id]).map((n) => n?.port))
-            .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003, 2004]));
-      }
-      done();
+      distribution.foobar.groups.put("foobar", [...nodes, extraNode], (error, result) => {
+        expect(error).toEqual({});
+        expect(Object.keys(result).length).toBe(5);
+        for (const id in result) {
+          expect(Object.keys(result[id]).length).toBe(5);
+          expect(Object.values(result[id]).map((n) => n?.port))
+              .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003, 2004]));
+        }
+        done();
+      });
     });
   });
 });
