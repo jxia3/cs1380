@@ -72,11 +72,11 @@ test("(5 pts) (scenario) group relativity", (done) => {
   distribution.local.groups.put(config, groupC, (e, v) => {
     distribution.groupC.groups.put(config, groupC, (e, v) => {
       // Modify the local 'view' of the group...
-      distribution.local.groups.rem("groupC", id.getSID(n1), (e, v) => {
-        distribution.local.comm.send(
-            ["groupC"],
-            {node: n2, gid: "groupC", service: "groups", method: "get"},
-            (e, v) => {
+      distribution.local.comm.send(
+          ["groupC", id.getSID(n1)],
+          {node: n1, service: "groups", method: "rem"},
+          (e, v) => {
+            distribution.groupC.groups.get("groupC", (e, v) => {
               const n1View = v[id.getSID(n1)];
               const n2View = v[id.getSID(n2)];
               try {
@@ -90,9 +90,9 @@ test("(5 pts) (scenario) group relativity", (done) => {
               } catch (error) {
                 done(error);
               }
-            },
-        );
-      });
+            });
+          },
+      );
     });
   });
 });
