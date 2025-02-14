@@ -10,6 +10,8 @@ jest.setTimeout(10000);
 
 const distribution = require("../../config.js");
 
+const util = distribution.util;
+
 let localServer = null;
 const nodes = [
   {ip: "127.0.0.1", port: 2000},
@@ -72,8 +74,25 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  let count = 0;
+  function increment(callback) {
+    count += 1;
+    callback(null, count);
+  }
+  const counterService = {increment: util.wire.createRPC(increment)};
+
+  distribution.foobar.routes.put(counterService, "counter", (error, result) => {
+    expect(error).toEqual({});
+    expect(Object.keys(result).length).toBe(5);
+    expect(Object.values(result).every((n) => n === "counter"));
+    const service = {service: "counter", method: "increment"};
+    distribution.foobar.comm.send([], service, (error, result) => {
+      expect(error).toEqual({});
+      expect(Object.keys(result).length).toBe(5);
+      expect(Object.values(result)).toEqual(expect.arrayContaining([1, 2, 3, 4, 5]));
+      done();
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
