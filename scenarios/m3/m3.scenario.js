@@ -137,7 +137,6 @@ test("(5 pts) (scenario) use the gossip service", (done) => {
           const delay = 100;
           setTimeout(() => {
             distribution.groupD.groups.get("newgroup", (e, v) => {
-              console.log("got result", e, v)
               let count = 0;
               for (const k in v) {
                 if (Object.keys(v[k]).length > 0) {
