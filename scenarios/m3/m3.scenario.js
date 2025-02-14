@@ -98,26 +98,27 @@ test("(5 pts) (scenario) group relativity", (done) => {
 });
 
 test("(5 pts) (scenario) use the gossip service", (done) => {
-/*
-    First, create group groupD a number of nodes of your choosing.
-    Then, using the groups.put method,  a new group is created called 'newgroup'.
-    Add a new node to 'newgroup' using the gossip service to propagate the new group membership to all (or a subset of) nodes in groupD.
+  /* First, create group groupD a number of nodes of your choosing.
+     Then, using the groups.put method,  a new group is created called 'newgroup'.
+     Add a new node to 'newgroup' using the gossip service to propagate the new group membership to all (or a subset of) nodes in groupD.
 
-    Experiment with:
-    1. The number of nodes in groupD
-    2. The subset function used in the gossip service
-    3. The expected number of nodes receiving the new group membership
-    4. The time delay between adding the new node to 'newgroup' and checking the group membership in groupD
-*/
+     Experiment with:
+     1. The number of nodes in groupD
+     2. The subset function used in the gossip service
+     3. The expected number of nodes receiving the new group membership
+     4. The time delay between adding the new node to 'newgroup' and checking the group membership in groupD */
 
   // Create groupD in an appropriate way...
   const groupD = {};
+  groupD[id.getSID(n1)] = n1;
+  groupD[id.getSID(n2)] = n2;
+  groupD[id.getSID(n3)] = n3;
 
   // How many nodes are expected to receive the new group membership?
-  const nExpected = 0;
+  const nExpected = 2;
 
   // Experiment with the subset function used in the gossip service...
-  const config = {gid: "groupD", subset: (lst) => "?"};
+  const config = {gid: "groupD", subset: (lst) => 2};
 
   // Instantiated groupD
   distribution.local.groups.put(config, groupD, (e, v) => {
@@ -133,9 +134,10 @@ test("(5 pts) (scenario) use the gossip service", (done) => {
         // Adding a new node to 'newgroup' using the gossip service
         distribution.groupD.gossip.send(message, remote, (e, v) => {
           // Experiment with the time delay between adding the new node to 'newgroup' and checking the group membership in groupD...
-          const delay = 0;
+          const delay = 100;
           setTimeout(() => {
             distribution.groupD.groups.get("newgroup", (e, v) => {
+              console.log("got result", e, v)
               let count = 0;
               for (const k in v) {
                 if (Object.keys(v[k]).length > 0) {
