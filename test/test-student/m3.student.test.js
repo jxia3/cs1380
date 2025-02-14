@@ -20,7 +20,6 @@ const nodes = [
 const extraNode = {ip: "127.0.0.1", port: 2004};
 
 test("(1 pts) student test", (done) => {
-  console.log("running first test");
   distribution.local.groups.put("foobar", nodes, (error, result) => {
     expect(error).toBeFalsy();
     expect(Object.keys(result).length).toBe(4);
@@ -37,8 +36,16 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.foobar.groups.put("foobar", nodes, (error, result) => {
+    expect(error).toEqual({});
+    expect(Object.keys(result).length).toBe(4);
+    for (const id in result) {
+      expect(Object.keys(result[id]).length).toBe(4);
+      expect(Object.values(result[id]).map((n) => n?.port))
+          .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003]));
+    }
+    done();
+  });
 });
 
 test("(1 pts) student test", (done) => {
@@ -59,16 +66,11 @@ test("(1 pts) student test", (done) => {
 beforeAll((done) => {
   stopNodes(() => {
     distribution.node.start((server) => {
-      console.log("started local");
       localServer = server;
       distribution.local.status.spawn(nodes[0], (error, result) => {
-        console.log("started 0", error, result);
         distribution.local.status.spawn(nodes[1], (error, result) => {
-          console.log("started 1", error, result);
           distribution.local.status.spawn(nodes[2], (error, result) => {
-            console.log("started 2", error, result);
             distribution.local.status.spawn(nodes[3], (error, result) => {
-              console.log("started 3", error, result);
               done();
             });
           });

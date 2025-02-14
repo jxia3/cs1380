@@ -54,6 +54,21 @@
         "unit": "milliseconds/item"
       }
     },
+    "m3": {
+      "hours": 10,
+      "loc": 600,
+      "throughput": {
+        "dev": [["spawn", 0.813]],
+        "aws": [["spawn", 0]],
+        "unit": "nodes/second"
+      },
+      "latency": {
+        "dev": [["spawn", 1.23]],
+        "aws": [["spawn", 0]],
+        "unit": "seconds/node"
+      },
+      "gossip": []
+    },
     "dev": {
       "cpu-no": 20,
       "mem-gb": 15,

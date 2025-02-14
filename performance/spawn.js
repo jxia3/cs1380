@@ -3,6 +3,7 @@
 
 const distribution = require("../config.js");
 
+const childProcess = require("child_process");
 const {performance} = require("perf_hooks");
 
 const LOCAL_IP = "127.0.0.1";
@@ -13,14 +14,19 @@ if (distribution.disableLogs) {
 }
 
 const local = distribution.local;
+const node = distribution.node;
 
 /**
  * Spawns nodes sequentially starting from a port number.
  */
 function spawnNodes(count, callback) {
-  const totalLatency = 0;
-  const startTime = performance.now();
-  spawn(count);
+  let totalLatency = null;
+  let startTime = null;
+  node.start(() => {
+    totalLatency = 0;
+    startTime = performance.now();
+    spawn(count);
+  });
 
   function spawn(iter) {
     if (iter === 0) {
@@ -47,6 +53,14 @@ function spawnNodes(count, callback) {
     console.log("Average latency:", totalLatency / count);
     callback();
   }
+}
+
+if (require.main === module) {
+  console.log("Spawning 100 nodes");
+  spawnNodes(100, () => {
+    console.log("Test ended");
+    childProcess.exec("pkill node");
+  });
 }
 
 module.exports = {spawnNodes};
