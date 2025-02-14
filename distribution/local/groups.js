@@ -57,8 +57,9 @@ function put(config, group, callback) {
   // Add group and recompute the all group
   groups[name] = nodes;
   global.distribution[name] = {_isGroup: true};
+  const subset = typeof config === "object" ? config?.subset : undefined;
   for (const service in all) {
-    global.distribution[name][service] = all[service]({gid: name});
+    global.distribution[name][service] = all[service]({gid: name, subset});
   }
   computeAllGroup();
 

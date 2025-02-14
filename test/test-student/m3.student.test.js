@@ -53,6 +53,16 @@ test("(1 pts) student test", (done) => {
     expect(error).toBeFalsy();
     expect(result?.ip).toBe(extraNode.ip);
     expect(result?.port).toBe(extraNode.port);
+    distribution.foobar.groups.get("foobar", (error, result) => {
+      expect(error).toEqual({});
+      expect(Object.keys(result).length).toBe(5);
+      for (const id in result) {
+        expect(Object.keys(result[id]).length).toBe(5);
+        expect(Object.values(result[id]).map((n) => n?.port))
+            .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003, 2004]));
+      }
+      done();
+    });
   });
 });
 

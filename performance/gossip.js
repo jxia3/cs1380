@@ -12,4 +12,10 @@ const local = distribution.local;
 
 spawn.spawnNodes(100, (nodes) => {
   console.log(nodes);
+  local.groups.put("gossip", nodes, (error, result) => {
+    if (error) {
+      throw error;
+    }
+    console.log(result);
+  });
 });
