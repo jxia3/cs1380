@@ -17,7 +17,7 @@ const local = distribution.local;
 const node = distribution.node;
 
 /**
- * Spawns nodes sequentially starting from a port number.
+ * Spawns nodes concurrently starting from a port number.
  */
 function spawnNodes(count, callback) {
   let totalLatency = null;
@@ -26,27 +26,27 @@ function spawnNodes(count, callback) {
   node.start(() => {
     totalLatency = 0;
     startTime = performance.now();
-    spawn(count);
+    startSpawn();
   });
 
-  function spawn(iter) {
-    if (iter === 0) {
-      endSpawn();
-      return;
+  function startSpawn() {
+    for (let n = 0; n < count; n += 1) {
+      const spawnStart = performance.now();
+      const port = BASE_PORT + n;
+      local.status.spawn({ip: LOCAL_IP, port}, (error, result) => {
+        totalLatency += performance.now() - spawnStart;
+        if (error) {
+          throw error;
+        }
+        if (result.ip !== LOCAL_IP || result.port !== port) {
+          throw new Error("Incorrect IP or port");
+        }
+        nodes.push(result);
+        if (nodes.length === count) {
+          endSpawn();
+        }
+      });
     }
-    const spawnStart = performance.now();
-    const port = BASE_PORT + count - iter;
-    local.status.spawn({ip: LOCAL_IP, port}, (error, result) => {
-      totalLatency += performance.now() - spawnStart;
-      if (error) {
-        throw error;
-      }
-      if (result.ip !== LOCAL_IP || result.port !== port) {
-        throw new Error("Incorrect IP or port");
-      }
-      nodes.push(result);
-      spawn(iter - 1);
-    });
   }
 
   function endSpawn() {
