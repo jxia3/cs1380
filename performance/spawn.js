@@ -18,25 +18,34 @@ const local = distribution.local;
  * Spawns nodes sequentially starting from a port number.
  */
 function spawnNodes(count, callback) {
-  let totalLatency = 0;
+  const totalLatency = 0;
   const startTime = performance.now();
   spawn(count);
 
   function spawn(iter) {
     if (iter === 0) {
-      callback();
+      endSpawn();
       return;
     }
     const spawnStart = performance.now();
     const port = BASE_PORT + count - iter;
-    local.status.spawn({ ip: LOCAL_IP, port }, (error, result) => {
+    local.status.spawn({ip: LOCAL_IP, port}, (error, result) => {
+      totalLatency += performance.now() - spawnStart;
       if (error) {
         throw error;
       }
       if (result.ip !== LOCAL_IP || result.port !== port) {
         throw new Error("Incorrect IP or port");
       }
-    })
+      spawn(iter - 1);
+    });
+  }
+
+  function endSpawn() {
+    const totalTime = performance.now() - startTime;
+    console.log("Throughput:", count / totalTime);
+    console.log("Average latency:", totalLatency / count);
+    callback();
   }
 }
 
