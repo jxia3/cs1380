@@ -33,6 +33,11 @@ if (args.config) {
         ? nodeConfig.port : global.nodeConfig.port;
   global.nodeConfig.onStart = nodeConfig.onStart
         ? nodeConfig.onStart : global.nodeConfig.onStart;
+  if (nodeConfig._disableLogs) {
+    try {
+      log.disable();
+    } catch {}
+  }
 }
 
 const distribution = function(config) {

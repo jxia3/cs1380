@@ -49,8 +49,11 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.foobar.status.spawn(extraNode, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result?.ip).toBe(extraNode.ip);
+    expect(result?.port).toBe(extraNode.port);
+  });
 });
 
 test("(1 pts) student test", (done) => {
