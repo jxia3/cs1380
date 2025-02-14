@@ -22,6 +22,7 @@ const node = distribution.node;
 function spawnNodes(count, callback) {
   let totalLatency = null;
   let startTime = null;
+  const nodes = [];
   node.start(() => {
     totalLatency = 0;
     startTime = performance.now();
@@ -43,6 +44,7 @@ function spawnNodes(count, callback) {
       if (result.ip !== LOCAL_IP || result.port !== port) {
         throw new Error("Incorrect IP or port");
       }
+      nodes.push(result);
       spawn(iter - 1);
     });
   }
@@ -51,16 +53,16 @@ function spawnNodes(count, callback) {
     const totalTime = performance.now() - startTime;
     console.log("Throughput:", count / totalTime);
     console.log("Average latency:", totalLatency / count);
-    callback();
+    callback(nodes);
+    childProcess.exec("pkill node");
   }
 }
 
 if (require.main === module) {
   console.log("Spawning 100 nodes");
-  spawnNodes(100, () => {
+  spawnNodes(100, (nodes) => {
     console.log("Test ended");
-    childProcess.exec("pkill node");
   });
 }
 
-module.exports = {spawnNodes};
+module.exports = {LOCAL_IP, BASE_PORT, spawnNodes};
