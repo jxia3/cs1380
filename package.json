@@ -59,12 +59,12 @@
       "loc": 600,
       "throughput": {
         "dev": [["spawn", 17.5]],
-        "aws": [["spawn", 0]],
+        "aws": [["spawn", 6.77]],
         "unit": "nodes/second"
       },
       "latency": {
         "dev": [["spawn", 0.840]],
-        "aws": [["spawn", 0]],
+        "aws": [["spawn", 2.67]],
         "unit": "seconds/node"
       },
       "gossip": []
