@@ -59,8 +59,8 @@ function spawnNodes(count, callback) {
 }
 
 if (require.main === module) {
-  console.log("Spawning 100 nodes");
-  spawnNodes(100, (nodes) => {
+  console.log("Spawning 20 nodes");
+  spawnNodes(20, (nodes) => {
     console.log("Test ended");
   });
 }
