@@ -22,7 +22,8 @@ const nodes = [
 const extraNode = {ip: "127.0.0.1", port: 2004};
 
 test("(1 pts) student test", (done) => {
-  distribution.local.groups.put("foobar", nodes, (error, result) => {
+  const groupConfig = {gid: "foobar", subset: (l) => 5};
+  distribution.local.groups.put(groupConfig, nodes, (error, result) => {
     expect(error).toBeFalsy();
     expect(Object.keys(result).length).toBe(4);
     expect(Object.values(result).map((n) => n?.port))
@@ -59,16 +60,20 @@ test("(1 pts) student test", (done) => {
       expect(Object.keys(error).length).toBe(1);
       expect(Object.values(error).every((e) => e instanceof Error)).toBe(true);
       expect(Object.keys(result).length).toBe(4);
-      distribution.foobar.groups.put("foobar", [...nodes, extraNode], (error, result) => {
-        expect(error).toEqual({});
-        expect(Object.keys(result).length).toBe(5);
-        for (const id in result) {
-          expect(Object.keys(result[id]).length).toBe(5);
-          expect(Object.values(result[id]).map((n) => n?.port))
-              .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003, 2004]));
-        }
-        done();
-      });
+      distribution.foobar.groups.put(
+          {gid: "foobar", subset: (l) => 5},
+          [...nodes, extraNode],
+          (error, result) => {
+            expect(error).toEqual({});
+            expect(Object.keys(result).length).toBe(5);
+            for (const id in result) {
+              expect(Object.keys(result[id]).length).toBe(5);
+              expect(Object.values(result[id]).map((n) => n?.port))
+                  .toEqual(expect.arrayContaining([2000, 2001, 2002, 2003, 2004]));
+            }
+            done();
+          },
+      );
     });
   });
 });
@@ -96,8 +101,28 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  let count = 0;
+  function increment(callback) {
+    count += 1;
+    callback(null, count);
+  }
+  const counterService = {increment: util.wire.createRPC(increment)};
+
+  distribution.local.routes.put(counterService, "counter", (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toBe("counter");
+    distribution.foobar.gossip.send(
+        [[], {node: global.nodeConfig, service: "counter", method: "increment"}],
+        {service: "comm", method: "send"},
+        (error, result) => {
+          console.log(error, result)
+          expect(error).toEqual({});
+          expect(Object.keys(result).length).toBe(5);
+          expect(Object.values(result)).toEqual(expect.arrayContaining([1, 2, 3, 4, 5]));
+          done();
+        },
+    );
+  });
 });
 
 beforeAll((done) => {
