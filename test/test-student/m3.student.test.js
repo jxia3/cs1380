@@ -21,9 +21,17 @@ const nodes = [
 ];
 const extraNode = {ip: "127.0.0.1", port: 2004};
 
+const nodeMap = {};
+const extraNodeMap = {};
+for (const node of nodes) {
+  nodeMap[util.id.getSID(node)] = node;
+  extraNodeMap[util.id.getSID(node)] = node;
+}
+extraNodeMap[util.id.getSID(extraNode)] = extraNode;
+
 test("(1 pts) student test", (done) => {
   const groupConfig = {gid: "foobar", subset: (l) => 5};
-  distribution.local.groups.put(groupConfig, nodes, (error, result) => {
+  distribution.local.groups.put(groupConfig, nodeMap, (error, result) => {
     expect(error).toBeFalsy();
     expect(Object.keys(result).length).toBe(4);
     expect(Object.values(result).map((n) => n?.port))
@@ -39,7 +47,7 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  distribution.foobar.groups.put("foobar", nodes, (error, result) => {
+  distribution.foobar.groups.put("foobar", nodeMap, (error, result) => {
     expect(error).toEqual({});
     expect(Object.keys(result).length).toBe(4);
     for (const id in result) {
@@ -62,7 +70,7 @@ test("(1 pts) student test", (done) => {
       expect(Object.keys(result).length).toBe(4);
       distribution.foobar.groups.put(
           {gid: "foobar", subset: (l) => 5},
-          [...nodes, extraNode],
+          extraNodeMap,
           (error, result) => {
             expect(error).toEqual({});
             expect(Object.keys(result).length).toBe(5);
@@ -115,7 +123,6 @@ test("(1 pts) student test", (done) => {
         [[], {node: global.nodeConfig, service: "counter", method: "increment"}],
         {service: "comm", method: "send"},
         (error, result) => {
-          console.log(error, result)
           expect(error).toEqual({});
           expect(Object.keys(result).length).toBe(5);
           expect(Object.values(result)).toEqual(expect.arrayContaining([1, 2, 3, 4, 5]));
