@@ -17,11 +17,15 @@ My implementation comprises `<number>` new software components, totaling `<numbe
 - Adding a new service to all the nodes in a group.
 - Sending a gossip message to all the nodes in a group.
 
-*Performance* -- spawn times (all students) and gossip (lab/ec-only).
+*Performance* -- I measured the performance of spawning a node and characterized the convergence of gossip across a network. Locally, my spawn implementation achieved an average latency of 0.840 seconds per node with a throughput of 17.5 nodes per second: multiple spawn commands can run concurrently. On AWS, I observed a much higher average latency of 2.67 seconds per node and a lower throughput of 6.77 nodes per second because the instance has limited compute resources. Details on the test parameters can be found in the `performance` directory.
+
+After spawning 100 nodes, I measured how many nodes received a gossip message with different broadcast parameters.
 
 ## Key Feature
 
 > What is the point of having a gossip protocol? Why doesn't a node just send the message to _all_ other nodes in its group?
+
+A gossip protocol is a scalable and simple way to distribute a message across all the nodes in a network. Simply sending a message from each node to all other known nodes would quickly become unscalable: the total number of messages sent would grow quadratically with the size of the network. Thus, the communication load on each individual node would be unreasonable for large networks. A gossip protocol where each node communicates with random neighbors has a small, bounded communication cost per node and takes advantage of exponential scaling to distribute messages with high probability across the network.
 
 # M2: Actors and Remote Procedure Calls (RPC)
 
