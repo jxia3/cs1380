@@ -58,12 +58,12 @@
       "hours": 10,
       "loc": 600,
       "throughput": {
-        "dev": [["spawn", 34.7]],
+        "dev": [["spawn", 17.5]],
         "aws": [["spawn", 0]],
         "unit": "nodes/second"
       },
       "latency": {
-        "dev": [["spawn", 2.37]],
+        "dev": [["spawn", 0.840]],
         "aws": [["spawn", 0]],
         "unit": "seconds/node"
       },
