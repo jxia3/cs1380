@@ -4,13 +4,12 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
-const childProcess = require("child_process");
-const path = require("path");
+const status = {};
 
-const state = {
-  nid: util.id.getNID(global.nodeConfig),
-  sid: util.id.getSID(global.nodeConfig),
-  messageCount: 0,
+global.moreStatus = {
+  sid: global.distribution.util.id.getSID(global.nodeConfig),
+  nid: global.distribution.util.id.getNID(global.nodeConfig),
+  counts: 0,
 };
 global.statusState = state;
 
