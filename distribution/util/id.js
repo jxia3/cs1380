@@ -1,7 +1,7 @@
 /** @typedef {import("../types.js").Node} Node */
 
-const assert = require('assert');
-const crypto = require('crypto');
+const assert = require("assert");
+const crypto = require("crypto");
 
 // The ID is the SHA256 hash of the JSON representation of the object
 /** @typedef {!string} ID */
@@ -34,7 +34,6 @@ function getNID(node) {
 function getSID(node) {
   return getNID(node).substring(0, 5);
 }
-
 
 function getMID(message) {
   const msg = {};
