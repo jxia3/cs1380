@@ -53,15 +53,15 @@ function spawnNodes(count, callback) {
     const totalTime = performance.now() - startTime;
     console.log("Throughput:", count / totalTime);
     console.log("Average latency:", totalLatency / count);
-    callback(nodes);
-    childProcess.exec("pkill node");
+    callback(nodes, () => childProcess.exec("pkill node"));
   }
 }
 
 if (require.main === module) {
   console.log("Spawning 20 nodes");
-  spawnNodes(20, (nodes) => {
+  spawnNodes(20, (nodes, exit) => {
     console.log("Test ended");
+    exit();
   });
 }
 

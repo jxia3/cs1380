@@ -67,7 +67,10 @@
         "aws": [["spawn", 2.67]],
         "unit": "seconds/node"
       },
-      "gossip": []
+      "gossip": {
+        "nodes": [1, 2, 3, 4, 5, 6],
+        "count": [16, 81, 93, 98, 99, 100]
+      }
     },
     "dev": {
       "cpu-no": 20,

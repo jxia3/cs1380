@@ -8,14 +8,36 @@ if (distribution.disableLogs) {
   distribution.disableLogs();
 }
 
-const local = distribution.local;
+const util = distribution.util;
 
-spawn.spawnNodes(100, (nodes) => {
-  console.log(nodes);
-  local.groups.put("gossip", nodes, (error, result) => {
-    if (error) {
-      throw error;
-    }
-    console.log(result);
+spawn.spawnNodes(100, (nodes, exit) => {
+  let count = 0;
+  function increment(callback) {
+    count += 1;
+    callback(null, count);
+  }
+  const counterService = {increment: util.wire.createRPC(increment)};
+  const group = {gid: "gossip", subset: (l) => 6};
+
+  distribution.local.routes.put(counterService, "counter", (error, result) => {
+    distribution.local.groups.put(group, nodes, (error, result) => {
+      distribution.gossip.groups.put(group, nodes, (error, result) => {
+        const service = {service: "comm", method: "send"};
+        const arguments = [[], {node: global.nodeConfig, service: "counter", method: "increment"}];
+        distribution.gossip.gossip.send(arguments, service, (error, result) => {
+          const counts = [];
+          for (const delay of [10, 50, 100, 200, 300, 400, 500, 1000]) {
+            setTimeout(() => {
+              counts.push([delay, count]);
+            }, delay);
+          }
+          setTimeout(() => {
+            console.log(counts);
+            console.log(count);
+            exit();
+          }, 5000);
+        });
+      });
+    });
   });
 });
