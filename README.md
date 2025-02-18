@@ -4,7 +4,11 @@
 
 > Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M3 (`hours`) and the lines of code per task.
 
-My implementation comprises `<number>` new software components, totaling `<number>` added lines of code over the previous implementation. Key challenges included `<1, 2, 3 + how you solved them>`.
+My implementation comprises 3 new software components, totaling 600 added lines of code over the previous implementation. The primary component is a groups module that facilitates creating and sending messages to groups of remote nodes. I abstracted the message sending and group context creation logic into a `remote` module and implemented distributed communication with the remote send function provided by the module. Then, I packaged local services including `status` and `routes` into distributed services. Additionally, I implemented a lightweight gossip protocol that supports broadcasting messages across a group of nodes.
+
+A key challenge was implementing the `status.spawn` function to spawn a new node. To support callbacks after a node has started up, I composed the provided start function for the new node with a local callback wrapped as an RPC. The composed function required text replacement since both the start function and the RPC stub need to be called from a single function, and the function cannot reference local data.
+
+Another challenge was ensuring that the group context is bound to methods exposed by distributed services. Since all distributed services need to create functions bound to a context containing the group ID, I abstracted the logic into a `remote` module. The functions provided to create a bound context also insert safety checks including checking if a group exists before calling a remote method. My abstraction saved me from writing a significant amount of repetitive code.
 
 ## Correctness & Performance Characterization
 
