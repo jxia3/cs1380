@@ -19,7 +19,7 @@ My implementation comprises `<number>` new software components, totaling `<numbe
 
 *Performance* -- I measured the performance of spawning a node and characterized the convergence of gossip across a network. Locally, my spawn implementation achieved an average latency of 0.840 seconds per node with a throughput of 17.5 nodes per second: multiple spawn commands can run concurrently. On AWS, I observed a much higher average latency of 2.67 seconds per node and a lower throughput of 6.77 nodes per second because the instance has limited compute resources. Details on the test parameters can be found in the `performance` directory.
 
-After spawning 100 nodes, I measured how many nodes received a gossip message with different broadcast parameters.
+After spawning 100 nodes, I measured how many nodes received a gossip message with different broadcast parameters. If each node broadcasts a message to only one other node, only 16 nodes receive the message. As soon as each node broadcasts a message to two other nodes, gossip experiences exponential growth and 81 nodes recieve the message. The number of nodes that receive the message gradually increases as the broadcast parameter increases until all nodes receive the message at six messages per node. The detailed results are located in the `package.json` file.
 
 ## Key Feature
 
