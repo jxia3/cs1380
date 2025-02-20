@@ -17,7 +17,11 @@ function get(config, callback) {
     return;
   }
 
-  // todo: scan and get
+  if (config.key !== null) {
+
+  } else if (config.key === null) {
+    
+  }
 }
 
 /**

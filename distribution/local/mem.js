@@ -17,14 +17,14 @@ function get(config, callback) {
     return;
   }
 
-  if (config.key === null) {
+  if (config.gid in store && config.key in store[config.gid]) {
+    callback(null, store[config.gid][config.key]);
+  } else if (config.key === null) {
     if (config.gid in store) {
       callback(null, Object.keys(store[config.gid]));
     } else {
       callback(null, []);
     }
-  } else if (config.gid in store && config.key in store[config.gid]) {
-    callback(null, store[config.gid][config.key]);
   } else {
     callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
   }
