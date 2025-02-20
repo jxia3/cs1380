@@ -66,6 +66,35 @@ function idToNum(hash) {
 }
 
 /**
+ * Computes the group and key of an object.
+ */
+function getObjectKey(config, object) {
+  if (typeof config === "string") {
+    config = {key: config, gid: "local"};
+  }
+  if (typeof config === "object") {
+    if (config?.key === undefined) {
+      config.key = null;
+    }
+    if (config?.gid === undefined) {
+      config.gid = "local";
+    }
+  }
+
+  if (config?.key === undefined || config?.gid === undefined) {
+    return new Error("Configuration does not have key or group");
+  }
+  if (config?.key === null) {
+    if (object === undefined) {
+      return new Error("Object not specified");
+    }
+    config.key = getID(object);
+  }
+
+  return config;
+}
+
+/**
  * Finds the node a key belongs to with a simple modulo operation.
  */
 function naiveHash(keyId, nodeIds) {
@@ -87,6 +116,7 @@ module.exports = {
   getSID,
   getMID,
   idToNum,
+  getObjectKey,
   naiveHash,
   consistentHash,
   rendezvousHash,
