@@ -5,7 +5,7 @@ const util = require("../util/util.js");
 const store = {local: {}, all: {}};
 
 /**
- * Retrieves an item from the store using its key and group ID.
+ * Retrieves an item from the in-memory store using its key and group ID.
  */
 function get(config, callback) {
   if (callback === undefined) {
@@ -31,8 +31,8 @@ function get(config, callback) {
 }
 
 /**
- * Inserts an item into the store. If a key is not specified, then the SHA256 hash of
- * the object serialized as JSON is used.
+ * Inserts an item into the in-memory store. If a key is not specified, then the SHA256
+ * hash of the object serialized as JSON is used.
  */
 function put(object, config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
@@ -53,7 +53,7 @@ function put(object, config, callback) {
 }
 
 /**
- * Removes an item from the store using its key and group ID.
+ * Removes an item from the in-memory store using its key and group ID.
  */
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
