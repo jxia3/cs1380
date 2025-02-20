@@ -16,6 +16,7 @@ function get(config, callback) {
     callback(config, null);
     return;
   }
+
   if (config.gid in store && config.key in store[config.gid]) {
     callback(null, store[config.gid][config.key]);
   } else {
@@ -28,14 +29,38 @@ function get(config, callback) {
  * the object serialized as JSON is used.
  */
 function put(object, config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectKey(config, object);
+  if (config instanceof Error) {
+    callback(config, null);
+    return;
+  }
 
+  if (!(config.gid in store)) {
+    store[config.gid] = {};
+  }
+  store[config.gid][config.key] = object;
+  callback(null, object);
 }
 
 /**
  * Removes an item from the store using its key and group ID.
  */
 function del(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectKey(config);
+  if (config instanceof Error) {
+    callback(config, null);
+    return;
+  }
 
+  if (config.gid in store && config.key in store[config.gid]) {
+    const object = store[config.gid][config.key];
+    delete store[config.gid][config.key];
+    callback(null, object);
+  } else {
+    callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
+  }
 }
 
 module.exports = {get, put, del};
