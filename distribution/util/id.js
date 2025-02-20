@@ -58,9 +58,8 @@ function idToNum(hash) {
   try {
     if (!hash.startsWith("0x")) {
       return BigInt(`0x${hash}`);
-    } else {
-      return BigInt(hash);
     }
+    return BigInt(hash);
   } catch (error) {
     throw new Error(`BigInt conversion failed with '${error.message}'`);
   }
