@@ -4,7 +4,6 @@
  * @typedef {!string} ID
  */
 
-const assert = require("assert");
 const crypto = require("crypto");
 
 /* Generates unique identifiers for objects using a SHA256 hash. Note that the objects
@@ -52,15 +51,28 @@ function getMID(message) {
   });
 }
 
-function idToNum(id) {
-  const n = parseInt(id, 16);
-  assert(!isNaN(n), "idToNum: id is not in KID form!");
-  return n;
+/**
+ * Converts a hexadecimal hash to a BigInt value.
+ */
+function idToNum(hash) {
+  try {
+    if (!hash.startsWith("0x")) {
+      return BigInt(`0x${hash}`);
+    } else {
+      return BigInt(hash);
+    }
+  } catch (error) {
+    throw new Error(`BigInt conversion failed with '${error.message}'`);
+  }
 }
 
-function naiveHash(kid, nids) {
-  nids.sort();
-  return nids[idToNum(kid) % nids.length];
+/**
+ * Finds the node a key belongs to with a simple modulo operation.
+ */
+function naiveHash(keyId, nodeIds) {
+  nodeIds = [...nodeIds];
+  nodeIds.sort();
+  return nodeIds[idToNum(keyId) % BigInt(nodeIds.length)];
 }
 
 function consistentHash(kid, nids) {

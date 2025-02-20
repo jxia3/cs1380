@@ -40,7 +40,7 @@ function log(message, severity) {
       console.log(data);
     }
     if (SAVE_MESSAGES) {
-      fs.appendFileSync(logFile, data + "\n");
+      fs.appendFileSync(logFile, `${data}\n`);
     }
   });
 }
