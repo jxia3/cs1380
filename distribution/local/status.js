@@ -5,14 +5,24 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const childProcess = require("child_process");
+const fs = require("fs");
 const path = require("path");
 
+// Initialize internal state
 const state = {
   nid: util.id.getNID(global.nodeConfig),
   sid: util.id.getSID(global.nodeConfig),
   messageCount: 0,
 };
+
+// Set global state and create store directory
 global.statusState = state;
+global.nodeInfo = {
+  nid: state.nid,
+  sid: state.sid,
+  storePath: path.join(__dirname, `../../store/${state.sid}`),
+};
+fs.mkdirSync(global.nodeInfo.storePath, {recursive: true});
 
 /**
  * Retrieves a status value on the current node.

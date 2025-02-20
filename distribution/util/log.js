@@ -16,6 +16,7 @@ function log(message, severity) {
   if (severity === undefined) {
     severity = "info";
   }
+
   const now = new Date();
   const date = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -27,22 +28,17 @@ function log(message, severity) {
     hour12: false,
   }).format(now);
   const timestamp = `${date}.${(now.getMilliseconds() * 1000).toString().padStart(6, "0")}`;
+  const ip = global?.nodeConfig?.ip === undefined ? "unknown" : global.nodeConfig.ip;
+  const port = global?.nodeConfig?.port === undefined ? "unknown" : global.nodeConfig.port;
+  const sid = global?.nodeInfo?.sid === undefined ? "anonymous" : global.nodeInfo.sid;
 
-  global.distribution.local.status.get("sid", (error, sid) => {
-    if (error) {
-      throw error;
-    }
-    if (sid === undefined) {
-      sid = "unknown";
-    }
-    const data = `[${timestamp}] [${global.nodeConfig.ip}:${global.nodeConfig.port} (${sid})] [${severity}] ${message}`;
-    if (PRINT_MESSAGES) {
-      console.log(data);
-    }
-    if (SAVE_MESSAGES) {
-      fs.appendFileSync(logFile, `${data}\n`);
-    }
-  });
+  const data = `[${timestamp}] [${ip}:${port} (${sid})] [${severity}] ${message}`;
+  if (PRINT_MESSAGES) {
+    console.log(data);
+  }
+  if (SAVE_MESSAGES) {
+    fs.appendFileSync(logFile, `${data}\n`);
+  }
 }
 
 module.exports = log;
