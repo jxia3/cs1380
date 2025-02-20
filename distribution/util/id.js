@@ -66,10 +66,10 @@ function idToNum(hash) {
 }
 
 /**
- * Computes the group and key of an object.
+ * Normalizes the group and key configuration of an object.
  */
-function getObjectKey(config, object) {
-  if (typeof config === "string") {
+function getObjectConfig(config) {
+  if (typeof config === "string" || config === null) {
     config = {key: config, gid: "local"};
   }
   if (typeof config === "object") {
@@ -80,17 +80,9 @@ function getObjectKey(config, object) {
       config.gid = "local";
     }
   }
-
   if (config?.key === undefined || config?.gid === undefined) {
     return new Error("Configuration does not have key or group");
   }
-  if (config?.key === null) {
-    if (object === undefined) {
-      return new Error("Object not specified");
-    }
-    config.key = getID(object);
-  }
-
   return config;
 }
 
@@ -116,7 +108,7 @@ module.exports = {
   getSID,
   getMID,
   idToNum,
-  getObjectKey,
+  getObjectConfig,
   naiveHash,
   consistentHash,
   rendezvousHash,

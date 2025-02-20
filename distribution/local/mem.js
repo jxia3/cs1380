@@ -11,13 +11,19 @@ function get(config, callback) {
   if (callback === undefined) {
     return;
   }
-  config = util.id.getObjectKey(config);
+  config = util.id.getObjectConfig(config);
   if (config instanceof Error) {
     callback(config, null);
     return;
   }
 
-  if (config.gid in store && config.key in store[config.gid]) {
+  if (config.key === null) {
+    if (config.gid in store) {
+      callback(null, Object.keys(store[config.gid]));
+    } else {
+      callback(null, []);
+    }
+  } else if (config.gid in store && config.key in store[config.gid]) {
     callback(null, store[config.gid][config.key]);
   } else {
     callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
@@ -30,12 +36,15 @@ function get(config, callback) {
  */
 function put(object, config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  config = util.id.getObjectKey(config, object);
+  config = util.id.getObjectConfig(config);
   if (config instanceof Error) {
     callback(config, null);
     return;
   }
 
+  if (config.key === null) {
+    config.key = util.id.getID(object);
+  }
   if (!(config.gid in store)) {
     store[config.gid] = {};
   }
@@ -48,9 +57,13 @@ function put(object, config, callback) {
  */
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  config = util.id.getObjectKey(config);
+  config = util.id.getObjectConfig(config);
   if (config instanceof Error) {
     callback(config, null);
+    return;
+  }
+  if (config.key === null) {
+    callback(new Error("Key cannot be null"), null);
     return;
   }
 
