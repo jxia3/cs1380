@@ -10,7 +10,9 @@ const groups = {all: {}};
  * Retrieves the node group associated with a name.
  */
 function get(name, callback) {
-  callback = callback === undefined ? (error, result) => {} : callback;
+  if (callback === undefined) {
+    return;
+  }
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
