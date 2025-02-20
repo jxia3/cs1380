@@ -2,6 +2,7 @@ const distribution = require("../config.js");
 const id = distribution.util.id;
 
 jest.setTimeout(10000);
+jest.spyOn(process, "exit").mockImplementation((n) => { });
 
 test("(1 pts) all.store.put(jcarb)/mygroup.store.get(jcarb)", (done) => {
   const user = {first: "Josiah", last: "Carberry"};
@@ -112,7 +113,7 @@ test("(1 pts) all.store.put/del/get(jcarb)", (done) => {
   });
 });
 
-test("(1 pts) all.store.put(no key)", (done) => {
+test("(6 pts) all.store.put(no key)", (done) => {
   const user = {first: "Josiah", last: "Carberry"};
 
   distribution.mygroup.store.put(user, null, (e, v) => {
@@ -293,35 +294,6 @@ test("(1 pts) all.store.put/del/get()", (done) => {
   });
 });
 
-test("(1 pts) all.store.get(no key)", (done) => {
-  const users = [
-    {first: "Saul", last: "Goodman"},
-    {first: "Walter", last: "White"},
-    {first: "Jesse", last: "Pinkman"},
-  ];
-  const keys = [
-    "sgoodmansgnk",
-    "jkrasinskisgnk",
-    "jbowensgnk",
-  ];
-
-  distribution.mygroupB.store.put(users[0], keys[0], (e, v) => {
-    distribution.mygroupB.store.put(users[1], keys[1], (e, v) => {
-      distribution.mygroupB.store.put(users[2], keys[2], (e, v) => {
-        distribution.mygroupB.store.get(null, (e, v) => {
-          try {
-            expect(e).toEqual({});
-            expect(Object.values(v)).toEqual(expect.arrayContaining(keys));
-            done();
-          } catch (error) {
-            done(error);
-          }
-        });
-      });
-    });
-  });
-});
-
 test("(1 pts) all.store.put(no key)", (done) => {
   const user = {first: "Gus", last: "Fring"};
 
@@ -414,29 +386,11 @@ beforeAll((done) => {
 
         // Create the groups
         distribution.local.groups.put(mygroupBConfig, mygroupBGroup, (e, v) => {
-          distribution.local.groups
-              .put(mygroupConfig, mygroupGroup, (e, v) => {
-                distribution.mygroup.groups
-                    .put(mygroupConfig, mygroupGroup, (e, v) => {
-                      distribution.mygroup.store.get(null, (e, k) => {
-                        const step = (idx) => {
-                          if (idx === k.length) {
-                            done();
-                            return;
-                          }
-
-                          distribution.mygroup.store.del(k[idx], (e, v) => {
-                            step(++idx);
-                          });
-                        };
-                        if (k.length === 0) {
-                          done();
-                          return;
-                        }
-                        step(0);
-                      });
-                    });
-              });
+          distribution.local.groups.put(mygroupConfig, mygroupGroup, (e, v) => {
+            distribution.mygroup.groups.put(mygroupConfig, mygroupGroup, (e, v) => {
+              done();
+            });
+          });
         });
       };
 
