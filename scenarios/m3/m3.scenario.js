@@ -35,7 +35,6 @@ test("(5 pts) (scenario) dynamic group membership", (done) => {
   /* Dynamically add a node (n3) to groupB after the group is initially created
      with nodes n1 and n2. Validate that the distributed status service reflects
      the updated group membership on all nodes. */
-  const groupB = {};
   const initialNodes = [n1, n2];
   const allNodes = [n1, n2, n3];
 

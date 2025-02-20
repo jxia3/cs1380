@@ -134,7 +134,7 @@ beforeAll((done) => {
                     done();
                   });
                 });
-              });
+          });
     };
 
     // Start the nodes

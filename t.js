@@ -25,17 +25,8 @@ distribution.node.start(() => {
 });
 
 function runTest() {
-  const group = {};
-  for (const node of nodes) {
-    group[distribution.util.id.getSID(node)] = node;
-  }
-  distribution.local.groups.put("all", nodes, (error, result) => {
-    console.log("put result:", error, result);
-    /* distribution.all.groups.put("all", nodes, (error, result) => {
-      console.log("put result:", error, result);
-      distribution.all.gossip.send(["sid"], {service: "status", method: "get"}, (error, result) => {
-        console.log("gossip result:", error, result);
-      });
-    });*/
-  });
+  const id = distribution.util.id;
+  const hash = id.getID({a: "b"});
+  console.log(hash);
+  console.log(id.idToNum(hash));
 }

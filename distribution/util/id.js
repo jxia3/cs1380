@@ -1,33 +1,40 @@
 /** @typedef {import("../types.js").Node} Node */
+/**
+ * The ID is the SHA256 hash of the JSON representation of the object.
+ * @typedef {!string} ID
+ */
 
 const assert = require("assert");
 const crypto = require("crypto");
 
-// The ID is the SHA256 hash of the JSON representation of the object
-/** @typedef {!string} ID */
+/* Generates unique identifiers for objects using a SHA256 hash. Note that the objects
+   cannot be cyclic since they are serialized as default JSON. */
 
 /**
- * @param {any} obj
+ * Computes the hexadecimal hash of an object serialized as JSON.
+ * @param {any} object
  * @return {ID}
  */
-function getID(obj) {
+function getID(object) {
   const hash = crypto.createHash("sha256");
-  hash.update(JSON.stringify(obj));
+  hash.update(JSON.stringify(object));
   return hash.digest("hex");
 }
 
 /**
- * The NID is the SHA256 hash of the JSON representation of the node
+ * Computes the ID of a node as the hash of its IP and port.
  * @param {Node} node
  * @return {ID}
  */
 function getNID(node) {
-  node = {ip: node.ip, port: node.port};
-  return getID(node);
+  if (node?.ip === undefined || node?.port === undefined) {
+    throw new Error("Node does not have an IP or port");
+  }
+  return getID({ip: node.ip, port: node.port});
 }
 
 /**
- * The SID is the first 5 characters of the NID
+ * Computes the short ID of a node as the first 5 characters of its ID.
  * @param {Node} node
  * @return {ID}
  */
@@ -35,11 +42,14 @@ function getSID(node) {
   return getNID(node).substring(0, 5);
 }
 
+/**
+ * Computes the ID of a message with a timestamp included for uniqueness.
+ */
 function getMID(message) {
-  const msg = {};
-  msg.date = new Date().getTime();
-  msg.mss = message;
-  return getID(msg);
+  return getID({
+    date: new Date().getTime(),
+    mss: message,
+  });
 }
 
 function idToNum(id) {
@@ -65,6 +75,7 @@ module.exports = {
   getNID,
   getSID,
   getMID,
+  idToNum,
   naiveHash,
   consistentHash,
   rendezvousHash,
