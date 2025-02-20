@@ -1,3 +1,23 @@
+# M4: Distributed Storage
+
+## Summary
+
+> Summarize your implementation, including key challenges you encountered
+
+Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M4 (`hours`) and the lines of code per task.
+
+## Correctness & Performance Characterization
+
+> Describe how you characterized the correctness and performance of your implementation
+
+*Correctness* -- number of tests and time they take.
+
+*Performance* -- insertion and retrieval.
+
+## Key Feature
+
+> Why is the `reconf` method designed to first identify all the keys to be relocated and then relocate individual objects instead of fetching all the objects immediately and then pushing them to their corresponding locations?
+
 # M3: Node Groups & Gossip Protocols
 
 ## Summary
