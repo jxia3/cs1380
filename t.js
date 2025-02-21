@@ -27,6 +27,5 @@ distribution.node.start(() => {
 function runTest() {
   const id = distribution.util.id;
   const hash = id.getID({a: "b"});
-  console.log(hash);
-  console.log(id.naiveHash(hash, ["a", "b", "c", "d"]));
+  distribution.local.store.get(null, console.log);
 }
