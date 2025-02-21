@@ -1,10 +1,10 @@
-/* A service that stores key-value pairs in memory distributed across a group. */
+/* A service that stores key-value pairs distributed across a group. */
 
 const remote = require("./remote.js");
 const util = require("../util/util.js");
 
 /**
- * Retrieves an item from group in-memory store using its key.
+ * Retrieves an item from a distributed group store using its key.
  */
 function get(config, callback) {
   checkContext(this.gid, this.hash);
@@ -14,13 +14,26 @@ function get(config, callback) {
     callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
     return;
   }
+
+  if (config.key !== null) {
+    // Find all keys and collect results
+    const service = {service: "mem", method: "get"};
+    const args = [{key: null, gid: this.gid}];
+    global.distribution[this.gid].comm.send(args, service, (errors, results) => {
+      const keys = Object.values(results).flat();
+      callback(errors, keys);
+    });
+  } else {
+    // Retrieve specific object from node
+    getItem.call(this, config, callback);
+  }
 }
 
 /**
- * Inserts an item into the group in-memory store. If a key is not specified, then the
+ * Inserts an item into the distributed group store. If a key is not specified, then the
  * SHA256 hash of the object serialized as JSON is used.
  */
-function put(config, callback) {
+function put(object, config, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
   config = util.id.getObjectConfig(config);
@@ -31,7 +44,7 @@ function put(config, callback) {
 }
 
 /**
- * Removes an item from the group in-memory store using its key.
+ * Removes an item from the distributed group store using its key.
  */
 function del(config, callback) {
   checkContext(this.gid, this.hash);
@@ -61,6 +74,21 @@ function checkContext(gid, hash) {
   if (typeof hash !== "function") {
     throw new Error("Invalid store hash function");
   }
+}
+
+/**
+ * Retrieves an item from the distributed group. The callback must be valid.
+ */
+function getItem(config, callback) {
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    const node = util.id.applyHash(config.key, group, this.hash);
+    console.log("FOUND NODE:", config, this.gid, node);
+    process.exit(0);
+  });
 }
 
 module.exports = (config) => {

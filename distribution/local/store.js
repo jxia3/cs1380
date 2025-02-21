@@ -39,10 +39,6 @@ function put(object, config, callback) {
     callback(config, null);
     return;
   }
-  if (global?.nodeInfo?.storePath === undefined) {
-    callback(new Error("Store path not available"), null);
-    return;
-  }
 
   if (global?.nodeInfo?.storePath === undefined) {
     callback(new Error("Store path not available"), null);

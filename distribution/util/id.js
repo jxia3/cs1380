@@ -87,6 +87,15 @@ function getObjectConfig(config) {
 }
 
 /**
+ * Applies a hash function to an item key and a group of nodes.
+ */
+function applyHash(key, group, hashFn) {
+  const keyId = getID(key);
+  const nodeIds = Object.values(group).map(getNID);
+  return hashFn(keyId, nodeIds);
+}
+
+/**
  * Finds the node a key belongs to with a simple modulo operation.
  */
 function naiveHash(keyId, nodeIds) {
@@ -109,6 +118,7 @@ module.exports = {
   getMID,
   idToNum,
   getObjectConfig,
+  applyHash,
   naiveHash,
   consistentHash,
   rendezvousHash,
