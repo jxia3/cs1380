@@ -22,9 +22,9 @@ function get(config, callback) {
     return;
   }
   if (config.key !== null) {
-    getItem(config.key, callback);
+    getItem(config, callback);
   } else {
-    getAllItems(callback);
+    getAllKeys(config, callback);
   }
 }
 
@@ -44,24 +44,44 @@ function put(object, config, callback) {
     return;
   }
 
+  if (global?.nodeInfo?.storePath === undefined) {
+    callback(new Error("Store path not available"), null);
+    return;
+  }
   if (config.key === null) {
     config.key = util.id.getID(object);
   }
+  saveItem(config, object, callback);
 }
 
 /**
  * Removes an item from the filesystem store using its key and group ID.
  */
 function del(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectConfig(config);
+  if (config instanceof Error) {
+    callback(config, null);
+    return;
+  }
+  if (config.key === null) {
+    callback(new Error("Key cannot be null"), null);
+    return;
+  }
 
+  if (global?.nodeInfo?.storePath === undefined) {
+    callback(new Error("Store path not available"), null);
+    return;
+  }
+  deleteItem(config, callback);
 }
 
 /**
  * Reads and deserializes an item from the local file system. The callback must be valid
  * and the global store path must be available.
  */
-function getItem(key, callback) {
-  const path = `${global.nodeInfo.storePath}/${encodeKey(key)}.json`;
+function getItem(config, callback) {
+  const path = `${global.nodeInfo.storePath}/${encodeKey(config.key)}.json`;
   fs.readFile(path, "utf8", (error, data) => {
     if (error) {
       callback(error, null);
@@ -79,7 +99,7 @@ function getItem(key, callback) {
  * Serializes and saves an object to the local file system. The callback must be valid
  * and the global store path must be available.
  */
-function saveItem(config, callback) {
+function saveItem(config, object, callback) {
 
 }
 
@@ -95,7 +115,7 @@ function deleteItem(config, callback) {
  * Reads and decodes the keys of all the items in the local file system. The callback must
  * be valid and the global store path must be available.
  */
-function getAllKeys(callback) {
+function getAllKeys(config, callback) {
   // Find all the keys in the filesystem
   fs.readdir(global.nodeInfo.storePath, {withFileTypes: true}, (error, items) => {
     if (error) {
@@ -110,17 +130,17 @@ function getAllKeys(callback) {
 }
 
 /**
- * Encodes a string key in base 64.
+ * Encodes a string key to base 64.
  */
 function encodeKey(key) {
-
+  return Buffer.from(key, "utf8").toString("base64");
 }
 
 /**
- * Decodes a string key in base 64.
+ * Decodes a string key from base 64.
  */
 function decodeKey(key) {
-
+  return Buffer.from(key, "base64").toString("utf8");
 }
 
 module.exports = {get, put, del};
