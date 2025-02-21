@@ -57,12 +57,9 @@ function getMID(message) {
  */
 function idToNum(hash) {
   try {
-    if (!hash.startsWith("0x")) {
-      return BigInt(`0x${hash}`);
-    }
-    return BigInt(hash);
+    return parseInt(hash, 16);
   } catch (error) {
-    throw new Error(`BigInt conversion failed with '${error.message}'`);
+    throw new Error(`Integer conversion failed with '${error.message}'`);
   }
 }
 
@@ -114,7 +111,7 @@ function applyHash(key, group, hashFn) {
 function naiveHash(keyId, nodeIds) {
   nodeIds = [...nodeIds];
   nodeIds.sort();
-  return nodeIds[idToNum(keyId) % BigInt(nodeIds.length)];
+  return nodeIds[idToNum(keyId) % nodeIds.length];
 }
 
 /**
