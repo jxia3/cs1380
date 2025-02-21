@@ -1,3 +1,4 @@
+/* global BigInt */
 /** @typedef {import("../types.js").Node} Node */
 /**
  * The ID is the SHA256 hash of the JSON representation of the object.
@@ -116,10 +117,28 @@ function naiveHash(keyId, nodeIds) {
   return nodeIds[idToNum(keyId) % BigInt(nodeIds.length)];
 }
 
-function consistentHash(kid, nids) {
+/**
+ * Finds the node corresponding to the ring placement of a key ID.
+ */
+function consistentHash(keyId, nodeIds) {
+  const key = idToNum(keyId);
+  const nodes = [];
+  for (const id of nodeIds) {
+    nodes.push({id, num: idToNum(id)});
+  }
+  nodes.sort((a, b) => a.id < b.id ? -1 : 1);
+
+  for (let n = 0; n < nodes.length; n += 1) {
+    if (nodes[n].num > key) {
+      return nodes[n].id;
+    }
+  }
+  return nodes[0].id;
 }
 
-
+/**
+ * Finds the node corresponding to the highest hash value.
+ */
 function rendezvousHash(kid, nids) {
 }
 
