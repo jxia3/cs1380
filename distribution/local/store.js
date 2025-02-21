@@ -128,7 +128,20 @@ function saveItem(config, object, callback) {
  * store path must be available.
  */
 function deleteItem(config, callback) {
-
+  const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.dat`;
+  getItem(config, (error, object) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    fs.unlink(path, (error) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, object);
+      }
+    });
+  });
 }
 
 /**
