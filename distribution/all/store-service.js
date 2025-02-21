@@ -73,6 +73,32 @@ function del(config, callback) {
 function reconf(config, callback) {
   checkContext(this.storeService, this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
+  if (Object.keys(config).length === 0) {
+    callback(new Error("Previous instance of group has no nodes"), null);
+    return;
+  }
+
+  // Get current group and all item keys
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    global.distribution[this.gid][this.storeService].get(null, (error, keys) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      rebalanceItems.call(this, config, group, keys, callback);
+    });
+  });
+}
+
+/**
+ * Redistributes items with changed locations across a group.
+ */
+function rebalanceItems(oldGroup, newGroup, keys, callback) {
+
 }
 
 /**
