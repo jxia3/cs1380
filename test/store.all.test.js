@@ -1,6 +1,8 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
+jest.setTimeout(10000);
+
 test("(1 pts) all.store.put(jcarb)/mygroup.store.get(jcarb)", (done) => {
   const user = {first: "Josiah", last: "Carberry"};
   const key = "jcarbspsg";

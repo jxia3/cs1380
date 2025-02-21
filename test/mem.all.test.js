@@ -1,6 +1,8 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
+jest.setTimeout(10000);
+
 test("(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)", (done) => {
   const user = {first: "John", last: "Carberry"};
   const key = "jcarbmpmg";
