@@ -36,7 +36,9 @@ if (args.config) {
   if (nodeConfig._disableLogs) {
     try {
       log.disable();
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

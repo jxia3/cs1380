@@ -84,10 +84,9 @@ function reconf(config, callback) {
       callback(error, null);
       return;
     }
-    global.distribution[this.gid][this.storeService].get(null, (error, keys) => {
-      if (error) {
-        callback(error, null);
-        return;
+    global.distribution[this.gid][this.storeService].get(null, (errors, keys) => {
+      for (const node in errors) {
+        console.error(errors[node]);
       }
       rebalanceItems.call(this, config, group, keys, callback);
     });
