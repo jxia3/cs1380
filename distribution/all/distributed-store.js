@@ -19,7 +19,7 @@ function get(config, callback) {
 
   if (config.key !== null) {
     // Retrieve specific object from node
-    getItem.call(this, config, callback);
+    routeRequest.call(this, config.key, "get", [config], callback);
   } else {
     // Find all keys and collect results
     const service = {service: this.storeService, method: "get"};
@@ -43,25 +43,10 @@ function put(object, config, callback) {
     return;
   }
 
-  global.distribution.local.groups.get(this.gid, (error, group) => {
-    // Check node group
-    if (error) {
-      callback(error, null);
-      return;
-    }
-    if (Object.keys(group).length === 0) {
-      callback(new Error(`Group '${this.gid}' has no nodes`), null);
-      return;
-    }
-
-    // Send item to node
-    if (config.key === null) {
-      config.key = util.id.getID(object);
-    }
-    const node = util.id.applyHash(config.key, group, this.hash);
-    const remote = {node, service: this.storeService, method: "put"};
-    global.distribution.local.comm.send([object, config], remote, callback);
-  });
+  if (config.key === null) {
+    config.key = util.id.getID(object);
+  }
+  routeRequest.call(this, config.key, "put", [object, config], callback);
 }
 
 /**
@@ -79,6 +64,7 @@ function del(config, callback) {
     callback(new Error("Key cannot be null"), null);
     return;
   }
+  routeRequest.call(this, config.key, "del", [config], callback);
 }
 
 /**
@@ -103,17 +89,28 @@ function checkContext(storeService, gid, hash) {
 }
 
 /**
- * Retrieves an item from the distributed group. The callback must be valid.
+ * Routes a service request for an object key to a remote node. The callback must be valid.
  */
-function getItem(config, callback) {
+function routeRequest(key, method, args, callback) {
   global.distribution.local.groups.get(this.gid, (error, group) => {
+    // Check node group
     if (error) {
       callback(error, null);
       return;
     }
-    const node = util.id.applyHash(config.key, group, this.hash);
-    const remote = {node, service: this.storeService, method: "get"};
-    global.distribution.local.comm.send([config], remote, callback);
+    if (Object.keys(group).length === 0) {
+      callback(new Error(`Group '${this.gid}' has no nodes`), null);
+      return;
+    }
+
+    // Send request to node
+    const node = util.id.applyHash(key, group, this.hash);
+    if (node?.ip === undefined || node?.port === undefined) {
+      callback(new Error("Request routed to invalid node"), null);
+      return;
+    }
+    const remote = {node, service: this.storeService, method};
+    global.distribution.local.comm.send(args, remote, callback);
   });
 }
 
