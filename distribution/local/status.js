@@ -22,7 +22,11 @@ global.nodeInfo = {
   sid: state.sid,
   storePath: path.join(__dirname, `../../store/${state.sid}`),
 };
-fs.mkdirSync(global.nodeInfo.storePath, {recursive: true});
+fs.mkdir(global.nodeInfo.storePath, {recursive: true}, (error, result) => {
+  if (error) {
+    console.error(error);
+  }
+});
 
 /**
  * Retrieves a status value on the current node.

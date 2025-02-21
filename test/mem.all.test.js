@@ -1,7 +1,6 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
-jest.setTimeout(10000);
 jest.spyOn(process, "exit").mockImplementation((n) => { });
 
 test("(1 pts) all.mem.put(jcarb)/mygroup.mem.get(jcarb)", (done) => {

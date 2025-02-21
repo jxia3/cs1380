@@ -25,6 +25,9 @@
     "yargs": "^17.7.2",
     "@brown-ds/distribution": "latest"
   },
+  "jest": {
+    "testTimeout": 10000
+  },
   "report": {
     "m1": {
       "hours": 8,
