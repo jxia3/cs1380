@@ -1,4 +1,3 @@
-/* global BigInt */
 /** @typedef {import("../types.js").Node} Node */
 /**
  * The ID is the SHA256 hash of the JSON representation of the object.
@@ -53,7 +52,7 @@ function getMID(message) {
 }
 
 /**
- * Converts a hexadecimal hash to a BigInt value.
+ * Converts a hexadecimal hash to a large integer value.
  */
 function idToNum(hash) {
   try {
