@@ -25,13 +25,15 @@ function get(name, callback) {
  */
 function put(config, group, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  const name = typeof config === "string" ? config : config?.gid;
-  if (typeof name !== "string" || name === "local") {
-    callback(new Error(`Invalid group name '${name}'`, null));
+  if (typeof config === "string") {
+    config = {gid: config};
+  }
+  if (config?.gid === undefined || config?.gid === "local") {
+    callback(new Error(`Invalid group name '${config.gid}'`, null));
     return;
   }
-  if (name in global.distribution && !global.distribution[name]._isGroup) {
-    callback(new Error(`Global object already exists with name '${name}'`), null);
+  if (config.gid in global.distribution && !global.distribution[config.gid]._isGroup) {
+    callback(new Error(`Global object already exists with name '${config.gid}'`), null);
     return;
   }
 
@@ -57,11 +59,10 @@ function put(config, group, callback) {
   }
 
   // Add group and recompute the all group
-  groups[name] = nodes;
-  global.distribution[name] = {_isGroup: true};
-  const subset = typeof config === "object" ? config?.subset : undefined;
+  groups[config.gid] = nodes;
+  global.distribution[config.gid] = {_isGroup: true};
   for (const service in all) {
-    global.distribution[name][service] = all[service]({gid: name, subset});
+    global.distribution[config.gid][service] = all[service](config);
   }
   computeAllGroup();
 

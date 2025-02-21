@@ -91,8 +91,8 @@ function del(intervalId, callback) {
 /**
  * Checks if the current function context is valid.
  */
-function checkContext(gid, subset) {
-  remote.checkGroup(gid);
+function checkContext(groupId, subset) {
+  remote.checkGroup(groupId);
   if (typeof subset !== "function") {
     throw new Error("Invalid gossip subset size function");
   }

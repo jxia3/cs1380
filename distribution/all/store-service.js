@@ -135,12 +135,12 @@ function rebalanceItems(oldGroup, newGroup, keys, callback) {
 /**
  * Checks if the current function context is valid.
  */
-function checkContext(storeService, gid, hash) {
+function checkContext(storeService, groupId, hashFn) {
   if (!STORE_SERVICES.includes(storeService)) {
     throw new Error("Invalid store service");
   }
-  remote.checkGroup(gid);
-  if (typeof hash !== "function") {
+  remote.checkGroup(groupId);
+  if (typeof hashFn !== "function") {
     throw new Error("Invalid store hash function");
   }
 }

@@ -1,9 +1,9 @@
 /**
  * Checks if a group ID is valid.
  */
-function checkGroup(gid) {
-  if (gid === undefined || !global.distribution[gid]?._isGroup) {
-    throw new Error(`Group '${gid}' does not exist`);
+function checkGroup(groupId) {
+  if (groupId === undefined || !global.distribution[groupId]?._isGroup) {
+    throw new Error(`Group '${groupId}' does not exist`);
   }
 }
 

@@ -40,8 +40,8 @@ function send(message, remote, callback) {
 
   // Send HTTP request and parse response
   try {
-    const gid = remote.gid === undefined ? "local" : remote.gid;
-    const url = `http://${remote.node.ip}:${remote.node.port}/${gid}/${remote.service}/${remote.method}`;
+    const groupId = remote.gid === undefined ? "local" : remote.gid;
+    const url = `http://${remote.node.ip}:${remote.node.port}/${groupId}/${remote.service}/${remote.method}`;
     callService(url, util.serialize(message), callback);
   } catch (error) {
     callback(error, null);
