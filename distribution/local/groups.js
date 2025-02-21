@@ -4,8 +4,6 @@
 const all = require("../all/all.js");
 const util = require("../util/util.js");
 
-const fs = require("fs");
-
 const groups = {all: {}};
 
 /**
@@ -67,18 +65,7 @@ function put(config, group, callback) {
   }
   computeAllGroup();
 
-  // Create group store
-  if (global?.nodeInfo?.storePath !== undefined) {
-    const groupDirectory = `${global.nodeInfo.storePath}/${name}`;
-    fs.mkdir(groupDirectory, {recursive: true}, (error, result) => {
-      if (error) {
-        console.error(error);
-      }
-      callback(null, nodes);
-    });
-  } else {
-    callback(null, nodes);
-  }
+  callback(null, nodes);
 }
 
 /**

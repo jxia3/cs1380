@@ -148,7 +148,7 @@ function getAllKeys(config, callback) {
   const groupDirectory = `${global.nodeInfo.storePath}/${config.gid}`;
   fs.access(groupDirectory, (error) => {
     if (error) {
-      callback(new Error(`Store for group '${config.gid}' does not exist`), null);
+      callback(null, []);
       return;
     }
     fs.readdir(groupDirectory, {withFileTypes: true}, (error, items) => {
