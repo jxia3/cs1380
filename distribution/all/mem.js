@@ -8,6 +8,12 @@ const util = require("../util/util.js");
  */
 function get(config, callback) {
   checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectConfig(config);
+  if (config?.gid !== this.gid) {
+    callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
+    return;
+  }
 }
 
 /**
@@ -16,6 +22,12 @@ function get(config, callback) {
  */
 function put(config, callback) {
   checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectConfig(config);
+  if (config?.gid !== this.gid) {
+    callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
+    return;
+  }
 }
 
 /**
@@ -23,6 +35,16 @@ function put(config, callback) {
  */
 function del(config, callback) {
   checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectConfig(config);
+  if (config?.gid !== this.gid) {
+    callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
+    return;
+  }
+  if (config.key === null) {
+    callback(new Error("Key cannot be null"), null);
+    return;
+  }
 }
 
 /**
@@ -30,6 +52,7 @@ function del(config, callback) {
  */
 function reconf(config, callback) {
   checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
 }
 
 /* Checks if the current function context is valid. */
