@@ -81,7 +81,7 @@ function del(config, callback) {
  * and the global store path must be available.
  */
 function getItem(config, callback) {
-  const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.json`;
+  const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.dat`;
   fs.access(path, (error) => {
     if (error) {
       callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
@@ -107,7 +107,7 @@ function getItem(config, callback) {
  */
 function saveItem(config, object, callback) {
   const groupDirectory = `${global.nodeInfo.storePath}/${config.gid}`;
-  const path = `${groupDirectory}/${encodeKey(config.key)}.json`;
+  const path = `${groupDirectory}/${encodeKey(config.key)}.dat`;
   fs.mkdir(groupDirectory, {recursive: true}, (error, result) => {
     if (error) {
       callback(error, null);
@@ -136,16 +136,22 @@ function deleteItem(config, callback) {
  * be valid and the global store path must be available.
  */
 function getAllKeys(config, callback) {
-  // Find all the keys in the filesystem
-  fs.readdir(global.nodeInfo.storePath, {withFileTypes: true}, (error, items) => {
+  const groupDirectory = `${global.nodeInfo.storePath}/${config.gid}`;
+  fs.access(groupDirectory, (error) => {
     if (error) {
-      callback(error, null);
+      callback(new Error(`Store for group '${config.gid}' does not exist`), null);
       return;
     }
-    const keys = items
-        .filter((i) => i.isFile() && i.name.endsWith(".json"))
-        .map((f) => decodeKey(f.name.slice(0, -5)));
-    callback(null, keys);
+    fs.readdir(groupDirectory, {withFileTypes: true}, (error, items) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      const keys = items
+          .filter((i) => i.isFile() && i.name.endsWith(".dat"))
+          .map((f) => decodeKey(f.name.slice(0, -4)));
+      callback(null, keys);
+    });
   });
 }
 
