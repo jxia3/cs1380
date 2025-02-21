@@ -9,7 +9,7 @@ const util = require("../util/util.js");
 function get(config, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
-  config = util.id.getObjectConfig(config);
+  config = util.id.getObjectConfig(config, this.gid);
   if (config?.gid !== this.gid) {
     callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
     return;
@@ -36,7 +36,7 @@ function get(config, callback) {
 function put(object, config, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
-  config = util.id.getObjectConfig(config);
+  config = util.id.getObjectConfig(config, this.gid);
   if (config?.gid !== this.gid) {
     callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
     return;
@@ -49,7 +49,7 @@ function put(object, config, callback) {
 function del(config, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
-  config = util.id.getObjectConfig(config);
+  config = util.id.getObjectConfig(config, this.gid);
   if (config?.gid !== this.gid) {
     callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
     return;

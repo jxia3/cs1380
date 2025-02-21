@@ -68,21 +68,26 @@ function idToNum(hash) {
 /**
  * Normalizes the group and key configuration of an object.
  */
-function getObjectConfig(config) {
-  if (typeof config === "string" || config === null) {
-    config = {key: config, gid: "local"};
+function getObjectConfig(config, defaultGroup) {
+  if (defaultGroup === undefined) {
+    defaultGroup = "local";
   }
+  if (typeof config === "string" || config === null) {
+    config = {key: config, gid: defaultGroup};
+  }
+
   if (typeof config === "object") {
     if (config?.key === undefined) {
       config.key = null;
     }
     if (config?.gid === undefined) {
-      config.gid = "local";
+      config.gid = defaultGroup;
     }
   }
   if (config?.key === undefined || config?.gid === undefined) {
     return new Error("Configuration does not have key or group");
   }
+
   return config;
 }
 
