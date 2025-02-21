@@ -3,13 +3,14 @@ const util = distribution.util;
 const id = distribution.util.id;
 
 test("(5 pts) (scenario) use the local store", (done) => {
-  /*
-      Use the distributed store to put a key-value pair.
-      Make sure to run the check() function at the last callback of your solution.
-  */
+  /* Use the distributed store to put a key-value pair.
+     Make sure to run the check() function at the last callback of your solution. */
   const user = {first: "Josiah", last: "Carberry"};
   const key = "jcarbspsg";
 
+  distribution.local.store.put(user, key, (e, v) => {
+    check();
+  });
 
   function check() {
     distribution.local.store.get(key, (e, v) => {
@@ -23,15 +24,10 @@ test("(5 pts) (scenario) use the local store", (done) => {
   }
 });
 
-
 test("(5 pts) (scenario) hash functions return different nodes", () => {
-  /*
-
-        Identify two keys that consistentHash maps to the same node. You will
-        likely need to try a few (but not many) keys. What can you conclude
-        about using consistentHash for a small number of keys.
-
-    */
+  /* Identify two keys that consistentHash maps to the same node. You will
+     likely need to try a few (but not many) keys. What can you conclude
+     about using consistentHash for a small number of keys. */
   const nodeIds = [
     util.id.getNID({ip: "192.168.0.1", port: 8000}),
     util.id.getNID({ip: "192.168.0.2", port: 8000}),
@@ -39,9 +35,9 @@ test("(5 pts) (scenario) hash functions return different nodes", () => {
     util.id.getNID({ip: "192.168.0.4", port: 8000}),
     util.id.getNID({ip: "192.168.0.5", port: 8000}),
   ];
-  const key1 = "?";
-  const key2 = "?";
 
+  const key1 = "abc1";
+  const key2 = "abc2";
 
   const kid1 = util.id.getID(key1);
   const kid2 = util.id.getID(key2);
@@ -53,13 +49,8 @@ test("(5 pts) (scenario) hash functions return different nodes", () => {
 });
 
 test("(5 pts) (scenario) hash functions return the same node", () => {
-  /*
-
-        Identify a key for which the three hash functions agree about its placement.
-        You will likely need to try a few (but not many) keys.
-
-    */
-
+  /* Identify a key for which the three hash functions agree about its placement.
+     You will likely need to try a few (but not many) keys.*/
   const nodeIds = [
     util.id.getNID({ip: "192.168.0.1", port: 8000}),
     util.id.getNID({ip: "192.168.0.2", port: 8000}),
@@ -67,7 +58,7 @@ test("(5 pts) (scenario) hash functions return the same node", () => {
     util.id.getNID({ip: "192.168.0.4", port: 8000}),
   ];
 
-  const key = "?";
+  const key = "abc15";
 
   const kid = util.id.getID(key);
 
@@ -87,12 +78,10 @@ const n5 = {ip: "127.0.0.1", port: 9005};
 const n6 = {ip: "127.0.0.1", port: 9006};
 
 test("(5 pts) (scenario) use mem.reconf", (done) => {
-  /*
-  In this scenario, you will use the `mem.reconf` method to reconfigure the placement of items in a group of nodes.
-  You will create a group of nodes and place items in them.
-  Then, you will remove a node from the group and call `mem.reconf` to place the items in the remaining nodes.
-  Finally, you will check if the items are in the right place.
-  */
+  /* In this scenario, you will use the `mem.reconf` method to reconfigure the placement of items in a group of nodes.
+     You will create a group of nodes and place items in them.
+     Then, you will remove a node from the group and call `mem.reconf` to place the items in the remaining nodes.
+     Finally, you will check if the items are in the right place. */
 
   // Create a group with any number of nodes
   const mygroupGroup = {};
@@ -200,7 +189,6 @@ beforeAll((done) => {
     });
   };
 });
-
 
 afterAll((done) => {
   const remote = {service: "status", method: "stop"};
