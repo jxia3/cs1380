@@ -18,16 +18,15 @@ function get(config, callback) {
   }
 
   if (config.key !== null) {
+    // Retrieve specific object from node
+    getItem.call(this, config, callback);
+  } else {
     // Find all keys and collect results
     const service = {service: this.storeService, method: "get"};
     const args = [{key: null, gid: this.gid}];
     global.distribution[this.gid].comm.send(args, service, (errors, results) => {
-      const keys = Object.values(results).flat();
-      callback(errors, keys);
+      callback(errors, Object.values(results).flat());
     });
-  } else {
-    // Retrieve specific object from node
-    getItem.call(this, config, callback);
   }
 }
 
@@ -43,6 +42,26 @@ function put(object, config, callback) {
     callback(new Error(`Group '${config.gid}' does not match '${this.gid}'`), null);
     return;
   }
+
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    // Check node group
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    if (Object.keys(group).length === 0) {
+      callback(new Error(`Group '${this.gid}' has no nodes`), null);
+      return;
+    }
+
+    // Send item to node
+    if (config.key === null) {
+      config.key = util.id.getID(object);
+    }
+    const node = util.id.applyHash(config.key, group, this.hash);
+    const remote = {node, service: this.storeService, method: "put"};
+    global.distribution.local.comm.send([object, config], remote, callback);
+  });
 }
 
 /**
@@ -93,8 +112,8 @@ function getItem(config, callback) {
       return;
     }
     const node = util.id.applyHash(config.key, group, this.hash);
-    console.log("FOUND NODE:", config, this.gid, node);
-    process.exit(0);
+    const remote = {node, service: this.storeService, method: "get"};
+    global.distribution.local.comm.send([config], remote, callback);
   });
 }
 

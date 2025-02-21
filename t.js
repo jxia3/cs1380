@@ -25,16 +25,17 @@ distribution.node.start(() => {
 });
 
 function runTest() {
-  const id = distribution.util.id;
-  const hash = id.getID({a: "b"});
-  distribution.all.mem.get(null, (error, result) => {
+  distribution.local.groups.put("all", nodes, (error, result) => {
     console.log(error, result);
-    distribution.all.mem.put([1, 2, 3, 4, 5], "hello", (error, result) => {
+    distribution.all.mem.get(null, (error, result) => {
       console.log(error, result);
-      distribution.all.mem.get(null, (error, result) => {
+      distribution.all.mem.put([1, 2, 3, 4], "hello", (error, result) => {
         console.log(error, result);
-        distribution.all.mem.get("hello", (error, result) => {
+        distribution.all.mem.get(null, (error, result) => {
           console.log(error, result);
+          distribution.all.mem.get("hello", (error, result) => {
+            console.log(error, result);
+          });
         });
       });
     });
