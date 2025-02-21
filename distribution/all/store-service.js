@@ -100,21 +100,21 @@ function reconf(config, callback) {
 function rebalanceItems(oldGroup, newGroup, keys, callback) {
   // Compute changed keys
   const changed = {};
+  let active = 0;
   for (const key of keys) {
     const oldNode = util.id.applyHash(key, oldGroup, this.hash);
     const newNode = util.id.applyHash(key, newGroup, this.hash);
     if (oldNode !== newNode) {
       changed[key] = oldNode;
+      active += 1;
     }
   }
-
-  // Send change requests
-  let active = Object.keys(changed).length;
   if (active === 0) {
     callback(null, null);
     return;
   }
 
+  // Send change requests
   for (const key in changed) {
     const remote = {node: oldGroup[changed[key]], service: this.storeService, method: "del"};
     const args = [{key, gid: this.gid}];

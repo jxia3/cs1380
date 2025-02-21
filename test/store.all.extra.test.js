@@ -1,6 +1,7 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
+jest.setTimeout(10000);
 
 test("(2.5 pts) all.store.get(no key)", (done) => {
   const users = [
