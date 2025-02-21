@@ -23,7 +23,7 @@ function get(config, callback) {
     if (config.gid in store) {
       callback(null, Object.keys(store[config.gid]));
     } else {
-      callback(null, []);
+      callback(new Error(`Store for group '${config.gid}' does not exist`), null);
     }
   } else {
     callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);

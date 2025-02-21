@@ -27,5 +27,16 @@ distribution.node.start(() => {
 function runTest() {
   const id = distribution.util.id;
   const hash = id.getID({a: "b"});
-  distribution.local.store.get(null, console.log);
+  distribution.local.store.get(null, (error, result) => {
+    console.log(error, result);
+    distribution.local.store.put([1, 2, 3, 4, 5], "hello", (error, result) => {
+      console.log(error, result);
+      distribution.local.store.get(null, (error, result) => {
+        console.log(error, result);
+        distribution.local.store.get("hello", (error, result) => {
+          console.log(error, result);
+        });
+      });
+    });
+  });
 }
