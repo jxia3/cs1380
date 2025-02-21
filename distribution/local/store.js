@@ -81,17 +81,23 @@ function del(config, callback) {
  * and the global store path must be available.
  */
 function getItem(config, callback) {
-  const path = `${global.nodeInfo.storePath}/${encodeKey(config.key)}.json`;
-  fs.readFile(path, "utf8", (error, data) => {
+  const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.json`;
+  fs.access(path, (error) => {
     if (error) {
-      callback(error, null);
+      callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
       return;
     }
-    try {
-      callback(null, util.deserialize(data));
-    } catch (error) {
-      callback(error, null);
-    }
+    fs.readFile(path, "utf8", (error, data) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      try {
+        callback(null, util.deserialize(data));
+      } catch (error) {
+        callback(error, null);
+      }
+    });
   });
 }
 
@@ -100,7 +106,21 @@ function getItem(config, callback) {
  * and the global store path must be available.
  */
 function saveItem(config, object, callback) {
-
+  const groupDirectory = `${global.nodeInfo.storePath}/${config.gid}`;
+  const path = `${groupDirectory}/${encodeKey(config.key)}.json`;
+  fs.mkdir(groupDirectory, {recursive: true}, (error, result) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    fs.writeFile(path, util.serialize(object), "utf8", (error) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, object);
+      }
+    });
+  });
 }
 
 /**
