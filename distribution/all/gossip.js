@@ -88,7 +88,9 @@ function del(intervalId, callback) {
   }
 }
 
-/* Checks if the current function context is valid. */
+/**
+ * Checks if the current function context is valid.
+ */
 function checkContext(gid, subset) {
   remote.checkGroup(gid);
   if (typeof subset !== "function") {
