@@ -97,12 +97,12 @@ function getObjectConfig(config, defaultGroup) {
  */
 function applyHash(key, group, hashFn) {
   const keyId = getID(key);
-  const nodes = Object.values(group);
-  const nodeIds = nodes.map(getNID);
-  const node = hashFn(keyId, nodeIds);
-  for (let n = 0; n < nodes.length; n += 1) {
-    if (nodeIds[n] == node) {
-      return nodes[n];
+  const groupKeys = Object.keys(group);
+  const nodeIds = groupKeys.map((key) => getNID(group[key]));
+  const nodeId = hashFn(keyId, nodeIds);
+  for (let n = 0; n < groupKeys.length; n += 1) {
+    if (nodeIds[n] === nodeId) {
+      return groupKeys[n];
     }
   }
   throw new Error("Node not found");

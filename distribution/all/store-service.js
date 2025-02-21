@@ -98,7 +98,39 @@ function reconf(config, callback) {
  * Redistributes items with changed locations across a group.
  */
 function rebalanceItems(oldGroup, newGroup, keys, callback) {
+  // Compute changed keys
+  const changed = {};
+  for (const key of keys) {
+    const oldNode = util.id.applyHash(key, oldGroup, this.hash);
+    const newNode = util.id.applyHash(key, newGroup, this.hash);
+    if (oldNode !== newNode) {
+      changed[key] = oldNode;
+    }
+  }
 
+  // Send change requests
+  let active = Object.keys(changed).length;
+  if (active === 0) {
+    callback(null, null);
+    return;
+  }
+
+  for (const key in changed) {
+    const remote = {node: oldGroup[changed[key]], service: this.storeService, method: "del"};
+    const args = [{key, gid: this.gid}];
+    global.distribution.local.comm.send(args, remote, (error, object) => {
+      if (error) {
+        active -= 1;
+        return;
+      }
+      global.distribution[this.gid][this.storeService].put(object, key, (error, result) => {
+        active -= 1;
+        if (active === 0) {
+          callback(null, null);
+        }
+      });
+    });
+  }
 }
 
 /**
@@ -130,7 +162,7 @@ function routeRequest(key, method, args, callback) {
     }
 
     // Send request to node
-    const node = util.id.applyHash(key, group, this.hash);
+    const node = group[util.id.applyHash(key, group, this.hash)];
     if (node?.ip === undefined || node?.port === undefined) {
       callback(new Error("Request routed to invalid node"), null);
       return;
