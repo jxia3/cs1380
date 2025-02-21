@@ -2,7 +2,7 @@
 
 const util = require("../util/util.js");
 
-const store = {local: {}, all: {}};
+const store = {};
 
 /**
  * Retrieves an item from the in-memory store using its key and group ID.
