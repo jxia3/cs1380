@@ -1,6 +1,6 @@
 /* Sends messages to all nodes in the current group probabilistically. */
 
-const remote = require("./remote.js");
+const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 /**

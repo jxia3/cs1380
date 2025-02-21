@@ -139,7 +139,20 @@ function consistentHash(keyId, nodeIds) {
 /**
  * Finds the node corresponding to the highest hash value.
  */
-function rendezvousHash(kid, nids) {
+function rendezvousHash(keyId, nodeIds) {
+  const nodes = [];
+  for (const id of nodeIds) {
+    const combinedKey = getID(keyId + id);
+    nodes.push({id, num: idToNum(combinedKey)});
+  }
+
+  let maxIndex = 0;
+  for (let n = 1; n < nodes.length; n += 1) {
+    if (nodes[n].num > nodes[maxIndex].num) {
+      maxIndex = n;
+    }
+  }
+  return nodes[maxIndex].id;
 }
 
 module.exports = {

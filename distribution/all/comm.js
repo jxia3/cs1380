@@ -2,7 +2,7 @@
 
 /* Provides an interface to call services on a group of remote nodes. */
 
-const remote = require("./remote.js");
+const remote = require("./remote-service.js");
 
 /**
  * NOTE: This Target is slightly different from local.all.Target

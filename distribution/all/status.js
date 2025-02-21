@@ -1,6 +1,6 @@
 /* Queries or modifies the state of all the nodes in a group. */
 
-const remote = require("./remote.js");
+const remote = require("./remote-service.js");
 
 const ACCUMULATE_ITEMS = ["counts", "heapTotal", "heapUsed"];
 

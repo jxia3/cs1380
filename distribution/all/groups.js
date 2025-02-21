@@ -1,6 +1,6 @@
 /* Manages the groups known by the current node group. */
 
-const remote = require("./remote.js");
+const remote = require("./remote-service.js");
 
 module.exports = remote.createConstructor({
   get: remote.createMethod("groups", "get", 1), // get(name, [callback])

@@ -1,6 +1,6 @@
 /* A service that stores key-value pairs distributed across a group. */
 
-const remote = require("./remote.js");
+const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 const STORE_SERVICES = ["mem", "store"];
