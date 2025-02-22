@@ -1,7 +1,7 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
-jest.spyOn(process, 'exit').mockImplementation((n) => { });
+jest.spyOn(process, "exit").mockImplementation((n) => { });
 
 test("(3 pts) all.groups.del(random)", (done) => {
   distribution.group4.groups.del("random", (e, v) => {
