@@ -1,7 +1,8 @@
 const distribution = require("../config.js");
 const id = distribution.util.id;
 
-test("(2.5 pts) all.store.get(no key)", (done) => {
+
+test('(3 pts) all.store.get(no key)', (done) => {
   const users = [
     {first: "Emma", last: "Watson"},
     {first: "John", last: "Krasinski"},
@@ -59,7 +60,7 @@ test("(1 pts) all.store.get(no key)", (done) => {
   });
 });
 
-test("(13 pts) all.store.reconf", (done) => {
+test('(12 pts) all.store.reconf', (done) => {
   /*
        NOTE: If this test fails locally,
        make sure you delete the contents of the store/ directory (not the directory itself!),

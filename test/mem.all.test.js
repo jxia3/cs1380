@@ -138,7 +138,7 @@ test(
       const nids = nodes.map((node) => id.getNID(node));
 
       distribution.group1.mem.put(user, key, (e, v) => {
-        const nid = id.consistentHash(kid, nids);
+        const nid = id.naiveHash(kid, nids);
         const pickedNode = nodes.filter((node) => id.getNID(node) === nid)[0];
         const remote = {node: pickedNode, service: "mem", method: "get"};
         const message = [{gid: "group1", key: key}];
