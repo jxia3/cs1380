@@ -86,35 +86,44 @@ test("(5 pts) (scenario) use mem.reconf", (done) => {
   // Create a group with any number of nodes
   const mygroupGroup = {};
   mygroupGroup[id.getSID(distribution.node.config)] = distribution.node.config; // Adding the current node to the group
+
   // Add more nodes to the group...
+  mygroupGroup[id.getSID(n1)] = n1;
+  mygroupGroup[id.getSID(n2)] = n2;
+  mygroupGroup[id.getSID(n3)] = n3;
 
   // Create a set of items and corresponding keys...
   const keysAndItems = [
     {key: "a", item: {first: "Josiah", last: "Carberry"}},
+    {key: "b", item: {first: "Foo", last: "Bar"}},
+    {key: "c", item: {first: "Baz", last: "Qux"}},
   ];
 
   // Experiment with different hash functions...
-  const config = {gid: "mygroup", hash: "?"};
+  const config = {gid: "mygroup", hash: util.id.consistentHash};
 
   distribution.local.groups.put(config, mygroupGroup, (e, v) => {
     // Now, place each one of the items you made inside the group...
     distribution.mygroup.mem.put(keysAndItems[0].item, keysAndItems[0].key, (e, v) => {
-      // We need to pass a copy of the group's
-      // nodes before the changes to reconf()
-      const groupCopy = {...mygroupGroup};
-
-      // Remove a node from the group...
-      const toRemove = "?";
-      distribution.mygroup.groups.rem(
-          "mygroup",
-          id.getSID(toRemove),
-          (e, v) => {
-            // We call `reconf()` on the distributed mem service. This will place the items in the remaining group nodes...
-            distribution.mygroup.mem.reconf(groupCopy, (e, v) => {
-              // Fill out the `checkPlacement` function (defined below) based on how you think the items will have been placed after the reconfiguration...
-              checkPlacement();
-            });
-          });
+      distribution.mygroup.mem.put(keysAndItems[1].item, keysAndItems[1].key, (e, v) => {
+        distribution.mygroup.mem.put(keysAndItems[2].item, keysAndItems[2].key, (e, v) => {
+          // We need to pass a copy of the group's
+          // nodes before the changes to reconf()
+          const groupCopy = {...mygroupGroup};
+          // Remove a node from the group...
+          const toRemove = n2;
+          distribution.mygroup.groups.rem(
+              "mygroup",
+              id.getSID(toRemove),
+              (e, v) => {
+                // We call `reconf()` on the distributed mem service. This will place the items in the remaining group nodes...
+                distribution.mygroup.mem.reconf(groupCopy, (e, v) => {
+                  // Fill out the `checkPlacement` function (defined below) based on how you think the items will have been placed after the reconfiguration...
+                  checkPlacement();
+                });
+              });
+        });
+      });
     });
   });
 
@@ -123,10 +132,12 @@ test("(5 pts) (scenario) use mem.reconf", (done) => {
   const checkPlacement = (e, v) => {
     const messages = [
       [{key: keysAndItems[0].key, gid: "mygroup"}],
+      [{key: keysAndItems[1].key, gid: "mygroup"}],
+      [{key: keysAndItems[2].key, gid: "mygroup"}],
     ];
 
     // Based on where you think the items should be, send the messages to the right nodes...
-    const remote = {node: "?", service: "mem", method: "get"};
+    const remote = {node: n1, service: "mem", method: "get"};
     distribution.local.comm.send(messages[0], remote, (e, v) => {
       try {
         expect(e).toBeFalsy();
@@ -135,9 +146,28 @@ test("(5 pts) (scenario) use mem.reconf", (done) => {
         done(error);
         return;
       }
-
-      // Write checks for the rest of the items...
-      done(); // Only call `done()` once all checks are written
+      remote.node = n1;
+      distribution.local.comm.send(messages[1], remote, (e, v) => {
+        try {
+          expect(e).toBeFalsy();
+          expect(v).toEqual(keysAndItems[1].item);
+        } catch (error) {
+          done(error);
+          return;
+        }
+        remote.node = n1;
+        distribution.local.comm.send(messages[2], remote, (e, v) => {
+          try {
+            expect(e).toBeFalsy();
+            expect(v).toEqual(keysAndItems[2].item);
+          } catch (error) {
+            done(error);
+            return;
+          }
+          // Write checks for the rest of the items...
+          done(); // Only call `done()` once all checks are written
+        });
+      });
     });
   };
 });
