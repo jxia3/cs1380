@@ -155,7 +155,7 @@ test("(5 pts) (scenario) use mem.reconf", (done) => {
           done(error);
           return;
         }
-        remote.node = n1;
+        remote.node = distribution.node.config;
         distribution.local.comm.send(messages[2], remote, (e, v) => {
           try {
             expect(e).toBeFalsy();
