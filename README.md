@@ -11,11 +11,11 @@ Remember to update the `report` section of the `package.json` file with the tota
 > Describe how you characterized the correctness and performance of your implementation
 
 *Correctness* -- I wrote 6 tests; these tests take a few seconds to execute. The tests cover:
-- a
-- b
-- c
-- d
-- e
+- Adding items with the same key to a local and distributed store.
+- Overwriting an item in a local store.
+- Overwriting an item in a distributed store.
+- Deleting and reinserting an item in a local store.
+- Deleting and reinserting an item in a distributed store.
 - Automatically reconfiguring objects when a new node is added to a group.
 
 *Performance* -- insertion and retrieval.

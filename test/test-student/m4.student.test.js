@@ -18,13 +18,34 @@ const nodes = [
   {ip: "127.0.0.1", port: 2003},
 ];
 const nodeMap = {};
+nodeMap[util.id.getSID(global.nodeConfig)] = global.nodeConfig;
 for (const node of nodes) {
   nodeMap[util.id.getSID(node)] = node;
 }
 
+const localKey = "local_key";
+const localObject = ["local", "object"];
+const remoteKey = "remote_key";
+const remoteObject = ["remote", "object"];
+
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.local.store.put(localObject, localKey, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual(localObject);
+    distribution.foobar.store.put(remoteObject, remoteKey, (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toEqual(remoteObject);
+      distribution.local.store.get(localKey, (error, result) => {
+        expect(error).toBeFalsy();
+        expect(result).toEqual(localObject);
+        distribution.foobar.store.get(remoteKey, (error, result) => {
+          expect(error).toBeFalsy();
+          expect(result).toEqual(remoteObject);
+          done();
+        });
+      });
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
@@ -48,6 +69,10 @@ test("(1 pts) student test", (done) => {
 });
 
 beforeAll((done) => {
+  const fs = require("fs");
+  fs.rmSync(path.join(__dirname, "../../store"), {recursive: true, force: true});
+  fs.mkdirSync(path.join(__dirname, "../../store"));
+
   stopNodes(() => {
     distribution.node.start((server) => {
       localServer = server;
