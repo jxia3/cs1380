@@ -225,5 +225,3 @@ test("(1 pts) local.store.put(no key)", (done) => {
     });
   });
 });
-
-
