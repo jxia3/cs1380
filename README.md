@@ -10,13 +10,21 @@ Remember to update the `report` section of the `package.json` file with the tota
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness* -- number of tests and time they take.
+*Correctness* -- I wrote 6 tests; these tests take a few seconds to execute. The tests cover:
+- a
+- b
+- c
+- d
+- e
+- Automatically reconfiguring objects when a new node is added to a group.
 
 *Performance* -- insertion and retrieval.
 
 ## Key Feature
 
 > Why is the `reconf` method designed to first identify all the keys to be relocated and then relocate individual objects instead of fetching all the objects immediately and then pushing them to their corresponding locations?
+
+Reconfiguration can be an expensive operation. To be as efficient as possible, the operation should not retrieve the value of every object. Instead, because the hash function to decide where an object goes soley depends on the key, only all the keys need to be retrieved. Then, every key that is still assigned to the same node with the new group does not need to be moved or retrieved. Only the objects that need to be moved are retrieved and then stored in their new locations.
 
 # M3: Node Groups & Gossip Protocols
 
