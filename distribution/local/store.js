@@ -113,6 +113,7 @@ function saveItem(config, object, callback) {
     }
     console.log("IN WRITE FILE");
     fs.writeFile(path, util.serialize(object), "utf8", (error) => {
+      console.log("AFTER WRITE FILE")
       if (error) {
         callback(error, null);
       } else {
