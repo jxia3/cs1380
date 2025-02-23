@@ -77,7 +77,7 @@ beforeAll((done) => {
             distribution.local.status.spawn(nodes[3], (error, result) => {
               distribution.local.groups.put("foobar", nodeMap, (error, result) => {
                 distribution.foobar.groups.put("foobar", nodeMap, (error, result) => {
-                  setTimeout(done, 5000);
+                  setTimeout(done, 3000);
                 });
               });
             });

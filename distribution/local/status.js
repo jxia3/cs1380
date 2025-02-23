@@ -116,7 +116,7 @@ function stop(callback) {
   }
 
   for (let i = 0; i < 100; i += 1) {
-    console.log("SHUTTING DOWN")
+    console.log("SHUTTING DOWN", global.nodeInfo)
   }
   if (!global.shuttingDown) {
     global.shuttingDown = true;
