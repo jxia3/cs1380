@@ -30,7 +30,7 @@ const currentNode = global?.nodeInfo?.sid;
 function _start() {
   if (global?.nodeConfig?.heartbeat && currentNode !== undefined) {
     nodes[currentNode] = {state: NodeState.Alive, staleness: 0};
-    setInterval(checkAlive, EPOCH_INTERVAL);
+    module.exports._interval = setInterval(checkAlive, EPOCH_INTERVAL);
   }
 }
 
