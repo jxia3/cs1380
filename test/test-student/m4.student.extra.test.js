@@ -29,7 +29,7 @@ for (const node of nodes) {
 }
 
 test("(15 pts) detect the need to reconfigure", (done) => {
-  const firstNode = global.nodeConfig;
+  const firstNode = nodes[1];
   const secondNode = nodes[0];
   const remote = {service: "store", method: "get"};
 
@@ -37,7 +37,6 @@ test("(15 pts) detect the need to reconfigure", (done) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
-      expect(false).toBe(true);
       remote.node = firstNode;
       distribution.local.comm.send(["abc1"], remote, (error, result) => {
         try {
