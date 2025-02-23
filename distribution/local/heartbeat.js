@@ -6,6 +6,7 @@ const log = require("../util/log.js");
 
 const EPOCH_INTERVAL = 2000;
 const PING_THRESHOLD = 10;
+const PING_TIMEOUT = 5000;
 const FAIL_THRESHOLD = 5;
 const FAIL_COOLDOWN = 10;
 
@@ -49,17 +50,11 @@ function checkAlive() {
   }
   console.log("at epoch", nodes, epoch);
 
-  // Ping nodes that exceed the staleness threshold
+  // Ping nodes to confirm liveness or declare failure
   for (const id in nodes) {
     if (nodes[id].state === NodeState.Alive && nodes[id].staleness >= PING_THRESHOLD) {
       nodes[id] = {state: NodeState.Pinging, staleness: 0};
-      global.distribution.local.groups.get("all", (error, group) => {
-        if (error) {
-          console.error(error);
-          return;
-        }
-        console.log("got group", group);
-      });
+      pingNode(id);
     }
   }
 
@@ -87,19 +82,48 @@ function checkAlive() {
 }
 
 /**
+ * Sends a status request to a remote node to confirm uptime. If the node address is
+ * not known, then no request is sent.
+ */
+function pingNode(nodeId) {
+  log(`Pinging node '${nodeId}' to confirm liveness`);
+  global.distribution.local.groups.get("all", (error, group) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (nodeId in group) {
+      log(`Sending ping request to '${nodeId}' at ${JSON.stringify(group[nodeId])}`);
+      const remote = {node: group[nodeId], service: "status", method: "get", timeout: PING_TIMEOUT};
+      global.distribution.local.comm.send(["sid"], remote, (error, result) => {
+        if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
+          nodes[nodeId] = {state: NodeState.Alive, staleness: 0};
+          log(`Confirmed liveness of node '${nodeId}'`);
+        }
+      });
+    } else {
+      log(`Could not find node '${nodeId}'`);
+    }
+  });
+}
+
+/**
  * Updates the local liveness store with a message from an alive remote node.
  */
 function receiveStatus(status, callback) {
+  console.log("received status", status);
   for (const id in status) {
-    if (id in failed) {
+    if (!(id in nodes)) {
+      nodes[id] = {state: NodeState.Alive, staleness: status[id]};
       continue;
     }
-    if (id in alive) {
-      alive[id] = Math.min(status[id], alive[id]);
-    } else {
-      alive[id] = status[id];
+    if (nodes[id].state === NodeState.Alive) {
+      nodes[id].staleness = Math.min(status[id], nodes[id].staleness);
+    } else if (nodes[id].state === NodeState.Pinging) {
+      nodes[id] = {state: NodeState.Alive, staleness: status[id]};
     }
   }
+  callback(null, null);
 }
 
 /**
