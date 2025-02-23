@@ -30,7 +30,7 @@ for (const node of nodes) {
 
 test("(15 pts) detect the need to reconfigure", (done) => {
   const firstNode = nodes[0];
-  const secondNode = nodes[0];
+  const secondNode = global.nodeConfig;
   const getRemote = {service: "store", method: "get"};
   const getArgs = [{key: "abc1", gid: "foobar"}];
   const stopRemote = {node: nodes[2], service: "status", method: "stop"};
@@ -45,16 +45,23 @@ test("(15 pts) detect the need to reconfigure", (done) => {
           expect(result).toEqual(["baz", "qux"]);
           distribution.local.comm.send([], stopRemote, (error, result) => {
             try {
-              expect(error).toBeFalsy()
-              expect(result).toBeTruthy()
+              expect(error).toBeFalsy();
+              expect(result).toBeTruthy();
               setTimeout(() => {
-                console.log(nodeMap)
-                process.exit(0)
-              }, 20000)
+                distribution.local.comm.send(getArgs, {...getRemote, node: secondNode}, (error, result) => {
+                  try {
+                    expect(error).toBeFalsy();
+                    expect(result).toEqual(["baz", "qux"]);
+                    done();
+                  } catch (error) {
+                    done(error);
+                  }
+                });
+              }, 15000);
             } catch (error) {
-              done(error)
+              done(error);
             }
-          })
+          });
         } catch (error) {
           done(error);
         }
