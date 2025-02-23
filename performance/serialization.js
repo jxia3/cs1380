@@ -11,11 +11,13 @@ const random = require("./random.js");
 const {performance} = require("perf_hooks");
 
 const util = distribution.util;
-random.setSeed(1000);
 
-testWorkload(generatePrimitives());
-testWorkload(generateSimple());
-testWorkload(generateComplex());
+if (require.main === module) {
+  random.setSeed(1000);
+  testWorkload(generatePrimitives());
+  testWorkload(generateSimple());
+  testWorkload(generateComplex());
+}
 
 /**
  * Tests a workload for performance and correctness.
@@ -225,3 +227,5 @@ function checkEq(a, b) {
   }
   return a === b;
 }
+
+module.exports = {generateObject};
