@@ -29,13 +29,13 @@ for (const node of nodes) {
 }
 
 test("(15 pts) detect the need to reconfigure", (done) => {
-  const firstNode = nodes[3];
+  const firstNode = nodes[0];
   const secondNode = nodes[0];
   const getRemote = {service: "store", method: "get"};
   const getArgs = [{key: "abc1", gid: "foobar"}];
-  const stopRemote = {node: nodes[1], service: "status", method: "stop"};
+  const stopRemote = {node: nodes[2], service: "status", method: "stop"};
 
-  distribution.foobar.store.put(["baz", "qux"], "abc2", (error, result) => {
+  distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
