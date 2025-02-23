@@ -2,9 +2,13 @@
 
 ## Summary
 
-> Summarize your implementation, including key challenges you encountered
+> Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M4 (`hours`) and the lines of code per task.
 
-Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M4 (`hours`) and the lines of code per task.
+My implementation comprises 4 new software components, totaling 800 added lines of code over the previous implementation. The primary components are `mem` and `store` services that implement key-value stores. Then, I added distributed versions of these services by hashing object keys and delegating calls to the nodes responsible for each object. Finally, I implemented object reconfiguration when a group changes and a heartbeat service to automatically detect the need to reconfigure.
+
+By far the most challenging aspect of the milestone was detecting the need to reconfigure. I used gossip to first detect when any node in the network goes down. After researching online, I found this paper that describes a simple protocol for downtime detection: https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=81e0296cee9880e550e507fcaf059af411c021a5. Each node maintains a staleness vector for all its known nodes in the network and gossips these values in a periodic interval. When a staleness value exceeeds a threshold, then the node is marked as failed.
+
+I modified this protocol to improve the reliability by adding a ping check before declaring a node as failed. Since gossip is probabilistic, it is possible that a message from an alive node never reaches another node several times in a row. Instead of directly declaring that a node is failed if no messages have been received, my heartbeat protocol sends a ping request to the suspected failure. Then, if no response is received, the failure is confirmed.
 
 ## Correctness & Performance Characterization
 
