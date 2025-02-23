@@ -3,7 +3,7 @@ const util = require("../util/util.js");
 
 const http = require("http");
 
-const DISABLE_LOGS = ["gossip"];
+const DISABLE_LOGS = ["gossip", "heartbeat"];
 
 /**
  * Starts the node's HTTP server to begin handling messages. The callback function

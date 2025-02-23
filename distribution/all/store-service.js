@@ -43,6 +43,9 @@ function put(object, config, callback) {
     return;
   }
 
+  if (global.distribution[this.gid]._state) {
+    global.distribution[this.gid]._state.hash = this.hash;
+  }
   if (config.key === null) {
     config.key = util.id.getID(object);
   }

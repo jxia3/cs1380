@@ -5,7 +5,7 @@
 const log = require("../util/log.js");
 
 const EPOCH_INTERVAL = 2000;
-const PING_THRESHOLD = 10;
+const PING_THRESHOLD = 5;
 const PING_TIMEOUT = 5000;
 const FAIL_THRESHOLD = 5;
 const FAIL_COOLDOWN = 10;
@@ -94,7 +94,6 @@ function pingNode(nodeId) {
       return;
     }
 
-    log(`Sending ping request to '${nodeId}' at ${JSON.stringify(group[nodeId])}`);
     const remote = {node: group[nodeId], service: "status", method: "get", timeout: PING_TIMEOUT};
     global.distribution.local.comm.send(["sid"], remote, (error, result) => {
       if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
@@ -113,6 +112,7 @@ function pingNode(nodeId) {
 function receiveStatus(status, callback) {
   for (const id in status) {
     if (!(id in nodes)) {
+      log(`Detected new node '${id}' in heartbeat`);
       nodes[id] = {state: NodeState.Alive, staleness: status[id]};
       continue;
     }
@@ -147,15 +147,30 @@ function registerFailure(nodeId, callback) {
       callback(error, null);
       return;
     }
-    removeNode(nodeId, groups, callback);
+
+    let active = groups.length;
+    for (const group of groups) {
+      removeNode(nodeId, group, (error, result) => {
+        active -= 1;
+        if (active === 0 && callback !== undefined) {
+          callback(null, null);
+        }
+      });
+    }
   });
 }
 
 /**
- * Reconfigures all the groups with a failed node.
+ * Removes a node from a failed group and reconfigures the group. The group hash
+ * is used to determine if reconfiguration is necessary and which node is responsible
+ * for the reconfiguration.
  */
-function removeNode(nodeId, groups, callback) {
-  console.log("removing", nodeId, groups);
+function removeNode(nodeId, groupId, callback) {
+  console.log("removing", nodeId, groupId);
+  if (!global.distribution[groupId]?._isGroup || !global.distribution[groupId]?._state?.hash) {
+    return;
+  }
+  console.log("passed check", nodeId, groupId, global.distribution[groupId]._hash);
 }
 
 module.exports = {receiveStatus, registerFailure, _start};

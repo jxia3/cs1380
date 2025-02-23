@@ -66,7 +66,7 @@ function put(config, group, callback) {
 
   // Add group and recompute the all group
   groups[config.gid] = nodes;
-  global.distribution[config.gid] = {_isGroup: true};
+  global.distribution[config.gid] = {_isGroup: true, _state: {}};
   for (const service in all) {
     global.distribution[config.gid][service] = all[service](config);
   }
