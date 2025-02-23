@@ -2,6 +2,7 @@
 
 const util = require("./distribution/util/util.js");
 const log = require("./distribution/util/log.js");
+
 const args = require("yargs").argv;
 
 // Default configuration
