@@ -96,7 +96,13 @@ beforeAll((done) => {
 });
 
 afterAll((done) => {
+  for (let i = 0; i < 20; i += 1) {
+    console.log("STOPPING")
+  }
   stopNodes(() => {
+    for (let i = 0; i < 20; i += 1) {
+      console.log("CLOSING")
+    }
     localServer.close();
     done();
   });
