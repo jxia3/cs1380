@@ -8,6 +8,9 @@
 
 const distribution = require("../../config.js");
 
+const fs = require("fs");
+const path = require("path");
+
 const util = distribution.util;
 
 let localServer = null;
@@ -49,30 +52,74 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  localObject.push("modified");
+  distribution.local.store.put(localObject, localKey, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual(localObject);
+    distribution.local.store.get(localKey, (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toEqual(localObject);
+      done();
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  remoteObject.push("modified");
+  distribution.foobar.store.put(remoteObject, remoteKey, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual(remoteObject);
+    distribution.foobar.store.get(remoteKey, (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toEqual(remoteObject);
+      done();
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.local.store.del(localKey, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual(localObject);
+    distribution.local.store.get(localKey, (error, result) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(result).toBeFalsy();
+      distribution.local.store.put(localObject, localKey, (error, result) => {
+        expect(error).toBeFalsy();
+        expect(result).toEqual(localObject);
+        distribution.local.store.get(localKey, (error, result) => {
+          expect(error).toBeFalsy();
+          expect(result).toEqual(localObject);
+          done();
+        });
+      });
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.foobar.store.del(remoteKey, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual(remoteObject);
+    distribution.foobar.store.get(remoteKey, (error, result) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(result).toBeFalsy();
+      distribution.foobar.store.put(remoteObject, remoteKey, (error, result) => {
+        expect(error).toBeFalsy();
+        expect(result).toEqual(remoteObject);
+        distribution.foobar.store.get(remoteKey, (error, result) => {
+          expect(error).toBeFalsy();
+          expect(result).toEqual(remoteObject);
+          done();
+        });
+      });
+    });
+  });
 });
 
 beforeAll((done) => {
-  const fs = require("fs");
   fs.rmSync(path.join(__dirname, "../../store"), {recursive: true, force: true});
   fs.mkdirSync(path.join(__dirname, "../../store"));
-
   stopNodes(() => {
     distribution.node.start((server) => {
       localServer = server;
