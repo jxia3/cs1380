@@ -8,7 +8,7 @@
 jest.setTimeout(60000);
 
 const distribution = require("../../config.js");
-global.nodeConfig.heartbeat = true;
+global.nodeConfig.heartbeat = false;
 
 const fs = require("fs");
 const path = require("path");
@@ -17,10 +17,10 @@ const util = distribution.util;
 
 let localServer = null;
 const nodes = [
-  {ip: "127.0.0.1", port: 2000, heartbeat: true},
-  {ip: "127.0.0.1", port: 2001, heartbeat: true},
-  {ip: "127.0.0.1", port: 2002, heartbeat: true},
-  {ip: "127.0.0.1", port: 2003, heartbeat: true},
+  {ip: "127.0.0.1", port: 2000, heartbeat: false},
+  {ip: "127.0.0.1", port: 2001, heartbeat: false},
+  {ip: "127.0.0.1", port: 2002, heartbeat: false},
+  {ip: "127.0.0.1", port: 2003, heartbeat: false},
 ];
 const nodeMap = {};
 nodeMap[util.id.getSID(global.nodeConfig)] = global.nodeConfig;
@@ -33,13 +33,13 @@ test("(15 pts) detect the need to reconfigure", (done) => {
   const secondNode = nodes[0];
   const remote = {service: "store", method: "get"};
 
-  distribution.foobar.store.put(["baz"], "abc1", (error, result) => {
+  distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     expect(error).toBeFalsy();
-    expect(result).toEqual(["foo"]);
+    expect(result).toEqual(["baz", "qux"]);
     remote.node = firstNode;
-    distribution.local.comm.send(["qux"], remote, (error, result) => {
+    distribution.local.comm.send(["abc1"], remote, (error, result) => {
       expect(error).toBeFalsy();
-      expect(result).toEqual(["foo"]);
+      expect(result).toEqual(["baz", "qux"]);
       done();
     });
   });
