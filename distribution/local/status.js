@@ -115,6 +115,9 @@ function stop(callback) {
     return;
   }
 
+  for (let i = 0; i < 100; i += 1) {
+    console.log("SHUTTING DOWN")
+  }
   if (!global.shuttingDown) {
     global.shuttingDown = true;
     setTimeout(() => {

@@ -34,7 +34,6 @@ test("(15 pts) detect the need to reconfigure", (done) => {
   const getRemote = {service: "store", method: "get"};
   const getArgs = [{key: "abc1", gid: "foobar"}];
   const stopRemote = {node: nodes[1], service: "status", method: "stop"};
-  const stopArgs = [];
 
   distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     try {
