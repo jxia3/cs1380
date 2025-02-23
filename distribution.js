@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const util = require("./distribution/util/util.js");
 const log = require("./distribution/util/log.js");
+const util = require("./distribution/util/util.js");
 
 const args = require("yargs").argv;
 

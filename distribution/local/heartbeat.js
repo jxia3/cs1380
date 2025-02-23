@@ -3,6 +3,7 @@
    Nodes must be manually added back into a group after recovering from a failure. */
 
 const log = require("../util/log.js");
+const util = require("../util/util.js");
 
 const EPOCH_INTERVAL = 2000;
 const PING_THRESHOLD = 5;
@@ -179,7 +180,9 @@ function removeNode(nodeId, groupId, callback) {
     callback(null, null);
     return;
   }
+  const hashFn = global.distribution[groupId]._state.hash;
 
+  // Retrieve old members of group
   global.distribution.local.groups.get(groupId, (error, group) => {
     if (error) {
       callback(error, null);
@@ -196,6 +199,22 @@ function removeNode(nodeId, groupId, callback) {
       if (error) {
         callback(error, null);
         return;
+      }
+      if (!(currentNode in newGroup)) {
+        callback(null, null);
+        return;
+      }
+
+      const leaderNode = util.id.applyHash(nodeId, newGroup, hashFn);
+      console.log("COMPUTED LEADER", nodeId, groupId, leaderNode, currentNode);
+      if (leaderNode === currentNode) {
+        global.distribution[groupId].mem.reconf(oldGroup, (memError, result) => {
+          global.distribution[groupId].store.reconf(oldGroup, (storeError, result) => {
+            callback(memError || storeError, null);
+          });
+        });
+      } else {
+        callback(null, null);
       }
     });
   });
