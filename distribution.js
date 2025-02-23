@@ -26,6 +26,9 @@ if (args.ip) {
 if (args.port) {
   global.nodeConfig.port = parseInt(args.port);
 }
+if (args.heartbeat) {
+  global.nodeConfig.heartbeat = true;
+}
 
 if (args.config) {
   const nodeConfig = util.deserialize(args.config);

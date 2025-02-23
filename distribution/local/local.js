@@ -11,6 +11,7 @@
   store       A local persistent key-value store         get, put, del
 */
 
+const status = require("./status.js");
 module.exports = {
   comm: require("./comm.js"),
   gossip: require("./gossip.js"),
@@ -19,6 +20,6 @@ module.exports = {
   mem: require("./mem.js"),
   routes: require("./routes.js"),
   rpc: require("./rpc.js"),
-  status: require("./status.js"),
+  status,
   store: require("./store.js"),
 };

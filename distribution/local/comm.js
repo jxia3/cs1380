@@ -42,7 +42,8 @@ function send(message, remote, callback) {
   try {
     const groupId = remote.gid === undefined ? "local" : remote.gid;
     const url = `http://${remote.node.ip}:${remote.node.port}/${groupId}/${remote.service}/${remote.method}`;
-    callService(url, util.serialize(message), callback);
+    const timeout = remote?.timeout === undefined ? REQUEST_TIMEOUT : remote?.timeout;
+    callService(url, util.serialize(message), timeout, callback);
   } catch (error) {
     callback(error, null);
   }
@@ -69,14 +70,14 @@ function createGuardedCallback(callback) {
 /**
  * Sends an HTTP request to call a service on a remote node.
  */
-function callService(url, body, callback) {
+function callService(url, body, timeout, callback) {
   log(`Sending service call to ${url}`);
   const request = http.request(url, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    timeout: REQUEST_TIMEOUT,
+    timeout,
   }, (response) => handleResponse(response, callback));
 
   request.on("timeout", () => {

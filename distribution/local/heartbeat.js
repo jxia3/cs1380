@@ -5,22 +5,22 @@
 const log = require("../util/log.js");
 
 const EPOCH_INTERVAL = 3000;
-const FAIL_THRESHOLD = 10;
+const STALE_THRESHOLD = 10;
 const FAIL_COOLDOWN = 10;
 
-// Possible states for a failed node
-const FailState = {
-  Declared: 0,
-  Registered: 1,
+// Possible liveness states for a node
+const NodeState = {
+  Alive: 0,
+  Pinging: 1,
+  DeclaredFailure: 2,
+  RegisteredFailure: 3,
 };
 
 let epoch = 0;
-const alive = {};
-const failed = {};
-
+const nodes = {};
 const currentNode = global?.nodeInfo?.sid;
 if (global?.nodeConfig?.heartbeat && currentNode !== undefined) {
-  alive[currentNode] = 0;
+  nodes[currentNode] = {state: NodeState.Alive, staleness: 0};
   setInterval(checkAlive, EPOCH_INTERVAL);
 }
 
@@ -28,22 +28,22 @@ if (global?.nodeConfig?.heartbeat && currentNode !== undefined) {
  * Sends a liveness gossip message to all known peer nodes and detects failed nodes.
  */
 function checkAlive() {
-  // Manage staleness counts and failed cache
+  // Update node states and staleness counts
   epoch += 1;
-  for (const id in alive) {
-    if (id in failed) {
-      delete alive[id];
-      continue;
-    }
-    if (id !== currentNode) {
-      alive[id] += 1;
-    }
-  }
-  for (const id in failed) {
-    if (failed[id].epoch + FAIL_COOLDOWN < epoch) {
-      delete failed[id];
+  for (const id in nodes) {
+    if (nodes[id].state === NodeState.Alive) {
+      if (id !== currentNode) {
+        nodes[id].staleness += 1;
+      }
+    } else if (nodes[id].state === NodeState.RegisteredFailure) {
+      if (nodes[id].epoch + FAIL_COOLDOWN < epoch) {
+        delete nodes[id];
+      }
     }
   }
+  console.log("at epoch", nodes, epoch);
+
+  // Ping nodes that exceed the staleness threshold
 
   // Send gossip message
   const service = {service: "heartbeat", method: "receiveStatus"};
@@ -71,14 +71,23 @@ function checkAlive() {
  * Updates the local liveness store with a message from an alive remote node.
  */
 function receiveStatus(status, callback) {
-
+  for (const id in status) {
+    if (id in failed) {
+      continue;
+    }
+    if (id in alive) {
+      alive[id] = Math.min(status[id], alive[id]);
+    } else {
+      alive[id] = status[id];
+    }
+  }
 }
 
 /**
  * Broadcasts the ID of a failed node to all known peer nodes.
  */
 function declareFailure(nodeId) {
-
+  console.log("declaring failure", nodeId);
 }
 
 /**

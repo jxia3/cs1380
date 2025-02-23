@@ -76,7 +76,7 @@
       }
     },
     "m4": {
-      "hours": 10,
+      "hours": 12,
       "loc": 700,
       "throughput": {
         "dev": [["mem-put", 1.99], ["mem-get", 3.80], ["store-put", 0.561], ["store-get", 1.02]],
