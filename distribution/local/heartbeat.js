@@ -102,6 +102,8 @@ function pingNode(nodeId) {
         if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
           nodes[nodeId] = {state: NodeState.Alive, staleness: 0};
           log(`Confirmed liveness of node '${nodeId}'`);
+        } else {
+          log(`Could not confirm liveness of node '${nodeId}'`);
         }
       });
     } else {
