@@ -37,6 +37,7 @@ test("(15 pts) detect the need to reconfigure", (done) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
+      console.log("MAP:", nodeMap);
       remote.node = firstNode;
       distribution.local.comm.send(["abc1"], remote, (error, result) => {
         try {
