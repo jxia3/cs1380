@@ -51,7 +51,7 @@ test("(15 pts) detect the need to reconfigure", (done) => {
               setTimeout(() => {
                 console.log(nodeMap)
                 process.exit(0)
-              }, 20000)
+              }, 40000)
             } catch (error) {
               done(error)
             }
