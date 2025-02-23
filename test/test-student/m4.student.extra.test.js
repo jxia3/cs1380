@@ -31,19 +31,31 @@ for (const node of nodes) {
 test("(15 pts) detect the need to reconfigure", (done) => {
   const firstNode = nodes[0];
   const secondNode = nodes[0];
-  const remote = {service: "store", method: "get"};
-  const args = [{key: "abc1", gid: "foobar"}];
+  const getRemote = {service: "store", method: "get"};
+  const getArgs = [{key: "abc1", gid: "foobar"}];
+  const stopRemote = {node: nodes[1], service: "status", method: "stop"};
+  const stopArgs = [];
 
   distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
-      remote.node = firstNode;
-      distribution.local.comm.send(args, remote, (error, result) => {
+      distribution.local.comm.send(getArgs, {...getRemote, node: firstNode}, (error, result) => {
         try {
           expect(error).toBeFalsy();
           expect(result).toEqual(["baz", "qux"]);
-          done();
+          distribution.local.comm.send([], stopRemote, (error, result) => {
+            try {
+              expect(error).toBeFalsy()
+              expect(result).toBeTruthy()
+              setTimeout(() => {
+                console.log(nodeMap)
+                process.exit(0)
+              }, 20000)
+            } catch (error) {
+              done(error)
+            }
+          })
         } catch (error) {
           done(error);
         }

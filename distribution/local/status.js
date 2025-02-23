@@ -106,7 +106,7 @@ function createStartFn(onStart, callback) {
 }
 
 /**
- * Stops the node after a 10 millisecond cooldown.
+ * Stops the node after a 20 millisecond cooldown.
  */
 function stop(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
@@ -129,7 +129,7 @@ function stop(callback) {
         console.error(error);
         process.exit(1);
       }
-    }, 10);
+    }, 20);
     log("Scheduled node shutdown");
   }
 
