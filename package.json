@@ -76,8 +76,8 @@
       }
     },
     "m4": {
-      "hours": 6,
-      "loc": 500,
+      "hours": 10,
+      "loc": 700,
       "throughput": {
         "dev": [["mem-put", 1.99], ["mem-get", 3.80], ["store-put", 0.561], ["store-get", 1.02]],
         "aws": [["mem-put", 1.14], ["mem-get", 1.58], ["store-put", 1.05], ["store-get", 1.59]],
