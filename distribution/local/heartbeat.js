@@ -5,8 +5,8 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
-const EPOCH_INTERVAL = 2000;
-const PING_THRESHOLD = 5;
+const EPOCH_INTERVAL = 1000;
+const PING_THRESHOLD = 8;
 const PING_TIMEOUT = 5000;
 const FAIL_THRESHOLD = 2;
 const FAIL_COOLDOWN = 10;
