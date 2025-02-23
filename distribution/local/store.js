@@ -108,6 +108,7 @@ function saveItem(config, object, callback) {
   const path = `${groupDirectory}/${encodeKey(config.key)}.dat`;
   fs.mkdir(groupDirectory, {recursive: true}, (error, result) => {
     if (error) {
+      console.log("error", error);
       callback(error, null);
       return;
     }
