@@ -9,9 +9,9 @@ const {generateObject} = require("./serialization.js");
 const {performance} = require("perf_hooks");
 
 const NODES = [
-  {ip: "3.146.176.81", port: 2001},
-  {ip: "52.15.228.162", port: 2002},
-  {ip: "3.147.48.153", port: 2003},
+  {ip: "127.0.0.1", port: 2001},
+  {ip: "127.0.0.1", port: 2002},
+  {ip: "127.0.0.1", port: 2003},
 ];
 const GROUP = "group";
 const SERVICE = "mem";
