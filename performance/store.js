@@ -38,8 +38,8 @@ for (let o = 0; o < 1000; o += 1) {
 distribution.local.groups.put(GROUP, nodeMap, (error, result) => {
   distribution[GROUP].groups.put(GROUP, nodeMap, (error, result) => {
     storeObjects(objects, keys, () => retrieveKeys(keys));
-  })
-})
+  });
+});
 
 /**
  * Stores all the objects in an array concurrently into a group of nodes.
@@ -63,14 +63,16 @@ function storeObjects(objects, keys, callback) {
       if (active === 0) {
         endStore();
       }
-    })
+    });
   }
 
   function endStore() {
     const totalTime = performance.now() - startTime;
     console.log("Throughput:", objects.length / totalTime);
     console.log("Average latency:", totalLatency / objects.length);
-    callback();
+    if (callback !== undefined) {
+      callback();
+    }
   }
 }
 
@@ -78,5 +80,33 @@ function storeObjects(objects, keys, callback) {
  * Retrieves all the keys in an array concurrently from a group of nodes.
  */
 function retrieveKeys(keys, callback) {
-  console.log("retrieving keys", keys.length);
+  let totalLatency = 0;
+  const startTime = performance.now();
+  let active = keys.length;
+
+  for (let k = 0; k < keys.length; k += 1) {
+    const getStart = performance.now();
+    distribution[GROUP][SERVICE].get(keys[k], (error, result) => {
+      totalLatency += performance.now() - getStart;
+      if (error) {
+        throw error;
+      }
+      if (result === null) {
+        throw new Error("Incorrect get result");
+      }
+      active -= 1;
+      if (active === 0) {
+        endRetrieve();
+      }
+    });
+  }
+
+  function endRetrieve() {
+    const totalTime = performance.now() - startTime;
+    console.log("Throughput:", objects.length / totalTime);
+    console.log("Average latency:", totalLatency / objects.length);
+    if (callback !== undefined) {
+      callback();
+    }
+  }
 }
