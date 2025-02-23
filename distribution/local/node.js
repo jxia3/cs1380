@@ -3,6 +3,8 @@ const util = require("../util/util.js");
 
 const http = require("http");
 
+const DISABLE_LOGS = ["gossip"];
+
 /**
  * Starts the node's HTTP server to begin handling messages. The callback function
  * is called when the server is alive.
@@ -100,7 +102,9 @@ function callService(query, method, request, response) {
 
     // Call service and send result
     global.statusState.messageCount += 1;
-    log(`Handling request to service '${query.service}' on group '${query.gid}'`);
+    if (!DISABLE_LOGS.includes(query.service)) {
+      log(`Handling request to service '${query.service}' on group '${query.gid}'`);
+    }
     try {
       method(...data, (error, result) => {
         response.writeHead(200, {"Content-Type": "application/json"});

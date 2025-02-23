@@ -13,9 +13,9 @@ distribution.node.start(() => {
 });
 
 function runTest() {
-  distribution.local.groups.put("all", [global.nodeConfig, ...nodes], (error, result) => {
+  distribution.local.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
     console.log("local put result", error, result);
-    distribution.all.groups.put("all", [global.nodeConfig, ...nodes], (error, result) => {
+    distribution.all.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
       console.log("all put result", error, result);
     });
   });

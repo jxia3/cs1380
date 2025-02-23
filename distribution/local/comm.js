@@ -9,6 +9,7 @@ const util = require("../util/util.js");
 const http = require("http");
 
 const REQUEST_TIMEOUT = 20000;
+const DISABLE_LOGS = ["gossip"];
 
 /**
  * @typedef {Object} Target
@@ -43,6 +44,9 @@ function send(message, remote, callback) {
     const groupId = remote.gid === undefined ? "local" : remote.gid;
     const url = `http://${remote.node.ip}:${remote.node.port}/${groupId}/${remote.service}/${remote.method}`;
     const timeout = remote?.timeout === undefined ? REQUEST_TIMEOUT : remote?.timeout;
+    if (!DISABLE_LOGS.includes(remote.service)) {
+      log(`Sending service call to ${url}`);
+    }
     callService(url, util.serialize(message), timeout, callback);
   } catch (error) {
     callback(error, null);
@@ -71,7 +75,6 @@ function createGuardedCallback(callback) {
  * Sends an HTTP request to call a service on a remote node.
  */
 function callService(url, body, timeout, callback) {
-  log(`Sending service call to ${url}`);
   const request = http.request(url, {
     method: "PUT",
     headers: {

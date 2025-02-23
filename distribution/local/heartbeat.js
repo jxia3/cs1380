@@ -55,19 +55,13 @@ function checkAlive() {
       }
     }
   }
-  console.log("at epoch", currentNode, nodes, epoch);
 
   // Ping nodes to confirm liveness or declare failure
   for (const id in nodes) {
     if (nodes[id].state === NodeState.Alive && nodes[id].staleness >= PING_THRESHOLD) {
       nodes[id] = {state: NodeState.Pinging, staleness: 0};
       pingNode(id);
-    }
-  }
-
-  // Advance nodes that cannot be pinged to the failed status
-  for (const id in nodes) {
-    if (nodes[id].state === NodeState.Pinging && nodes[id].staleness >= FAIL_THRESHOLD) {
+    } else if (nodes[id].state === NodeState.Pinging && nodes[id].staleness >= FAIL_THRESHOLD) {
       nodes[id] = {state: NodeState.DeclaredFailure};
       declareFailure(id);
     }
@@ -95,20 +89,21 @@ function pingNode(nodeId) {
       console.error(error);
       return;
     }
-    if (nodeId in group) {
-      log(`Sending ping request to '${nodeId}' at ${JSON.stringify(group[nodeId])}`);
-      const remote = {node: group[nodeId], service: "status", method: "get", timeout: PING_TIMEOUT};
-      global.distribution.local.comm.send(["sid"], remote, (error, result) => {
-        if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
-          nodes[nodeId] = {state: NodeState.Alive, staleness: 0};
-          log(`Confirmed liveness of node '${nodeId}'`);
-        } else {
-          log(`Could not confirm liveness of node '${nodeId}'`);
-        }
-      });
-    } else {
+    if (!(nodeId in group)) {
       log(`Could not find node '${nodeId}'`);
+      return;
     }
+
+    log(`Sending ping request to '${nodeId}' at ${JSON.stringify(group[nodeId])}`);
+    const remote = {node: group[nodeId], service: "status", method: "get", timeout: PING_TIMEOUT};
+    global.distribution.local.comm.send(["sid"], remote, (error, result) => {
+      if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
+        nodes[nodeId] = {state: NodeState.Alive, staleness: 0};
+        log(`Confirmed liveness of node '${nodeId}'`);
+      } else {
+        log(`Could not confirm liveness of node '${nodeId}'`);
+      }
+    });
   });
 }
 
@@ -116,7 +111,6 @@ function pingNode(nodeId) {
  * Updates the local liveness store with a message from an alive remote node.
  */
 function receiveStatus(status, callback) {
-  console.log("received status", currentNode, status);
   for (const id in status) {
     if (!(id in nodes)) {
       nodes[id] = {state: NodeState.Alive, staleness: status[id]};
@@ -128,24 +122,40 @@ function receiveStatus(status, callback) {
       nodes[id] = {state: NodeState.Alive, staleness: status[id]};
     }
   }
-  callback(null, null);
+  if (callback !== undefined) {
+    callback(null, null);
+  }
 }
 
 /**
  * Broadcasts the ID of a failed node to all known peer nodes.
  */
 function declareFailure(nodeId) {
-  console.log("declaring failure", nodeId);
+  log(`Declaring node '${nodeId}' as failed`);
+  const service = {service: "heartbeat", method: "registerFailure"};
+  global.distribution.all.comm.send([nodeId], service);
 }
 
 /**
  * Removes a failed node from all node groups and reconfigures group storage.
  */
-function registerFailure(nodeId) {
-  if (nodeId in failed) {
-    return;
-  }
-  failed[nodeId] = epoch;
+function registerFailure(nodeId, callback) {
+  log(`Registering node '${nodeId}' as failed`);
+  nodes[nodeId] = {state: NodeState.RegisteredFailure, epoch};
+  global.distribution.local.groups.get(null, (error, groups) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    removeNode(nodeId, groups, callback);
+  });
+}
+
+/**
+ * Reconfigures all the groups with a failed node.
+ */
+function removeNode(nodeId, groups, callback) {
+  console.log("removing", nodeId, groups);
 }
 
 module.exports = {receiveStatus, registerFailure, _start};
