@@ -8,7 +8,7 @@ const util = require("../util/util.js");
 const EPOCH_INTERVAL = 2000;
 const PING_THRESHOLD = 5;
 const PING_TIMEOUT = 5000;
-const FAIL_THRESHOLD = 5;
+const FAIL_THRESHOLD = 2;
 const FAIL_COOLDOWN = 10;
 
 // Possible liveness states for a node

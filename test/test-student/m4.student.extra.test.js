@@ -29,11 +29,19 @@ for (const node of nodes) {
 }
 
 test("(15 pts) detect the need to reconfigure", (done) => {
-  distribution.foobar.store.put(["foo"], "bar", (error, result) => {
+  const firstNode = global.nodeConfig;
+  const secondNode = nodes[0];
+  const remote = {service: "store", method: "get"};
+
+  distribution.foobar.store.put(["baz"], "qux", (error, result) => {
     expect(error).toBeFalsy();
     expect(result).toEqual(["foo"]);
-    console.log("PLACED ITEM");
-    process.exit(0);
+    remote.node = firstNode;
+    distribution.local.comm.send(["qux"], remote, (error, result) => {
+      expect(error).toBeFalsy();
+      expect(result).toEqual(["foo"]);
+      done();
+    });
   });
 });
 
@@ -49,7 +57,7 @@ beforeAll((done) => {
             distribution.local.status.spawn(nodes[3], (error, result) => {
               distribution.local.groups.put("foobar", nodeMap, (error, result) => {
                 distribution.foobar.groups.put("foobar", nodeMap, (error, result) => {
-                  setTimeout(done, 5000);
+                  setTimeout(done, 10000);
                 });
               });
             });

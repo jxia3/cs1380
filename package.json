@@ -26,7 +26,12 @@
     "@brown-ds/distribution": "latest"
   },
   "jest": {
-    "testTimeout": 10000
+    "testTimeout": 10000,
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    }
   },
   "report": {
     "m1": {

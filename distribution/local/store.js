@@ -33,6 +33,7 @@ function get(config, callback) {
  * hash of the object serialized as JSON is used.
  */
 function put(object, config, callback) {
+  console.log("CALLING STORE PUT");
   callback = callback === undefined ? (error, result) => {} : callback;
   config = util.id.getObjectConfig(config);
   if (config instanceof Error) {
@@ -102,6 +103,7 @@ function getItem(config, callback) {
  * and the global store path must be available.
  */
 function saveItem(config, object, callback) {
+  console.log("IN SAVE ITEM");
   const groupDirectory = `${global.nodeInfo.storePath}/${config.gid}`;
   const path = `${groupDirectory}/${encodeKey(config.key)}.dat`;
   fs.mkdir(groupDirectory, {recursive: true}, (error, result) => {
@@ -109,6 +111,7 @@ function saveItem(config, object, callback) {
       callback(error, null);
       return;
     }
+    console.log("IN WRITE FILE");
     fs.writeFile(path, util.serialize(object), "utf8", (error) => {
       if (error) {
         callback(error, null);
