@@ -8,27 +8,45 @@ const {generateObject} = require("./serialization.js");
 
 const {performance} = require("perf_hooks");
 
+const GROUP = "group";
 const NODES = [
-  {ip: "", port: 0},
-  {ip: "", port: 0},
-  {ip: "", port: 0},
+  {ip: "127.0.0.1", port: 2001},
+  {ip: "127.0.0.1", port: 2002},
+  {ip: "127.0.0.1", port: 2003},
 ];
+
+const util = distribution.util;
 
 if (distribution.disableLogs) {
   distribution.disableLogs();
 }
-
 random.setSeed(1000);
+
+const nodeMap = {};
+for (const node of NODES) {
+  nodeMap[util.id.getSID(node)] = node;
+}
 const objects = [];
 for (let o = 0; o < 1000; o += 1) {
   objects.push(generateObject(3, 2));
 }
-storeObjects(objects, retrieveObjects);
 
+distribution.local.groups.put(GROUP, nodeMap, (error, result) => {
+  distribution[GROUP].groups.put(GROUP, nodeMap, (error, result) => {
+    storeObjects(objects, retrieveKeys);
+  })
+})
+
+/**
+ * Stores all the objects in an array concurrently into a group of nodes.
+ */
 function storeObjects(objects, callback) {
-
+  console.log("storing objects", objects.length);
 }
 
-function retrieveObjects(objects, callback) {
-
+/**
+ * Retrieves all the keys in an array concurrently from a group of nodes.
+ */
+function retrieveKeys(keys, callback) {
+  console.log("retrieving keys", keys.length);
 }
