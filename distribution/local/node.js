@@ -25,6 +25,8 @@ function start(callback) {
     log(`Server error: ${error}`);
     throw error;
   });
+
+  global.distribution.local.heartbeat._start();
 }
 
 /**

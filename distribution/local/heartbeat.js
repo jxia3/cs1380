@@ -21,9 +21,16 @@ const NodeState = {
 let epoch = 0;
 const nodes = {};
 const currentNode = global?.nodeInfo?.sid;
-if (global?.nodeConfig?.heartbeat && currentNode !== undefined) {
-  nodes[currentNode] = {state: NodeState.Alive, staleness: 0};
-  setInterval(checkAlive, EPOCH_INTERVAL);
+
+/**
+ * Starts the heartbeat check. This internal function does not accept a callback and
+ * should not be called by external services.
+ */
+function _start() {
+  if (global?.nodeConfig?.heartbeat && currentNode !== undefined) {
+    nodes[currentNode] = {state: NodeState.Alive, staleness: 0};
+    setInterval(checkAlive, EPOCH_INTERVAL);
+  }
 }
 
 /**
@@ -48,7 +55,7 @@ function checkAlive() {
       }
     }
   }
-  console.log("at epoch", nodes, epoch);
+  console.log("at epoch", currentNode, nodes, epoch);
 
   // Ping nodes to confirm liveness or declare failure
   for (const id in nodes) {
@@ -111,7 +118,7 @@ function pingNode(nodeId) {
  * Updates the local liveness store with a message from an alive remote node.
  */
 function receiveStatus(status, callback) {
-  console.log("received status", status);
+  console.log("received status", currentNode, status);
   for (const id in status) {
     if (!(id in nodes)) {
       nodes[id] = {state: NodeState.Alive, staleness: status[id]};
@@ -143,4 +150,4 @@ function registerFailure(nodeId) {
   failed[nodeId] = epoch;
 }
 
-module.exports = {receiveStatus, registerFailure};
+module.exports = {receiveStatus, registerFailure, _start};
