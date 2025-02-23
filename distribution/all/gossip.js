@@ -33,7 +33,6 @@ function sendPayload(payload, callback) {
   }
 
   global.distribution.local.groups.get(this.gid, (error, group) => {
-    console.log("SENDING GOSSIP TO", group);
     if (error) {
       callback(error, null);
     } else {

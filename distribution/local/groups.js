@@ -54,10 +54,13 @@ function put(config, group, callback) {
     return;
   }
 
-  // Remove start functions
+  // Remove extra data
   for (const id in nodes) {
-    if (nodes[id]?.onStart !== undefined) {
-      delete nodes[id]?.onStart;
+    if (nodes[id].heartbeat !== undefined) {
+      delete nodes[id].heartbeat;
+    }
+    if (nodes[id].onStart !== undefined) {
+      delete nodes[id].onStart;
     }
   }
 
@@ -95,6 +98,9 @@ function add(name, node, callback) {
   if (!(name in groups)) {
     callback(new Error(`Group '${name}' not found`), null);
   } else {
+    if (node.heartbeat !== undefined) {
+      delete node.heartbeat;
+    }
     if (node.onStart !== undefined) {
       delete node.onStart;
     }

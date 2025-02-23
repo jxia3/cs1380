@@ -81,11 +81,7 @@ function checkAlive() {
     }
   }
   const service = {service: "heartbeat", method: "receiveStatus"};
-  global.distribution.all.gossip.send([alive], service, (errors, results) => {
-    for (const nodeId in errors) {
-      console.error(errors[nodeId]);
-    }
-  });
+  global.distribution.all.gossip.send([alive], service);
 }
 
 /**
