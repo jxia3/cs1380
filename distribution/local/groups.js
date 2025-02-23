@@ -7,16 +7,19 @@ const util = require("../util/util.js");
 const groups = {all: {}};
 
 /**
- * Retrieves the node group associated with a name.
+ * Retrieves the node group associated with a name. If no name is specified, then all the
+ * group IDs on the local node are returned.
  */
 function get(name, callback) {
   if (callback === undefined) {
     return;
   }
-  if (!(name in groups)) {
-    callback(new Error(`Group '${name}' not found`), null);
-  } else {
+  if (name === null) {
+    callback(null, Object.keys(groups));
+  } else if (name in groups) {
     callback(null, groups[name]);
+  } else {
+    callback(new Error(`Group '${name}' not found`), null);
   }
 }
 
