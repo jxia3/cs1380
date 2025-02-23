@@ -75,6 +75,20 @@
         "count": [16, 81, 93, 98, 99, 100]
       }
     },
+    "m4": {
+      "hours": 6,
+      "loc": 500,
+      "throughput": {
+        "dev": [["mem-put", 1.99], ["mem-get", 3.80], ["store-put", 0.561], ["store-get", 1.02]],
+        "aws": [["mem-put", 0], ["mem-get", 0], ["store-put", 0], ["store-get", 0]],
+        "unit": "items/millisecond"
+      },
+      "latency": {
+        "dev": [["mem-put", 334], ["mem-get", 133], ["store-put", 1480], ["store-get", 803]],
+        "aws": [["mem-put", 0], ["mem-get", 0], ["store-put", 0], ["store-get", 0]],
+        "unit": "milliseconds/item"
+      }
+    },
     "dev": {
       "cpu-no": 20,
       "mem-gb": 15,

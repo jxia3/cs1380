@@ -32,7 +32,7 @@ const keys = [];
 for (let o = 0; o < 1000; o += 1) {
   const object = generateObject(3, 2);
   objects.push(object);
-  keys.push(util.id.getID(object));
+  keys.push(`${o}_${util.id.getID(object)}`);
 }
 
 distribution.local.groups.put(GROUP, nodeMap, (error, result) => {
