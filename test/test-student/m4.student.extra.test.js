@@ -32,23 +32,23 @@ test("(15 pts) detect the need to reconfigure", (done) => {
   const firstNode = nodes[0];
   const secondNode = nodes[0];
   const remote = {service: "store", method: "get"};
+  const args = [{key: "abc1", gid: "foobar"}];
 
   distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
-      console.log("MAP:", nodeMap);
       remote.node = firstNode;
-      distribution.local.comm.send(["abc1"], remote, (error, result) => {
+      distribution.local.comm.send(args, remote, (error, result) => {
         try {
           expect(error).toBeFalsy();
           expect(result).toEqual(["baz", "qux"]);
           done();
-        } catch(error) {
+        } catch (error) {
           done(error);
         }
       });
-    } catch(error) {
+    } catch (error) {
       done(error);
     }
   });

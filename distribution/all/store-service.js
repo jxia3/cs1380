@@ -162,13 +162,11 @@ function routeRequest(key, method, args, callback) {
 
     // Send request to node
     const node = group[util.id.applyHash(key, group, this.hash)];
-    console.log("ROUTING REQUEST TO", node);
     if (node?.ip === undefined || node?.port === undefined) {
       callback(new Error("Request routed to invalid node"), null);
       return;
     }
     const remote = {node, service: this.storeService, method};
-    console.log("SENDING COMM", remote);
     global.distribution.local.comm.send(args, remote, callback);
   });
 }
