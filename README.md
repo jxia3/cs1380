@@ -18,7 +18,7 @@ Remember to update the `report` section of the `package.json` file with the tota
 - Deleting and reinserting an item in a distributed store.
 - Automatically reconfiguring objects when a new node is added to a group.
 
-*Performance* -- insertion and retrieval.
+*Performance* -- I measured the performance of inserting and retrieving objects for the distributed `mem` and `store` services. In the `performance` directory, I created a script that benchmarks the services with 1,000 randomly generated objects, and I ran the test on both my local machine and on AWS. Locally, I observed that the `mem` service has a much higher throughput and a much lower latency than the `store` service, which matched my expectations. Filesystem accesses are expensive compared to memory wirtes. On AWS, I also observed the same effect. However, retrieving objects from the filesystem was faster than my local machine, which could be because of the reduced file I/O speeds of WSL. Detailed performance results are located in `package.json`.
 
 ## Key Feature
 
