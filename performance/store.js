@@ -8,12 +8,13 @@ const {generateObject} = require("./serialization.js");
 
 const {performance} = require("perf_hooks");
 
-const GROUP = "group";
 const NODES = [
   {ip: "127.0.0.1", port: 2001},
   {ip: "127.0.0.1", port: 2002},
   {ip: "127.0.0.1", port: 2003},
 ];
+const GROUP = "group";
+const SERVICE = "mem";
 
 const util = distribution.util;
 
@@ -27,21 +28,50 @@ for (const node of NODES) {
   nodeMap[util.id.getSID(node)] = node;
 }
 const objects = [];
+const keys = [];
 for (let o = 0; o < 1000; o += 1) {
-  objects.push(generateObject(3, 2));
+  const object = generateObject(3, 2);
+  objects.push(object);
+  keys.push(util.id.getID(object));
 }
 
 distribution.local.groups.put(GROUP, nodeMap, (error, result) => {
   distribution[GROUP].groups.put(GROUP, nodeMap, (error, result) => {
-    storeObjects(objects, retrieveKeys);
+    storeObjects(objects, keys, () => retrieveKeys(keys));
   })
 })
 
 /**
  * Stores all the objects in an array concurrently into a group of nodes.
  */
-function storeObjects(objects, callback) {
-  console.log("storing objects", objects.length);
+function storeObjects(objects, keys, callback) {
+  let totalLatency = 0;
+  const startTime = performance.now();
+  let active = objects.length;
+
+  for (let o = 0; o < objects.length; o += 1) {
+    const putStart = performance.now();
+    distribution[GROUP][SERVICE].put(objects[o], keys[o], (error, result) => {
+      totalLatency += performance.now() - putStart;
+      if (error) {
+        throw error;
+      }
+      if (result === null) {
+        throw new Error("Incorrect put result");
+      }
+      active -= 1;
+      if (active === 0) {
+        endStore();
+      }
+    })
+  }
+
+  function endStore() {
+    const totalTime = performance.now() - startTime;
+    console.log("Throughput:", objects.length / totalTime);
+    console.log("Average latency:", totalLatency / objects.length);
+    callback();
+  }
 }
 
 /**
