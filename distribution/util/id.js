@@ -122,7 +122,7 @@ function consistentHash(keyId, nodeIds) {
   for (const id of nodeIds) {
     nodes.push({id, num: idToNum(id)});
   }
-  nodes.sort((a, b) => a.id < b.id ? -1 : 1);
+  nodes.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 
   for (let n = 0; n < nodes.length; n += 1) {
     if (key <= nodes[n].num) {

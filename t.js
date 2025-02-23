@@ -17,6 +17,9 @@ function runTest() {
     console.log("local put result", error, result);
     distribution.all.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
       console.log("all put result", error, result);
+      distribution.test.mem.put(["foo"], "bar", (error, result) => {
+        console.log("mem put result", error, result);
+      });
     });
   });
 }

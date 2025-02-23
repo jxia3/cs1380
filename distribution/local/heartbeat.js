@@ -138,21 +138,29 @@ function declareFailure(nodeId) {
 
 /**
  * Removes a failed node from all node groups and reconfigures group storage.
+ * The failed node is rebroadcast to all peers to ensure a consistent network state.
  */
 function registerFailure(nodeId, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!(nodeId in nodes) || nodes[nodeId].state === NodeState.RegisteredFailure) {
+    callback(null, null);
+    return;
+  }
   log(`Registering node '${nodeId}' as failed`);
   nodes[nodeId] = {state: NodeState.RegisteredFailure, epoch};
+  declareFailure(nodeId);
+
   global.distribution.local.groups.get(null, (error, groups) => {
     if (error) {
       callback(error, null);
       return;
     }
-
     let active = groups.length;
+    groups.sort((a, b) => a === "all" ? -1 : b === "all" ? 1 : 0);
     for (const group of groups) {
       removeNode(nodeId, group, (error, result) => {
         active -= 1;
-        if (active === 0 && callback !== undefined) {
+        if (active === 0) {
           callback(null, null);
         }
       });
@@ -166,11 +174,31 @@ function registerFailure(nodeId, callback) {
  * for the reconfiguration.
  */
 function removeNode(nodeId, groupId, callback) {
-  console.log("removing", nodeId, groupId);
+  callback = callback === undefined ? (error, result) => {} : callback;
   if (!global.distribution[groupId]?._isGroup || !global.distribution[groupId]?._state?.hash) {
+    callback(null, null);
     return;
   }
-  console.log("passed check", nodeId, groupId, global.distribution[groupId]._hash);
+
+  global.distribution.local.groups.get(groupId, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    if (!(nodeId in group)) {
+      callback(null, null);
+      return;
+    }
+
+    // Reconfigure modified group
+    const oldGroup = {...group};
+    global.distribution.local.groups.rem(groupId, nodeId, (error, newGroup) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+    });
+  });
 }
 
 module.exports = {receiveStatus, registerFailure, _start};
