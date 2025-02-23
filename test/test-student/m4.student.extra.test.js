@@ -29,7 +29,7 @@ for (const node of nodes) {
 }
 
 test("(15 pts) detect the need to reconfigure", (done) => {
-  const firstNode = nodes[0];
+  const firstNode = nodes[1];
   const secondNode = nodes[0];
   const getRemote = {service: "store", method: "get"};
   const getArgs = [{key: "abc1", gid: "foobar"}];
