@@ -8,7 +8,7 @@
 jest.setTimeout(60000);
 
 const distribution = require("../../config.js");
-global.nodeConfig.heartbeat = false;
+global.nodeConfig.heartbeat = true;
 
 const fs = require("fs");
 const path = require("path");
@@ -17,10 +17,10 @@ const util = distribution.util;
 
 let localServer = null;
 const nodes = [
-  {ip: "127.0.0.1", port: 2000, heartbeat: false},
-  {ip: "127.0.0.1", port: 2001, heartbeat: false},
-  {ip: "127.0.0.1", port: 2002, heartbeat: false},
-  {ip: "127.0.0.1", port: 2003, heartbeat: false},
+  {ip: "127.0.0.1", port: 2000, heartbeat: true},
+  {ip: "127.0.0.1", port: 2001, heartbeat: true},
+  {ip: "127.0.0.1", port: 2002, heartbeat: true},
+  {ip: "127.0.0.1", port: 2003, heartbeat: true},
 ];
 const nodeMap = {};
 nodeMap[util.id.getSID(global.nodeConfig)] = global.nodeConfig;
