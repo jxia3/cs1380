@@ -29,7 +29,7 @@ for (const node of nodes) {
 }
 
 test("(15 pts) detect the need to reconfigure", (done) => {
-  const firstNode = nodes[2];
+  const firstNode = global.nodeConfig;
   const secondNode = nodes[0];
   const remote = {service: "store", method: "get"};
 
