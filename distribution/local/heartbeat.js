@@ -4,8 +4,9 @@
 
 const log = require("../util/log.js");
 
-const EPOCH_INTERVAL = 3000;
-const STALE_THRESHOLD = 10;
+const EPOCH_INTERVAL = 2000;
+const PING_THRESHOLD = 10;
+const FAIL_THRESHOLD = 5;
 const FAIL_COOLDOWN = 10;
 
 // Possible liveness states for a node
@@ -35,6 +36,11 @@ function checkAlive() {
       if (id !== currentNode) {
         nodes[id].staleness += 1;
       }
+    } else if (nodes[id].state === NodeState.Pinging) {
+      if (id === currentNode) {
+        throw new Error("Current node is stale");
+      }
+      nodes[id].staleness += 1;
     } else if (nodes[id].state === NodeState.RegisteredFailure) {
       if (nodes[id].epoch + FAIL_COOLDOWN < epoch) {
         delete nodes[id];
@@ -44,27 +50,40 @@ function checkAlive() {
   console.log("at epoch", nodes, epoch);
 
   // Ping nodes that exceed the staleness threshold
+  for (const id in nodes) {
+    if (nodes[id].state === NodeState.Alive && nodes[id].staleness >= PING_THRESHOLD) {
+      nodes[id] = {state: NodeState.Pinging, staleness: 0};
+      global.distribution.local.groups.get("all", (error, group) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        console.log("got group", group);
+      });
+    }
+  }
 
-  // Send gossip message
+  // Advance nodes that cannot be pinged to the failed status
+  for (const id in nodes) {
+    if (nodes[id].state === NodeState.Pinging && nodes[id].staleness >= FAIL_THRESHOLD) {
+      nodes[id] = {state: NodeState.DeclaredFailure};
+      declareFailure(id);
+    }
+  }
+
+  // Send gossip message with alive nodes
+  const alive = {};
+  for (const id in nodes) {
+    if (nodes[id].state === NodeState.Alive) {
+      alive[id] = nodes[id].staleness;
+    }
+  }
   const service = {service: "heartbeat", method: "receiveStatus"};
   global.distribution.all.gossip.send([alive], service, (errors, results) => {
     for (const nodeId in errors) {
       console.error(errors[nodeId]);
     }
   });
-
-  // Check for failed nodes
-  for (const id in alive) {
-    if (id in failed) {
-      delete alive[id];
-      continue;
-    }
-    if (alive[id] >= FAIL_THRESHOLD) {
-      delete alive[id];
-      failed[id] = {state: FailState.Declared, epoch};
-      declareFailure(id);
-    }
-  }
 }
 
 /**
