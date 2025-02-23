@@ -157,7 +157,7 @@ function registerFailure(nodeId, callback) {
       return;
     }
     let active = groups.length;
-    groups.sort((a, b) => a === "all" ? -1 : b === "all" ? 1 : 0);
+    groups.sort((a, b) => a === "all" ? 1 : b === "all" ? -1 : 0);
     for (const group of groups) {
       removeNode(nodeId, group, (error, result) => {
         active -= 1;
@@ -176,11 +176,11 @@ function registerFailure(nodeId, callback) {
  */
 function removeNode(nodeId, groupId, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (!global.distribution[groupId]?._isGroup || !global.distribution[groupId]?._state?.hash) {
+  if (!global.distribution[groupId]?._isGroup) {
     callback(null, null);
     return;
   }
-  const hashFn = global.distribution[groupId]._state.hash;
+  const hashFn = global.distribution[groupId]?._state?.hash;
 
   // Retrieve old members of group
   global.distribution.local.groups.get(groupId, (error, group) => {
@@ -193,20 +193,20 @@ function removeNode(nodeId, groupId, callback) {
       return;
     }
 
-    // Reconfigure modified group
+    // Remove node and reconfigure modified group
     const oldGroup = {...group};
     global.distribution.local.groups.rem(groupId, nodeId, (error, newGroup) => {
       if (error) {
         callback(error, null);
         return;
       }
-      if (!(currentNode in newGroup)) {
+      if (hashFn === undefined || !(currentNode in newGroup)) {
         callback(null, null);
         return;
       }
 
+      // Select leader node with group hash function
       const leaderNode = util.id.applyHash(nodeId, newGroup, hashFn);
-      console.log("COMPUTED LEADER", nodeId, groupId, leaderNode, currentNode);
       if (leaderNode === currentNode) {
         global.distribution[groupId].mem.reconf(oldGroup, (memError, result) => {
           global.distribution[groupId].store.reconf(oldGroup, (storeError, result) => {

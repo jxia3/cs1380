@@ -4,7 +4,7 @@ global.nodeConfig.heartbeat = true;
 const basePort = 2000;
 const nodes = [
   {ip: "127.0.0.1", port: basePort, heartbeat: true},
-  // {ip: "127.0.0.1", port: basePort + 1, heartbeat: true},
+  {ip: "127.0.0.1", port: basePort + 1, heartbeat: true},
   // {ip: "127.0.0.1", port: basePort + 2, heartbeat: true},
 ];
 
@@ -17,7 +17,7 @@ function runTest() {
     console.log("local put result", error, result);
     distribution.all.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
       console.log("all put result", error, result);
-      distribution.test.mem.put(["foo"], "bar", (error, result) => {
+      distribution.test.store.put(["foo"], "bar3", (error, result) => {
         console.log("mem put result", error, result);
       });
     });

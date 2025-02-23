@@ -43,9 +43,6 @@ function put(object, config, callback) {
     return;
   }
 
-  if (global.distribution[this.gid]._state) {
-    global.distribution[this.gid]._state.hash = this.hash;
-  }
   if (config.key === null) {
     config.key = util.id.getID(object);
   }
@@ -189,6 +186,9 @@ function createConstructor(storeService) {
     context.hash = config?.hash;
     if (typeof context.hash !== "function") {
       context.hash = util.id.naiveHash;
+    }
+    if (global.distribution[context.gid]._state) {
+      global.distribution[context.gid]._state.hash = context.hash;
     }
 
     return {
