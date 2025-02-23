@@ -115,9 +115,6 @@ function stop(callback) {
     return;
   }
 
-  for (let i = 0; i < 100; i += 1) {
-    console.log("SHUTTING DOWN", global.nodeInfo)
-  }
   if (!global.shuttingDown) {
     global.shuttingDown = true;
     setTimeout(() => {
@@ -125,8 +122,8 @@ function stop(callback) {
         global.distribution.node.server.close(() => {
           if (process.env.JEST_WORKER_ID === undefined) {
             log("Shut down node");
-            process.exit(0);
           }
+          process.exit(0);
         });
       } catch (error) {
         console.error(error);
