@@ -25,7 +25,11 @@ function receive(payload, callback) {
   const remote = {...payload.config, node: global.nodeConfig};
   global.distribution.local.comm.send(payload.message, remote, callback);
   if (global.distribution[payload.groupId]?._isGroup) {
-    global.distribution[payload.groupId].gossip.sendPayload(payload);
+    global.distribution[payload.groupId].gossip.sendPayload(payload, (error, result) => {
+      if (error) {
+        console.error(error);
+      }
+    });
   }
 }
 
