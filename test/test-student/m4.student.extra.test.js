@@ -35,7 +35,7 @@ test("(15 pts) detect the need to reconfigure", (done) => {
   const getArgs = [{key: "abc1", gid: "foobar"}];
   const stopRemote = {node: nodes[1], service: "status", method: "stop"};
 
-  distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
+  distribution.foobar.store.put(["baz", "qux"], "abc2", (error, result) => {
     try {
       expect(error).toBeFalsy();
       expect(result).toEqual(["baz", "qux"]);
@@ -50,7 +50,7 @@ test("(15 pts) detect the need to reconfigure", (done) => {
               setTimeout(() => {
                 console.log(nodeMap)
                 process.exit(0)
-              }, 40000)
+              }, 20000)
             } catch (error) {
               done(error)
             }
