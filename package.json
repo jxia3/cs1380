@@ -80,12 +80,12 @@
       "loc": 500,
       "throughput": {
         "dev": [["mem-put", 1.99], ["mem-get", 3.80], ["store-put", 0.561], ["store-get", 1.02]],
-        "aws": [["mem-put", 0], ["mem-get", 0], ["store-put", 0], ["store-get", 0]],
+        "aws": [["mem-put", 1.14], ["mem-get", 1.58], ["store-put", 1.05], ["store-get", 1.59]],
         "unit": "items/millisecond"
       },
       "latency": {
         "dev": [["mem-put", 334], ["mem-get", 133], ["store-put", 1480], ["store-get", 803]],
-        "aws": [["mem-put", 0], ["mem-get", 0], ["store-put", 0], ["store-get", 0]],
+        "aws": [["mem-put", 567], ["mem-get", 363], ["store-put", 644], ["store-get", 370]],
         "unit": "milliseconds/item"
       }
     },
