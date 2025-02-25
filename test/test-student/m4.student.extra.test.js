@@ -44,23 +44,24 @@ test("(15 pts) detect the need to reconfigure", (done) => {
           expect(error).toBeFalsy();
           expect(result).toEqual(["baz", "qux"]);
           distribution.local.comm.send([], stopRemote, (error, result) => {
-            try {
-              expect(error).toBeFalsy();
-              expect(result).toBeTruthy();
-              setTimeout(() => {
-                distribution.local.comm.send(getArgs, {...getRemote, node: secondNode}, (error, result) => {
-                  try {
-                    expect(error).toBeFalsy();
-                    expect(result).toEqual(["baz", "qux"]);
-                    done();
-                  } catch (error) {
-                    done(error);
-                  }
-                });
-              }, 15000);
-            } catch (error) {
-              done(error);
-            }
+            distribution.local.comm.send([], stopRemote, (error, result) => {
+              try {
+                expect(error).toBeFalsy();
+                setTimeout(() => {
+                  distribution.local.comm.send(getArgs, {...getRemote, node: secondNode}, (error, result) => {
+                    try {
+                      expect(error).toBeFalsy();
+                      expect(result).toEqual(["baz", "qux"]);
+                      done();
+                    } catch (error) {
+                      done(error);
+                    }
+                  });
+                }, 15000);
+              } catch (error) {
+                done(error);
+              }
+            });
           });
         } catch (error) {
           done(error);

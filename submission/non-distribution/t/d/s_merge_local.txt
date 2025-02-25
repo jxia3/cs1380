@@ -1,0 +1,7 @@
+foo | 1 | https://b.com
+foo bar | 5 | https://b.com
+foo bar baz | 3 | https://b.com
+bar | 2 | https://b.com
+bar baz | 2 | https://b.com
+qux | 1 | https://b.com
+qux corge | 1 | https://b.com
