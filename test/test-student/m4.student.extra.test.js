@@ -33,7 +33,7 @@ test("(15 pts) detect the need to reconfigure", (done) => {
   const secondNode = global.nodeConfig;
   const getRemote = {service: "store", method: "get"};
   const getArgs = [{key: "abc1", gid: "foobar"}];
-  const stopRemote = {node: nodes[2], service: "status", method: "stop"};
+  const stopRemote = {node: nodes[2], service: "status", method: "forceStop"};
 
   distribution.foobar.store.put(["baz", "qux"], "abc1", (error, result) => {
     try {
@@ -44,24 +44,23 @@ test("(15 pts) detect the need to reconfigure", (done) => {
           expect(error).toBeFalsy();
           expect(result).toEqual(["baz", "qux"]);
           distribution.local.comm.send([], stopRemote, (error, result) => {
-            distribution.local.comm.send([], stopRemote, (error, result) => {
-              try {
-                expect(error).toBeFalsy();
-                setTimeout(() => {
-                  distribution.local.comm.send(getArgs, {...getRemote, node: secondNode}, (error, result) => {
-                    try {
-                      expect(error).toBeFalsy();
-                      expect(result).toEqual(["baz", "qux"]);
-                      done();
-                    } catch (error) {
-                      done(error);
-                    }
-                  });
-                }, 15000);
-              } catch (error) {
-                done(error);
-              }
-            });
+            try {
+              expect(error).toBeFalsy();
+              expect(result).toBeTruthy();
+              setTimeout(() => {
+                distribution.local.comm.send(getArgs, {...getRemote, node: secondNode}, (error, result) => {
+                  try {
+                    expect(error).toBeFalsy();
+                    expect(result).toEqual(["baz", "qux"]);
+                    done();
+                  } catch (error) {
+                    done(error);
+                  }
+                });
+              }, 15000);
+            } catch (error) {
+              done(error);
+            }
           });
         } catch (error) {
           done(error);

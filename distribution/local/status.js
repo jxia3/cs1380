@@ -106,7 +106,8 @@ function createStartFn(onStart, callback) {
 }
 
 /**
- * Stops the node after a 20 millisecond cooldown.
+ * Stops the node after a 20 millisecond cooldown. In a Jest test environment, the
+ * process is not exited.
  */
 function stop(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
@@ -131,14 +132,30 @@ function stop(callback) {
       }
     }, 20);
     log("Scheduled node shutdown");
-  } else {
-    setTimeout(() => {
-      log("Force stopping node");
-      process.exit(0);
-    }, 20);
   }
 
   callback(null, global.nodeConfig);
 }
 
-module.exports = {get, spawn, stop};
+/**
+ * Force stops the node after a 20 millisecond cooldown.
+ */
+function forceStop(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  global.shuttingDown = true;
+
+  setTimeout(() => {
+    log("Force stopping node");
+    if (global.distribution.node.server !== undefined) {
+      global.distribution.node.server.close(() => {
+        process.exit(0);
+      });
+    } else {
+      process.exit(0);
+    }
+  }, 20);
+
+  callback(null, global.nodeConfig);
+}
+
+module.exports = {get, spawn, stop, forceStop};
