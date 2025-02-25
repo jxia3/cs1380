@@ -1,3 +1,0 @@
-foo | https://a.com 15 https://b.com 4 https://c.com 1
-bar baz | https://a.com 100
-qux corge grault | https://a.com 1 https://b.com 1 https://d.com 1 https://e.com 1

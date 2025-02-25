@@ -1,7 +1,0 @@
-Lorem	ipsum
-dolor	sit
-amet	consectetur
-Lorem	ipsum
-adipiscing	elit
-Lorem	ipsum
-Lorem	ipsum

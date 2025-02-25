@@ -1,6 +1,0 @@
-foobar | 2 | https://example.com
-foobar baz | 3 | https://example.com
-foobar baz qux | 4 | https://example.com
-baz | 1 | https://example.com
-baz qux | 1 | https://example.com
-qux | 1 | https://example.com
