@@ -104,7 +104,7 @@ afterAll((done) => {
 });
 
 function stopNodes(callback) {
-  const stopMethod = {service: "status", method: "stop"};
+  const stopMethod = {service: "status", method: "forceStop"};
   stopMethod.node = nodes[0];
   distribution.local.comm.send([], stopMethod, (error, result) => {
     stopMethod.node = nodes[1];
