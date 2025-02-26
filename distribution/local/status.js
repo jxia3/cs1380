@@ -118,6 +118,9 @@ function stop(callback) {
 
   if (!global.shuttingDown) {
     global.shuttingDown = true;
+    if (distribution.local.heartbeat?._interval !== undefined) {
+      clearInterval(distribution.local.heartbeat._interval);
+    }
     setTimeout(() => {
       try {
         global.distribution.node.server.close(() => {
@@ -143,6 +146,9 @@ function stop(callback) {
 function forceStop(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   global.shuttingDown = true;
+  if (distribution.local.heartbeat?._interval !== undefined) {
+    clearInterval(distribution.local.heartbeat._interval);
+  }
 
   setTimeout(() => {
     log("Force stopping node");
