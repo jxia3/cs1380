@@ -71,12 +71,4 @@ function stop(callback) {
   global.distribution.local.status.stop();
 }
 
-module.exports = (config) => {
-  const context = {};
-  context.gid = config?.gid === undefined ? "all" : config.gid;
-  return {
-    get: get.bind(context),
-    spawn: spawn.bind(context),
-    stop: stop.bind(context),
-  };
-};
+module.exports = remote.createConstructor({get, spawn, stop});

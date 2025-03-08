@@ -1,7 +1,13 @@
 /** @typedef {import("../types").Callback} Callback */
 
+/* Handles MapReduce operations across a node group. Requests are distributed
+   across all the nodes in a group and the result is provided in a callback on
+   the orchestrator node. */
+
+const remote = require("./remote-service.js");
+
 /**
- * Map functions used for mapreduce
+ * Map function used for MapReduce
  * @callback Mapper
  * @param {any} key
  * @param {any} value
@@ -9,7 +15,7 @@
  */
 
 /**
- * Reduce functions used for mapreduce
+ * Reduce function used for MapReduce
  * @callback Reducer
  * @param {any} key
  * @param {Array} value
@@ -23,27 +29,19 @@
  * @property {string[]} keys
  */
 
+/**
+ * Distributes a MapReduce computation across a node group and collects the result.
+ * @param {MRConfig} config
+ * @param {Callback} callback
+ * @return {void}
+ */
+function exec(config, callback) {
+  console.log("CALLED EXEC");
+  console.log(config);
+  console.log(callback);
+}
 
-/*
-  Note: The only method explicitly exposed in the `mr` service is `exec`.
-  Other methods, such as `map`, `shuffle`, and `reduce`, should be dynamically
-  installed on the remote nodes and not necessarily exposed to the user.
-*/
-
-function mr(config) {
-  const context = {
-    gid: config.gid || "all",
-  };
-
-  /**
-   * @param {MRConfig} config
-   * @param {Callback} cb
-   * @return {void}
-   */
-  function exec(config, cb) {
-  }
-
-  return {exec};
-};
-
-module.exports = mr;
+/* Note: The only method explicitly exposed in the `mr` service is `exec`.
+   Other methods, such as `map`, `shuffle`, and `reduce`, should be dynamically
+   installed on the remote nodes and not necessarily exposed to the user. */
+module.exports = remote.createConstructor({exec});
