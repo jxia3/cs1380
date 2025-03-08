@@ -1,16 +1,16 @@
-const distribution = require('../config.js');
+const distribution = require("../config.js");
 const local = distribution.local;
 
-test('(2 pts) local.store.get(no key)', (done) => {
+test("(2 pts) local.store.get(no key)", (done) => {
   const users = [
-    {first: 'Emma', last: 'Watson'},
-    {first: 'John', last: 'Krasinski'},
-    {first: 'Julie', last: 'Bowen'},
+    {first: "Emma", last: "Watson"},
+    {first: "John", last: "Krasinski"},
+    {first: "Julie", last: "Bowen"},
   ];
   const keys = [
-    'ewatson',
-    'jkrasinski',
-    'jbowen',
+    "ewatson",
+    "jkrasinski",
+    "jbowen",
   ];
 
   distribution.local.store.put(users[0], keys[0], (e, v) => {
@@ -30,16 +30,16 @@ test('(2 pts) local.store.get(no key)', (done) => {
   });
 });
 
-test('(2 pts) local.store.get(no key)', (done) => {
+test("(2 pts) local.store.get(no key)", (done) => {
   const users = [
-    {first: 'Saul', last: 'Goodman'},
-    {first: 'Walter', last: 'White'},
-    {first: 'Jesse', last: 'Pinkman'},
+    {first: "Saul", last: "Goodman"},
+    {first: "Walter", last: "White"},
+    {first: "Jesse", last: "Pinkman"},
   ];
   const keys = [
-    'sgoodman',
-    'wwhite',
-    'jpinkman',
+    "sgoodman",
+    "wwhite",
+    "jpinkman",
   ];
 
   local.store.put(users[0], keys[0], (e, v) => {

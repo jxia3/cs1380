@@ -94,6 +94,10 @@
         "unit": "milliseconds/item"
       }
     },
+    "m5": {
+      "hours": 0,
+      "loc": 0
+    },
     "dev": {
       "cpu-no": 20,
       "mem-gb": 15,
