@@ -47,5 +47,23 @@ function runTest() {
 }
 
 function doMapReduce() {
-  console.log("doing map reduce");
+  const mapper = (key, value) => {
+    const words = value.split(/(\s+)/).filter((e) => e !== " ");
+    const out = {};
+    out[words[1]] = parseInt(words[3]);
+    return [out];
+  };
+
+  const reducer = (key, values) => {
+    const out = {};
+    out[key] = values.reduce((a, b) => Math.max(a, b), -Infinity);
+    return out;
+  };
+
+  distribution.test.store.get(null, (error, keys) => {
+    console.log(keys);
+    distribution.test.mr.exec({keys, map: mapper, reduce: reducer}, (e, v) => {
+      console.log(e, v);
+    });
+  });
 }
