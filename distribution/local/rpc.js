@@ -70,7 +70,7 @@ function _createRPC(fn) {
     args.unshift("__RPC_ID__");
     global.distribution.local.comm.send(args, remote, callback);
   }
-  const nodeInfo = `{ ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port} }`;
+  const nodeInfo = `{ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port}}`;
   const stubText = stub
       .toString()
       .replaceAll("\"__NODE_INFO__\"", nodeInfo)

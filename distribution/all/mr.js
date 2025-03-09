@@ -78,8 +78,13 @@ function runOperation(config, group, callback) {
   operationCount += 1;
   console.log(operationId);
 
-  const orchestrator = createOrchestrator(group);
-  const worker = createWorker(group, orchestratorId);
+  const orchestrator = createOrchestrator(group, orchestratorId, workerId);
+  const worker = createWorker.call(this, config, orchestratorId);
+  console.log(worker)
+  console.log(worker.map.toString())
+  console.log(worker.shuffle.toString())
+  console.log(worker.reduce.toString())
+
   global.distribution.local.routes.put(orchestrator, orchestratorId, (error, result) => {
     if (error) {
       callback(error, null);
@@ -99,21 +104,56 @@ function runOperation(config, group, callback) {
 /**
  * Creates a MapReduce orchestration service for a group of nodes.
  */
-function createOrchestrator(group) {
+function createOrchestrator(group, orchestratorId, workerId) {
 
 }
 
 /**
  * Creates a MapReduce worker service to distribute across a group of nodes.
  */
-function createWorker(group) {
+function createWorker(config, orchestratorId) {
+  remote.checkGroup(this.gid);
+  return {
+    map: compileWorkerFn.call(this, workerMap, config, orchestratorId),
+    shuffle: compileWorkerFn.call(this, workerShuffle, config, orchestratorId),
+    reduce: compileWorkerFn.call(this, workerReduce, config, orchestratorId),
+  };
+}
+
+/**
+ * Compiles the parameters of an operation into a worker function.
+ */
+function compileWorkerFn(fn, config, orchestratorId) {
+  remote.checkGroup(this.gid);
+  const nodeInfo = `{ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port}}`;
+  const fnText = fn
+      .toString()
+      .replaceAll("\"__NODE_INFO__\"", nodeInfo)
+      .replaceAll("\"__GROUP_ID__\"", `"${this.gid}"`)
+      .replaceAll("\"__ORCHESTRATOR_ID__\"", `"${orchestratorId}"`)
+      .replaceAll("\"__MAP_FN__\"", config.map.toString())
+      .replaceAll("\"__REDUCE_FN__\"", config.reduce.toString());
+  return (new Function(`return ${fnText}`))();
+}
+
+/**
+ * Runs a local map operation and notifies the orchestrator on completion.
+ */
+function workerMap(config, callback) {
 
 }
 
 /**
- * Receives completion notifications from nodes and schedules MapReduce operations.
+ * Runs a local shuffle operation and notifies the orchestrator on completion.
  */
-function notify(config, callback) {
+function workerShuffle(config, callback) {
+
+}
+
+/**
+ * Runs a local reduce operation and notifies the orchestrator on completion.
+ */
+function workerReduce(config, callback) {
 
 }
 
