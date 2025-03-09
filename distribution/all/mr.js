@@ -6,7 +6,7 @@
 
 const remote = require("./remote-service.js");
 
-const operationCount = 0;
+let operationCount = 0;
 
 /**
  * Map function used for MapReduce
@@ -53,17 +53,25 @@ function exec(config, callback) {
     return;
   }
 
-  console.log("CALLED EXEC");
-  console.log(config);
-  console.log(callback);
-
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
       callback(error, null);
       return;
     }
+    runOperation.call(this, config, group, callback);
     console.log(group);
   });
+}
+
+/**
+ * Runs a MapReduce operation across a group of nodes.
+ */
+function runOperation(config, group, callback) {
+  remote.checkGroup(this.gid);
+  const sid = global?.nodeInfo?.sid === undefined ? "anonymous" : global.nodeInfo.sid;
+  const orchestratorId = `mr-${sid}-${operationCount}`;
+  operationCount += 1;
+  console.log(orchestratorId);
 }
 
 /**

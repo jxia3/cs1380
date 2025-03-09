@@ -8,11 +8,11 @@ const nodes = [
 ];
 
 const dataset = [
-  {"000": "006701199099999 1950 0515070049999999N9 +0000 1+9999"},
-  {"106": "004301199099999 1950 0515120049999999N9 +0022 1+9999"},
-  {"212": "004301199099999 1950 0515180049999999N9 -0011 1+9999"},
-  {"318": "004301265099999 1949 0324120040500001N9 +0111 1+9999"},
-  {"424": "004301265099999 1949 0324180040500001N9 +0078 1+9999"},
+  {"0004": "006701199099999 1950 0515070049999999N9 +0000 1+9999"},
+  {"1064": "004301199099999 1950 0515120049999999N9 +0022 1+9999"},
+  {"2124": "004301199099999 1950 0515180049999999N9 -0011 1+9999"},
+  {"3184": "004301265099999 1949 0324120040500001N9 +0111 1+9999"},
+  {"4244": "004301265099999 1949 0324180040500001N9 +0078 1+9999"},
 ];
 
 distribution.node.start(() => {
@@ -26,9 +26,10 @@ distribution.node.start(() => {
 });
 
 function runTest() {
-  distribution.local.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
+  const groupConfig = {gid: "test", hash: distribution.util.id.consistentHash};
+  distribution.local.groups.put(groupConfig, [global.nodeConfig, ...nodes], (error, result) => {
     console.log("local put result", error);
-    distribution.test.groups.put("test", [global.nodeConfig, ...nodes], (error, result) => {
+    distribution.test.groups.put(groupConfig, [global.nodeConfig, ...nodes], (error, result) => {
       console.log("test put result", error);
       let cntr = 0;
       dataset.forEach((o) => {
