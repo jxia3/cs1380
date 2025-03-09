@@ -89,28 +89,6 @@ function createOperation(config, group, callback) {
 }
 
 /**
- * Runs a MapReduce operation across a group of nodes. The callback must be valid.
- */
-function runOperation(config, group, callback) {
-  remote.checkGroup(this.gid);
-  const groupHashFn = global.distribution[this.gid]?._state?.hash;
-  const hashFn = groupHashFn === undefined ? util.id.naiveHash : groupHashFn;
-
-  const partition = {};
-  for (const node in group) {
-    partition[node] = [];
-  }
-  for (const key of config.keys) {
-    const node = util.id.applyHash(key, group, hashFn);
-    partition[node].push(key);
-  }
-
-  console.log(config.keys);
-  console.log(group);
-  console.log(partition);
-}
-
-/**
  * Creates a MapReduce worker service to distribute across a group of nodes.
  * The parameters for the operation are compiled into the functions.
  */
@@ -138,6 +116,7 @@ function createWorker(config, operationId) {
  */
 function workerMap(keys, callback) {
   const config = global.distribution.util.deserialize("__CONFIG__");
+  console.log("called map", global.nodeInfo.sid, config)
 }
 
 /**
@@ -152,6 +131,57 @@ function workerShuffle(callback) {
  */
 function workerReduce(callback) {
   const config = global.distribution.util.deserialize("__CONFIG__");
+}
+
+/**
+ * Runs a MapReduce operation across a group of nodes. The callback must be valid.
+ */
+function runOperation(config, group, callback) {
+  remote.checkGroup(this.gid);
+  const groupHashFn = global.distribution[this.gid]?._state?.hash;
+  const hashFn = groupHashFn === undefined ? util.id.naiveHash : groupHashFn;
+
+  // Partition keys across nodes
+  const partition = {};
+  for (const node in group) {
+    partition[node] = [];
+  }
+  for (const key of config.keys) {
+    const node = util.id.applyHash(key, group, hashFn);
+    partition[node].push(key);
+  }
+
+  // Run MapReduce phases and aggregate results
+  runPhase.call(this, config, group, (node) => [partition[node]], "map", (error, results) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    console.log("Finished map");
+    console.log(error, results);
+  });
+}
+
+/**
+ * Sends a signal to a group of nodes to run a MapReduce phase. The callback must be valid.
+ */
+function runPhase(config, group, argumentFn, phase, callback) {
+  remote.checkGroup(this.gid);
+  const results = {};
+  let active = Object.keys(group).length;
+
+  for (const node in group) {
+    const remote = {node: group[node], service: config.workerId, method: phase};
+    global.distribution.local.comm.send(argumentFn(node), remote, (error, result) => {
+      if (!error) {
+        results[node] = result;
+      }
+      active -= 1;
+      if (active === 0) {
+        callback(null, results);
+      }
+    });
+  }
 }
 
 /* Note: The only method explicitly exposed in the `mr` service is `exec`.

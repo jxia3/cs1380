@@ -97,7 +97,7 @@ function pingNode(nodeId) {
 
     const remote = {node: group[nodeId], service: "status", method: "get", timeout: PING_TIMEOUT};
     global.distribution.local.comm.send(["sid"], remote, (error, result) => {
-      if (!error && nodeId in nodes && nodes[nodeId].state == NodeState.Pinging) {
+      if (!error && nodeId in nodes && nodes[nodeId].state === NodeState.Pinging) {
         nodes[nodeId] = {state: NodeState.Alive, staleness: 0};
         log(`Confirmed liveness of node '${nodeId}'`);
       } else {
