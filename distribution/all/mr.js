@@ -73,60 +73,48 @@ function createOperation(config, group, callback) {
     return;
   }
   const operationId = `mr-${global.nodeInfo.sid}-${operationCount}`;
-  const orchestratorId = `orchestrator-${operationId}`;
   const workerId = `worker-${operationId}`;
   operationCount += 1;
 
-  const orchestrator = createOrchestrator(group, orchestratorId, workerId);
-  const worker = createWorker.call(this, config, orchestratorId);
-  global.distribution.local.routes.put(orchestrator, orchestratorId, (error, result) => {
-    if (error) {
-      callback(error, null);
+  const worker = createWorker.call(this, config, operationId);
+  global.distribution[this.gid].routes.put(worker, workerId, (errors, results) => {
+    if (Object.keys(errors).length > 0) {
+      callback(new Error("Failed to install worker service"), null);
       return;
     }
-    global.distribution[this.gid].routes.put(worker, workerId, (errors, results) => {
-      if (Object.keys(errors).length > 0) {
-        callback(new Error("Failed to install worker service"), null);
-        return;
-      }
-      config.orchestratorId = orchestratorId;
-      config.workerId = workerId;
-      startOperation.call(this, config, group, callback);
-    });
+    config.operationId = operationId;
+    config.workerId = workerId;
+    runOperation.call(this, config, group, callback);
   });
 }
 
 /**
- * Starts a MapReduce operation across a group of nodes. The callback must be valid.
+ * Runs a MapReduce operation across a group of nodes. The callback must be valid.
  */
-function startOperation(config, group, callback) {
+function runOperation(config, group, callback) {
   remote.checkGroup(this.gid);
   const groupHashFn = global.distribution[this.gid]?._state?.hash;
   const hashFn = groupHashFn === undefined ? util.id.naiveHash : groupHashFn;
-  console.log("running operation");
-  console.log(config);
-  console.log(hashFn.toString());
-}
 
-/**
- * Creates a MapReduce orchestration service for a group of nodes.
- */
-function createOrchestrator(group, orchestratorId, workerId) {
-  const numNodes = Object.keys(group).length;
-  const completedMap = new Set();
-  const completedShuffle = new Set();
-  const completedReduce = new Set();
-
-  function handleNotification(config, callback) {
-
+  const partition = {};
+  for (const node in group) {
+    partition[node] = [];
   }
+  for (const key of config.keys) {
+    const node = util.id.applyHash(key, group, hashFn);
+    partition[node].push(key);
+  }
+
+  console.log(config.keys);
+  console.log(group);
+  console.log(partition);
 }
 
 /**
  * Creates a MapReduce worker service to distribute across a group of nodes.
  * The parameters for the operation are compiled into the functions.
  */
-function createWorker(config, orchestratorId) {
+function createWorker(config, operationId) {
   remote.checkGroup(this.gid);
 
   const workerConfig = {...config};
@@ -134,7 +122,7 @@ function createWorker(config, orchestratorId) {
   const compileParams = {
     "__NODE_INFO__": {ip: global.nodeConfig.ip, port: global.nodeConfig.port},
     "__GROUP_ID__": this.gid,
-    "__ORCHESTRATOR_ID__": orchestratorId,
+    "__OPERATION_ID__": operationId,
     "__CONFIG__": util.serialize(workerConfig),
   };
 
