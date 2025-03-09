@@ -118,16 +118,20 @@ function createOrchestrator(group, orchestratorId, workerId) {
 
 /**
  * Creates a MapReduce worker service to distribute across a group of nodes.
+ * The parameters for the operation are compiled into the functions.
  */
 function createWorker(config, orchestratorId) {
   remote.checkGroup(this.gid);
+
+  const workerConfig = {...config};
+  delete workerConfig.keys;
   const compileParams = {
     "__NODE_INFO__": {ip: global.nodeConfig.ip, port: global.nodeConfig.port},
     "__GROUP_ID__": this.gid,
     "__ORCHESTRATOR_ID__": orchestratorId,
-    "__MAP_FN__": config.map,
-    "__REDUCE_FN__": config.reduce,
+    "__CONFIG__": util.serialize(workerConfig),
   };
+
   return {
     map: util.compile(workerMap, compileParams),
     shuffle: util.compile(workerShuffle, compileParams),
@@ -138,22 +142,22 @@ function createWorker(config, orchestratorId) {
 /**
  * Runs a local map operation and notifies the orchestrator on completion.
  */
-function workerMap(config, callback) {
-  const x = "__MAP_FN__";
+function workerMap(keys, callback) {
+  const config = global.distribution.util.deserialize("__CONFIG__");
 }
 
 /**
  * Runs a local shuffle operation and notifies the orchestrator on completion.
  */
-function workerShuffle(config, callback) {
-
+function workerShuffle(callback) {
+  const config = global.distribution.util.deserialize("__CONFIG__");
 }
 
 /**
  * Runs a local reduce operation and notifies the orchestrator on completion.
  */
-function workerReduce(config, callback) {
-
+function workerReduce(callback) {
+  const config = global.distribution.util.deserialize("__CONFIG__");
 }
 
 /* Note: The only method explicitly exposed in the `mr` service is `exec`.
