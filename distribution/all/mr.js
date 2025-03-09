@@ -168,7 +168,6 @@ function workerShuffle(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const groupId = "__GROUP_ID__";
   const operationId = "__OPERATION_ID__";
-  const config = global.distribution.util.deserialize("__CONFIG__");
   if (!global.distribution[groupId]?._isGroup) {
     callback(new Error(`Group '${groupId}' does not exist`), null);
     return;
@@ -176,7 +175,7 @@ function workerShuffle(callback) {
 
   const mapResultKey = `map-${operationId}`;
   global.distribution.local.store.del(mapResultKey, (error, results) => {
-    if (error) {
+    if (error || results.length === 0) {
       callback(null, null);
       return;
     }
@@ -218,6 +217,36 @@ function workerReduce(callback) {
     callback(new Error(`Group '${groupId}' does not exist`), null);
     return;
   }
+
+  global.distribution.local.mem.get({key: null, gid: groupId}, (error, itemKeys) => {
+    // Initialize reduce results
+    const results = {};
+    let active = itemKeys.length;
+    if (error || active === 0) {
+      callback(null, results);
+      return;
+    }
+
+    for (const itemKey of itemKeys) {
+      global.distribution.local.mem.del({key: itemKey, gid: groupId}, (error, items) => {
+        // Run reduce function on values
+        try {
+          if (!error && items.length > 0) {
+            const key = items[0].key;
+            const values = items.map((i) => i.values).flat();
+            const result = config.reduce(key, values);
+            results[key] = result;
+          }
+        } catch {}
+
+        // Notify orchestrator
+        active -= 1;
+        if (active === 0) {
+          callback(null, results);
+        }
+      });
+    }
+  });
 }
 
 /**
@@ -244,15 +273,19 @@ function runOperation(config, group, callback) {
       callback(error, null);
       return;
     }
-    console.log("Finished map");
-    console.log(error, results);
     runPhase.call(this, config, group, (node) => [], "shuffle", (error, results) => {
       if (error) {
         callback(error, null);
         return;
       }
-      console.log("finished shuffle");
-      console.log(error, results);
+      runPhase.call(this, config, group, (node) => [], "reduce", (error, results) => {
+        if (error) {
+          callback(error, null);
+          return;
+        }
+        console.log("finished reduce");
+        console.log(error, results);
+      });
     });
   });
 }

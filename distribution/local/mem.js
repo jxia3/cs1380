@@ -48,7 +48,15 @@ function put(object, config, callback) {
   if (!(config.gid in store)) {
     store[config.gid] = {};
   }
-  store[config.gid][config.key] = object;
+  if (config.operation === "append") {
+    if (!(config.key in store[config.gid])) {
+      store[config.gid][config.key] = [];
+    }
+    store[config.gid][config.key].push(object);
+  } else {
+    store[config.gid][config.key] = object;
+  }
+
   callback(null, object);
 }
 
