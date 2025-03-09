@@ -59,14 +59,14 @@ function exec(config, callback) {
       callback(error, null);
       return;
     }
-    startOperation.call(this, config, group, callback);
+    createOperation.call(this, config, group, callback);
   });
 }
 
 /**
  * Sets up a MapReduce operation across a group of nodes. The callback must be valid.
  */
-function startOperation(config, group, callback) {
+function createOperation(config, group, callback) {
   remote.checkGroup(this.gid);
   if (global?.nodeInfo?.sid === undefined) {
     callback(new Error("Node is not online"), null);
@@ -84,26 +84,28 @@ function startOperation(config, group, callback) {
       callback(error, null);
       return;
     }
-    console.log("added service", orchestrator, orchestratorId);
     global.distribution[this.gid].routes.put(worker, workerId, (errors, results) => {
       if (Object.keys(errors).length > 0) {
         callback(new Error("Failed to install worker service"), null);
         return;
       }
-      console.log("added service", worker, workerId);
       config.orchestratorId = orchestratorId;
       config.workerId = workerId;
-      runOperation.call(this, config, group, callback);
+      startOperation.call(this, config, group, callback);
     });
   });
 }
 
 /**
- * Runs a MapReduce operation across a group of nodes. The callback must be valid.
+ * Starts a MapReduce operation across a group of nodes. The callback must be valid.
  */
-function runOperation(config, group, callback) {
+function startOperation(config, group, callback) {
   remote.checkGroup(this.gid);
+  const groupHashFn = global.distribution[this.gid]?._state?.hash;
+  const hashFn = groupHashFn === undefined ? util.id.naiveHash : groupHashFn;
   console.log("running operation");
+  console.log(config);
+  console.log(hashFn.toString());
 }
 
 /**
