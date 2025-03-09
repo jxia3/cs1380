@@ -131,14 +131,27 @@ function workerMap(keys, callback) {
  * Runs a local shuffle operation and notifies the orchestrator on completion.
  */
 function workerShuffle(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const groupId = "__GROUP_ID__";
+  const operationId = "__OPERATION_ID__";
   const config = global.distribution.util.deserialize("__CONFIG__");
+  if (!global.distribution[groupId]?._isGroup) {
+    callback(new Error(`Group '${groupId}' does not exist`), null);
+    return;
+  }
 }
 
 /**
  * Runs a local reduce operation and notifies the orchestrator on completion.
  */
 function workerReduce(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const groupId = "__GROUP_ID__";
   const config = global.distribution.util.deserialize("__CONFIG__");
+  if (!global.distribution[groupId]?._isGroup) {
+    callback(new Error(`Group '${groupId}' does not exist`), null);
+    return;
+  }
 }
 
 /**
