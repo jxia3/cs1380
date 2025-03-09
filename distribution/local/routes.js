@@ -60,7 +60,7 @@ function put(service, name, callback) {
     callback(new Error("Service name cannot be an object"), null);
   }
   services[name] = service;
-  callback(null, name); // todo: check
+  callback(null, name);
 }
 
 /**

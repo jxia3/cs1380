@@ -287,6 +287,7 @@ function runOperation(config, group, callback) {
           callback(error, null);
           return;
         }
+        // todo: unregister service
         callback(null, Object.values(results).flat());
       });
     });
