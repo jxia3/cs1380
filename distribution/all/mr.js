@@ -98,7 +98,6 @@ function createWorker(config, operationId) {
   const workerConfig = {...config};
   delete workerConfig.keys;
   const compileParams = {
-    "__NODE_INFO__": {ip: global.nodeConfig.ip, port: global.nodeConfig.port},
     "__GROUP_ID__": this.gid,
     "__OPERATION_ID__": operationId,
     "__CONFIG__": util.serialize(workerConfig),
@@ -115,8 +114,17 @@ function createWorker(config, operationId) {
  * Runs a local map operation and notifies the orchestrator on completion.
  */
 function workerMap(keys, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const groupId = "__GROUP_ID__";
+  const operationId = "__OPERATION_ID__";
   const config = global.distribution.util.deserialize("__CONFIG__");
-  console.log("called map", global.nodeInfo.sid, config)
+  if (!global.distribution[groupId]?._isGroup) {
+    callback(new Error(`Group '${groupId}' does not exist`), null);
+    return;
+  }
+
+  console.log("called map", keys, global.nodeInfo.sid, config);
+  console.log(groupId, operationId);
 }
 
 /**

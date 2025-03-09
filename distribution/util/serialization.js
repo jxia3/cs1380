@@ -100,6 +100,9 @@ function exploreNative(object, path) {
     return;
   }
   const id = path.join(".");
+  if (id === "global.process.mainModule") {
+    return;
+  }
   nativeIds.set(object, id);
   nativeObjects[id] = object;
 

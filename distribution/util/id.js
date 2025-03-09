@@ -110,17 +110,17 @@ function applyHash(key, group, hashFn) {
 function naiveHash(keyId, nodeIds) {
   nodeIds = [...nodeIds];
   nodeIds.sort();
-  return nodeIds[idToNum(keyId) % nodeIds.length];
+  return nodeIds[global.distribution.util.id.idToNum(keyId) % nodeIds.length];
 }
 
 /**
  * Finds the node corresponding to the ring placement of a key ID.
  */
 function consistentHash(keyId, nodeIds) {
-  const key = idToNum(keyId);
+  const key = global.distribution.util.id.idToNum(keyId);
   const nodes = [];
   for (const id of nodeIds) {
-    nodes.push({id, num: idToNum(id)});
+    nodes.push({id, num: global.distribution.util.id.idToNum(id)});
   }
   nodes.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 
@@ -139,8 +139,8 @@ function rendezvousHash(keyId, nodeIds) {
   let maxHash = -1;
   let nodeId = nodeIds[0];
   for (const id of nodeIds) {
-    const combinedKey = getID(`${keyId}${id}`);
-    const hashNum = idToNum(combinedKey);
+    const combinedKey = global.distribution.util.id.getID(`${keyId}${id}`);
+    const hashNum = global.distribution.util.id.idToNum(combinedKey);
     if (hashNum > maxHash) {
       maxHash = hashNum;
       nodeId = id;
