@@ -1,6 +1,7 @@
 /* Manages the RPCs available on a node. RPC functions are stored in a mapping
    keyed by unique string IDs. */
 
+const compile = require("../util/compile.js");
 const log = require("../util/log.js");
 
 const rpcFns = {};
@@ -70,13 +71,11 @@ function _createRPC(fn) {
     args.unshift("__RPC_ID__");
     global.distribution.local.comm.send(args, remote, callback);
   }
-  const nodeInfo = `{ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port}}`;
-  const stubText = stub
-      .toString()
-      .replaceAll("\"__NODE_INFO__\"", nodeInfo)
-      .replaceAll("\"__RPC_ID__\"", `"${id}"`);
 
-  return (new Function(`return ${stubText}`))();
+  return compile(stub, {
+    "__NODE_INFO__": {ip: global.nodeConfig.ip, port: global.nodeConfig.port},
+    "__RPC_ID__": id,
+  });
 }
 
 module.exports = {create, call, rem, _createRPC};

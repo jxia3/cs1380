@@ -5,6 +5,7 @@
    the orchestrator node. */
 
 const remote = require("./remote-service.js");
+const util = require("../util/util.js");
 
 let operationCount = 0;
 
@@ -80,10 +81,10 @@ function runOperation(config, group, callback) {
 
   const orchestrator = createOrchestrator(group, orchestratorId, workerId);
   const worker = createWorker.call(this, config, orchestratorId);
-  console.log(worker)
-  console.log(worker.map.toString())
-  console.log(worker.shuffle.toString())
-  console.log(worker.reduce.toString())
+  console.log(worker);
+  console.log(worker.map.toString());
+  console.log(worker.shuffle.toString());
+  console.log(worker.reduce.toString());
 
   global.distribution.local.routes.put(orchestrator, orchestratorId, (error, result) => {
     if (error) {
@@ -105,7 +106,14 @@ function runOperation(config, group, callback) {
  * Creates a MapReduce orchestration service for a group of nodes.
  */
 function createOrchestrator(group, orchestratorId, workerId) {
+  const numNodes = Object.keys(group).length;
+  const completedMap = new Set();
+  const completedShuffle = new Set();
+  const completedReduce = new Set();
 
+  function handleNotification(config, callback) {
+
+  }
 }
 
 /**
@@ -113,34 +121,25 @@ function createOrchestrator(group, orchestratorId, workerId) {
  */
 function createWorker(config, orchestratorId) {
   remote.checkGroup(this.gid);
-  return {
-    map: compileWorkerFn.call(this, workerMap, config, orchestratorId),
-    shuffle: compileWorkerFn.call(this, workerShuffle, config, orchestratorId),
-    reduce: compileWorkerFn.call(this, workerReduce, config, orchestratorId),
+  const compileParams = {
+    "__NODE_INFO__": {ip: global.nodeConfig.ip, port: global.nodeConfig.port},
+    "__GROUP_ID__": this.gid,
+    "__ORCHESTRATOR_ID__": orchestratorId,
+    "__MAP_FN__": config.map,
+    "__REDUCE_FN__": config.reduce,
   };
-}
-
-/**
- * Compiles the parameters of an operation into a worker function.
- */
-function compileWorkerFn(fn, config, orchestratorId) {
-  remote.checkGroup(this.gid);
-  const nodeInfo = `{ip: "${global.nodeConfig.ip}", port: ${global.nodeConfig.port}}`;
-  const fnText = fn
-      .toString()
-      .replaceAll("\"__NODE_INFO__\"", nodeInfo)
-      .replaceAll("\"__GROUP_ID__\"", `"${this.gid}"`)
-      .replaceAll("\"__ORCHESTRATOR_ID__\"", `"${orchestratorId}"`)
-      .replaceAll("\"__MAP_FN__\"", config.map.toString())
-      .replaceAll("\"__REDUCE_FN__\"", config.reduce.toString());
-  return (new Function(`return ${fnText}`))();
+  return {
+    map: util.compile(workerMap, compileParams),
+    shuffle: util.compile(workerShuffle, compileParams),
+    reduce: util.compile(workerReduce, compileParams),
+  };
 }
 
 /**
  * Runs a local map operation and notifies the orchestrator on completion.
  */
 function workerMap(config, callback) {
-
+  const x = "__MAP_FN__";
 }
 
 /**

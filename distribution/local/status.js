@@ -98,11 +98,11 @@ function createStartFn(onStart, callback) {
       externalStart(error, null, (error, result) => {});
     }
   }
-  const startText = startFn.toString()
-      .replaceAll("\"__NODE_START__\"", nodeStart.toString())
-      .replaceAll("\"__EXTERNAL_START__\"", externalStart.toString());
 
-  return (new Function(`return ${startText}`))();
+  return util.compile(startFn, {
+    "__NODE_START__": nodeStart,
+    "__EXTERNAL_START__": externalStart,
+  });
 }
 
 /**
