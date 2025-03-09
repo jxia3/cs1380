@@ -64,14 +64,36 @@ function exec(config, callback) {
 }
 
 /**
- * Runs a MapReduce operation across a group of nodes.
+ * Runs a MapReduce operation across a group of nodes. The callback must be valid.
  */
 function runOperation(config, group, callback) {
   remote.checkGroup(this.gid);
-  const sid = global?.nodeInfo?.sid === undefined ? "anonymous" : global.nodeInfo.sid;
-  const orchestratorId = `mr-${sid}-${operationCount}`;
+  if (global?.nodeInfo?.sid === undefined) {
+    callback(new Error("Node is not online"), null);
+    return;
+  }
+  const operationId = `mr-${global.nodeInfo.sid}-${operationCount}`;
+  const orchestratorId = `orchestrator-${operationId}`;
+  const workerId = `worker-${operationId}`;
   operationCount += 1;
-  console.log(orchestratorId);
+  console.log(operationId);
+
+  const orchestrator = createOrchestrator(group);
+  const worker = createWorker(group, orchestratorId);
+  global.distribution.local.routes.put(orchestrator, orchestratorId, (error, result) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    console.log("added service", orchestrator, orchestratorId);
+    global.distribution[this.gid].routes.put(worker, workerId, (errors, results) => {
+      if (Object.keys(errors).length > 0) {
+        callback(new Error("Failed to install worker service"), null);
+        return;
+      }
+      console.log("added service", worker, workerId);
+    });
+  });
 }
 
 /**
