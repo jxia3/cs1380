@@ -175,7 +175,36 @@ function workerShuffle(callback) {
   }
 
   const mapResultKey = `map-${operationId}`;
-  global.distribution.local.store.del()
+  global.distribution.local.store.del(mapResultKey, (error, results) => {
+    if (error) {
+      callback(null, null);
+      return;
+    }
+
+    // Aggregate local values
+    const values = {};
+    for (const result of results) {
+      for (const key in result) {
+        if (!(key in values)) {
+          values[key] = [];
+        }
+        values[key].push(result[key]);
+      }
+    }
+
+    // Distribute values across group memory
+    let active = Object.keys(values).length;
+    for (const key in values) {
+      const item = {key, values: values[key]};
+      const itemConfig = {key: `shuffle-${operationId}-${key}`, gid: groupId, operation: "append"};
+      global.distribution[groupId].mem.put(item, itemConfig, (error, result) => {
+        active -= 1;
+        if (active === 0) {
+          callback(null, null);
+        }
+      });
+    }
+  });
 }
 
 /**
@@ -217,6 +246,14 @@ function runOperation(config, group, callback) {
     }
     console.log("Finished map");
     console.log(error, results);
+    runPhase.call(this, config, group, (node) => [], "shuffle", (error, results) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      console.log("finished shuffle");
+      console.log(error, results);
+    });
   });
 }
 
