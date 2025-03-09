@@ -1,11 +1,11 @@
-/* A service that stores key-value pairs in the local filesystem. */
+/* A service that stores key-value pairs in the local file system. */
 
 const util = require("../util/util.js");
 
 const fs = require("fs");
 
 /**
- * Retrieves an item from the filesystem store using its key and group ID.
+ * Retrieves an item from the file system store using its key and group ID.
  */
 function get(config, callback) {
   if (callback === undefined) {
@@ -29,7 +29,7 @@ function get(config, callback) {
 }
 
 /**
- * Inserts an item into the filesystem store. If a key is not specified, then the SHA256
+ * Inserts an item into the file system store. If a key is not specified, then the SHA256
  * hash of the object serialized as JSON is used.
  */
 function put(object, config, callback) {
@@ -51,7 +51,7 @@ function put(object, config, callback) {
 }
 
 /**
- * Removes an item from the filesystem store using its key and group ID.
+ * Removes an item from the file system store using its key and group ID.
  */
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;

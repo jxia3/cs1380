@@ -173,6 +173,9 @@ function workerShuffle(callback) {
     callback(new Error(`Group '${groupId}' does not exist`), null);
     return;
   }
+
+  const mapResultKey = `map-${operationId}`;
+  global.distribution.local.store.del()
 }
 
 /**
