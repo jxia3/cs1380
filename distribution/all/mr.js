@@ -6,6 +6,8 @@
 
 const remote = require("./remote-service.js");
 
+let operationCount = 0;
+
 /**
  * Map function used for MapReduce
  * @callback Mapper
@@ -36,9 +38,49 @@ const remote = require("./remote-service.js");
  * @return {void}
  */
 function exec(config, callback) {
+  remote.checkGroup(this.gid);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!(config?.keys instanceof Array) || typeof config?.map !== "function" || typeof config?.reduce !== "function") {
+    callback(new Error("Invalid keys or operation functions"), null);
+    return;
+  }
+  if (config?.compact !== undefined && typeof config.compact !== "function") {
+    callback(new Error("Invalid compaction function"), null);
+    return;
+  }
+
   console.log("CALLED EXEC");
   console.log(config);
   console.log(callback);
+
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    console.log(group);
+  })
+}
+
+/**
+ * Creates a MapReduce orchestration service for a group of nodes.
+ */
+function createOrchestrator(group) {
+
+}
+
+/**
+ * Creates a MapReduce worker service to distribute across a group of nodes.
+ */
+function createWorker(group) {
+
+}
+
+/**
+ * Receives completion notifications from nodes and schedules MapReduce operations.
+ */
+function notify(config, callback) {
+
 }
 
 /* Note: The only method explicitly exposed in the `mr` service is `exec`.
