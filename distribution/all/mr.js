@@ -167,8 +167,9 @@ function workerMap(keys, callback) {
         }
 
         // Store results and notify orchestrator
+        const service = config.memory ? "mem" : "store";
         const mapResultKey = `map-${operationId}`;
-        global.distribution.local.store.put(results, mapResultKey, (error, result) => {
+        global.distribution.local[service].put(results, mapResultKey, (error, result) => {
           if (error) {
             callback(error, null);
           } else {
@@ -187,13 +188,15 @@ function workerShuffle(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const groupId = "__GROUP_ID__";
   const operationId = "__OPERATION_ID__";
+  const config = global.distribution.util.deserialize("__CONFIG__");
   if (!global.distribution[groupId]?._isGroup) {
     callback(new Error(`Group '${groupId}' does not exist`), null);
     return;
   }
 
+  const service = config.memory ? "mem" : "store";
   const mapResultKey = `map-${operationId}`;
-  global.distribution.local.store.del(mapResultKey, (error, results) => {
+  global.distribution.local[service].del(mapResultKey, (error, results) => {
     if (error || results.length === 0) {
       callback(null, null);
       return;
