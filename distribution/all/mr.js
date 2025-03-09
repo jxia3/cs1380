@@ -6,7 +6,7 @@
 
 const remote = require("./remote-service.js");
 
-let operationCount = 0;
+const operationCount = 0;
 
 /**
  * Map function used for MapReduce
@@ -40,8 +40,12 @@ let operationCount = 0;
 function exec(config, callback) {
   remote.checkGroup(this.gid);
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (!(config?.keys instanceof Array) || typeof config?.map !== "function" || typeof config?.reduce !== "function") {
-    callback(new Error("Invalid keys or operation functions"), null);
+  if (!(config?.keys instanceof Array)) {
+    callback(new Error("Invalid keys"), null);
+    return;
+  }
+  if (typeof config?.map !== "function" || typeof config?.reduce !== "function") {
+    callback(new Error("Invalid operation functions"), null);
     return;
   }
   if (config?.compact !== undefined && typeof config.compact !== "function") {
@@ -59,7 +63,7 @@ function exec(config, callback) {
       return;
     }
     console.log(group);
-  })
+  });
 }
 
 /**
