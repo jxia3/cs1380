@@ -59,15 +59,14 @@ function exec(config, callback) {
       callback(error, null);
       return;
     }
-    runOperation.call(this, config, group, callback);
-    console.log(group);
+    startOperation.call(this, config, group, callback);
   });
 }
 
 /**
- * Runs a MapReduce operation across a group of nodes. The callback must be valid.
+ * Sets up a MapReduce operation across a group of nodes. The callback must be valid.
  */
-function runOperation(config, group, callback) {
+function startOperation(config, group, callback) {
   remote.checkGroup(this.gid);
   if (global?.nodeInfo?.sid === undefined) {
     callback(new Error("Node is not online"), null);
@@ -77,15 +76,9 @@ function runOperation(config, group, callback) {
   const orchestratorId = `orchestrator-${operationId}`;
   const workerId = `worker-${operationId}`;
   operationCount += 1;
-  console.log(operationId);
 
   const orchestrator = createOrchestrator(group, orchestratorId, workerId);
   const worker = createWorker.call(this, config, orchestratorId);
-  console.log(worker);
-  console.log(worker.map.toString());
-  console.log(worker.shuffle.toString());
-  console.log(worker.reduce.toString());
-
   global.distribution.local.routes.put(orchestrator, orchestratorId, (error, result) => {
     if (error) {
       callback(error, null);
@@ -98,8 +91,19 @@ function runOperation(config, group, callback) {
         return;
       }
       console.log("added service", worker, workerId);
+      config.orchestratorId = orchestratorId;
+      config.workerId = workerId;
+      runOperation.call(this, config, group, callback);
     });
   });
+}
+
+/**
+ * Runs a MapReduce operation across a group of nodes. The callback must be valid.
+ */
+function runOperation(config, group, callback) {
+  remote.checkGroup(this.gid);
+  console.log("running operation");
 }
 
 /**
