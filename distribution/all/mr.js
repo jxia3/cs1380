@@ -212,6 +212,7 @@ function workerShuffle(callback) {
 function workerReduce(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const groupId = "__GROUP_ID__";
+  const operationId = "__OPERATION_ID__";
   const config = global.distribution.util.deserialize("__CONFIG__");
   if (!global.distribution[groupId]?._isGroup) {
     callback(new Error(`Group '${groupId}' does not exist`), null);
@@ -220,7 +221,10 @@ function workerReduce(callback) {
 
   global.distribution.local.mem.get({key: null, gid: groupId}, (error, itemKeys) => {
     // Initialize reduce results
-    const results = {};
+    if (!error) {
+      itemKeys = itemKeys.filter(k => k.startsWith(`shuffle-${operationId}`));
+    }
+    const results = [];
     let active = itemKeys.length;
     if (error || active === 0) {
       callback(null, results);
@@ -235,7 +239,7 @@ function workerReduce(callback) {
             const key = items[0].key;
             const values = items.map((i) => i.values).flat();
             const result = config.reduce(key, values);
-            results[key] = result;
+            results.push(result);
           }
         } catch {}
 
@@ -283,8 +287,7 @@ function runOperation(config, group, callback) {
           callback(error, null);
           return;
         }
-        console.log("finished reduce");
-        console.log(error, results);
+        callback(null, Object.values(results).flat());
       });
     });
   });
