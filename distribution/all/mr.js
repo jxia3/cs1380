@@ -123,8 +123,42 @@ function workerMap(keys, callback) {
     return;
   }
 
-  console.log("called map", keys, global.nodeInfo.sid, config);
-  console.log(groupId, operationId);
+  // Initialize map results
+  const results = [];
+  let active = keys.length;
+  if (active === 0) {
+    callback(null, null);
+    return;
+  }
+
+  for (const key of keys) {
+    global.distribution[groupId].store.get(key, (error, value) => {
+      // Run map function on value
+      try {
+        if (!error) {
+          const result = config.map(key, value);
+          if (result instanceof Array) {
+            results.push(...result);
+          } else {
+            results.push(result);
+          }
+        }
+      } catch {}
+
+      // Store map results and notify orchestrator
+      active -= 1;
+      if (active === 0) {
+        const mapResultKey = `map-${operationId}`;
+        global.distribution.local.store.put(results, mapResultKey, (error, result) => {
+          if (error) {
+            callback(error, null);
+          } else {
+            callback(null, null);
+          }
+        });
+      }
+    });
+  }
 }
 
 /**
