@@ -124,7 +124,7 @@ function workerMap(keys, callback) {
   }
 
   // Initialize map results
-  const results = [];
+  const values = {};
   let active = keys.length;
   if (active === 0) {
     callback(null, null);
@@ -136,18 +136,34 @@ function workerMap(keys, callback) {
       // Run map function on value
       try {
         if (!error) {
-          const result = config.map(key, value);
-          if (result instanceof Array) {
-            results.push(...result);
-          } else {
-            results.push(result);
+          let result = config.map(key, value);
+          result = result instanceof Array ? result : [result];
+          for (const item of result) {
+            for (const key in item) {
+              if (!(key in values)) {
+                values[key] = [];
+              }
+              values[key].push(item[key]);
+            }
           }
         }
       } catch {}
 
-      // Store map results and notify orchestrator
       active -= 1;
       if (active === 0) {
+        // Compact results
+        const results = [];
+        for (const key in values) {
+          if (config.compact === undefined) {
+            for (const value of values[key]) {
+              results.push({[key]: value});
+            }
+          } else {
+            results.push({[key]: config.compact(values[key])});
+          }
+        }
+
+        // Store results and notify orchestrator
         const mapResultKey = `map-${operationId}`;
         global.distribution.local.store.put(results, mapResultKey, (error, result) => {
           if (error) {
@@ -222,7 +238,7 @@ function workerReduce(callback) {
   global.distribution.local.mem.get({key: null, gid: groupId}, (error, itemKeys) => {
     // Initialize reduce results
     if (!error) {
-      itemKeys = itemKeys.filter(k => k.startsWith(`shuffle-${operationId}`));
+      itemKeys = itemKeys.filter((k) => k.startsWith(`shuffle-${operationId}`));
     }
     const results = [];
     let active = itemKeys.length;
@@ -287,7 +303,7 @@ function runOperation(config, group, callback) {
           callback(error, null);
           return;
         }
-        // todo: unregister service
+        global.distribution[this.gid].routes.rem(config.workerId);
         callback(null, Object.values(results).flat());
       });
     });
