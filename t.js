@@ -63,7 +63,7 @@ function doMapReduce() {
 
   distribution.test.store.get(null, (error, keys) => {
     console.log(keys);
-    distribution.test.mr.exec({keys, map: mapper, reduce: reducer}, (e, v) => {
+    distribution.test.mr.exec({keys, map: mapper, reduce: reducer, compact: reducer}, (e, v) => {
       console.log(e, v);
     });
   });

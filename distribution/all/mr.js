@@ -151,7 +151,7 @@ function workerMap(keys, callback) {
 
       active -= 1;
       if (active === 0) {
-        // Compact results
+        // Split results or run compaction function
         const results = [];
         for (const key in values) {
           if (config.compact === undefined) {
@@ -159,7 +159,10 @@ function workerMap(keys, callback) {
               results.push({[key]: value});
             }
           } else {
-            results.push({[key]: config.compact(values[key])});
+            const compact = config.compact(key, values[key]);
+            for (const key in compact) {
+              results.push({[key]: compact[key]});
+            }
           }
         }
 
