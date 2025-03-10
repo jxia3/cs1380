@@ -133,12 +133,11 @@ function workerMap(keys, callback) {
 
   for (const key of keys) {
     global.distribution[groupId].store.get(key, (error, value) => {
-      // Run map function on value
       try {
         if (!error) {
-          let result = config.map(key, value);
-          result = result instanceof Array ? result : [result];
-          for (const item of result) {
+          // Run map function on value
+          const result = config.map(key, value);
+          for (const item of (result instanceof Array ? result : [result])) {
             for (const key in item) {
               if (!(key in values)) {
                 values[key] = [];
@@ -148,34 +147,34 @@ function workerMap(keys, callback) {
           }
         }
       } catch {}
-
       active -= 1;
       if (active === 0) {
-        // Split results or run compaction function
-        const results = [];
-        for (const key in values) {
-          if (config.compact === undefined) {
-            for (const value of values[key]) {
-              results.push({[key]: value});
-            }
-          } else {
-            const compact = config.compact(key, values[key]);
-            for (const key in compact) {
-              results.push({[key]: compact[key]});
-            }
-          }
-        }
+        endOperation(values);
+      }
+    });
+  }
 
-        // Store results and notify orchestrator
-        const service = config.memory ? "mem" : "store";
-        const mapResultKey = `map-${operationId}`;
-        global.distribution.local[service].put(results, mapResultKey, (error, result) => {
-          if (error) {
-            callback(error, null);
-          } else {
-            callback(null, null);
-          }
-        });
+  function endOperation(values) {
+    // Split results or run compaction function
+    const results = [];
+    for (const key in values) {
+      if (config.compact === undefined) {
+        for (const value of values[key]) {
+          results.push({[key]: value});
+        }
+      } else {
+        results.push(config.compact(key, values[key]));
+      }
+    }
+
+    // Store results and notify orchestrator
+    const service = config.memory ? "mem" : "store";
+    const mapResultKey = `map-${operationId}`;
+    global.distribution.local[service].put(results, mapResultKey, (error, result) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, null);
       }
     });
   }
@@ -247,32 +246,37 @@ function workerReduce(callback) {
       itemKeys = itemKeys.filter((k) => k.startsWith(`shuffle-${operationId}`));
     }
     const results = [];
-    let active = itemKeys.length;
-    if (error || active === 0) {
+    let reduceActive = itemKeys.length;
+    if (error || reduceActive === 0) {
       callback(null, results);
       return;
     }
 
     for (const itemKey of itemKeys) {
       global.distribution.local.mem.del({key: itemKey, gid: groupId}, (error, items) => {
-        // Run reduce function on values
         try {
           if (!error && items.length > 0) {
+            // Run reduce function on values
             const key = items[0].key;
             const values = items.map((i) => i.values).flat();
-            const result = config.reduce(key, values);
-            results.push(result);
+            results.push(config.reduce(key, values));
           }
         } catch {}
-
-        // Notify orchestrator
-        active -= 1;
-        if (active === 0) {
-          callback(null, results);
+        reduceActive -= 1;
+        if (reduceActive === 0) {
+          endOperation(results);
         }
       });
     }
   });
+
+  function endOperation(results) {
+    if (config.out !== undefined && global.distribution[config.out]?._isGroup) {
+      const storeActive = results.length;
+    } else {
+      callback(null, results);
+    }
+  }
 }
 
 /**
