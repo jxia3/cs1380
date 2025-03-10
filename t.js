@@ -49,21 +49,27 @@ function runTest() {
 
 function doMapReduce() {
   const mapper = (key, value) => {
-    const words = value.split(/(\s+)/).filter((e) => e !== " ");
+    const out = {};
+    out[key] = value;
+    return [out];
+    /* const words = value.split(/(\s+)/).filter((e) => e !== " ");
     const out = {};
     out[words[1]] = parseInt(words[3]);
-    return [out];
+    return [out];*/
   };
 
   const reducer = (key, values) => {
     const out = {};
-    out[key] = values.reduce((a, b) => Math.max(a, b), -Infinity);
+    out[key] = values.join(" ");
     return out;
+    /* const out = {};
+    out[key] = values.reduce((a, b) => Math.max(a, b), -Infinity);
+    return out;*/
   };
 
   distribution.test.store.get(null, (error, keys) => {
     console.log(keys);
-    distribution.test.mr.exec({keys, map: mapper, reduce: reducer, compact: reducer, memory: true, out: "abc"}, (e, v) => {
+    distribution.test.mr.exec({keys, map: mapper, reduce: reducer, compact: reducer, memory: true, out: "abc", rounds: 20}, (e, v) => {
       console.log(e, v);
     });
   });

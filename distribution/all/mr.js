@@ -7,6 +7,7 @@
 const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
+let execCount = 0;
 let operationCount = 0;
 
 /**
@@ -58,6 +59,47 @@ function exec(config, callback) {
     return;
   }
 
+  // Run single iteration
+  const execId = `exec-${global.nodeInfo.sid}-${execCount}`;
+  execCount += 1;
+  if (config?.rounds === undefined || config.rounds === 1) {
+    execSingle.call(this, config, callback);
+    return;
+  }
+
+  // Run multiple iterations over groups
+  // TODO: remove input group?
+  const rounds = config.rounds;
+  let round = 0;
+  const roundConfig = {...config, out: `${execId}-${round}`};
+  delete roundConfig.rounds;
+  execSingle.call(this, roundConfig, runIteration);
+
+  function runIteration(error, result) {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    const outputGroup = roundConfig.out;
+    round += 1;
+
+    if (round < rounds - 1) {
+      roundConfig.out = `${execId}-${round}`;
+      execSingle.call({gid: outputGroup}, roundConfig, runIteration);
+    } else {
+      if (config.out !== undefined) {
+        roundConfig.out = config.out;
+      }
+      execSingle.call({gid: outputGroup}, roundConfig, callback);
+    }
+  }
+}
+
+/**
+ * Runs a single iteration of MapReduce across a node group. The callback must be valid.
+ */
+function execSingle(config, callback) {
+  remote.checkGroup(this.gid);
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
       callback(error, null);
@@ -90,7 +132,11 @@ function createOperation(config, group, callback) {
     config.workerId = workerId;
 
     if (config.out !== undefined) {
-      global.distribution[this.gid].groups.put(config.out, group, (errors, results) => {
+      const groupConfig = {gid: config.out};
+      if (global.distribution[this.gid]?._state?.hash !== undefined) {
+        groupConfig.hash = global.distribution[this.gid]?._state?.hash;
+      }
+      global.distribution[this.gid].groups.put(groupConfig, group, (errors, results) => {
         if (Object.keys(errors).length > 0) {
           callback(new Error("Failed to create output group"), null);
           return;
