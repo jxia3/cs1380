@@ -53,6 +53,10 @@ function exec(config, callback) {
     callback(new Error("Invalid compaction function"), null);
     return;
   }
+  if (config?.out !== undefined && global.distribution[config.out]?._isGroup) {
+    callback(new Error("Output group exists"), null);
+    return;
+  }
 
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
@@ -84,7 +88,18 @@ function createOperation(config, group, callback) {
     }
     config.operationId = operationId;
     config.workerId = workerId;
-    runOperation.call(this, config, group, callback);
+
+    if (config.out !== undefined) {
+      global.distribution[this.gid].groups.put(config.out, group, (errors, results) => {
+        if (Object.keys(errors).length > 0) {
+          callback(new Error("Failed to create output group"), null);
+          return;
+        }
+        runOperation.call(this, config, group, callback);
+      });
+    } else {
+      runOperation.call(this, config, group, callback);
+    }
   });
 }
 
@@ -271,9 +286,21 @@ function workerReduce(callback) {
   });
 
   function endOperation(results) {
-    if (config.out !== undefined && global.distribution[config.out]?._isGroup) {
-      const storeActive = results.length;
+    if (config.out !== undefined && global.distribution[config.out]?._isGroup && results.length > 0) {
+      // Store results in output group
+      let storeActive = results.map((i) => Object.keys(i).length).reduce((a, b) => a + b);
+      for (const item of results) {
+        for (const key in item) {
+          global.distribution[config.out].store.put(item[key], {key, gid: config.out}, (error, result) => {
+            storeActive -= 1;
+            if (storeActive === 0) {
+              callback(null, results);
+            }
+          });
+        }
+      }
     } else {
+      // Send results to orchestrator
       callback(null, results);
     }
   }
