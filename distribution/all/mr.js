@@ -210,12 +210,12 @@ function workerMap(keys, callback) {
       } catch {}
       active -= 1;
       if (active === 0) {
-        endOperation(values);
+        endMap(values);
       }
     });
   }
 
-  function endOperation(values) {
+  function endMap(values) {
     // Split results or run compaction function
     const results = [];
     for (const key in values) {
@@ -325,13 +325,13 @@ function workerReduce(callback) {
         } catch {}
         reduceActive -= 1;
         if (reduceActive === 0) {
-          endOperation(results);
+          endReduce(results);
         }
       });
     }
   });
 
-  function endOperation(results) {
+  function endReduce(results) {
     if (config.out !== undefined && global.distribution[config.out]?._isGroup && results.length > 0) {
       // Store results in output group
       let storeActive = results.map((i) => Object.keys(i).length).reduce((a, b) => a + b);
