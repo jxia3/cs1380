@@ -8,7 +8,7 @@
   routes      A mapping from names to functions          get, put, rem
   rpc         A remote procedure call interface          create, call, rem
   status      Status and control of the current node     get, spawn, stop
-  store       A local persistent key-value store         get, put, del
+  store       A local persistent key-value store         get, put, del, clear
 */
 
 const status = require("./status.js");

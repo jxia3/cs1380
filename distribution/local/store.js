@@ -73,6 +73,23 @@ function del(config, callback) {
 }
 
 /**
+ * Removes all the items in a group from the file system store.
+ */
+function clear(groupId, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (groupId === undefined) {
+    callback(new Error("Group not specified"), null);
+    return;
+  }
+
+  if (global?.nodeInfo?.storePath === undefined) {
+    callback(new Error("Store path not available"), null);
+    return;
+  }
+  clearGroup(groupId, callback);
+}
+
+/**
  * Reads and deserializes an item from the local file system. The callback must be valid
  * and the global store path must be available.
  */
@@ -141,6 +158,27 @@ function deleteItem(config, callback) {
 }
 
 /**
+ * Deletes a group directory in the local file system. The callback must be valid and the
+ * global store path must be available.
+ */
+function clearGroup(groupId, callback) {
+  const path = `${global.nodeInfo.storePath}/${groupId}`;
+  fs.access(path, (error) => {
+    if (error) {
+      callback(new Error(`Directory for group '${groupId}' not found`), null);
+      return;
+    }
+    fs.rm(path, {recursive: true}, (error) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      callback(null, null);
+    });
+  });
+}
+
+/**
  * Reads and decodes the keys of all the items in the local file system. The callback must
  * be valid and the global store path must be available.
  */
@@ -178,4 +216,4 @@ function decodeKey(key) {
   return Buffer.from(key, "base64").toString("utf8");
 }
 
-module.exports = {get, put, del};
+module.exports = {get, put, del, clear};

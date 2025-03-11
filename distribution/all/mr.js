@@ -68,7 +68,6 @@ function exec(config, callback) {
   }
 
   // Run multiple iterations over groups
-  // TODO: remove input group?
   const rounds = config.rounds;
   let round = 0;
   const roundConfig = {...config, out: `${execId}-${round}`};
@@ -83,6 +82,9 @@ function exec(config, callback) {
     const outputGroup = roundConfig.out;
     round += 1;
 
+    if (round > 0) {
+      roundConfig.deleteInput = true;
+    }
     if (round < rounds - 1) {
       roundConfig.out = `${execId}-${round}`;
       execSingle.call({gid: outputGroup}, roundConfig, runIteration);
@@ -232,6 +234,9 @@ function workerMap(keys, callback) {
     const service = config.memory ? "mem" : "store";
     const mapResultKey = `map-${operationId}`;
     global.distribution.local[service].put(results, mapResultKey, (error, result) => {
+      if (config.deleteInput) {
+        global.distribution[groupId].comm.send([groupId], {service: "store", method: "clear"});
+      }
       if (error) {
         callback(error, null);
       } else {
