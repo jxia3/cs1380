@@ -10,9 +10,8 @@ const strmatchGroup = {};
 const ridxGroup = {};
 const rlgGroup = {};
 
-
 /*
-    The local node will be the orchestrator.
+  The local node will be the orchestrator.
 */
 let localServer = null;
 
@@ -21,12 +20,10 @@ const n2 = {ip: "127.0.0.1", port: 7111};
 const n3 = {ip: "127.0.0.1", port: 7112};
 
 test("(0 pts) (scenario) all.mr:ncdc", (done) => {
-/* Implement the map and reduce functions.
-   The map function should parse the string value and return an object with the year as the key and the temperature as the value.
-   The reduce function should return the maximum temperature for each year.
-
-   (The implementation for this scenario is provided below.)
-*/
+  /* Implement the map and reduce functions.
+     The map function should parse the string value and return an object with the year as the key and the temperature as the value.
+     The reduce function should return the maximum temperature for each year.
+     (The implementation for this scenario is provided below.) */
 
   const mapper = (key, value) => {
     const words = value.split(/(\s+)/).filter((e) => e !== " ");
@@ -59,7 +56,6 @@ test("(0 pts) (scenario) all.mr:ncdc", (done) => {
         done(e);
       }
 
-
       distribution.ncdc.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
         try {
           expect(v).toEqual(expect.arrayContaining(expected));
@@ -87,16 +83,21 @@ test("(0 pts) (scenario) all.mr:ncdc", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:dlib", (done) => {
-/*
-   Implement the map and reduce functions.
-   The map function should parse the string value and return an object with the word as the key and the value as 1.
-   The reduce function should return the count of each word.
-*/
+  /* Implement the map and reduce functions.
+     The map function should parse the string value and return an object with the word as the key and the value as 1.
+     The reduce function should return the count of each word. */
 
   const mapper = (key, value) => {
+    const result = [];
+    const words = value.split(" ");
+    for (const word of words) {
+      result.push({[word]: 1});
+    }
+    return result;
   };
 
   const reducer = (key, values) => {
+    return {[key]: values.reduce((a, b) => a + b, 0)};
   };
 
   const dataset = [
@@ -141,7 +142,6 @@ test("(10 pts) (scenario) all.mr:dlib", (done) => {
   };
 
   let cntr = 0;
-
   // Send the dataset to the cluster
   dataset.forEach((o) => {
     const key = Object.keys(o)[0];
@@ -157,11 +157,9 @@ test("(10 pts) (scenario) all.mr:dlib", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:tfidf", (done) => {
-/*
-    Implement the map and reduce functions.
-    The map function should parse the string value and return an object with the word as the key and the document and count as the value.
-    The reduce function should return the TF-IDF for each word.
-*/
+  /* Implement the map and reduce functions.
+     The map function should parse the string value and return an object with the word as the key and the document and count as the value.
+     The reduce function should return the TF-IDF for each word. */
 
   const mapper = (key, value) => {
   };
@@ -209,7 +207,6 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
   };
 
   let cntr = 0;
-
   // Send the dataset to the cluster
   dataset.forEach((o) => {
     const key = Object.keys(o)[0];
