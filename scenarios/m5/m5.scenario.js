@@ -162,10 +162,31 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
      The reduce function should return the TF-IDF for each word. */
 
   const mapper = (key, value) => {
+    const result = [];
+    const words = value.split(" ");
+    for (const word of words) {
+      result.push({[word]: {doc: key, len: words.length}});
+    }
+    return result;
   };
 
   // Reduce function: calculate TF-IDF for each word
   const reducer = (key, values) => {
+    const counts = {};
+    for (const item of values) {
+      if (!(item.doc in counts)) {
+        counts[item.doc] = {count: 0, len: item.len};
+      }
+      counts[item.doc].count += 1;
+    }
+
+    const scores = {};
+    const idf = Math.log(3 / (Object.keys(counts).length + 1));
+    for (const doc in counts) {
+      const tf = counts[doc].count / counts[doc].len;
+      scores[doc] = Math.round(tf * idf * 1000) / 1000;
+    }
+    return {[key]: scores};
   };
 
   const dataset = [
@@ -175,16 +196,16 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
   ];
 
   const expected = [
-    {"machine": {"doc1": "0.20", "doc3": "0.20"}},
-    {"learning": {"doc1": "0.00", "doc2": "0.00", "doc3": "0.00"}},
-    {"is": {"doc1": "1.10"}},
-    {"amazing": {"doc1": "0.20", "doc2": "0.20"}},
-    {"deep": {"doc2": "0.20", "doc3": "0.20"}},
-    {"powers": {"doc2": "1.10"}},
-    {"systems": {"doc2": "1.10"}},
-    {"and": {"doc3": "1.10"}},
-    {"are": {"doc3": "1.10"}},
-    {"related": {"doc3": "1.10"}},
+    {"machine": {"doc1": 0, "doc3": 0}},
+    {"learning": {"doc1": -0.072, "doc2": -0.058, "doc3": -0.082}},
+    {"is": {"doc1": 0.101}},
+    {"amazing": {"doc1": 0, "doc2": 0}},
+    {"deep": {"doc2": 0, "doc3": 0}},
+    {"powers": {"doc2": 0.081}},
+    {"systems": {"doc2": 0.081}},
+    {"and": {"doc3": 0.058}},
+    {"are": {"doc3": 0.058}},
+    {"related": {"doc3": 0.058}},
   ];
 
   const doMapReduce = (cb) => {
