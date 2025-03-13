@@ -159,7 +159,12 @@ test("(10 pts) (scenario) all.mr:dlib", (done) => {
 test("(10 pts) (scenario) all.mr:tfidf", (done) => {
   /* Implement the map and reduce functions.
      The map function should parse the string value and return an object with the word as the key and the document and count as the value.
-     The reduce function should return the TF-IDF for each word. */
+     The reduce function should return the TF-IDF for each word.
+
+     Hint:
+     TF = (Number of times the term appears in a document) / (Total number of terms in the document)
+     IDF = log10(Total number of documents / Number of documents with the term in it)
+     TF-IDF = TF * IDF */
 
   const mapper = (key, value) => {
     const result = [];
@@ -181,7 +186,7 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
     }
 
     const scores = {};
-    const idf = Math.log(3 / (Object.keys(counts).length + 1));
+    const idf = Math.log10(3 / Object.keys(counts).length);
     for (const doc in counts) {
       const tf = counts[doc].count / counts[doc].len;
       scores[doc] = Math.round(tf * idf * 1000) / 1000;
@@ -196,16 +201,14 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
   ];
 
   const expected = [
-    {"machine": {"doc1": 0, "doc3": 0}},
-    {"learning": {"doc1": -0.072, "doc2": -0.058, "doc3": -0.082}},
-    {"is": {"doc1": 0.101}},
-    {"amazing": {"doc1": 0, "doc2": 0}},
-    {"deep": {"doc2": 0, "doc3": 0}},
-    {"powers": {"doc2": 0.081}},
-    {"systems": {"doc2": 0.081}},
-    {"and": {"doc3": 0.058}},
-    {"are": {"doc3": 0.058}},
-    {"related": {"doc3": 0.058}},
+    {"is": {"doc1": 0.12}},
+    {"deep": {"doc2": 0.04, "doc3": 0.03}},
+    {"systems": {"doc2": 0.1}},
+    {"learning": {"doc1": 0, "doc2": 0, "doc3": 0}},
+    {"amazing": {"doc1": 0.04, "doc2": 0.04}},
+    {"machine": {"doc1": 0.04, "doc3": 0.03}},
+    {"are": {"doc3": 0.07}}, {"powers": {"doc2": 0.1}},
+    {"and": {"doc3": 0.07}}, {"related": {"doc3": 0.07}},
   ];
 
   const doMapReduce = (cb) => {
