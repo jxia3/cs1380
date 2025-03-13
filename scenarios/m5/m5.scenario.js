@@ -250,8 +250,8 @@ test("(10 pts) (scenario) all.mr:rlg", (done) => {
 });
 
 /*
-    This is the setup for the test scenario.
-    Do not modify the code below.
+  This is the setup for the test scenario.
+  Do not modify the code below.
 */
 
 beforeAll((done) => {
@@ -286,7 +286,6 @@ beforeAll((done) => {
   rlgGroup[id.getSID(n1)] = n1;
   rlgGroup[id.getSID(n2)] = n2;
   rlgGroup[id.getSID(n3)] = n3;
-
 
   const startNodes = (cb) => {
     distribution.local.status.spawn(n1, (e, v) => {
