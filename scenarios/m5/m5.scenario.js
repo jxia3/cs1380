@@ -189,7 +189,7 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
     const idf = Math.log10(3 / Object.keys(counts).length);
     for (const doc in counts) {
       const tf = counts[doc].count / counts[doc].len;
-      scores[doc] = Math.round(tf * idf * 1000) / 1000;
+      scores[doc] = Math.round(tf * idf * 100) / 100;
     }
     return {[key]: scores};
   };
