@@ -46,12 +46,12 @@ function createDataset(group, callback) {
 }
 
 function wordCountMap(key, value) {
-  const result = [];
+  const results = [];
   const words = value.split(" ");
   for (const word of words) {
-    result.push({[word]: 1});
+    results.push({[word]: 1});
   }
-  return result;
+  return results;
 }
 
 function wordCountReduce(key, values) {
@@ -72,14 +72,18 @@ const expectedResult = [
   {"corge": 1},
 ];
 
-function checkResult(result) {
+function checkResult(result, modifier) {
   if (!(result instanceof Array)) {
     return false;
   }
   for (const item of result) {
     for (const key in item) {
       const expected = expectedResult.find((i) => Object.keys(i)[0] == key);
-      if (expected === undefined || item[key] != expected[key]) {
+      if (expected === undefined) {
+        return false;
+      }
+      if ((modifier === undefined && item[key] !== expected[key])
+        || (modifier !== undefined && item[key] !== modifier(expected[key]))) {
         return false;
       }
     }
@@ -107,30 +111,72 @@ test("(1 pts) student test", (done) => {
   const map = (key, value) => ({[key]: value});
   const reduce = (key, values) => ({[key]: values});
   distribution.empty.mr.exec({keys: [], map, reduce}, (error, result) => {
-    expect(error).toBeFalsy();
-    expect(result).toEqual([]);
-    done();
+    try {
+      expect(error).toBeFalsy();
+      expect(result).toEqual([]);
+      done();
+    } catch (error) {
+      done(error);
+    }
   });
 });
 
 test("(1 pts) student test", (done) => {
   createDataset("rendezvous", () => {
     distribution.rendezvous.mr.exec(wordCountConfig, (error, result) => {
-      expect(error).toBeFalsy();
-      expect(checkResult(result)).toBe(true);
-      done();
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result)).toBe(true);
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  function doubleMap(key, value) {
+    const results = [];
+    const words = value.split(" ");
+    for (const word of words) {
+      results.push({[word]: 1});
+      results.push({[word]: 1});
+    }
+    return results;
+  }
+
+  createDataset("rendezvous", () => {
+    distribution.rendezvous.mr.exec({...wordCountConfig, map: doubleMap}, (error, result) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result, (count) => count * 2)).toBe(true);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  createDataset("rendezvous", () => {
+    let active = 2;
+    for (let j = 0; j < active; j += 1) {
+      distribution.rendezvous.mr.exec(wordCountConfig, (error, result) => {
+        try {
+          expect(error).toBeFalsy();
+          expect(checkResult(result)).toBe(true);
+          active -= 1;
+          if (active === 0) {
+            done();
+          }
+        } catch (error) {
+          done(error);
+        }
+      });
+    }
+  });
 });
 
 beforeAll((done) => {
