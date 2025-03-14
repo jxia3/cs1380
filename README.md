@@ -10,7 +10,12 @@ My implementation comprises `<number>` new software components, totaling `<numbe
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness*: I wrote <X> cases testing <1, 2, 3>.
+*Correctness*: I wrote 5 tests; these tests take a few seconds to execute. The tests cover:
+- Running a MapReduce operation with invalid inputs.
+- Running a MapReduce operation on an empty dataset.
+- Running a MapReduce operation with rendezvous hashing.
+- Calling a mapper that returns multiple key-value pairs.
+- Running multiple MapReduce operations concurrently.
 
 *Performance*: My <workflow> can sustain <throughput> <unit>/second, with an average latency of <number> seconds per <unit>.
 
@@ -34,7 +39,7 @@ I modified this protocol to improve the reliability by adding a ping check befor
 
 > Describe how you characterized the correctness and performance of your implementation
 
-*Correctness* -- I wrote 6 tests; these tests take a few seconds to execute. The tests cover:
+*Correctness*: I wrote 6 tests; these tests take a few seconds to execute. The tests cover:
 - Adding items with the same key to a local and distributed store.
 - Overwriting an item in a local store.
 - Overwriting an item in a distributed store.
@@ -42,7 +47,7 @@ I modified this protocol to improve the reliability by adding a ping check befor
 - Deleting and reinserting an item in a distributed store.
 - Automatically reconfiguring objects when a new node is added to a group.
 
-*Performance* -- I measured the performance of inserting and retrieving objects for the distributed `mem` and `store` services. In the `performance` directory, I created a script that benchmarks the services with 1,000 randomly generated objects, and I ran the test on both my local machine and on AWS. Locally, I observed that the `mem` service has a much higher throughput and a much lower latency than the `store` service, which matched my expectations. File system accesses are expensive compared to memory wirtes. On AWS, I also observed the same effect. However, retrieving objects from the file system was faster than my local machine, which could be because of the reduced file I/O speeds of WSL. Detailed performance results are located in `package.json`.
+*Performance*: I measured the performance of inserting and retrieving objects for the distributed `mem` and `store` services. In the `performance` directory, I created a script that benchmarks the services with 1,000 randomly generated objects, and I ran the test on both my local machine and on AWS. Locally, I observed that the `mem` service has a much higher throughput and a much lower latency than the `store` service, which matched my expectations. File system accesses are expensive compared to memory wirtes. On AWS, I also observed the same effect. However, retrieving objects from the file system was faster than my local machine, which could be because of the reduced file I/O speeds of WSL. Detailed performance results are located in `package.json`.
 
 ## Key Feature
 
@@ -73,7 +78,7 @@ Another challenge was ensuring that the group context is bound to methods expose
 - Adding a new service to all the nodes in a group.
 - Sending a gossip message to all the nodes in a group.
 
-*Performance* -- I measured the performance of spawning a node and characterized the convergence of gossip across a network. Locally, my spawn implementation achieved an average latency of 0.840 seconds per node with a throughput of 17.5 nodes per second: multiple spawn commands can run concurrently. On AWS, I observed a much higher average latency of 2.67 seconds per node and a lower throughput of 6.77 nodes per second because the instance has limited compute resources. Details on the test parameters can be found in the `performance` directory.
+*Performance*: I measured the performance of spawning a node and characterized the convergence of gossip across a network. Locally, my spawn implementation achieved an average latency of 0.840 seconds per node with a throughput of 17.5 nodes per second: multiple spawn commands can run concurrently. On AWS, I observed a much higher average latency of 2.67 seconds per node and a lower throughput of 6.77 nodes per second because the instance has limited compute resources. Details on the test parameters can be found in the `performance` directory.
 
 After spawning 100 nodes, I measured how many nodes received a gossip message with different broadcast parameters. If each node broadcasts a message to only one other node, only 16 nodes receive the message. As soon as each node broadcasts a message to two other nodes, gossip experiences exponential growth and 81 nodes recieve the message. The number of nodes that receive the message gradually increases as the broadcast parameter increases until all nodes receive the message at six messages per node. The detailed results are located in the `package.json` file.
 
