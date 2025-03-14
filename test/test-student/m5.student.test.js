@@ -26,6 +26,67 @@ for (const node of nodes) {
   nodeMap[util.id.getSID(node)] = node;
 }
 
+const dataset = [
+  {"0": "foo bar baz"},
+  {"1": "foo baz qux"},
+  {"2": "foo qux corge"},
+];
+
+function createDataset(group, callback) {
+  let active = dataset.length;
+  for (const item of dataset) {
+    const key = Object.keys(item)[0];
+    distribution[group].store.put(item[key], key, (error, result) => {
+      active -= 1;
+      if (active === 0) {
+        callback();
+      }
+    });
+  }
+}
+
+function wordCountMap(key, value) {
+  const result = [];
+  const words = value.split(" ");
+  for (const word of words) {
+    result.push({[word]: 1});
+  }
+  return result;
+}
+
+function wordCountReduce(key, values) {
+  return {[key]: values.reduce((a, b) => a + b, 0)};
+}
+
+const wordCountConfig = {
+  keys: dataset.flatMap((i) => Object.keys(i)),
+  map: wordCountMap,
+  reduce: wordCountReduce,
+};
+
+const expectedResult = [
+  {"foo": 3},
+  {"bar": 1},
+  {"baz": 2},
+  {"qux": 2},
+  {"corge": 1},
+];
+
+function checkResult(result) {
+  if (!(result instanceof Array)) {
+    return false;
+  }
+  for (const item of result) {
+    for (const key in item) {
+      const expected = expectedResult.find((i) => Object.keys(i)[0] == key);
+      if (expected === undefined || item[key] != expected[key]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 test("(1 pts) student test", (done) => {
   distribution.empty.mr.exec({}, (error, result) => {
     expect(error).toBeInstanceOf(Error);
@@ -43,13 +104,23 @@ test("(1 pts) student test", (done) => {
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  const map = (key, value) => ({[key]: value});
+  const reduce = (key, values) => ({[key]: values});
+  distribution.empty.mr.exec({keys: [], map, reduce}, (error, result) => {
+    expect(error).toBeFalsy();
+    expect(result).toEqual([]);
+    done();
+  });
 });
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  createDataset("rendezvous", () => {
+    distribution.rendezvous.mr.exec(wordCountConfig, (error, result) => {
+      expect(error).toBeFalsy();
+      expect(checkResult(result)).toBe(true);
+      done();
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
