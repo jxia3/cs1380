@@ -254,12 +254,8 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
 */
 
 test("(10 pts) (scenario) all.mr:crawl", (done) => {
-  function testFetch(url) {
-    return `CONTENT: ${url}`;
-  }
-
   const mapper = (key, value) => {
-    return {[key]: {url: value, content: testFetch(value)}};
+    return {[key]: {url: value, content: `CONTENT: ${value}`}};
   };
 
   const reducer = (key, values) => {
@@ -313,7 +309,72 @@ test("(10 pts) (scenario) all.mr:crawl", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:urlxtr", (done) => {
-  done(new Error("Implement the map and reduce functions"));
+  const mapper = (key, value) => {
+    const result = [];
+    const terms = value.split(" ");
+    for (const term of terms) {
+      if (!term.startsWith("https://")) {
+        continue;
+      }
+      result.push({[key]: term});
+    }
+    return result;
+  };
+
+  const reducer = (key, values) => {
+    const urls = [];
+    for (const value of values) {
+      if (!urls.includes(value)) {
+        urls.push(value);
+      }
+    }
+    return {[key]: urls};
+  };
+
+  const dataset = [
+    {"0": "foo https://a.com bar https://b.com baz https://c.com qux https://a.com"},
+    {"1": "corge https://b.com grault https://c.com garply https://d.com waldo https://b.com"},
+    {"2": "fred https://c.com plugh https://d.com xyzzy https://e.com thud https://c.com"},
+  ];
+
+  const expected = [
+    {"0": ["https://a.com", "https://b.com", "https://c.com"]},
+    {"1": ["https://b.com", "https://c.com", "https://d.com"]},
+    {"2": ["https://c.com", "https://d.com", "https://e.com"]},
+  ];
+
+  const doMapReduce = (cb) => {
+    distribution.urlxtr.store.get(null, (e, v) => {
+      try {
+        expect(v.length).toBe(dataset.length);
+      } catch (e) {
+        done(e);
+      }
+
+      distribution.urlxtr.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
+        try {
+          expect(v).toEqual(expect.arrayContaining(expected));
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+  };
+
+  let cntr = 0;
+  // Send the dataset to the cluster
+  dataset.forEach((o) => {
+    const key = Object.keys(o)[0];
+    const value = o[key];
+    distribution.urlxtr.store.put(value, key, (e, v) => {
+      cntr++;
+      // Once the dataset is in place, run the map reduce
+      if (cntr === dataset.length) {
+        doMapReduce();
+      }
+    });
+  });
 });
 
 test("(10 pts) (scenario) all.mr:strmatch", (done) => {
