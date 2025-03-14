@@ -515,7 +515,80 @@ test("(10 pts) (scenario) all.mr:ridx", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:rlg", (done) => {
-  done(new Error("Implement the map and reduce functions"));
+  const mapper = (key, value) => {
+    const result = [];
+    const terms = value.split(" ");
+    for (const term of terms) {
+      if (!term.startsWith("https://")) {
+        continue;
+      }
+      result.push({[term]: key});
+    }
+    return result;
+  };
+
+  const reducer = (key, values) => {
+    const urls = [];
+    for (const value of values) {
+      if (!urls.includes(value)) {
+        urls.push(value);
+      }
+    }
+    return {[key]: urls};
+  };
+
+  const dataset = [
+    {"https://a.com": "foo https://a.com bar https://b.com baz https://c.com qux https://a.com"},
+    {"https://b.com": "corge https://b.com grault https://c.com garply https://d.com waldo https://b.com"},
+    {"https://c.com": "fred https://c.com plugh https://d.com xyzzy https://e.com thud https://c.com"},
+  ];
+
+  const expected = [
+    {"https://a.com": ["https://a.com"]},
+    {"https://b.com": ["https://a.com", "https://b.com"]},
+    {"https://c.com": ["https://a.com", "https://b.com", "https://c.com"]},
+    {"https://d.com": ["https://b.com", "https://c.com"]},
+    {"https://e.com": ["https://c.com"]},
+  ];
+
+  const doMapReduce = (cb) => {
+    distribution.rlg.store.get(null, (e, v) => {
+      try {
+        expect(v.length).toBe(dataset.length);
+      } catch (e) {
+        done(e);
+      }
+
+      distribution.rlg.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
+        try {
+          const expectedKeys = expected.flatMap((v) => Object.keys(v));
+          expect(v.flatMap((v) => Object.keys(v))).toEqual(expect.arrayContaining(expectedKeys));
+          for (const value of v) {
+            const valueKey = Object.keys(value)[0];
+            const expectedValue = expected.find((v) => Object.keys(v)[0] === valueKey);
+            expect(value[valueKey]).toEqual(expect.arrayContaining(expectedValue[valueKey]));
+          }
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+  };
+
+  let cntr = 0;
+  // Send the dataset to the cluster
+  dataset.forEach((o) => {
+    const key = Object.keys(o)[0];
+    const value = o[key];
+    distribution.rlg.store.put(value, key, (e, v) => {
+      cntr++;
+      // Once the dataset is in place, run the map reduce
+      if (cntr === dataset.length) {
+        doMapReduce();
+      }
+    });
+  });
 });
 
 /*
