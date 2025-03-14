@@ -27,8 +27,19 @@ for (const node of nodes) {
 }
 
 test("(1 pts) student test", (done) => {
-  // Fill out this test case...
-  done(new Error("Not implemented"));
+  distribution.empty.mr.exec({}, (error, result) => {
+    expect(error).toBeInstanceOf(Error);
+    expect(result).toBeFalsy();
+    distribution.empty.mr.exec({map: () => {}, reduce: () => {}}, (error, result) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(result).toBeFalsy();
+      distribution.empty.mr.exec({keys: [], map: 1, reduce: 2}, (error, result) => {
+        expect(error).toBeInstanceOf(Error);
+        expect(result).toBeFalsy();
+        done();
+      });
+    });
+  });
 });
 
 test("(1 pts) student test", (done) => {
