@@ -410,7 +410,13 @@ test("(10 pts) (scenario) all.mr:strmatch", (done) => {
 
       distribution.strmatch.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
         try {
-          expect(v).toEqual(expect.arrayContaining(expected));
+          const expectedKeys = expected.flatMap((v) => Object.keys(v));
+          expect(v.flatMap((v) => Object.keys(v))).toEqual(expect.arrayContaining(expectedKeys));
+          for (const value of v) {
+            const valueKey = Object.keys(value)[0];
+            const expectedValue = expected.find((v) => Object.keys(v)[0] === valueKey);
+            expect(value[valueKey]).toEqual(expect.arrayContaining(expectedValue[valueKey]));
+          }
           done();
         } catch (e) {
           done(e);
@@ -435,7 +441,77 @@ test("(10 pts) (scenario) all.mr:strmatch", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:ridx", (done) => {
-  done(new Error("Implement the map and reduce functions"));
+  const mapper = (key, value) => {
+    const result = [];
+    const words = value.split(" ");
+    for (const word of words) {
+      result.push({[word]: key});
+    }
+    return result;
+  };
+
+  const reducer = (key, values) => {
+    const docs = [];
+    for (const value of values) {
+      if (!docs.includes(value)) {
+        docs.push(value);
+      }
+    }
+    return {[key]: docs};
+  };
+
+  const dataset = [
+    {"0": "foo bar baz"},
+    {"1": "foo baz qux"},
+    {"2": "foo qux corge"},
+  ];
+
+  const expected = [
+    {"foo": ["0", "1", "2"]},
+    {"bar": ["0"]},
+    {"baz": ["0", "1"]},
+    {"qux": ["1", "2"]},
+    {"corge": ["2"]},
+  ];
+
+  const doMapReduce = (cb) => {
+    distribution.ridx.store.get(null, (e, v) => {
+      try {
+        expect(v.length).toBe(dataset.length);
+      } catch (e) {
+        done(e);
+      }
+
+      distribution.ridx.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
+        try {
+          const expectedKeys = expected.flatMap((v) => Object.keys(v));
+          expect(v.flatMap((v) => Object.keys(v))).toEqual(expect.arrayContaining(expectedKeys));
+          for (const value of v) {
+            const valueKey = Object.keys(value)[0];
+            const expectedValue = expected.find((v) => Object.keys(v)[0] === valueKey);
+            expect(value[valueKey]).toEqual(expect.arrayContaining(expectedValue[valueKey]));
+          }
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+  };
+
+  let cntr = 0;
+  // Send the dataset to the cluster
+  dataset.forEach((o) => {
+    const key = Object.keys(o)[0];
+    const value = o[key];
+    distribution.ridx.store.put(value, key, (e, v) => {
+      cntr++;
+      // Once the dataset is in place, run the map reduce
+      if (cntr === dataset.length) {
+        doMapReduce();
+      }
+    });
+  });
 });
 
 test("(10 pts) (scenario) all.mr:rlg", (done) => {
