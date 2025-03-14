@@ -254,7 +254,62 @@ test("(10 pts) (scenario) all.mr:tfidf", (done) => {
 */
 
 test("(10 pts) (scenario) all.mr:crawl", (done) => {
-  done(new Error("Implement this test."));
+  function testFetch(url) {
+    return `CONTENT: ${url}`;
+  }
+
+  const mapper = (key, value) => {
+    return {[key]: {url: value, content: testFetch(value)}};
+  };
+
+  const reducer = (key, values) => {
+    return {[key]: values[0]};
+  };
+
+  const dataset = [
+    {"0": "https://a.com"},
+    {"1": "https://b.com"},
+    {"2": "https://c.com"},
+  ];
+
+  const expected = [
+    {"0": {"url": "https://a.com", "content": "CONTENT: https://a.com"}},
+    {"1": {"url": "https://b.com", "content": "CONTENT: https://b.com"}},
+    {"2": {"url": "https://c.com", "content": "CONTENT: https://c.com"}},
+  ];
+
+  const doMapReduce = (cb) => {
+    distribution.crawl.store.get(null, (e, v) => {
+      try {
+        expect(v.length).toBe(dataset.length);
+      } catch (e) {
+        done(e);
+      }
+
+      distribution.crawl.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
+        try {
+          expect(v).toEqual(expect.arrayContaining(expected));
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+  };
+
+  let cntr = 0;
+  // Send the dataset to the cluster
+  dataset.forEach((o) => {
+    const key = Object.keys(o)[0];
+    const value = o[key];
+    distribution.crawl.store.put(value, key, (e, v) => {
+      cntr++;
+      // Once the dataset is in place, run the map reduce
+      if (cntr === dataset.length) {
+        doMapReduce();
+      }
+    });
+  });
 });
 
 test("(10 pts) (scenario) all.mr:urlxtr", (done) => {
@@ -321,26 +376,35 @@ beforeAll((done) => {
     });
   };
 
+  const groups = [
+    {name: "ncdc", nodes: ncdcGroup},
+    {name: "dlib", nodes: dlibGroup},
+    {name: "tfidf", nodes: tfidfGroup},
+    {name: "crawl", nodes: crawlGroup},
+    {name: "urlxtr", nodes: urlxtrGroup},
+    {name: "strmatch", nodes: strmatchGroup},
+    {name: "ridx", nodes: ridxGroup},
+    {name: "rlg", nodes: rlgGroup},
+  ];
+  let index = 0;
+
   distribution.node.start((server) => {
     localServer = server;
-
-    const ncdcConfig = {gid: "ncdc"};
     startNodes(() => {
-      distribution.local.groups.put(ncdcConfig, ncdcGroup, (e, v) => {
-        distribution.ncdc.groups.put(ncdcConfig, ncdcGroup, (e, v) => {
-          const dlibConfig = {gid: "dlib"};
-          distribution.local.groups.put(dlibConfig, dlibGroup, (e, v) => {
-            distribution.dlib.groups.put(dlibConfig, dlibGroup, (e, v) => {
-              const tfidfConfig = {gid: "tfidf"};
-              distribution.local.groups.put(tfidfConfig, tfidfGroup, (e, v) => {
-                distribution.tfidf.groups.put(tfidfConfig, tfidfGroup, (e, v) => {
-                  done();
-                });
-              });
-            });
+      function addGroup() {
+        if (index >= groups.length) {
+          done();
+          return;
+        }
+        const config = {gid: groups[index].name};
+        distribution.local.groups.put(config, groups[index].nodes, (e, v) => {
+          distribution[groups[index].name].groups.put(config, groups[index].nodes, (e, v) => {
+            index += 1;
+            addGroup();
           });
         });
-      });
+      }
+      addGroup();
     });
   });
 });
