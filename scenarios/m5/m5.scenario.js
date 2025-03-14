@@ -378,7 +378,60 @@ test("(10 pts) (scenario) all.mr:urlxtr", (done) => {
 });
 
 test("(10 pts) (scenario) all.mr:strmatch", (done) => {
-  done(new Error("Implement the map and reduce functions"));
+  const mapper = (key, value) => {
+    const regex = "^(?=.*\\d).*$";
+    if ((new RegExp(regex)).test(key)) {
+      return {[regex]: key};
+    }
+    return {[regex]: null};
+  };
+
+  const reducer = (key, values) => {
+    return {[key]: values.filter((v) => v !== null)};
+  };
+
+  const dataset = [
+    {"foobar1": "content 1"},
+    {"12345": "content 2"},
+    {"baz qux": "content 3"},
+  ];
+
+  const expected = [
+    {"^(?=.*\\d).*$": ["foobar1", "12345"]},
+  ];
+
+  const doMapReduce = (cb) => {
+    distribution.strmatch.store.get(null, (e, v) => {
+      try {
+        expect(v.length).toBe(dataset.length);
+      } catch (e) {
+        done(e);
+      }
+
+      distribution.strmatch.mr.exec({keys: v, map: mapper, reduce: reducer}, (e, v) => {
+        try {
+          expect(v).toEqual(expect.arrayContaining(expected));
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+  };
+
+  let cntr = 0;
+  // Send the dataset to the cluster
+  dataset.forEach((o) => {
+    const key = Object.keys(o)[0];
+    const value = o[key];
+    distribution.strmatch.store.put(value, key, (e, v) => {
+      cntr++;
+      // Once the dataset is in place, run the map reduce
+      if (cntr === dataset.length) {
+        doMapReduce();
+      }
+    });
+  });
 });
 
 test("(10 pts) (scenario) all.mr:ridx", (done) => {
