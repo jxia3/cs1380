@@ -95,8 +95,8 @@
       }
     },
     "m5": {
-      "hours": 0,
-      "loc": 0,
+      "hours": 10,
+      "loc": 1000,
       "throughput": {
         "dev": [["mr-store", 0.824], ["mr-mem", 1.10]],
         "aws": [["mr-store", 0.244], ["mr-mem", 0.263]],
