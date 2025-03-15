@@ -121,15 +121,56 @@ test("(15 pts) implement compaction", (done) => {
 });
 
 test("(15 pts) add support for distributed persistence", (done) => {
-  done(new Error("Not implemented"));
+  createDataset("persist", () => {
+    const config = {...combineConfig, out: "persistOut"};
+    distribution.compact.mr.exec(config, (error, result) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result, expectedResults[0])).toBe(true);
+        distribution[config.out].store.get(null, (error, result) => {
+          try {
+            expect(error).toBeFalsy();
+            expect(result).toEqual(expect.arrayContaining(config.keys));
+          } catch (error) {
+            done(error);
+          }
+        });
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
 });
 
 test("(5 pts) add support for optional in-memory operation", (done) => {
-  done(new Error("Not implemented"));
+  createDataset("memory", () => {
+    const config = {...combineConfig, memory: true};
+    distribution.compact.mr.exec(config, (error, result) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result, expectedResults[0])).toBe(true);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
 });
 
 test("(15 pts) add support for iterative map-reduce", (done) => {
-  done(new Error("Not implemented"));
+  createDataset("iterative", () => {
+    const config = {...combineConfig, rounds: 3};
+    distribution.compact.mr.exec(config, (error, result) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result, expectedResults[2])).toBe(true);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
 });
 
 beforeAll((done) => {
