@@ -99,12 +99,12 @@
       "loc": 0,
       "throughput": {
         "dev": [["mr-store", 0.824], ["mr-mem", 1.10]],
-        "aws": [["mr-store", 0], ["mr-mem", 0]],
+        "aws": [["mr-store", 0.244], ["mr-mem", 0.263]],
         "unit": "keys/millisecond"
       },
       "latency": {
         "dev": [["mr-store", 1.21], ["mr-mem", 0.908]],
-        "aws": [["mr-store", 0], ["mr-mem", 0]],
+        "aws": [["mr-store", 4.11], ["mr-mem", 3.80]],
         "unit": "milliseconds/key"
       }
     },
