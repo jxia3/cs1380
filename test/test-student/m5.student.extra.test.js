@@ -129,7 +129,7 @@ test("(15 pts) add support for distributed persistence", (done) => {
         expect(checkResult(result, expectedResults[0])).toBe(true);
         distribution[config.out].store.get(null, (error, result) => {
           try {
-            expect(error).toBeFalsy();
+            expect(error).toEqual({});
             expect(result).toEqual(expect.arrayContaining(config.keys));
           } catch (error) {
             done(error);
