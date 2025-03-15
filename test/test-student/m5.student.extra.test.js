@@ -123,7 +123,7 @@ test("(15 pts) implement compaction", (done) => {
 test("(15 pts) add support for distributed persistence", (done) => {
   createDataset("persist", () => {
     const config = {...combineConfig, out: "persistOut"};
-    distribution.compact.mr.exec(config, (error, result) => {
+    distribution.persist.mr.exec(config, (error, result) => {
       try {
         expect(error).toBeFalsy();
         expect(checkResult(result, expectedResults[0])).toBe(true);
@@ -146,7 +146,7 @@ test("(15 pts) add support for distributed persistence", (done) => {
 test("(5 pts) add support for optional in-memory operation", (done) => {
   createDataset("memory", () => {
     const config = {...combineConfig, memory: true};
-    distribution.compact.mr.exec(config, (error, result) => {
+    distribution.memory.mr.exec(config, (error, result) => {
       try {
         expect(error).toBeFalsy();
         expect(checkResult(result, expectedResults[0])).toBe(true);
@@ -161,7 +161,7 @@ test("(5 pts) add support for optional in-memory operation", (done) => {
 test("(15 pts) add support for iterative map-reduce", (done) => {
   createDataset("iterative", () => {
     const config = {...combineConfig, rounds: 3};
-    distribution.compact.mr.exec(config, (error, result) => {
+    distribution.iterative.mr.exec(config, (error, result) => {
       try {
         expect(error).toBeFalsy();
         expect(checkResult(result, expectedResults[2])).toBe(true);
