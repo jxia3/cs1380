@@ -25,6 +25,86 @@ for (const node of nodes) {
   nodeMap[util.id.getSID(node)] = node;
 }
 
+const dataset = [
+  {"0": "a b c"},
+  {"1": "d e f g h i"},
+  {"2": "j k l m n o p q r"},
+];
+
+function createDataset(group, callback) {
+  let active = dataset.length;
+  for (const item of dataset) {
+    const key = Object.keys(item)[0];
+    distribution[group].store.put(item[key], key, (error, result) => {
+      active -= 1;
+      if (active === 0) {
+        callback();
+      }
+    });
+  }
+}
+
+function combineMap(key, value) {
+  const results = [];
+  const words = value.split(" ");
+  for (let w = 0; w < words.length - 1; w += 2) {
+    results.push({[key]: `${words[w]}${words[w + 1]}`});
+  }
+  if (words.length % 2 === 1) {
+    results.push({[key]: words[words.length - 1]});
+  }
+  return results;
+}
+
+function combineReduce(key, values) {
+  values.sort();
+  return {[key]: values.join(" ")};
+}
+
+const wordCountConfig = {
+  keys: dataset.flatMap((i) => Object.keys(i)),
+  map: combineMap,
+  reduce: combineReduce,
+};
+
+const expectedResults = [
+  [
+    {"0": "ab c"},
+    {"1": "de fg hi"},
+    {"2": "jk lm no pq r"},
+  ],
+  [
+    {"0": "abc"},
+    {"1": "defg hi"},
+    {"2": "jklm nopq r"},
+  ],
+  [
+    {"0": "abc"},
+    {"1": "defghi"},
+    {"2": "jklmnopq r"},
+  ],
+  [
+    {"0": "abc"},
+    {"1": "defghi"},
+    {"2": "jklmnopqr"},
+  ],
+];
+
+function checkResult(result) {
+  if (!(result instanceof Array)) {
+    return false;
+  }
+  for (const item of result) {
+    for (const key in item) {
+      const expected = expectedResult.find((i) => Object.keys(i)[0] == key);
+      if (expected === undefined || item[key] !== expected[key]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 test("(15 pts) implement compaction", (done) => {
   done(new Error("Not implemented"));
 });
