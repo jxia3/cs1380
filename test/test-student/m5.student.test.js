@@ -147,7 +147,8 @@ test("(1 pts) student test", (done) => {
   }
 
   createDataset("rendezvous", () => {
-    distribution.rendezvous.mr.exec({...wordCountConfig, map: doubleMap}, (error, result) => {
+    const config = {...wordCountConfig, map: doubleMap};
+    distribution.rendezvous.mr.exec(config, (error, result) => {
       try {
         expect(error).toBeFalsy();
         expect(checkResult(result, (count) => count * 2)).toBe(true);

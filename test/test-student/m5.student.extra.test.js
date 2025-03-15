@@ -61,7 +61,7 @@ function combineReduce(key, values) {
   return {[key]: values.join(" ")};
 }
 
-const wordCountConfig = {
+const combineConfig = {
   keys: dataset.flatMap((i) => Object.keys(i)),
   map: combineMap,
   reduce: combineReduce,
@@ -90,7 +90,7 @@ const expectedResults = [
   ],
 ];
 
-function checkResult(result) {
+function checkResult(result, expectedResult) {
   if (!(result instanceof Array)) {
     return false;
   }
@@ -106,7 +106,18 @@ function checkResult(result) {
 }
 
 test("(15 pts) implement compaction", (done) => {
-  done(new Error("Not implemented"));
+  createDataset("compact", () => {
+    const config = {...combineConfig, compact: combineReduce};
+    distribution.compact.mr.exec(config, (error, result) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(checkResult(result, expectedResults[0])).toBe(true);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
 });
 
 test("(15 pts) add support for distributed persistence", (done) => {
