@@ -4,7 +4,9 @@
 
 > Summarize your implementation, including key challenges you encountered. Remember to update the `report` section of the `package.json` file with the total number of hours it took you to complete each task of M5 (`hours`) and the lines of code per task.
 
-My implementation comprises `<number>` new software components, totaling `<number>` added lines of code over the previous implementation. Key challenges included `<1, 2, 3 + how you solved them>`.
+My implementation comprises 1 new software component, totaling 1000 added lines of code over the previous implementation. The functionality of my MapReduce framework is packaged into an `mr` service distributed across the nodes in a MapReduce group. The node that calls the operation orchestrates the computation by scheduling map, shuffle, and reduce rounds across the group.
+
+A key challenge was creating dynamic routes for each MapReduce computation. First, the orchestrator node generates a unique ID for each computation based on its node ID and a counter tracking the total number of operations. Then, the node distributes a set of functions corresponding to the map, shuffle, and reduce phase to the node group. An innovative feature I added is the ability to compile the functions directly into the service: instead of setting up a local endpoint on each node, the configuration for the MapReduce operation is serialized into an RPC-like function.
 
 ## Correctness & Performance Characterization
 
@@ -17,11 +19,13 @@ My implementation comprises `<number>` new software components, totaling `<numbe
 - Calling a mapper that returns multiple key-value pairs.
 - Running multiple MapReduce operations concurrently.
 
-*Performance*: My <workflow> can sustain <throughput> <unit>/second, with an average latency of <number> seconds per <unit>.
+*Performance*: My MapReduce framework can sustain a throughput of 0.824 keys/ms on my local machine and 0.224 keys/ms on AWS, with an average latency of 1.21 ms/key on my local machine and 4.11 ms/key on AWS. Enabling in-memory operations increases the throughput to 1.10 keys/ms on my local machine and 0.263 keys/ms on AWS, with a decreased average latency of 0.908 ms/key on my local machine and 3.80 ms/key on AWS. I observed a larger performance gain on my local machine, likely because WSL incurs additional I/O costs from communicating with my host Windows operating system compared to native linux on AWS.
 
 ## Key Feature
 
 > Which extra features did you implement and how?
+
+I implemented all the extra features listed in the specification. Supporting iterated MapReduce operation is the most interesting feature. I used the option to specify a persistent output group for the operation to chain multiple rounds of MapReduce by setting the input for one as the output of another. The rounds are scheduled in the `mr.exec` function on the orchestrator node, so I did not need to introduce additional complexity into the underlying MapReduce primitive.
 
 # M4: Distributed Storage
 
