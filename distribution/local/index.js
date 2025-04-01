@@ -175,6 +175,7 @@ function extractTerms(title, text) {
   const lines = text.split("\n")
       .map((l) => l.replaceAll(/ +\./g, ". ").replaceAll(/ +,/g, ", ").replaceAll(/ +/g, " ").trim())
       .filter((l) => l !== "");
+  console.log(lines);
 
   // Extract terms and context from lines
   for (let l = 0; l < lines.length; l += 1) {
@@ -202,13 +203,16 @@ function extractTerms(title, text) {
 function extractContext(lines, lineIndex, term) {
   const leftStream = createCharStream(lines, lineIndex, term.start, -1);
   leftStream.next();
-  const left = readContext(leftStream).map((w) => w.split("").reverse().join("")).join(" ");
+  const leftWords = readContext(leftStream).map((w) => w.split("").reverse().join(""));
+  leftWords.reverse();
+  const left = leftWords.join(" ");
 
   const rightStream = createCharStream(lines, lineIndex, term.end - 1, 1);
   rightStream.next();
   const right = readContext(rightStream).join(" ");
 
-  return `${left} ${term.text} ${right}`.trim();
+  const termSection = lines[lineIndex].slice(term.start, term.end);
+  return `${left} ${termSection} ${right}`.trim();
 }
 
 /**
