@@ -3,11 +3,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const stopwords = [];
+const stopwords = new Set();
 fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
   const words = data.toString().trim().split(/\s+/g);
   for (const word of words) {
-    stopwords.push(word);
+    stopwords.add(word);
   }
 });
 

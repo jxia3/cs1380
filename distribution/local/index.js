@@ -148,6 +148,7 @@ function extractText(content) {
 function extractTerms(title, text) {
   const termIndex = {};
   for (const line of text.split("\n")) {
+    console.log(line);
     for (const term of calcTerms(line)) {
       console.log(term);
     }
@@ -159,11 +160,11 @@ function extractTerms(title, text) {
  * Computes the terms that are not stopwords in a line of text.
  */
 function calcTerms(line) {
-  line = "Introducing Gemini 2.5 Our most intelligent AI models, built for the agentic era";
   const words = [];
   let currentWord = "";
   let currentStart = 0;
 
+  // Compute words and indices
   for (let c = 0; c < line.length; c += 1) {
     if (checkTermChar(line, currentWord, c)) {
       if (currentWord === "") {
@@ -187,9 +188,24 @@ function calcTerms(line) {
     });
   }
 
-  console.log(line);
-  console.log(words);
-  process.exit(0);
+  // Filter stopwords and compute terms
+  const keywords = words.filter((w) => !util.stopwords.has(w.text));
+  const terms = [];
+  for (let n = 1; n <= NGRAM_LEN; n += 1) {
+    for (let s = 0; s < keywords.length - n + 1; s += 1) {
+      const term = [];
+      for (let w = 0; w < n; w += 1) {
+        term.push(keywords[s + w].text);
+      }
+      terms.push({
+        text: term.join(" "),
+        start: keywords[s].start,
+        end: keywords[s + n - 1].end,
+      });
+    }
+  }
+
+  return terms;
 }
 
 /**
