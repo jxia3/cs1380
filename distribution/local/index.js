@@ -5,6 +5,8 @@ const util = require("../util/util.js");
 
 const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
+const CONTEXT_WORDS = 4;
+const MAX_CONTEXT_LEN = 200;
 
 const queueMutex = util.sync.createMutex();
 
@@ -105,6 +107,10 @@ function extractText(content) {
     "&gt;": ">",
     "&nbsp;": " ",
     "&#160;": " ",
+    "‘": "'",
+    "’": "'",
+    "“": "\"",
+    "”": "\"",
   };
 
   // Extract title in title tag
@@ -166,7 +172,7 @@ function extractTerms(title, text) {
     }
   }
 
-  const lines = text.split("\n").map((l) => l.trim());
+  const lines = text.split("\n").map((l) => l.trim()).filter((l) => l !== "");
   for (let l = 0; l < lines.length; l += 1) {
     const {terms, wordCount} = util.search.calcTerms(lines[l]);
     for (const term of terms) {
@@ -190,7 +196,55 @@ function extractTerms(title, text) {
  * Extracts the context around a term in a line.
  */
 function extractContext(lines, lineIndex, term) {
-  return "context"
+  console.log(lines);
+  const stream = createCharStream(lines, lineIndex, 0, 1);
+  while (true) {
+    const char = stream.next();
+    if (char === null) {
+      break;
+    } else {
+      process.stdout.write(char);
+    }
+  }
+  process.exit(0);
+}
+
+/**
+ * Creates a character stream starting at an index in a line.
+ */
+function createCharStream(lines, lineIndex, charIndex, increment) {
+  let finished = lineIndex < 0 || lineIndex >= lines.length
+    || (lineIndex === 0 && charIndex < 0)
+    || (lineIndex === lines.length - 1 && charIndex >= lines[lineIndex].length);
+  let lineBreak = false;
+
+  return {
+    next: () => {
+      // Check special cases
+      if (finished) {
+        return null;
+      }
+      if (lineBreak) {
+        lineBreak = false;
+        return " ";
+      }
+
+      // Get current character and increment indices
+      const char = lines[lineIndex][charIndex];
+      charIndex += increment;
+      if (charIndex < 0 || charIndex >= lines[lineIndex].length) {
+        lineIndex += increment;
+        if (lineIndex < 0 || lineIndex >= lines.length) {
+          finished = true;
+        } else {
+          charIndex = increment === 1 ? 0 : lines[lineIndex].length - 1;
+          lineBreak = true;
+        }
+      }
+
+      return char;
+    },
+  };
 }
 
 module.exports = {queuePage, _start};
