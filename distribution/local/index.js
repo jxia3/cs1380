@@ -4,7 +4,6 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const QUEUE_KEY = "index-queue";
-const NGRAM_LEN = 3;
 
 const queueMutex = util.sync.createMutex();
 
@@ -148,99 +147,13 @@ function extractText(content) {
 function extractTerms(title, text) {
   const termIndex = {};
   for (const line of text.split("\n")) {
-    const {terms, wordCount} = calcTerms(line);
+    const {terms, wordCount} = util.search.calcTerms(line);
     console.log(line, wordCount);
     for (const term of terms) {
       console.log(term);
     }
   }
   return termIndex;
-}
-
-/**
- * Computes the terms that are not stopwords in a line of text.
- */
-function calcTerms(line) {
-  const words = [];
-  let currentWord = "";
-  let currentStart = 0;
-
-  let index = 0;
-  while (index < line.length) {
-    if (line.slice(index, index + 3) === "'s ") {
-      // Remove contractions
-      index += 2;
-      continue;
-    } else if (checkTermChar(line, currentWord, index)) {
-      // Add regular character
-      if (currentWord === "") {
-        currentStart = index;
-      }
-      currentWord += line[index].toLowerCase();
-    } else if (/[\s-]/.test(line[index]) && currentWord !== "") {
-      // Handle end of word
-      words.push({
-        text: currentWord,
-        start: currentStart,
-        end: index,
-      });
-      currentWord = "";
-    }
-    index += 1;
-  }
-  if (currentWord !== "") {
-    words.push({
-      text: currentWord,
-      start: currentStart,
-      end: line.length,
-    });
-  }
-
-  // Filter stopwords and compute terms
-  const keywords = words.filter((w) => !checkStopword(w.text));
-  const terms = [];
-  for (let n = 1; n <= NGRAM_LEN; n += 1) {
-    for (let s = 0; s < keywords.length - n + 1; s += 1) {
-      const term = [];
-      for (let w = 0; w < n; w += 1) {
-        term.push(keywords[s + w].text);
-      }
-      terms.push({
-        text: term.join(" "),
-        start: keywords[s].start,
-        end: keywords[s + n - 1].end,
-      });
-    }
-  }
-
-  return {terms, wordCount: keywords.length};
-}
-
-/**
- * Checks if the character at an index is a valid term character.
- */
-function checkTermChar(line, currentWord, index) {
-  const CHAR_REGEX = /[a-zA-Z0-9]/;
-  const NUMBER_REGEX = /[0-9]/;
-
-  const char = line[index];
-  const prevChar = currentWord !== "" ? currentWord[currentWord.length - 1] : "";
-  const nextChar = index < line.length - 1 ? line[index + 1] : "";
-  if (CHAR_REGEX.test(char)) {
-    return true;
-  }
-  if (char === "." && NUMBER_REGEX.test(prevChar) && NUMBER_REGEX.test(nextChar)) {
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * Checks if a word is a stopword.
- */
-function checkStopword(word) {
-  return word.length === 1 || util.stopwords.has(word);
 }
 
 module.exports = {queuePage, _start};
