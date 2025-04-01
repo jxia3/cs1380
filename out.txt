@@ -1,253 +1,30 @@
-[01/04/2025, 20:15:01.015000] [127.0.0.1:1234 (8cf1b)] [info] Server running at http://127.0.0.1:1234
-[01/04/2025, 20:15:02.029000] [127.0.0.1:1234 (8cf1b)] [info] Adding page https://stripe.com to the index queue
+[01/04/2025, 20:39:40.555000] [127.0.0.1:1234 (8cf1b)] [info] Server running at http://127.0.0.1:1234
+[01/04/2025, 20:39:41.568000] [127.0.0.1:1234 (8cf1b)] [info] Adding page https://stripe.com to the index queue
 title: Stripe | Financial Infrastructure to Grow Your Revenue
-text: Stripe logo
-Products
-Solutions
-Developers
-Resources
-Pricing
-Dashboard
-Sign in
-Sign in
-Contact sales
-Open mobile navigation
-Stripe logo
-Back
-Close mobile navigation
-Products
-Solutions
-Developers
-Resources
-Contact sales
-Pricing
-Global payments
-Payments
-Payments
-Online payments
-Payment Links
-No-code payments
-Checkout
-Prebuilt payment form
-Elements
-Flexible UI components
-Terminal
-Terminal
-In-person payments
-Radar
-Radar
-Fraud prevention
-Authorization
-Authorization
-Acceptance optimizations
+content: Global payments
 Embedded payments and Finance
-Connect
-Connect
-Payments for platforms
-Treasury
-Treasury
-Financial accounts
-Capital
-Capital
-Customer financing
-Issuing
-Issuing
-Physical and virtual cards
 Revenue and Finance Automation
-Billing
-Billing
-Subscriptions and usage-based
-Revenue Recognition
-Revenue Recognition
-Accounting automation
-Tax
-Tax
-Sales tax & VAT automation
-Invoicing
-Invoicing
-Online invoices
-Sigma
-Sigma
-Custom reports
-Data Pipeline
-Data sync
 More
-Payment methods
-Access to 100+ globally
-Link
-Accelerated checkout
-Financial Connections
-Linked financial account data
-Identity
-Online identity verification
-Atlas
-Startup incorporation
 By stage
-Enterprises
-Startups
 By business model
-Ecommerce
-SaaS
-Retail
-Platforms
-Marketplaces
 By use case
-Finance automation
-Embedded finance
-Global businesses
-Crypto
-Creator economy
 Ecosystem
-Stripe App Marketplace
-Partners
-Professional services
-Documentation
 Get started
-Prebuilt checkout
-Libraries and SDKs
-App integrations
 Guides
-Accept online payments
-Manage subscriptions
-Send payments
-Full API reference
-API status
-API changelog
-Build on Stripe Apps
-Support center
-Support plans
-Guides
-Customer stories
-Blog
-Sessions
-Contact sales
-Jobs
-Newsroom
-Stripe Press
-Become a partner
-Dashboard
-Sign in
-Sign in
 Global payments
-Payments
-Online payments
-Payments
-No-code payments
-Payment Links
-Prebuilt payment form
-Checkout
-Flexible UI components
-Elements
-Terminal
-In-person payments
-Terminal
-Radar
-Fraud prevention
-Radar
-Authorization
-Acceptance optimizations
-Authorization
 Embedded payments and Finance
-Connect
-Payments for platforms
-Connect
-Treasury
-Financial accounts
-Treasury
-Capital
-Customer financing
-Capital
-Issuing
-Physical and virtual cards
-Issuing
 Revenue and Finance Automation
-Billing
-Subscriptions and usage-based
-Billing
-Revenue Recognition
-Accounting automation
-Revenue Recognition
-Tax
-Sales tax & VAT automation
-Tax
-Invoicing
-Online invoices
-Invoicing
-Sigma
-Custom reports
-Sigma
-Data sync
-Data Pipeline
-More
-Payment methods
-Access to 100+ globally
-Accelerated checkout
-Link
-Linked financial account data
-Financial Connections
-Online identity verification
-Identity
-Startup incorporation
-Atlas
-Carbon removal
-Climate
 By stage
-Enterprises
-Startups
 By business model
-Ecommerce
-SaaS
-Retail
-Platforms
-Marketplaces
 By use case
-Finance automation
-Embedded finance
-Global businesses
-Crypto
-Creator economy
 Ecosystem
-Stripe App Marketplace
-Partners
-Professional services
-Documentation
-Start integrating Stripe’s products and tools
 Get started
-Prebuilt checkout
-Libraries and SDKs
-App integrations
-Code samples
 Guides
-Accept online payments
-Manage subscriptions
-Send payments
-Set up in-person payments
-Full API reference
-API status
-API changelog
-Build on Stripe Apps
-Support center
-Support plans
-Guides
-Customer stories
-Blog
-Sessions
-Contact sales
-Jobs
-Newsroom
-Stripe Press
-Become a partner
-Sessions 2025 · May 6–8
-·
-Register now
+Sessions 2025 May 6 8
 Financial infrastructure to grow your revenue
 Financial infrastructure to grow your revenue
 Financial infrastructure to grow your revenue
 Join the millions of companies that use Stripe to accept payments online and in person, embed financial services, power custom revenue models, and build a more profitable business.
-Start now
-Contact sales
-Start now
-Contact sales
 Rocket Rides
 Search
 Today
@@ -302,7 +79,7 @@ United States
 ZIP
 Pay
 Cancel
-Chase Freedom (•••• 1234)
+Chase Freedom ( 1234)
 27 Fredrick Ave Brothers OR
 Billing
 John Appleseed
@@ -322,7 +99,7 @@ Marriott logo
 Shopify logo
 Airbnb logo
 URBN logo
-Mousedown/⌘ FF/Rewind
+Mousedown/ FF/Rewind
 Right/left Stretch
 Up/down Amplitude
 -/+ Zoom
@@ -334,41 +111,17 @@ P Pause/play
 Modular solutions
 A fully integrated suite of financial and payments products
 Reduce costs, grow revenue, and run your business more efficiently on a fully integrated platform. Use Stripe to handle all of your payments-related needs, manage revenue operations, and launch (or invent) new business models.
-Atlas
-Billing
-Capital
-Checkout
-Climate
-Connect
-Elements
-Identity
-Invoicing
-Issuing
-Payments
-Radar
-Sigma
-Tax
-Terminal
-Treasury
-Payments
-Tax
-Radar
-Terminal
 Wood Chair 001
 $149
-€135.00
-¥199.00
-€135.00
+135.00
+199.00
+135.00
 $149
 Pay $149
-€135.00 zahlen
-支付 ¥199.00
-Betaal €135.00
+135.00 zahlen
+199.00
+Betaal 135.00
 Pay $149
-Billing
-Invoicing
-RevRec
-Sigma
 Quantum
 Abstraction
 Typographic
@@ -429,10 +182,6 @@ Up to 3 fonts
 50k requests
 5 domains
 Unlimited seats
-Connect
-Payouts
-Terminal
-Elements
 #9125
 Hanako Yamada
 Processing
@@ -494,63 +243,33 @@ My store
 Orders
 Products
 Reviews
-Issuing
-Connect
-Treasury
-Capital
-Atlas
-Billing
-Capital
-Checkout
-Climate
-Connect
-Elements
-Identity
-Invoicing
-Issuing
-Payments
-Radar
-Sigma
-Tax
-Terminal
-Treasury
 Payments
 Payments
 Accept and optimize payments, globally
 Increase authorization rates, optimize your checkout conversion, and offer local payment methods in every market.
-Start with Payments
 See also
-Tax for automating sales tax and VAT
-Radar for fraud prevention and management
-Terminal for custom in-person payments
-Payments
-Tax
-Radar
-Terminal
+for automating sales tax and VAT
+for fraud prevention and management
+for custom in-person payments
 Wood Chair 001
 $149
-€135.00
-¥199.00
-€135.00
+135.00
+199.00
+135.00
 $149
 Pay $149
-€135.00 zahlen
-支付 ¥199.00
-Betaal €135.00
+135.00 zahlen
+199.00
+Betaal 135.00
 Pay $149
 Billing
 Billing
 Capture recurring revenue
 Support recurring business models, minimize churn, and automate finance operations.
-Start with Billing
 See also
-Invoicing for invoice creation, collection, and tracking
-Revenue Recognition for streamlined accrual accounting
-Sigma for custom revenue reports
-Billing
-Invoicing
-RevRec
-Sigma
+for invoice creation, collection, and tracking
+for streamlined accrual accounting
+for custom revenue reports
 Quantum
 Abstraction
 Typographic
@@ -615,15 +334,10 @@ Connect
 Connect
 Set up multiparty payments and payouts
 Integrate payments into your platform or marketplace for end-to-end payments experiences.
-Start with Connect
 See also
-Terminal for custom in-person payments
-Instant Payouts for fast payments to users
-Payment Elements for customizable UIs
-Connect
-Payouts
-Terminal
-Elements
+for custom in-person payments
+for fast payments to users
+for customizable UIs
 #9125
 Hanako Yamada
 Processing
@@ -689,15 +403,10 @@ Issuing
 Issuing
 Build a fintech offering with banking-as-a-service
 Launch, manage, and scale a commercial card program without any setup fees.
-Start with Issuing
 See also
-Treasury for financial accounts
-Capital for offering fast, flexible financing
-Connect for powering platform payments
-Issuing
-Connect
-Treasury
-Capital
+for financial accounts
+for offering fast, flexible financing
+for powering platform payments
 Global scale
 The backbone for global commerce
 Stripe makes moving money as easy and programmable as moving data.
@@ -705,67 +414,14 @@ Our teams are based in offices around the world and we process hundreds of billi
 500M+
 API requests per day, peaking at 13,000 requests a second.
 99.999%
-historical uptime for Stripe services.
+historical uptime for .
 90%
 of U.S. adults have bought from businesses using Stripe.
 135+
 currencies and payment methods supported.
 Enterprise reinvention
 Bring agility to your enterprise
-Quickly build great payments experiences, improve performance, expand into new markets, and engage customers with subscriptions and marketplaces. Get expert integration guidance from our professional services team and certified partners, and connect Stripe to Salesforce, SAP, and more through the Stripe App Marketplace.
-Explore Stripe for enterprises
-Millions
-BMW owners using ConnectedDrive Store
-350+
-US dealerships
-Products used
-Payments
-Payments
-Connect
-Connect
-5+
-Amazon businesses on Stripe including Prime, Audible, and Amazon Pay.
-50+
-Payment methods available on Stripe
-Products used
-Payments
-Payments
-Connect
-Connect
-130
-Countries in logistics network
-$10+
-Billion worth of goods moved around the world each year
-Products used
-Payments
-Payments
-Connect
-Connect
-+5.5%
-Uplift from Stripe's Global Payments Infrastructure
-+1%
-Uplift from Adaptive Acceptance
-Products used
-Payments
-Payments
-Sigma
-Sigma
-BMW logo
-Read story
-Learn why BMW chose Stripe to power ecommerce and payments
-Amazon logo
-Read story
-See how Amazon simplified cross-border payments with Stripe
-Maersk logo
-Read story
-See how Maersk tapped into new technology to make it easier to ship around the world
-Twilio logo
-Read story
-See how Twilio increased authorization rates by 10% with Stripe
-BMW logo
-Amazon logo
-Maersk logo
-Twilio logo
+Quickly build great payments experiences, improve performance, expand into new markets, and engage customers with subscriptions and marketplaces. Get expert integration guidance from our team and , and connect Stripe to Salesforce, SAP, and more through the .
 Built for growth
 Take your startup further, faster
 Startups build on Stripe to launch faster, adapt as they grow, and automate workflows to do more with less. Build your own API-based integration or use our low- to no-code solutions, which are simple enough for easy implementation and powerful enough to scale as fast and as far as you need.
@@ -773,7 +429,6 @@ Atlas
 Atlas
 Incorporate your company
 Form a legal entity, issue stock, and start accepting payments.
-Learn about Atlas
 Email
 jane.diaz@example.com
 Card information
@@ -787,9 +442,8 @@ United States
 Checkout
 Checkout
 Sell to consumers
-Launch a B2C business with a prebuilt payment page that’s optimized for conversion.
-Start with Checkout
-👋 anything I can help with today?
+Launch a B2C business with a prebuilt payment page that s optimized for conversion.
+anything I can help with today?
 Hey, can I buy a license just for myself?
 Sure, in that case I'd recommend our starter plan.
 buy.stripe.com/Ae93Jis
@@ -799,7 +453,6 @@ Scan to pay
 Payment Links
 Validate your idea
 Test your product idea by launching payments with little to no code.
-Try Payment Links
 $144.78
 Due Feb 19
 To
@@ -813,16 +466,13 @@ Invoicing
 Invoicing
 Sell to businesses
 Launch a B2B business and collect one-time or recurring payments from customers.
-Explore Invoicing
 Designed for developers
 Ship faster with powerful and easy-to-use APIs
 Save engineering time with unified payments functionality. We obsess over the maze of gateways, payments rails, and financial institutions that make up the global economic landscape so that your teams can build what you need on one platform.
-Read the docs
 ~
 NORMAL
 server.js
 100%
-☰
 0/1
 ln
 :
@@ -832,25 +482,19 @@ $
 []
 Use Stripe with your stack
 We offer client and server libraries in everything from React and PHP to .NET and iOS.
-See libraries
 Try no-code options
 Customize and deploy payments interfaces directly from the Stripe Dashboard.
-Explore no-code
 Explore prebuilt integrations
 Connect Stripe to over a hundred tools including Adobe, Salesforce, and Xero.
-Browse App Marketplace
 Build on Stripe Apps
 Create an app just for your team or for the millions of businesses on Stripe.
-Learn about Apps
 Launch with ease
 Low- and no-code options for getting started
-If you’d like to use Stripe for your business but don’t have developers on staff, no problem. We have a few options depending on your needs.
+If you d like to use Stripe for your business but don t have developers on staff, no problem. We have a few options depending on your needs.
 Use a pre-integrated platform
-Explore our directory to find out-of-the-box solutions that connect with Stripe, such as Squarespace and Lightspeed.
-See directory
+Explore our directory to find out-of-the-box solutions that connect with Stripe, such as and .
 Build with Stripe-certified experts
 Work with a Stripe consulting partner that can integrate and deploy Stripe solutions for you.
-View partners
 Brand elements
 Customize how your brand appears globally across the Stripe products your customers use.
 Icon
@@ -860,209 +504,66 @@ F5F0EA
 Accent color
 262627
 Try our no-code products
-Create an invoice, accept an in-person payment with your phone, or share a payment link directly from your Dashboard to start generating revenue in minutes—no code required.
-Explore no-code
+Create an , accept an with your phone, or share a directly from your Dashboard to start generating revenue in minutes no code required.
 Ready to get started?
 Create an account instantly to get started or contact us to design a custom package for your business.
-Start now
-Contact sales
 Always know what you pay
 Integrated per-transaction pricing with no hidden fees.
-Pricing details
 Start your integration
 Get up and running with Stripe in as little as 10 minutes.
-API reference
-Stripe logo
-United States (English)
 Australia
-English
 Austria
-Deutsch
-English
 Belgium
-Nederlands
-Français
-Deutsch
-English
 Brazil
-Português
-English
 Bulgaria
-English
 Canada
-English
-Français
 Croatia
-English
-Italiano
 Cyprus
-English
 Czech Republic
-English
 Denmark
-English
 Estonia
-English
 Finland
-English
-Svenska
 France
-Français
-English
 Germany
-Deutsch
-English
 Gibraltar
-English
 Greece
-English
 Hong Kong
-English
-简体中文
 Hungary
-English
 India
-English
 Ireland
-English
 Italy
-Italiano
-English
 Japan
-日本語
-English
 Latvia
-English
 Liechtenstein
-Deutsch
-English
 Lithuania
-English
 Luxembourg
-Français
-Deutsch
-English
 Malaysia
-English
-简体中文
 Malta
-English
 Mexico
-Español
-English
 Netherlands
-Nederlands
-English
 New Zealand
-English
 Norway
-English
 Poland
-English
 Portugal
-Português
-English
 Romania
-English
 Singapore
-English
-简体中文
 Slovakia
-English
 Slovenia
-English
-Italiano
 Spain
-Español
-English
 Sweden
-Svenska
-English
 Switzerland
-Deutsch
-Français
-Italiano
-English
 Thailand
-ไทย
-English
 United Arab Emirates
-English
 United Kingdom
-English
 United States
-English
-Español
-简体中文
 Products & pricing
-Pricing
-Atlas
-Billing
-Capital
-Checkout
-Climate
-Connect
-Data Pipeline
-Elements
-Financial Connections
-Identity
-Invoicing
-Issuing
-Link
-Payments
-Payment Links
-Payouts
-Radar
-Revenue Recognition
-Sigma
-Tax
-Terminal
-Treasury
 Solutions
-Startups
-Enterprises
-SaaS
-Retail
-Platforms
-Ecommerce
-Marketplaces
-Crypto
-Creator economy
-Embedded finance
-Global businesses
-Finance automation
 Integrations & custom solutions
-Stripe App Marketplace
-Partner ecosystem
-Professional services
 Developers
-Documentation
-API reference
-API status
-API changelog
-Stripe Apps
 Resources
-Guides
-Customer stories
-Blog
-Annual conference
-Privacy & terms
-Prohibited & restricted businesses
-Licenses
-Sitemap
-Cookie settings
-Your privacy choices
 Company
-Jobs
-Newsroom
-Stripe Press
 Support
-Contact sales
-Support center
-Support plans
 CA residents:
 +1 888 926 2289
-Sign in
-© 2025 Stripe, Inc.
-Start now
-Contact sales
+2025 Stripe, Inc.
+undefined

@@ -68,14 +68,16 @@ function queuePage(url, callback) {
  */
 function indexPage(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  util.search.downloadPage(url, (error, content) => {
+  util.search.downloadPage(url, (error, data) => {
     if (error) {
       callback(error, null);
       return;
     }
-    const {title, text} = extractText(content);
+    const {title, content} = extractText(data);
     console.log("title:", title)
-    console.log("text:", text)
+    console.log("content:", content)
+    const terms = extractTerms(title, content);
+    console.log(terms)
   });
 }
 
@@ -83,8 +85,12 @@ function indexPage(url, callback) {
  * Parses the title and text content in a page.
  */
 function extractText(content) {
-  // Extract title in title tag
   const TITLE_REGEX = /<title>([\S\s]+?)<\/title>/;
+  const DISCARD_REGEX = /<(head|script|style|a|button)[\S\s]*?<\/\1>/g;
+  const TAG_REGEX = /<[^>]*>/g;
+  const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9`~!@#$%^&*()\-_=+\[\]\{\}\\|;:'",<.>/? \n]+/g;
+
+  // Extract title in title tag
   let title = null;
   const titleMatch = TITLE_REGEX.exec(content);
   if (titleMatch !== null) {
@@ -96,10 +102,11 @@ function extractText(content) {
   }
 
   // Remove HTML tags and collapse whitespace
-  content = content.replaceAll(/<(script|style)[\S\s]*?<\/\1>/g, "");
-  content = content.replaceAll(/<[^>]*>/g, "");
+  content = content.replaceAll(DISCARD_REGEX, "");
+  content = content.replaceAll(TAG_REGEX, "");
   content = content.replaceAll("&nbsp;", " ");
   content = content.replaceAll("&amp;", "&")
+  content = content.replaceAll(SPECIAL_CHARS_REGEX, " ");
   content = content.replaceAll(/\s*\n+\s*/g, "\n");
   content = content.replaceAll(/[^\S\n\r]+/g, " ");
   content = content.trim();
@@ -116,7 +123,14 @@ function extractText(content) {
     }
   }
 
-  return {title, text: content};
+  return {title, content};
+}
+
+/**
+ * Extracts key terms from a page title and text content.
+ */
+function extractTerms(title, text) {
+
 }
 
 module.exports = {queuePage, _start};
