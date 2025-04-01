@@ -159,9 +159,57 @@ function extractTerms(title, text) {
  * Computes the terms that are not stopwords in a line of text.
  */
 function calcTerms(line) {
-  console.log(util.stopwords)
-  console.log(line)
-  process.exit(0)
+  line = "Introducing Gemini 2.5 Our most intelligent AI models, built for the agentic era";
+  const words = [];
+  let currentWord = "";
+  let currentStart = 0;
+
+  for (let c = 0; c < line.length; c += 1) {
+    if (checkTermChar(line, currentWord, c)) {
+      if (currentWord === "") {
+        currentStart = c;
+      }
+      currentWord += line[c].toLowerCase();
+    } else if (/\s+/g.test(line[c]) && currentWord !== "") {
+      words.push({
+        text: currentWord,
+        start: currentStart,
+        end: c,
+      });
+      currentWord = "";
+    }
+  }
+  if (currentWord !== "") {
+    words.push({
+      text: currentWord,
+      start: currentStart,
+      end: line.length,
+    });
+  }
+
+  console.log(line);
+  console.log(words);
+  process.exit(0);
+}
+
+/**
+ * Checks if the character at an index is a valid term character.
+ */
+function checkTermChar(line, currentWord, index) {
+  const CHAR_REGEX = /[a-zA-Z0-9]/;
+  const NUMBER_REGEX = /[0-9]/;
+
+  const char = line[index];
+  const prevChar = currentWord !== "" ? currentWord[currentWord.length - 1] : "";
+  const nextChar = index < line.length - 1 ? line[index + 1] : "";
+  if (CHAR_REGEX.test(char)) {
+    return true;
+  }
+  if (char === "." && NUMBER_REGEX.test(prevChar) && NUMBER_REGEX.test(nextChar)) {
+    return true;
+  }
+
+  return false;
 }
 
 module.exports = {queuePage, _start};
