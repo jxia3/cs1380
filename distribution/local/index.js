@@ -4,6 +4,7 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const QUEUE_KEY = "index-queue";
+const NGRAM_LEN = 3;
 
 const queueMutex = util.sync.createMutex();
 
@@ -145,7 +146,21 @@ function extractText(content) {
  * of each term is also extracted. Terms in the title are weighted 5x heavier than terms in the body.
  */
 function extractTerms(title, text) {
+  const termIndex = {};
+  for (const line of text.split("\n")) {
+    for (const term of calcTerms(line)) {
+      console.log(term);
+    }
+  }
+  return termIndex;
+}
 
+/**
+ * Computes the terms that are not stopwords in a line of text.
+ */
+function calcTerms(line) {
+  console.log(util.stopwords)
+  process.exit(0)
 }
 
 module.exports = {queuePage, _start};
