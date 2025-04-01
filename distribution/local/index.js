@@ -176,7 +176,7 @@ function calcTerms(line) {
         currentStart = index;
       }
       currentWord += line[index].toLowerCase();
-    } else if (/\s+/g.test(line[index]) && currentWord !== "") {
+    } else if (/[\s-]/.test(line[index]) && currentWord !== "") {
       // Handle end of word
       words.push({
         text: currentWord,
