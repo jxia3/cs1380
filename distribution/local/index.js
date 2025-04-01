@@ -21,7 +21,6 @@ function _start() {
     active = true;
 
     queueMutex.lock(() => {
-      console.log("checking queue");
       global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
         // Check if there is an item in the queue
         if (error || queue.length == 0) {
