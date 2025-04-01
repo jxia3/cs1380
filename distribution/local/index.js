@@ -68,7 +68,7 @@ function queuePage(url, callback) {
  */
 function indexPage(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  console.log("indexing", url);
+  log(`Indexing ${url}`);
   callback(null, null);
 }
 

@@ -1,5 +1,25 @@
 /* A module for synchronization between asynchronous tasks. */
 
+const log = require("./log.js");
+
+/**
+ * Creates a callback function that can only be called once.
+ */
+function createGuardedCallback(callback) {
+  let callCount = 0;
+  function guardedCallback(error, result) {
+    callCount += 1;
+    if (callCount > 1) {
+      log(`Guarded callback called ${callCount} times`);
+      return;
+    }
+    if (callback !== undefined) {
+      callback(error, result);
+    }
+  }
+  return guardedCallback;
+}
+
 /**
  * Creates a mutex object that exposes methods for synchronization.
  */
@@ -46,4 +66,4 @@ function unlockMutex(callback) {
   callback();
 }
 
-module.exports = {createMutex};
+module.exports = {createGuardedCallback, createMutex};
