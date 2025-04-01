@@ -23,7 +23,7 @@ function _start() {
     queueMutex.lock(() => {
       global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
         // Check if there is an item in the queue
-        if (error || queue.length == 0) {
+        if (error || queue.length === 0) {
           queueMutex.unlock(() => {
             active = false;
           });
@@ -73,8 +73,31 @@ function indexPage(url, callback) {
       callback(error, null);
       return;
     }
-    console.log("got content", content);
+    const { title, text } = extractText(content);
   });
+}
+
+/**
+ * Parses the title and text content in a page.
+ */
+function extractText(content) {
+  // Extract title
+  let title = null;
+  const titleMatch = /<title>([\S\s]+?)<\/title>/g.exec(content);
+  if (titleMatch !== null) {
+    const matchContent = titleMatch[1].replaceAll(/<[^>]*>/g, "").trim();
+    if (matchContent !== "") {
+      title = matchContent;
+    }
+  }
+
+  // Remove HTML tags and collapse whitespace
+  content = content.replaceAll(/<(script|style)[\S\s]*?<\/\1>/g, "");
+  content = content.replaceAll(/<[^>]*>/g, "");
+  content = content.replaceAll(/\n+\s*/g, "\n");
+  content = content.replaceAll(/[^\S\n\r]+/g, " ");
+  content = content.trim();
+  console.log(`'${content}'`);
 }
 
 module.exports = {queuePage, _start};
