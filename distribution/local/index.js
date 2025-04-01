@@ -73,7 +73,9 @@ function indexPage(url, callback) {
       callback(error, null);
       return;
     }
-    const { title, text } = extractText(content);
+    const {title, text} = extractText(content);
+    console.log("title:", title)
+    console.log("text:", text)
   });
 }
 
@@ -81,13 +83,15 @@ function indexPage(url, callback) {
  * Parses the title and text content in a page.
  */
 function extractText(content) {
-  // Extract title
+  // Extract title in title tag
+  const TITLE_REGEX = /<title>([\S\s]+?)<\/title>/;
   let title = null;
-  const titleMatch = /<title>([\S\s]+?)<\/title>/g.exec(content);
+  const titleMatch = TITLE_REGEX.exec(content);
   if (titleMatch !== null) {
     const matchContent = titleMatch[1].replaceAll(/<[^>]*>/g, "").trim();
     if (matchContent !== "") {
       title = matchContent;
+      content = content.replace(TITLE_REGEX, "");
     }
   }
 
@@ -97,7 +101,20 @@ function extractText(content) {
   content = content.replaceAll(/\n+\s*/g, "\n");
   content = content.replaceAll(/[^\S\n\r]+/g, " ");
   content = content.trim();
-  console.log(`'${content}'`);
+
+  // Extract title from body
+  if (title === null) {
+    if (content !== "") {
+      const lineEnd = content.indexOf("\n");
+      const line = lineEnd !== -1 ? content.slice(0, lineEnd) : content;
+      const words = line.split(" ");
+      title = words.slice(0, 10).join(" ");
+    } else {
+      title = "<unknown>";
+    }
+  }
+
+  return {title, text: content};
 }
 
 module.exports = {queuePage, _start};
