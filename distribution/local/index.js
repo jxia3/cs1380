@@ -164,21 +164,28 @@ function calcTerms(line) {
   let currentWord = "";
   let currentStart = 0;
 
-  // Compute words and indices
-  for (let c = 0; c < line.length; c += 1) {
-    if (checkTermChar(line, currentWord, c)) {
+  let index = 0;
+  while (index < line.length) {
+    if (line.slice(index, index + 3) === "'s ") {
+      // Remove contractions
+      index += 2;
+      continue;
+    } else if (checkTermChar(line, currentWord, index)) {
+      // Add regular character
       if (currentWord === "") {
-        currentStart = c;
+        currentStart = index;
       }
-      currentWord += line[c].toLowerCase();
-    } else if (/\s+/g.test(line[c]) && currentWord !== "") {
+      currentWord += line[index].toLowerCase();
+    } else if (/\s+/g.test(line[index]) && currentWord !== "") {
+      // Handle end of word
       words.push({
         text: currentWord,
         start: currentStart,
-        end: c,
+        end: index,
       });
       currentWord = "";
     }
+    index += 1;
   }
   if (currentWord !== "") {
     words.push({
