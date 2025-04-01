@@ -4,6 +4,7 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const QUEUE_KEY = "index-queue";
+const CONTEXT_COUNT = 3;
 
 const queueMutex = util.sync.createMutex();
 
@@ -151,14 +152,45 @@ function extractText(content) {
  */
 function extractTerms(title, text) {
   const termIndex = {};
-  for (const line of text.split("\n")) {
-    const {terms, wordCount} = util.search.calcTerms(line);
-    console.log(line, wordCount);
-    for (const term of terms) {
-      console.log(term);
+  const {terms: titleTerms} = util.search.calcTerms(title);
+  for (const term of titleTerms) {
+    if (!(term.text in termIndex)) {
+      termIndex[term.text] = {
+        frequency: 0,
+        context: [],
+      };
+    }
+    termIndex[term.text].frequency += 5;
+    if (termIndex[term.text].context.length === 0) {
+      termIndex[term.text].context.push(title);
     }
   }
+
+  const lines = text.split("\n").map((l) => l.trim());
+  for (let l = 0; l < lines.length; l += 1) {
+    const {terms, wordCount} = util.search.calcTerms(lines[l]);
+    for (const term of terms) {
+      if (!(term.text in termIndex)) {
+        termIndex[term.text] = {
+          frequency: 0,
+          context: [],
+        };
+      }
+      termIndex[term.text].frequency += wordCount > 2 ? 1 : 0.5;
+      if (termIndex[term.text].context.length < CONTEXT_COUNT) {
+        termIndex[term.text].context.push(extractContext(lines, l, term));
+      }
+    }
+  }
+
   return termIndex;
+}
+
+/**
+ * Extracts the context around a term in a line.
+ */
+function extractContext(lines, lineIndex, term) {
+  return "context"
 }
 
 module.exports = {queuePage, _start};
