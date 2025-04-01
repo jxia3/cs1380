@@ -127,7 +127,8 @@ function extractText(content) {
 }
 
 /**
- * Extracts key terms from a page title and text content.
+ * Extracts key terms from a page title and text content. A context segment around the first few occurrences
+ * of each term is also extracted. Terms in the title are weighted 5x heavier than terms in the body.
  */
 function extractTerms(title, text) {
 
