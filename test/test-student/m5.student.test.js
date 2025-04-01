@@ -78,7 +78,7 @@ function checkResult(result, modifier) {
   }
   for (const item of result) {
     for (const key in item) {
-      const expected = expectedResult.find((i) => Object.keys(i)[0] == key);
+      const expected = expectedResult.find((i) => Object.keys(i)[0] === key);
       if (expected === undefined) {
         return false;
       }
