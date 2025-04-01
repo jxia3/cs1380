@@ -143,13 +143,14 @@ function extractText(content) {
 
 /**
  * Extracts key terms from a page title and text content. A context segment around the first few occurrences
- * of each term is also extracted. Terms in the title are weighted 5x heavier than terms in the body.
+ * of each term is also extracted. Terms in the title are weighted heavier than terms in the body.
  */
 function extractTerms(title, text) {
   const termIndex = {};
   for (const line of text.split("\n")) {
-    console.log(line);
-    for (const term of calcTerms(line)) {
+    const {terms, wordCount} = calcTerms(line);
+    console.log(line, wordCount);
+    for (const term of terms) {
       console.log(term);
     }
   }
@@ -196,7 +197,7 @@ function calcTerms(line) {
   }
 
   // Filter stopwords and compute terms
-  const keywords = words.filter((w) => !util.stopwords.has(w.text));
+  const keywords = words.filter((w) => !checkStopword(w.text));
   const terms = [];
   for (let n = 1; n <= NGRAM_LEN; n += 1) {
     for (let s = 0; s < keywords.length - n + 1; s += 1) {
@@ -212,7 +213,7 @@ function calcTerms(line) {
     }
   }
 
-  return terms;
+  return {terms, wordCount: keywords.length};
 }
 
 /**
@@ -233,6 +234,13 @@ function checkTermChar(line, currentWord, index) {
   }
 
   return false;
+}
+
+/**
+ * Checks if a word is a stopword.
+ */
+function checkStopword(word) {
+  return word.length === 1 || util.stopwords.has(word);
 }
 
 module.exports = {queuePage, _start};
