@@ -160,6 +160,7 @@ function extractTerms(title, text) {
  */
 function calcTerms(line) {
   console.log(util.stopwords)
+  console.log(line)
   process.exit(0)
 }
 
