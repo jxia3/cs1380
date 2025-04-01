@@ -6,7 +6,7 @@ const util = require("../util/util.js");
 const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
-const MAX_CONTEXT_LEN = 200;
+const MAX_CONTEXT_LEN = 50;
 
 const queueMutex = util.sync.createMutex();
 
@@ -81,8 +81,6 @@ function indexPage(url, callback) {
       return;
     }
     const {title, content} = extractText(data);
-    console.log("title:", title);
-    console.log("content:", content);
     const terms = extractTerms(title, content);
     console.log(terms);
   });
@@ -157,6 +155,7 @@ function extractText(content) {
  * of each term is also extracted. Terms in the title are weighted heavier than terms in the body.
  */
 function extractTerms(title, text) {
+  // Extract terms from title
   const termIndex = {};
   const {terms: titleTerms} = util.search.calcTerms(title);
   for (const term of titleTerms) {
@@ -172,7 +171,12 @@ function extractTerms(title, text) {
     }
   }
 
-  const lines = text.split("\n").map((l) => l.trim()).filter((l) => l !== "");
+  // Format lines
+  const lines = text.split("\n")
+      .map((l) => l.replaceAll(/ +\./g, ". ").replaceAll(/ +,/g, ", ").replaceAll(/ +/g, " ").trim())
+      .filter((l) => l !== "");
+
+  // Extract terms and context from lines
   for (let l = 0; l < lines.length; l += 1) {
     const {terms, wordCount} = util.search.calcTerms(lines[l]);
     for (const term of terms) {
@@ -196,17 +200,47 @@ function extractTerms(title, text) {
  * Extracts the context around a term in a line.
  */
 function extractContext(lines, lineIndex, term) {
-  console.log(lines);
-  const stream = createCharStream(lines, lineIndex, 0, 1);
-  while (true) {
-    const char = stream.next();
-    if (char === null) {
-      break;
-    } else {
-      process.stdout.write(char);
-    }
+  const leftStream = createCharStream(lines, lineIndex, term.start, -1);
+  leftStream.next();
+  const left = readContext(leftStream).map((w) => w.split("").reverse().join("")).join(" ");
+
+  const rightStream = createCharStream(lines, lineIndex, term.end - 1, 1);
+  rightStream.next();
+  const right = readContext(rightStream).join(" ");
+
+  return `${left} ${term.text} ${right}`.trim();
+}
+
+/**
+ * Reads a side of a context from a character stream.
+ */
+function readContext(stream) {
+  const context = [];
+  let contextLen = 0;
+  let currentWord = "";
+
+  // Clear spaces from beginning of context
+  let char = stream.next();
+  while (char !== null && char === " ") {
+    char = stream.next();
   }
-  process.exit(0);
+
+  // Add words to context
+  while (char !== null && context.length < CONTEXT_WORDS && contextLen < MAX_CONTEXT_LEN) {
+    if (char !== " ") {
+      currentWord += char;
+    } else if (currentWord !== "") {
+      context.push(currentWord);
+      currentWord = "";
+    }
+    char = stream.next();
+    contextLen += 1;
+  }
+  if (currentWord !== "") {
+    context.push(currentWord);
+  }
+
+  return context;
 }
 
 /**
