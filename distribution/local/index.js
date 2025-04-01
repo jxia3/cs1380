@@ -90,9 +90,11 @@ function indexPage(url, callback) {
  */
 function extractText(content) {
   const TITLE_REGEX = /<title>([\S\s]+?)<\/title>/;
-  const DISCARD_REGEX = /<(head|script|style|a|button)[\S\s]*?<\/\1>/g;
+  const METADATA_REGEX = /<(head|script|style|button)[\S\s]*?<\/\1>/g;
+  const LINK_COMPONENT_REGEX = />\s*?<a[\S\s]*?<\/a>\s*?</g;
+  const EMPTY_LINK_REGEX = /<a\s[^>]*?><\/a>/g;
   const TAG_REGEX = /<[^>]*>/g;
-  const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9`~!@#$%^&*()\-_=+\[\]\{\}\\|;:'",<.>/? \n]+/g;
+  const SPECIAL_CHAR_REGEX = /[^a-zA-Z0-9`~!@#$%^&*()\-_=+\[\]\{\}\\|;:'",<.>/? \n]+/g;
   const HTML_CODES = {
     "&quot;": "\"",
     "&#34;": "\"",
@@ -101,6 +103,7 @@ function extractText(content) {
     "&lt;": "<",
     "&gt;": ">",
     "&nbsp;": " ",
+    "&#160;": " ",
   };
 
   // Extract title in title tag
@@ -115,12 +118,14 @@ function extractText(content) {
   }
 
   // Remove HTML tags and collapse whitespace
-  content = content.replaceAll(DISCARD_REGEX, " ");
+  content = content.replaceAll(METADATA_REGEX, " ");
+  content = content.replaceAll(LINK_COMPONENT_REGEX, "><");
+  content = content.replaceAll(EMPTY_LINK_REGEX, " ");
   content = content.replaceAll(TAG_REGEX, " ");
   for (const code in HTML_CODES) {
     content = content.replaceAll(code, HTML_CODES[code]);
   }
-  content = content.replaceAll(SPECIAL_CHARS_REGEX, " ");
+  content = content.replaceAll(SPECIAL_CHAR_REGEX, " ");
   content = content.replaceAll(/\s*\n+\s*/g, "\n");
   content = content.replaceAll(/[^\S\n\r]+/g, " ");
   content = content.trim();
