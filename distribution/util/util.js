@@ -1,6 +1,7 @@
 const compile = require("./compile.js");
 const id = require("./id.js");
 const serialization = require("./serialization.js");
+const sync = require("./sync.js");
 const wire = require("./wire.js");
 
 module.exports = {
@@ -8,5 +9,6 @@ module.exports = {
   deserialize: serialization.deserialize,
   compile,
   id,
+  sync,
   wire,
 };
