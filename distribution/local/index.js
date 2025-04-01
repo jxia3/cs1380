@@ -98,7 +98,9 @@ function extractText(content) {
   // Remove HTML tags and collapse whitespace
   content = content.replaceAll(/<(script|style)[\S\s]*?<\/\1>/g, "");
   content = content.replaceAll(/<[^>]*>/g, "");
-  content = content.replaceAll(/\n+\s*/g, "\n");
+  content = content.replaceAll("&nbsp;", " ");
+  content = content.replaceAll("&amp;", "&")
+  content = content.replaceAll(/\s*\n+\s*/g, "\n");
   content = content.replaceAll(/[^\S\n\r]+/g, " ");
   content = content.trim();
 
