@@ -28,7 +28,7 @@ const DISABLE_LOGS = ["gossip", "heartbeat"];
  */
 function send(message, remote, callback) {
   // Check service call arguments
-  callback = createGuardedCallback(callback);
+  callback = util.sync.createGuardedCallback(callback);
   if (remote?.node?.ip === undefined || remote?.node?.port === undefined
       || remote?.service === undefined || remote?.method === undefined) {
     callback(new Error("Invalid remote node configuration"), null);
@@ -51,24 +51,6 @@ function send(message, remote, callback) {
   } catch (error) {
     callback(error, null);
   }
-}
-
-/**
- * Creates a callback function that can only be called once.
- */
-function createGuardedCallback(callback) {
-  let callCount = 0;
-  function guardedCallback(error, result) {
-    callCount += 1;
-    if (callCount > 1) {
-      log(`Guarded callback called ${callCount} times`);
-      return;
-    }
-    if (callback !== undefined) {
-      callback(error, result);
-    }
-  }
-  return guardedCallback;
 }
 
 /**
