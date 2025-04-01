@@ -1,25 +1,9 @@
 const distribution = require("./distribution.js");
 
-const util = distribution.util;
-
-const mutex = util.sync.createMutex();
-
-setInterval(() => {
-  mutex.lock(() => {
-    console.log("locked in interval");
-    mutex.unlock(() => {
-      console.log("unlocked in interval");
+distribution.node.start(() => {
+  distribution.local.index.indexPage("https://example.com", () => {
+    distribution.local.index.indexPage("https://b.com", () => {
+      console.log("added pages");
     });
   });
-}, 1000);
-
-setTimeout(() => {
-  mutex.lock(() => {
-    console.log("locked in timeout");
-    setTimeout(() => {
-      mutex.unlock(() => {
-        console.log("unlocked in timeout");
-      });
-    }, 2000);
-  });
-}, 3000);
+});
