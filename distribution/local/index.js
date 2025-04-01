@@ -68,8 +68,13 @@ function queuePage(url, callback) {
  */
 function indexPage(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  log(`Indexing ${url}`);
-  callback(null, null);
+  util.search.downloadPage(url, (error, content) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    console.log("got content", content);
+  });
 }
 
 module.exports = {queuePage, _start};
