@@ -1,6 +1,7 @@
 /* A module with operations for a search engine. */
 
 const http = require("http");
+const https = require("https");
 
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 20000;
@@ -14,7 +15,8 @@ function downloadPage(url, callback) {
   }
   callback = global.distribution.util.sync.createGuardedCallback(callback);
 
-  const request = http.request(url, {
+  const module = url.startsWith("https") ? https : http;
+  const request = module.request(url, {
     method: "GET",
     headers: {
       "User-Agent": USER_AGENT,
@@ -34,10 +36,12 @@ function downloadPage(url, callback) {
 }
 
 /**
- * Extracts the HTML content from an HTTP response.
+ * Saves the HTML content from an HTTP response.
  */
 function handleResponse(response, callback) {
-  console.log("handling response");
+  let content = "";
+  response.on("data", (chunk) => content += chunk);
+  response.on("end", () => callback(null, content));
 }
 
 module.exports = {downloadPage};
