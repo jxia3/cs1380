@@ -1,10 +1,26 @@
 /* A module with operations for a search engine. */
 
+const fs = require("fs");
 const http = require("http");
 const https = require("https");
+const path = require("path");
 
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 20000;
+const NGRAM_LEN = 3;
+
+const stopwords = new Set();
+
+// Load stopwords asynchronously on startup
+fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
+  if (error) {
+    throw error;
+  }
+  const words = data.toString().trim().split(/\s+/g);
+  for (const word of words) {
+    stopwords.add(word);
+  }
+});
 
 /**
  * Downloads the HTML content of a page at a URL.
@@ -44,4 +60,93 @@ function handleResponse(response, callback) {
   response.on("end", () => callback(null, content));
 }
 
-module.exports = {downloadPage};
+/**
+ * Computes the terms that are not stopwords in a line of text.
+ */
+function calcTerms(line) {
+  const words = [];
+  let currentWord = "";
+  let currentStart = 0;
+
+  let index = 0;
+  while (index < line.length) {
+    if (line.slice(index, index + 3) === "'s ") {
+      // Remove contractions
+      index += 2;
+      continue;
+    } else if (checkTermChar(line, currentWord, index)) {
+      // Add regular character
+      if (currentWord === "") {
+        currentStart = index;
+      }
+      currentWord += line[index].toLowerCase();
+    } else if (/[\s-]/.test(line[index]) && currentWord !== "") {
+      // Handle end of word
+      words.push({
+        text: currentWord,
+        start: currentStart,
+        end: index,
+      });
+      currentWord = "";
+    }
+    index += 1;
+  }
+  if (currentWord !== "") {
+    words.push({
+      text: currentWord,
+      start: currentStart,
+      end: line.length,
+    });
+  }
+
+  // Filter stopwords and compute terms
+  const keywords = words.filter((w) => !checkStopword(w.text));
+  const terms = [];
+  for (let n = 1; n <= NGRAM_LEN; n += 1) {
+    for (let s = 0; s < keywords.length - n + 1; s += 1) {
+      const term = [];
+      for (let w = 0; w < n; w += 1) {
+        term.push(keywords[s + w].text);
+      }
+      terms.push({
+        text: term.join(" "),
+        start: keywords[s].start,
+        end: keywords[s + n - 1].end,
+      });
+    }
+  }
+
+  return {terms, wordCount: keywords.length};
+}
+
+/**
+ * Checks if the character at an index is a valid term character.
+ */
+function checkTermChar(line, currentWord, index) {
+  const CHAR_REGEX = /[a-zA-Z0-9]/;
+  const NUMBER_REGEX = /[0-9]/;
+
+  const char = line[index];
+  const prevChar = currentWord !== "" ? currentWord[currentWord.length - 1] : "";
+  const nextChar = index < line.length - 1 ? line[index + 1] : "";
+  if (CHAR_REGEX.test(char)) {
+    return true;
+  }
+  if (char === "." && NUMBER_REGEX.test(prevChar) && NUMBER_REGEX.test(nextChar)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Checks if a word is a stopword.
+ */
+function checkStopword(word) {
+  if (stopwords.size === 0) {
+    throw new Error("No stopwords loaded");
+  }
+  return word.length === 1 || stopwords.has(word);
+}
+
+module.exports = {downloadPage, calcTerms};

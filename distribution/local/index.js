@@ -4,7 +4,6 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const QUEUE_KEY = "index-queue";
-const NGRAM_LEN = 3;
 
 const queueMutex = util.sync.createMutex();
 
@@ -143,73 +142,18 @@ function extractText(content) {
 
 /**
  * Extracts key terms from a page title and text content. A context segment around the first few occurrences
- * of each term is also extracted. Terms in the title are weighted 5x heavier than terms in the body.
+ * of each term is also extracted. Terms in the title are weighted heavier than terms in the body.
  */
 function extractTerms(title, text) {
   const termIndex = {};
   for (const line of text.split("\n")) {
-    for (const term of calcTerms(line)) {
+    const {terms, wordCount} = util.search.calcTerms(line);
+    console.log(line, wordCount);
+    for (const term of terms) {
       console.log(term);
     }
   }
   return termIndex;
-}
-
-/**
- * Computes the terms that are not stopwords in a line of text.
- */
-function calcTerms(line) {
-  line = "Introducing Gemini 2.5 Our most intelligent AI models, built for the agentic era";
-  const words = [];
-  let currentWord = "";
-  let currentStart = 0;
-
-  for (let c = 0; c < line.length; c += 1) {
-    if (checkTermChar(line, currentWord, c)) {
-      if (currentWord === "") {
-        currentStart = c;
-      }
-      currentWord += line[c].toLowerCase();
-    } else if (/\s+/g.test(line[c]) && currentWord !== "") {
-      words.push({
-        text: currentWord,
-        start: currentStart,
-        end: c,
-      });
-      currentWord = "";
-    }
-  }
-  if (currentWord !== "") {
-    words.push({
-      text: currentWord,
-      start: currentStart,
-      end: line.length,
-    });
-  }
-
-  console.log(line);
-  console.log(words);
-  process.exit(0);
-}
-
-/**
- * Checks if the character at an index is a valid term character.
- */
-function checkTermChar(line, currentWord, index) {
-  const CHAR_REGEX = /[a-zA-Z0-9]/;
-  const NUMBER_REGEX = /[0-9]/;
-
-  const char = line[index];
-  const prevChar = currentWord !== "" ? currentWord[currentWord.length - 1] : "";
-  const nextChar = index < line.length - 1 ? line[index + 1] : "";
-  if (CHAR_REGEX.test(char)) {
-    return true;
-  }
-  if (char === "." && NUMBER_REGEX.test(prevChar) && NUMBER_REGEX.test(nextChar)) {
-    return true;
-  }
-
-  return false;
 }
 
 module.exports = {queuePage, _start};
