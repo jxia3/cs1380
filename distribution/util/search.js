@@ -5,6 +5,7 @@ const http = require("http");
 const https = require("https");
 const path = require("path");
 
+const GROUP = "search";
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 20000;
 const NGRAM_LEN = 3;
@@ -176,6 +177,7 @@ function createTopTermKey(term) {
 }
 
 module.exports = {
+  GROUP,
   NGRAM_LEN,
   normalizeUrl,
   downloadPage,
