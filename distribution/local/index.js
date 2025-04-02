@@ -120,7 +120,10 @@ function indexPage(url, data, callback) {
   log(`Indexing page ${url}`);
   const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
-  global.distribution[GROUP].index.updateIndex(url, terms, docLen, callback);
+  global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
+    log(`Finished indexing page ${url}`);
+    callback(errors, results);
+  });
 }
 
 /**
