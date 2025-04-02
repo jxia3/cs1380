@@ -4,47 +4,61 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const NGRAM_LEN = util.search.NGRAM_LEN;
+const ACTIVE_LIMIT = 3;
 const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
 
-const queueMutex = util.sync.createMutex();
-
 /**
- * Starts the index loop. This internal function does not accept a callback and
- * should not be called by external services.
+ * Initializes the queue and starts the index loop. This internal function does not accept a callback
+ * and should not be called by external services.
  */
-function _start() {
-  let active = false;
+function _start(clearQueue, callback) {
+  if (callback === undefined) {
+    throw new Error("Start index received no callback");
+  }
+  if (clearQueue) {
+    global.distribution.local.store.put([], QUEUE_KEY, callback);
+  } else {
+    global.distribution.local.store.get(QUEUE_KEY, (error, result) => {
+      if (error) {
+        global.distribution.local.store.put([], QUEUE_KEY, callback);
+      } else {
+        callback(null, null);
+      }
+    });
+  }
+
+  let active = 0;
   module.exports._interval = setInterval(() => {
-    // Check if another iteration is active
-    if (active) {
+    if (active > ACTIVE_LIMIT) {
       return;
     }
-    active = true;
-
-    queueMutex.lock(() => {
-      global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
-        // Check if there is an item in the queue
-        if (error || queue.length === 0) {
-          queueMutex.unlock(() => {
-            active = false;
+    active += 1;
+    global.distribution.local.atomicStore.readAndModify(
+        QUEUE_KEY,
+        (queue) => {
+          // Extract the first element from the queue
+          if (queue.length === 0) {
+            return {};
+          }
+          const url = queue.shift();
+          return {
+            state: url,
+            value: queue,
+          };
+        },
+        (error, url) => {
+          // Index the URL if it was extracted
+          if (url === null) {
+            return;
+          }
+          indexPage(url, (error, result) => {
+            active -= 1;
           });
-          return;
-        }
-
-        // Extract the first URL and index the page
-        const url = queue.shift();
-        global.distribution.local.store.put(queue, QUEUE_KEY, (error, result) => {
-          queueMutex.unlock(() => {
-            indexPage(url, (error, result) => {
-              active = false;
-            });
-          });
-        });
-      });
-    });
+        },
+    );
   }, 500);
 }
 
@@ -52,19 +66,17 @@ function _start() {
  * Adds a URL to the indexing queue.
  */
 function queuePage(url, callback) {
-  queueMutex.lock(() => {
-    log(`Adding page ${url} to the index queue`);
-    global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
-      if (error) {
-        queue = [url];
-      } else {
+  global.distribution.local.atomicStore.readAndModify(
+      QUEUE_KEY,
+      (queue) => {
+        log(`Adding page ${url} to the index queue`);
         queue.push(url);
-      }
-      global.distribution.local.store.put(queue, QUEUE_KEY, (error, result) => {
-        queueMutex.unlock(() => callback(error, result));
-      });
-    });
-  });
+        return {value: queue};
+      },
+      (error, result) => {
+        callback(error, null);
+      },
+  );
 }
 
 /**
@@ -94,7 +106,7 @@ function indexPage(url, callback) {
 function extractText(content) {
   const TITLE_REGEX = /<title>([\S\s]+?)<\/title>/;
   const METADATA_REGEX = /<(head|script|style|button)[\S\s]*?<\/\1>/g;
-  const LINK_COMPONENT_REGEX = />\s*?<a[\S\s]*?<\/a>\s*?</g;
+  const LINK_COMPONENT_REGEX = /(?<!<td)>\s*?<a[\S\s]*?<\/a>\s*?</g;
   const EMPTY_LINK_REGEX = /<a\s[^>]*?><\/a>/g;
   const TAG_REGEX = /<[^>]*>/g;
   const SPECIAL_CHAR_REGEX = /[^a-zA-Z0-9`~!@#$%^&*()\-_=+\[\]\{\}\\|;:'",<.>/? \n]+/g;
@@ -165,15 +177,15 @@ function extractTerms(title, text) {
     docLen[n] += Math.max(titleCount - n + 1, 0);
   }
 
-  // Add title terms with a high frequency weight
+  // Add title terms with a high score
   for (const term of titleTerms) {
     if (!(term.text in termIndex)) {
       termIndex[term.text] = {
-        frequency: 0,
+        score: 0,
         context: [],
       };
     }
-    termIndex[term.text].frequency += 5;
+    termIndex[term.text].score += 5;
     if (termIndex[term.text].context.length === 0) {
       termIndex[term.text].context.push(title);
     }
@@ -193,11 +205,11 @@ function extractTerms(title, text) {
     for (const term of terms) {
       if (!(term.text in termIndex)) {
         termIndex[term.text] = {
-          frequency: 0,
+          score: 0,
           context: [],
         };
       }
-      termIndex[term.text].frequency += wordCount > 2 ? 1 : 0.5;
+      termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
         termIndex[term.text].context.push(extractContext(lines, l, term));
       }
