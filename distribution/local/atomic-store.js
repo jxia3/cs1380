@@ -17,7 +17,7 @@ function readAndModify(config, operations) {
   if (!(key in locks)) {
     locks[key] = util.sync.createRwLock();
   }
-  const storeModule = global.distribution.store;
+  const storeModule = global.distribution.local.store;
 
   locks[key].lockWrite(() => {
     storeModule.tryGet(config, (error, exists, value) => {
@@ -34,9 +34,9 @@ function readAndModify(config, operations) {
       let carryValue = null;
       try {
         if (exists && operations?.modify !== undefined) {
-          store = true;
           const modifyResult = operations.modify(value);
           if (modifyResult !== null) {
+            store = true;
             updatedValue = modifyResult.value;
             carryValue = modifyResult.carry;
           }
