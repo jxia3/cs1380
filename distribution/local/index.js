@@ -38,7 +38,7 @@ function _start(clearQueue, callback) {
       return;
     }
     active += 1;
-    global.distribution.local.atomicStore.readAndModify(QUEUE_KEY, {
+    global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
       modify: (queue) => {
         // Extract the first element from the queue
         if (queue.length === 0) {
@@ -73,7 +73,7 @@ function _start(clearQueue, callback) {
 function queuePage(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
-  global.distribution.local.atomicStore.readAndModify(QUEUE_KEY, {
+  global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
       log(`Adding page ${url} to the index queue`);
       queue.push(url);
