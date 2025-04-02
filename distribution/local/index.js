@@ -83,10 +83,10 @@ function queuePage(url, callback) {
  * Downloads a page with a URL and updates the distributed index.
  */
 function indexPage(url, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
   if (typeof url === "string" && url.endsWith("/")) {
     url = url.slice(0, -1);
   }
-  callback = callback === undefined ? (error, result) => {} : callback;
   log(`Indexing page ${url}`);
 
   util.search.downloadPage(url, (error, data) => {
