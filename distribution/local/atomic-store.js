@@ -62,8 +62,8 @@ function getAndModify(config, operations) {
         }
         if (result !== null) {
           store = true;
-          updatedValue = modifyResult.value;
-          carryValue = modifyResult.carry;
+          updatedValue = result.value;
+          carryValue = result.carry;
         }
       } catch (error) {
         locks[key].unlockWrite();
