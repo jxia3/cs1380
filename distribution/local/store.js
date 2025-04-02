@@ -5,6 +5,15 @@ const util = require("../util/util.js");
 const fs = require("fs");
 
 /**
+ * An error that indicates if an item is not found in the store.
+ */
+class NotFoundError extends Error {
+  constructor(...args) {
+    super(...args);
+  }
+}
+
+/**
  * Retrieves an item from the file system store using its key and group ID.
  */
 function get(config, callback) {
@@ -26,6 +35,41 @@ function get(config, callback) {
   } else {
     getAllKeys(config, callback);
   }
+}
+
+/**
+ * Retrieves an item from the file system store and returns if it exists.
+ */
+function tryGet(config, callback) {
+  if (callback === undefined) {
+    return;
+  }
+  config = util.id.getObjectConfig(config);
+  if (config instanceof Error) {
+    callback(config, null);
+    return;
+  }
+
+  if (global?.nodeInfo?.storePath === undefined) {
+    callback(new Error("Store path not available"), null);
+    return;
+  }
+  if (config.key === null) {
+    callback(new Error("Cannot try to get all the keys"), null);
+    return;
+  }
+
+  getItem(config, (error, object) => {
+    if (error) {
+      if (error instanceof NotFoundError) {
+        callback(null, false, null);
+      } else {
+        callback(error, null, null);
+      }
+    } else {
+      callback(null, true, object);
+    }
+  });
 }
 
 /**
@@ -97,7 +141,7 @@ function getItem(config, callback) {
   const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.dat`;
   fs.access(path, (error) => {
     if (error) {
-      callback(new Error(`Key '${config.key}' not found in group '${config.gid}'`), null);
+      callback(new NotFoundError(`Key '${config.key}' not found in group '${config.gid}'`), null);
       return;
     }
     fs.readFile(path, "utf8", (error, data) => {
@@ -216,4 +260,4 @@ function decodeKey(key) {
   return Buffer.from(key, "base64").toString("utf8");
 }
 
-module.exports = {get, put, del, clear};
+module.exports = {get, tryGet, put, del, clear};
