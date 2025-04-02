@@ -23,6 +23,18 @@ fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
 });
 
 /**
+ * Normalizes a URL string.
+ */
+function normalizeUrl(url) {
+  url = url.toLowerCase();
+  url = url.split(/[?#]/)[0];
+  while (url.endsWith("/")) {
+    url = url.slice(0, -1);
+  }
+  return url;
+}
+
+/**
  * Downloads the HTML content of a page at a URL.
  */
 function downloadPage(url, callback) {
@@ -150,4 +162,4 @@ function checkStopword(word) {
   return word.length === 1 || stopwords.has(word);
 }
 
-module.exports = {NGRAM_LEN, downloadPage, calcTerms};
+module.exports = {NGRAM_LEN, normalizeUrl, downloadPage, calcTerms};
