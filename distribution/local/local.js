@@ -23,4 +23,5 @@ module.exports = {
   status,
   store: require("./store.js"),
   index: require("./index.js"),
+  atomicStore: require("./atomic-store.js"),
 };
