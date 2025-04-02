@@ -33,16 +33,17 @@ function getAndModify(config, operations) {
       let updatedValue = null;
       let carryValue = null;
       try {
+        let result = null;
+        // Get the result based on whether the key exists or not
         if (exists && operations?.modify !== undefined) {
-          const modifyResult = operations.modify(value);
-          if (modifyResult !== null) {
-            store = true;
-            updatedValue = modifyResult.value;
-            carryValue = modifyResult.carry;
-          }
+          result = operations.modify(value);
         } else if (!exists && operations?.default !== undefined) {
+          result = operations.default();
+        }
+        if (result !== null) {
           store = true;
-          updatedValue = operations.default();
+          updatedValue = modifyResult.value;
+          carryValue = modifyResult.carry;
         }
       } catch (error) {
         locks[key].unlockWrite();
