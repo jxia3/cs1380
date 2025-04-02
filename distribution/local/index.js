@@ -103,10 +103,10 @@ function indexPage(url, callback) {
     }
     const {title, content} = extractText(data);
     const {terms, docLen} = extractTerms(title, content);
-    for (const term in terms) {
-      console.log(term, terms[term]);
-    }
-    console.log(docLen);
+    updateIndex(url, terms, docLen, () => {
+      console.log("finished update");
+      callback();
+    });
   });
 }
 
@@ -191,6 +191,7 @@ function extractTerms(title, text) {
   for (const term of titleTerms) {
     if (!(term.text in termIndex)) {
       termIndex[term.text] = {
+        length: term.length,
         score: 0,
         context: [],
       };
@@ -221,6 +222,7 @@ function extractTerms(title, text) {
     for (const term of terms) {
       if (!(term.text in termIndex)) {
         termIndex[term.text] = {
+          length: term.length,
           score: 0,
           context: [],
         };
@@ -316,4 +318,44 @@ function createCharStream(text, index, increment) {
   };
 }
 
-module.exports = {queuePage, _start};
+/**
+ * Updates the local index of terms on a node.
+ */
+function updateIndex(url, terms, docLen, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  let active = Object.keys(terms).length;
+  let updateError = null;
+
+  for (const term in terms) {
+    const key = util.search.createFullTermKey(term);
+    global.distribution.local.atomicStore.getAndModify(key, {
+      modify: (index) => {
+        if (url in index) {
+          throw new Error(`Page ${url} is already in the index`);
+        }
+        index[url] = {
+          score: terms[term].score / docLen[terms[term].length],
+          context: terms[term].context,
+        };
+        return {value: index};
+      },
+      default: () => ({
+        [url]: {
+          score: terms[term].score / docLen[terms[term].length],
+          context: terms[term].context,
+        },
+      }),
+      callback: (error, result) => {
+        if (error && updateError === null) {
+          updateError = error;
+        }
+        active -= 1;
+        if (active === 0) {
+          callback(updateError, null);
+        }
+      },
+    });
+  }
+}
+
+module.exports = {queuePage, updateIndex, _start};

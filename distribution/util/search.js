@@ -161,4 +161,25 @@ function checkStopword(word) {
   return word.length === 1 || stopwords.has(word);
 }
 
-module.exports = {NGRAM_LEN, normalizeUrl, downloadPage, calcTerms};
+/**
+ * Returns the storage key for the full results for a term.
+ */
+function createFullTermKey(term) {
+  return `[${term}]-full`;
+}
+
+/**
+ * Returns the storage key for the top results for a term.
+ */
+function createTopTermKey(term) {
+  return `[${term}]-top`;
+}
+
+module.exports = {
+  NGRAM_LEN,
+  normalizeUrl,
+  downloadPage,
+  calcTerms,
+  createFullTermKey,
+  createTopTermKey,
+};
