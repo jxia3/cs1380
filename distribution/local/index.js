@@ -103,7 +103,7 @@ function indexPage(url, callback) {
     }
     const {title, content} = extractText(data);
     const {terms, docLen} = extractTerms(title, content);
-    for (term in terms) {
+    for (const term in terms) {
       console.log(term, terms[term]);
     }
     console.log(docLen);
@@ -209,6 +209,7 @@ function extractTerms(title, text) {
       .replaceAll(/ +/g, " ")
       .trim();
   const lines = text.split("\n").map((l) => l.trim()).filter((l) => l !== "");
+  text = lines.join("\n");
 
   // Extract terms and context from lines
   let textIndex = 0;
@@ -271,14 +272,14 @@ function readContext(stream) {
   // Clear spaces from beginning of context
   let char = stream.next();
   streamCount += 1;
-  while (char !== null && char === " ") {
+  while (char !== null && /\s+/.test(char)) {
     char = stream.next();
     streamCount += 1;
   }
 
   // Add words to context
   while (char !== null && context.length < CONTEXT_WORDS && contextLen < MAX_CONTEXT_LEN) {
-    if (char !== " ") {
+    if (!/\s+/.test(char)) {
       currentWord += char;
     } else if (currentWord !== "") {
       context.push(currentWord);
@@ -310,7 +311,7 @@ function createCharStream(text, index, increment) {
       if (index < 0 || index >= text.length) {
         finished = true;
       }
-      return char === "\n" ? " " : char;
+      return /\s+/.test(char) ? " " : char;
     },
   };
 }
