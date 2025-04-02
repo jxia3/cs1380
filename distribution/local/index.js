@@ -95,7 +95,7 @@ function indexPage(url, callback) {
 function extractText(content) {
   const TITLE_REGEX = /<title>([\S\s]+?)<\/title>/;
   const METADATA_REGEX = /<(head|script|style|button)[\S\s]*?<\/\1>/g;
-  const LINK_COMPONENT_REGEX = />\s*?<a[\S\s]*?<\/a>\s*?</g;
+  const LINK_COMPONENT_REGEX = /(?<!<td)>\s*?<a[\S\s]*?<\/a>\s*?</g;
   const EMPTY_LINK_REGEX = /<a\s[^>]*?><\/a>/g;
   const TAG_REGEX = /<[^>]*>/g;
   const SPECIAL_CHAR_REGEX = /[^a-zA-Z0-9`~!@#$%^&*()\-_=+\[\]\{\}\\|;:'",<.>/? \n]+/g;
