@@ -35,9 +35,11 @@ function readAndModify(config, operations) {
       try {
         if (exists && operations?.modify !== undefined) {
           store = true;
-          const {value: modifyValue, carry} = operations.modify(value);
-          updatedValue = modifyValue;
-          carryValue = carry;
+          const modifyResult = operations.modify(value);
+          if (modifyResult !== null) {
+            updatedValue = modifyResult.value;
+            carryValue = modifyResult.carry;
+          }
         } else if (!exists && operations?.default !== undefined) {
           store = true;
           updatedValue = operations.default();

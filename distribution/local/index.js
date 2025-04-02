@@ -21,11 +21,13 @@ function _start(clearQueue, callback) {
   if (clearQueue) {
     global.distribution.local.store.put([], QUEUE_KEY, callback);
   } else {
-    global.distribution.local.store.get(QUEUE_KEY, (error, result) => {
+    global.distribution.local.store.tryGet(QUEUE_KEY, (error, exists, result) => {
       if (error) {
-        global.distribution.local.store.put([], QUEUE_KEY, callback);
-      } else {
+        callback(error, null);
+      } else if (exists) {
         callback(null, null);
+      } else {
+        global.distribution.local.store.put([], QUEUE_KEY, callback);
       }
     });
   }
@@ -36,29 +38,32 @@ function _start(clearQueue, callback) {
       return;
     }
     active += 1;
-    global.distribution.local.atomicStore.readAndModify(
-        QUEUE_KEY,
-        (queue) => {
-          // Extract the first element from the queue
-          if (queue.length === 0) {
-            return {};
-          }
-          const url = queue.shift();
-          return {
-            state: url,
-            value: queue,
-          };
-        },
-        (error, url) => {
-          // Index the URL if it was extracted
-          if (url === null) {
-            return;
-          }
+    global.distribution.local.atomicStore.readAndModify(QUEUE_KEY, {
+      modify: (queue) => {
+        // Extract the first element from the queue
+        if (queue.length === 0) {
+          return null;
+        }
+        const url = queue.shift();
+        return {
+          value: queue,
+          carry: url,
+        };
+      },
+      default: () => [],
+      callback: (error, url) => {
+        // Index a valid URL
+        if (error) {
+          console.error(error);
+          return;
+        }
+        if (url !== null) {
           indexPage(url, (error, result) => {
             active -= 1;
           });
-        },
-    );
+        }
+      },
+    });
   }, 500);
 }
 
@@ -68,17 +73,19 @@ function _start(clearQueue, callback) {
 function queuePage(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
-  global.distribution.local.atomicStore.readAndModify(
-      QUEUE_KEY,
-      (queue) => {
-        log(`Adding page ${url} to the index queue`);
-        queue.push(url);
-        return {value: queue};
-      },
-      (error, result) => {
-        callback(error, null);
-      },
-  );
+  global.distribution.local.atomicStore.readAndModify(QUEUE_KEY, {
+    modify: (queue) => {
+      log(`Adding page ${url} to the index queue`);
+      queue.push(url);
+      return {
+        value: queue,
+        carry: null,
+      };
+    },
+    callback: (error, result) => {
+      callback(error, null);
+    },
+  });
 }
 
 /**
