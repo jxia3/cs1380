@@ -3,6 +3,7 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
+const GROUP = util.search.GROUP;
 const NGRAM_LEN = util.search.NGRAM_LEN;
 const ACTIVE_LIMIT = 3;
 const QUEUE_KEY = "index-queue";
@@ -58,7 +59,7 @@ function _start(clearQueue, callback) {
           return;
         }
         if (url !== null) {
-          indexPage(url, (error, result) => {
+          indexUrl(url, (error, result) => {
             active -= 1;
           });
         }
@@ -70,7 +71,7 @@ function _start(clearQueue, callback) {
 /**
  * Adds a URL to the indexing queue.
  */
-function queuePage(url, callback) {
+function queueUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
@@ -91,23 +92,32 @@ function queuePage(url, callback) {
 /**
  * Downloads a page with a URL and updates the distributed index.
  */
-function indexPage(url, callback) {
+function indexUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
-  log(`Indexing page ${url}`);
-
   util.search.downloadPage(url, (error, data) => {
     if (error) {
       callback(error, null);
-      return;
+    } else {
+      indexPage(url, data, callback);
     }
-    const {title, content} = extractText(data);
-    const {terms, docLen} = extractTerms(title, content);
-    updateIndex(url, terms, docLen, () => {
-      console.log("finished update");
-      callback();
-    });
   });
+}
+
+/**
+ * Updates the distributed index with the HTML data from a page.
+ */
+function indexPage(url, data, callback) {
+  if (!global.distribution[GROUP]?._isGroup) {
+    throw new Error(`Group '${GROUP}' does not exist`);
+  }
+  callback = callback === undefined ? (error, result) => {} : callback;
+  url = util.search.normalizeUrl(url);
+
+  log(`Indexing page ${url}`);
+  const {title, content} = extractText(data);
+  const {terms, docLen} = extractTerms(title, content);
+  global.distribution[GROUP].index.updateIndex(url, terms, docLen, callback);
 }
 
 /**
@@ -330,6 +340,7 @@ function updateIndex(url, terms, docLen, callback) {
     const key = util.search.createFullTermKey(term);
     global.distribution.local.atomicStore.getAndModify(key, {
       modify: (index) => {
+        // Insert URL into index
         if (url in index) {
           throw new Error(`Page ${url} is already in the index`);
         }
@@ -340,6 +351,7 @@ function updateIndex(url, terms, docLen, callback) {
         return {value: index};
       },
       default: () => ({
+        // Create index with URL
         [url]: {
           score: terms[term].score / docLen[terms[term].length],
           context: terms[term].context,
@@ -358,4 +370,4 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queuePage, updateIndex, _start};
+module.exports = {queueUrl, updateIndex, _start};

@@ -182,7 +182,7 @@ function createConstructor(storeService) {
     context.gid = config?.gid === undefined ? "all" : config.gid;
     context.hash = config?.hash;
     if (typeof context.hash !== "function") {
-      context.hash = util.id.naiveHash;
+      context.hash = util.id.rendezvousHash;
     }
     if (global.distribution[context.gid]._state) {
       global.distribution[context.gid]._state.hash = context.hash;

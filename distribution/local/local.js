@@ -22,6 +22,7 @@ module.exports = {
   rpc: require("./rpc.js"),
   status,
   store: require("./store.js"),
+
   index: require("./index.js"),
   atomicStore: require("./atomic-store.js"),
 };
