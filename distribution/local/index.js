@@ -3,6 +3,7 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
+const GROUP = util.search.GROUP;
 const NGRAM_LEN = util.search.NGRAM_LEN;
 const ACTIVE_LIMIT = 3;
 const QUEUE_KEY = "index-queue";
@@ -58,7 +59,10 @@ function _start(clearQueue, callback) {
           return;
         }
         if (url !== null) {
-          indexPage(url, (error, result) => {
+          indexUrl(url, (errors, results) => {
+            if (Object.keys(errors).length > 0) {
+              console.error(Object.values(errors)[0]);
+            }
             active -= 1;
           });
         }
@@ -70,7 +74,7 @@ function _start(clearQueue, callback) {
 /**
  * Adds a URL to the indexing queue.
  */
-function queuePage(url, callback) {
+function queueUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
@@ -91,20 +95,34 @@ function queuePage(url, callback) {
 /**
  * Downloads a page with a URL and updates the distributed index.
  */
-function indexPage(url, callback) {
+function indexUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
-  log(`Indexing page ${url}`);
-
   util.search.downloadPage(url, (error, data) => {
     if (error) {
       callback(error, null);
-      return;
+    } else {
+      indexPage(url, data, callback);
     }
-    const {title, content} = extractText(data);
-    const {terms, docLen} = extractTerms(title, content);
-    console.log(terms);
-    console.log(docLen);
+  });
+}
+
+/**
+ * Updates the distributed index with the HTML data from a page.
+ */
+function indexPage(url, data, callback) {
+  if (!global.distribution[GROUP]?._isGroup) {
+    throw new Error(`Group '${GROUP}' does not exist`);
+  }
+  callback = callback === undefined ? (error, result) => {} : callback;
+  url = util.search.normalizeUrl(url);
+
+  log(`Indexing page ${url}`);
+  const {title, content} = extractText(data);
+  const {terms, docLen} = extractTerms(title, content);
+  global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
+    log(`Finished indexing page ${url}`);
+    callback(errors, results);
   });
 }
 
@@ -189,6 +207,7 @@ function extractTerms(title, text) {
   for (const term of titleTerms) {
     if (!(term.text in termIndex)) {
       termIndex[term.text] = {
+        length: term.length,
         score: 0,
         context: [],
       };
@@ -199,12 +218,18 @@ function extractTerms(title, text) {
     }
   }
 
-  // Format lines
-  const lines = text.split("\n")
-      .map((l) => l.replaceAll(/ +\./g, ". ").replaceAll(/ +,/g, ", ").replaceAll(/ +/g, " ").trim())
-      .filter((l) => l !== "");
+  // Format text and lines
+  text = text
+      .replaceAll(/\n+/g, "\n")
+      .replaceAll(/ +\./g, ". ")
+      .replaceAll(/ +,/g, ", ")
+      .replaceAll(/ +/g, " ")
+      .trim();
+  const lines = text.split("\n").map((l) => l.trim()).filter((l) => l !== "");
+  text = lines.join("\n");
 
   // Extract terms and context from lines
+  let textIndex = 0;
   for (let l = 0; l < lines.length; l += 1) {
     const {terms, wordCount} = util.search.calcTerms(lines[l]);
     for (let n = 1; n <= NGRAM_LEN; n += 1) {
@@ -213,36 +238,44 @@ function extractTerms(title, text) {
     for (const term of terms) {
       if (!(term.text in termIndex)) {
         termIndex[term.text] = {
+          length: term.length,
           score: 0,
           context: [],
         };
       }
       termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
-        termIndex[term.text].context.push(extractContext(lines, l, term));
+        termIndex[term.text].context.push(extractContext(text, textIndex + term.start, textIndex + term.end));
       }
     }
+    textIndex += lines[l].length + 1;
   }
 
   return {terms: termIndex, docLen};
 }
 
 /**
- * Extracts the context around a term in a line.
+ * Extracts the context around a term section in a text block.
  */
-function extractContext(lines, lineIndex, term) {
-  const leftStream = createCharStream(lines, lineIndex, term.start, -1);
+function extractContext(text, start, end) {
+  const leftStream = createCharStream(text, start, -1);
   leftStream.next();
-  const leftWords = readContext(leftStream).map((w) => w.split("").reverse().join(""));
+  const rightStream = createCharStream(text, end - 1, 1);
+  rightStream.next();
+
+  const {words: leftReverse, count: leftCount} = readContext(leftStream);
+  const leftWords = leftReverse.map((w) => w.split("").reverse().join(""));
   leftWords.reverse();
   const left = leftWords.join(" ");
+  const {words: rightWords, count: rightCount} = readContext(rightStream);
+  const right = rightWords.join(" ");
+  const term = text.slice(start, end);
 
-  const rightStream = createCharStream(lines, lineIndex, term.end - 1, 1);
-  rightStream.next();
-  const right = readContext(rightStream).join(" ");
-
-  const termSection = lines[lineIndex].slice(term.start, term.end);
-  return `${left} ${termSection} ${right}`.trim();
+  return {
+    text: `${left} ${term} ${right}`.trim(),
+    start: start - leftCount,
+    end: end + rightCount,
+  };
 }
 
 /**
@@ -251,17 +284,20 @@ function extractContext(lines, lineIndex, term) {
 function readContext(stream) {
   const context = [];
   let contextLen = 0;
+  let streamCount = 0;
   let currentWord = "";
 
   // Clear spaces from beginning of context
   let char = stream.next();
-  while (char !== null && char === " ") {
+  streamCount += 1;
+  while (char !== null && /\s+/.test(char)) {
     char = stream.next();
+    streamCount += 1;
   }
 
   // Add words to context
   while (char !== null && context.length < CONTEXT_WORDS && contextLen < MAX_CONTEXT_LEN) {
-    if (char !== " ") {
+    if (!/\s+/.test(char)) {
       currentWord += char;
     } else if (currentWord !== "") {
       context.push(currentWord);
@@ -269,50 +305,75 @@ function readContext(stream) {
     }
     char = stream.next();
     contextLen += 1;
+    streamCount += 1;
   }
   if (currentWord !== "") {
     context.push(currentWord);
   }
 
-  return context;
+  return {words: context, count: Math.max(streamCount - 1, 0)};
 }
 
 /**
- * Creates a character stream starting at an index in a line.
+ * Creates a character stream starting at an index in a text block.
  */
-function createCharStream(lines, lineIndex, charIndex, increment) {
-  let finished = lineIndex < 0 || lineIndex >= lines.length
-    || (lineIndex === 0 && charIndex < 0)
-    || (lineIndex === lines.length - 1 && charIndex >= lines[lineIndex].length);
-  let lineBreak = false;
-
+function createCharStream(text, index, increment) {
+  let finished = index < 0 || index >= text.length;
   return {
     next: () => {
-      // Check special cases
       if (finished) {
         return null;
       }
-      if (lineBreak) {
-        lineBreak = false;
-        return " ";
+      const char = text[index];
+      index += increment;
+      if (index < 0 || index >= text.length) {
+        finished = true;
       }
-
-      // Get current character and increment indices
-      const char = lines[lineIndex][charIndex];
-      charIndex += increment;
-      if (charIndex < 0 || charIndex >= lines[lineIndex].length) {
-        lineIndex += increment;
-        if (lineIndex < 0 || lineIndex >= lines.length) {
-          finished = true;
-        } else {
-          charIndex = increment === 1 ? 0 : lines[lineIndex].length - 1;
-          lineBreak = true;
-        }
-      }
-
-      return char;
+      return /\s+/.test(char) ? " " : char;
     },
   };
 }
 
-module.exports = {queuePage, _start};
+/**
+ * Updates the local index of terms on a node.
+ */
+function updateIndex(url, terms, docLen, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  let active = Object.keys(terms).length;
+  let updateError = null;
+
+  for (const term in terms) {
+    const key = util.search.createFullTermKey(term);
+    global.distribution.local.atomicStore.getAndModify(key, {
+      modify: (index) => {
+        // Insert URL into index
+        if (url in index) {
+          throw new Error(`Page ${url} is already in the index`);
+        }
+        index[url] = {
+          score: terms[term].score / docLen[terms[term].length],
+          context: terms[term].context,
+        };
+        return {value: index};
+      },
+      default: () => ({
+        // Create index with URL
+        [url]: {
+          score: terms[term].score / docLen[terms[term].length],
+          context: terms[term].context,
+        },
+      }),
+      callback: (error, result) => {
+        if (error && updateError === null) {
+          updateError = error;
+        }
+        active -= 1;
+        if (active === 0) {
+          callback(updateError, null);
+        }
+      },
+    });
+  }
+}
+
+module.exports = {queueUrl, updateIndex, _start};
