@@ -166,15 +166,15 @@ function extractTerms(title, text) {
     docLen[n] += Math.max(titleCount - n + 1, 0);
   }
 
-  // Add title terms with a high frequency weight
+  // Add title terms with a high score
   for (const term of titleTerms) {
     if (!(term.text in termIndex)) {
       termIndex[term.text] = {
-        frequency: 0,
+        score: 0,
         context: [],
       };
     }
-    termIndex[term.text].frequency += 5;
+    termIndex[term.text].score += 5;
     if (termIndex[term.text].context.length === 0) {
       termIndex[term.text].context.push(title);
     }
@@ -194,11 +194,11 @@ function extractTerms(title, text) {
     for (const term of terms) {
       if (!(term.text in termIndex)) {
         termIndex[term.text] = {
-          frequency: 0,
+          score: 0,
           context: [],
         };
       }
-      termIndex[term.text].frequency += wordCount > 2 ? 1 : 0.5;
+      termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
         termIndex[term.text].context.push(extractContext(lines, l, term));
       }
