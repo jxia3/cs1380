@@ -2,50 +2,68 @@
 
 const util = require("../util/util.js");
 
-const mutexes = {};
+const locks = {};
 
 /**
  * Reads, modifies, and writes a value in the local key-value store.
  */
-function readAndModify(config, modifyFn, callback) {
-  // Initialize mutex for key
-  callback = callback === undefined ? (error, result) => {} : callback;
+function readAndModify(config, operations) {
+  // Initialize lock for key
+  if (operations?.callback === undefined) {
+    throw new Error("Read and modify received no callback");
+  }
   config = util.id.getObjectConfig(config);
   const key = `${config.gid}-${config.key}`;
-  if (!(key in mutexes)) {
-    mutexes[key] = util.sync.createMutex();
+  if (!(key in locks)) {
+    locks[key] = util.sync.createRwLock();
   }
+  const storeModule = global.distribution.local.store;
 
-  mutexes[key].lock(() => {
-    global.distribution.local.store.get(config, (error, value) => {
-      // Return early if there is no value
+  locks[key].lockWrite(() => {
+    storeModule.tryGet(config, (error, exists, value) => {
+      // Check if there is an error
       if (error) {
-        mutexes[key].unlock(() => callback(error, null));
+        locks[key].unlockWrite();
+        operations.callback(error, null);
         return;
       }
 
-      // Compute updated value
-      let modifyResult = null;
+      // Compute updated or default value
+      let store = false;
+      let updatedValue = null;
+      let carryValue = null;
       try {
-        modifyResult = modifyFn(value);
+        if (exists && operations?.modify !== undefined) {
+          const modifyResult = operations.modify(value);
+          if (modifyResult !== null) {
+            store = true;
+            updatedValue = modifyResult.value;
+            carryValue = modifyResult.carry;
+          }
+        } else if (!exists && operations?.default !== undefined) {
+          store = true;
+          updatedValue = operations.default();
+        }
       } catch (error) {
-        mutexes[key].unlock(() => callback(error, null));
-      }
-      if (modifyResult?.value === undefined) {
-        mutexes[key].unlock(() => callback(null, null));
+        locks[key].unlockWrite();
+        operations.callback(error, null);
         return;
       }
 
       // Store updated value
-      global.distribution.local.store.put(modifyResult.value, config, (error, result) => {
-        mutexes[key].unlock(() => {
+      if (store) {
+        storeModule.put(updatedValue, config, (error, result) => {
+          locks[key].unlockWrite();
           if (error) {
-            callback(error, null);
+            operations.callback(error, null);
           } else {
-            callback(null, modifyResult?.state);
+            operations.callback(null, carryValue);
           }
         });
-      });
+      } else {
+        locks[key].unlockWrite();
+        operations.callback(null, carryValue);
+      }
     });
   });
 }

@@ -26,44 +26,47 @@ function createGuardedCallback(callback) {
 function createMutex() {
   const state = {locked: false};
   return {
-    lock: lockMutex.bind(state),
-    unlock: unlockMutex.bind(state),
+    lock: (callback) => lockMutex(state, callback),
+    unlock: () => unlockMutex(state),
   };
 }
 
 /**
- * Locks a mutex bound as the function's context.
+ * Locks a mutex passed as the function's state.
  */
-function lockMutex(callback) {
-  if (this.locked === undefined) {
-    throw new Error("Invalid mutex state");
-  }
+function lockMutex(state, callback) {
   if (callback === undefined) {
     throw new Error("Lock mutex received no callback");
   }
-  if (this.locked) {
-    setTimeout(() => lockMutex.call(this, callback), 10);
+  if (state.locked) {
+    setTimeout(() => lockMutex(state, callback), 10);
   } else {
-    this.locked = true;
+    state.locked = true;
     callback();
   }
 }
 
 /**
- * Unlocks a mutex bound as the function's context.
+ * Unlocks a mutex passed as the function's state.
  */
-function unlockMutex(callback) {
-  if (this.locked === undefined) {
-    throw new Error("Invalid mutex state");
-  }
-  if (callback === undefined) {
-    throw new Error("Unlock mutex received no callback");
-  }
-  if (!this.locked) {
+function unlockMutex(state) {
+  if (!state.locked) {
     throw new Error("Mutex is not locked");
   }
-  this.locked = false;
-  callback();
+  state.locked = false;
 }
 
-module.exports = {createGuardedCallback, createMutex};
+/**
+ * Creates a reader-writer lock object that exposes methods for synchronization.
+ */
+function createRwLock() {
+  const mutex = createMutex();
+  return {
+    lockRead: mutex.lock,
+    unlockRead: mutex.unlock,
+    lockWrite: mutex.lock,
+    unlockWrite: mutex.unlock,
+  };
+}
+
+module.exports = {createGuardedCallback, createMutex, createRwLock};
