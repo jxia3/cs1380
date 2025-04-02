@@ -3,6 +3,7 @@
 const log = require("../util/log.js");
 const util = require("../util/util.js");
 
+const NGRAM_LEN = util.search.NGRAM_LEN;
 const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
@@ -81,8 +82,9 @@ function indexPage(url, callback) {
       return;
     }
     const {title, content} = extractText(data);
-    const terms = extractTerms(title, content);
+    const {terms, docLen} = extractTerms(title, content);
     console.log(terms);
+    console.log(docLen);
   });
 }
 
@@ -157,7 +159,13 @@ function extractText(content) {
 function extractTerms(title, text) {
   // Extract terms from title
   const termIndex = {};
-  const {terms: titleTerms} = util.search.calcTerms(title);
+  const docLen = new Array(NGRAM_LEN + 1).fill(0);
+  const {terms: titleTerms, wordCount: titleCount} = util.search.calcTerms(title);
+  for (let n = 1; n <= NGRAM_LEN; n += 1) {
+    docLen[n] += Math.max(titleCount - n + 1, 0);
+  }
+
+  // Add title terms with a high frequency weight
   for (const term of titleTerms) {
     if (!(term.text in termIndex)) {
       termIndex[term.text] = {
@@ -175,11 +183,13 @@ function extractTerms(title, text) {
   const lines = text.split("\n")
       .map((l) => l.replaceAll(/ +\./g, ". ").replaceAll(/ +,/g, ", ").replaceAll(/ +/g, " ").trim())
       .filter((l) => l !== "");
-  console.log(lines);
 
   // Extract terms and context from lines
   for (let l = 0; l < lines.length; l += 1) {
     const {terms, wordCount} = util.search.calcTerms(lines[l]);
+    for (let n = 1; n <= NGRAM_LEN; n += 1) {
+      docLen[n] += Math.max(wordCount - n + 1, 0);
+    }
     for (const term of terms) {
       if (!(term.text in termIndex)) {
         termIndex[term.text] = {
@@ -194,7 +204,7 @@ function extractTerms(title, text) {
     }
   }
 
-  return termIndex;
+  return {terms: termIndex, docLen};
 }
 
 /**

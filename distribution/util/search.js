@@ -110,6 +110,7 @@ function calcTerms(line) {
       }
       terms.push({
         text: term.join(" "),
+        length: term.length,
         start: keywords[s].start,
         end: keywords[s + n - 1].end,
       });
@@ -149,4 +150,4 @@ function checkStopword(word) {
   return word.length === 1 || stopwords.has(word);
 }
 
-module.exports = {downloadPage, calcTerms};
+module.exports = {NGRAM_LEN, downloadPage, calcTerms};
