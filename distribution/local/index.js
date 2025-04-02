@@ -4,6 +4,7 @@ const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const NGRAM_LEN = util.search.NGRAM_LEN;
+const ACTIVE_LIMIT = 3;
 const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
@@ -16,20 +17,20 @@ const queueMutex = util.sync.createMutex();
  * should not be called by external services.
  */
 function _start() {
-  let active = false;
+  let active = 0;
   module.exports._interval = setInterval(() => {
-    // Check if another iteration is active
-    if (active) {
+    // Check if other iterations are active
+    if (active > ACTIVE_LIMIT) {
       return;
     }
-    active = true;
+    active += 1;
 
     queueMutex.lock(() => {
       global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
         // Check if there is an item in the queue
         if (error || queue.length === 0) {
           queueMutex.unlock(() => {
-            active = false;
+            active -= 1;
           });
           return;
         }
@@ -39,7 +40,7 @@ function _start() {
         global.distribution.local.store.put(queue, QUEUE_KEY, (error, result) => {
           queueMutex.unlock(() => {
             indexPage(url, (error, result) => {
-              active = false;
+              active -= 1;
             });
           });
         });
