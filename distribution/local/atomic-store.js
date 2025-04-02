@@ -7,7 +7,7 @@ const locks = {};
 /**
  * Reads, modifies, and writes a value in the local key-value store.
  */
-function readAndModify(config, operations) {
+function getAndModify(config, operations) {
   // Initialize lock for key
   if (operations?.callback === undefined) {
     throw new Error("Read and modify received no callback");
@@ -68,4 +68,4 @@ function readAndModify(config, operations) {
   });
 }
 
-module.exports = {readAndModify};
+module.exports = {getAndModify};
