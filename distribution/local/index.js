@@ -10,42 +10,55 @@ const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
 
-const queueMutex = util.sync.createMutex();
-
 /**
- * Starts the index loop. This internal function does not accept a callback and
- * should not be called by external services.
+ * Initializes the queue and starts the index loop. This internal function does not accept a callback
+ * and should not be called by external services.
  */
-function _start() {
+function _start(clearQueue, callback) {
+  if (callback === undefined) {
+    throw new Error("Start index received no callback");
+  }
+  if (clearQueue) {
+    global.distribution.local.store.put([], QUEUE_KEY, callback);
+  } else {
+    global.distribution.local.store.get(QUEUE_KEY, (error, result) => {
+      if (error) {
+        global.distribution.local.store.put([], QUEUE_KEY, callback);
+      } else {
+        callback(null, null);
+      }
+    });
+  }
+
   let active = 0;
   module.exports._interval = setInterval(() => {
-    // Check if other iterations are active
     if (active > ACTIVE_LIMIT) {
       return;
     }
     active += 1;
-
-    queueMutex.lock(() => {
-      global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
-        // Check if there is an item in the queue
-        if (error || queue.length === 0) {
-          queueMutex.unlock(() => {
+    global.distribution.local.atomicStore.readAndModify(
+        QUEUE_KEY,
+        (queue) => {
+          // Extract the first element from the queue
+          if (queue.length === 0) {
+            return {};
+          }
+          const url = queue.shift();
+          return {
+            state: url,
+            value: queue,
+          };
+        },
+        (error, url) => {
+          // Index the URL if it was extracted
+          if (url === null) {
+            return;
+          }
+          indexPage(url, (error, result) => {
             active -= 1;
           });
-          return;
-        }
-
-        // Extract the first URL and index the page
-        const url = queue.shift();
-        global.distribution.local.store.put(queue, QUEUE_KEY, (error, result) => {
-          queueMutex.unlock(() => {
-            indexPage(url, (error, result) => {
-              active -= 1;
-            });
-          });
-        });
-      });
-    });
+        },
+    );
   }, 500);
 }
 
@@ -53,19 +66,17 @@ function _start() {
  * Adds a URL to the indexing queue.
  */
 function queuePage(url, callback) {
-  queueMutex.lock(() => {
-    log(`Adding page ${url} to the index queue`);
-    global.distribution.local.store.get(QUEUE_KEY, (error, queue) => {
-      if (error) {
-        queue = [url];
-      } else {
+  global.distribution.local.atomicStore.readAndModify(
+      QUEUE_KEY,
+      (queue) => {
+        log(`Adding page ${url} to the index queue`);
         queue.push(url);
-      }
-      global.distribution.local.store.put(queue, QUEUE_KEY, (error, result) => {
-        queueMutex.unlock(() => callback(error, result));
-      });
-    });
-  });
+        return {value: queue};
+      },
+      (error, result) => {
+        callback(error, null);
+      },
+  );
 }
 
 /**
