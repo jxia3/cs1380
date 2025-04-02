@@ -59,7 +59,10 @@ function _start(clearQueue, callback) {
           return;
         }
         if (url !== null) {
-          indexUrl(url, (error, result) => {
+          indexUrl(url, (errors, results) => {
+            if (Object.keys(errors).length > 0) {
+              console.error(Object.values(errors)[0]);
+            }
             active -= 1;
           });
         }
