@@ -103,7 +103,9 @@ function indexPage(url, callback) {
     }
     const {title, content} = extractText(data);
     const {terms, docLen} = extractTerms(title, content);
-    console.log(terms);
+    for (term in terms) {
+      console.log(term, terms[term]);
+    }
     console.log(docLen);
   });
 }
@@ -199,12 +201,17 @@ function extractTerms(title, text) {
     }
   }
 
-  // Format lines
-  const lines = text.split("\n")
-      .map((l) => l.replaceAll(/ +\./g, ". ").replaceAll(/ +,/g, ", ").replaceAll(/ +/g, " ").trim())
-      .filter((l) => l !== "");
+  // Format text and lines
+  text = text
+      .replaceAll(/\n+/g, "\n")
+      .replaceAll(/ +\./g, ". ")
+      .replaceAll(/ +,/g, ", ")
+      .replaceAll(/ +/g, " ")
+      .trim();
+  const lines = text.split("\n").map((l) => l.trim()).filter((l) => l !== "");
 
   // Extract terms and context from lines
+  let textIndex = 0;
   for (let l = 0; l < lines.length; l += 1) {
     const {terms, wordCount} = util.search.calcTerms(lines[l]);
     for (let n = 1; n <= NGRAM_LEN; n += 1) {
@@ -219,30 +226,37 @@ function extractTerms(title, text) {
       }
       termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
-        termIndex[term.text].context.push(extractContext(lines, l, term));
+        termIndex[term.text].context.push(extractContext(text, textIndex + term.start, textIndex + term.end));
       }
     }
+    textIndex += lines[l].length + 1;
   }
 
   return {terms: termIndex, docLen};
 }
 
 /**
- * Extracts the context around a term in a line.
+ * Extracts the context around a term section in a text block.
  */
-function extractContext(lines, lineIndex, term) {
-  const leftStream = createCharStream(lines, lineIndex, term.start, -1);
+function extractContext(text, start, end) {
+  const leftStream = createCharStream(text, start, -1);
   leftStream.next();
-  const leftWords = readContext(leftStream).map((w) => w.split("").reverse().join(""));
+  const rightStream = createCharStream(text, end - 1, 1);
+  rightStream.next();
+
+  const {words: leftReverse, count: leftCount} = readContext(leftStream);
+  const leftWords = leftReverse.map((w) => w.split("").reverse().join(""));
   leftWords.reverse();
   const left = leftWords.join(" ");
+  const {words: rightWords, count: rightCount} = readContext(rightStream);
+  const right = rightWords.join(" ");
+  const term = text.slice(start, end);
 
-  const rightStream = createCharStream(lines, lineIndex, term.end - 1, 1);
-  rightStream.next();
-  const right = readContext(rightStream).join(" ");
-
-  const termSection = lines[lineIndex].slice(term.start, term.end);
-  return `${left} ${termSection} ${right}`.trim();
+  return {
+    text: `${left} ${term} ${right}`.trim(),
+    start: start - leftCount,
+    end: end + rightCount,
+  };
 }
 
 /**
@@ -251,12 +265,15 @@ function extractContext(lines, lineIndex, term) {
 function readContext(stream) {
   const context = [];
   let contextLen = 0;
+  let streamCount = 0;
   let currentWord = "";
 
   // Clear spaces from beginning of context
   let char = stream.next();
+  streamCount += 1;
   while (char !== null && char === " ") {
     char = stream.next();
+    streamCount += 1;
   }
 
   // Add words to context
@@ -269,48 +286,31 @@ function readContext(stream) {
     }
     char = stream.next();
     contextLen += 1;
+    streamCount += 1;
   }
   if (currentWord !== "") {
     context.push(currentWord);
   }
 
-  return context;
+  return {words: context, count: Math.max(streamCount - 1, 0)};
 }
 
 /**
- * Creates a character stream starting at an index in a line.
+ * Creates a character stream starting at an index in a text block.
  */
-function createCharStream(lines, lineIndex, charIndex, increment) {
-  let finished = lineIndex < 0 || lineIndex >= lines.length
-    || (lineIndex === 0 && charIndex < 0)
-    || (lineIndex === lines.length - 1 && charIndex >= lines[lineIndex].length);
-  let lineBreak = false;
-
+function createCharStream(text, index, increment) {
+  let finished = index < 0 || index >= text.length;
   return {
     next: () => {
-      // Check special cases
       if (finished) {
         return null;
       }
-      if (lineBreak) {
-        lineBreak = false;
-        return " ";
+      const char = text[index];
+      index += increment;
+      if (index < 0 || index >= text.length) {
+        finished = true;
       }
-
-      // Get current character and increment indices
-      const char = lines[lineIndex][charIndex];
-      charIndex += increment;
-      if (charIndex < 0 || charIndex >= lines[lineIndex].length) {
-        lineIndex += increment;
-        if (lineIndex < 0 || lineIndex >= lines.length) {
-          finished = true;
-        } else {
-          charIndex = increment === 1 ? 0 : lines[lineIndex].length - 1;
-          lineBreak = true;
-        }
-      }
-
-      return char;
+      return char === "\n" ? " " : char;
     },
   };
 }
