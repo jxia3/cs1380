@@ -66,6 +66,8 @@ function _start(clearQueue, callback) {
  * Adds a URL to the indexing queue.
  */
 function queuePage(url, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  url = util.search.normalizeUrl(url);
   global.distribution.local.atomicStore.readAndModify(
       QUEUE_KEY,
       (queue) => {
@@ -83,10 +85,9 @@ function queuePage(url, callback) {
  * Downloads a page with a URL and updates the distributed index.
  */
 function indexPage(url, callback) {
-  if (typeof url === "string" && url.endsWith("/")) {
-    url = url.slice(0, -1);
-  }
   callback = callback === undefined ? (error, result) => {} : callback;
+  url = util.search.normalizeUrl(url);
+  log(`Indexing page ${url}`);
 
   util.search.downloadPage(url, (error, data) => {
     if (error) {
