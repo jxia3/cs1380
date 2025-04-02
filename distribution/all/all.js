@@ -19,4 +19,6 @@ module.exports = {
   routes: require("./routes.js"),
   status: require("./status.js"),
   store: require("./store.js"),
+
+  index: require("./index.js"),
 };
