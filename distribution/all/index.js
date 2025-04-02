@@ -9,6 +9,9 @@ const util = require("../util/util.js");
 function updateIndex(url, terms, docLen, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
+  console.log("ROUTING:");
+  console.log(Object.keys(terms));
+  process.exit(0);
 }
 
 /**

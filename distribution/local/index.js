@@ -113,14 +113,11 @@ function indexPage(url, data, callback) {
   }
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
-  log(`Indexing page ${url}`);
 
+  log(`Indexing page ${url}`);
   const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
-  updateIndex(url, terms, docLen, () => {
-    console.log("finished update");
-    callback();
-  });
+  global.distribution[GROUP].index.updateIndex(url, terms, docLen, callback);
 }
 
 /**
