@@ -87,6 +87,7 @@ function indexPage(url, callback) {
     url = url.slice(0, -1);
   }
   callback = callback === undefined ? (error, result) => {} : callback;
+  log(`Indexing page ${url}`);
 
   util.search.downloadPage(url, (error, data) => {
     if (error) {
