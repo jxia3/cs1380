@@ -5,7 +5,7 @@ distribution.node.start(() => {
     console.log("added search group");
     distribution.local.index._start(true, () => {
       setTimeout(() => {
-        distribution.local.index.queueUrl("https://stripe.com", () => {});
+        distribution.local.index.queueUrl("https://cs.brown.edu/courses/csci1380/sandbox/1/", () => {});
       }, 1000);
     });
   });

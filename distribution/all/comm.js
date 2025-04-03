@@ -6,7 +6,7 @@ const remote = require("./remote-service.js");
 
 /**
  * NOTE: This Target is slightly different from local.all.Target
- * @typdef {Object} Target
+ * @typedef {Object} Target
  * @property {string} service
  * @property {string} method
  */

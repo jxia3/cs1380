@@ -1,3 +1,6 @@
+/** @typedef {import("../types").Callback} Callback */
+
+
 /* An atomic filesystem-backed key-value store built on the store module. */
 
 const util = require("../util/util.js");
@@ -5,7 +8,24 @@ const util = require("../util/util.js");
 const locks = {};
 
 /**
+ * Expected return format of functions in an Operations object
+ * @typedef {Object} ModifyResult
+ * @property {any} [value] The modified value
+ * @property {any} [carry] Gets passed to callback function in an Operations object
+ */
+
+/**
+ * @typedef {Object} Operations
+ * @property {function(): ModifyResult} [modify] 
+ * @property {function(): ModifyResult} [default]
+ * @property {Callback} callback
+ */
+
+/**
  * Reads, modifies, and writes a value in the local key-value store.
+ * @param {string | Object} config 
+ * @param {Operations} operations
+ * @returns {void}
  */
 function getAndModify(config, operations) {
   // Initialize lock for key
@@ -42,8 +62,8 @@ function getAndModify(config, operations) {
         }
         if (result !== null) {
           store = true;
-          updatedValue = modifyResult.value;
-          carryValue = modifyResult.carry;
+          updatedValue = result.value;
+          carryValue = result.carry;
         }
       } catch (error) {
         locks[key].unlockWrite();
