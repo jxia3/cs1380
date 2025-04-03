@@ -5,9 +5,11 @@
 const util = require('../util/util.js');
 const remote = require("./remote-service.js");
 
+const QUEUE_KEY = "crawl-queue";
+
 /**
  * Given a page URL, use consistentHash to determine which node is responsible 
- * for crawling it, and run the crawler on that node.
+ * for crawling it, add it to that node's queue, and make a crawl call to that node.
  * @param {string} pageURL
  * @param {Callback} callback
  */
@@ -29,6 +31,28 @@ function crawl(pageURL, callback) {
       callback(new Error("Request routed to invalid node"), null);
       return;
     }
+    // First update that node's queue
+    const storeRemote = {node, service: 'atomicStore', method: 'getAndModify'};
+    const operations = {
+      modify: (queue) => {
+        queue.push(pageURL);
+        return {
+          value: queue,
+          carry: null,
+        };
+      },
+      default: () => {
+        return {
+          value: [pageURL]
+        }
+      },
+      callback: (error, result) => {
+        callback(error, null);
+      },
+    }
+
+    global.distribution.local.comm.send()
+
     const remote = {node, service: 'crawler', method: 'crawl'};
     global.distribution.local.comm.send([pageURL], remote, callback);
   });
