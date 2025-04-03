@@ -2,8 +2,13 @@
 
 /* A service that crawls pages and saves relevant URLs. */
 
+const util = require('../util/util.js');
+
 // Key for saving visited URLs on local.store
 const CRAWL_KEY = "crawled-urls";
+// How often we write visited URLs list to disk (per SAVE_INTERVAL URLs)
+const SAVE_INTERVAL = 1000;
+const crawledURLs = new Set();
 
 /**
  * Given a page URL, finds other URLs in the page to crawl, then indexes the page.
@@ -12,28 +17,43 @@ const CRAWL_KEY = "crawled-urls";
  * @return {void}
  */
 function crawl(pageURL, callback) {
-  // 1. Check local.store to see if this URL has been visited (do I need locking here?)
-  global.distribution.local.atomicStore.getAndModify(CRAWL_KEY, {
-    modify: (urlList) => {
-      // Only return results if this URL is not seen
-      if (!urlList.includes(pageURL)) {
-        return {
-          value: [...urlList, pageURL],
-          carry: true
-        }
+  if (crawledURLs.has(pageURL)) {
+    // Already visited the URL
+    callback(null, null); // TODO: callback something
+    return;
+  }
+  crawledURLs.add(pageURL);
+
+  // Extract page content & URLs
+
+  // Routinely cache the visited URLs to disk
+  if (crawledURLs.size % SAVE_INTERVAL === 0) {
+    const crawledList = Array.from(crawledURLs);
+    global.distrbution.local.store.put(crawledList, CRAWL_KEY, (error, _) => {
+      if (error instanceof Error) {
+        callback(error);
+        return;
       }
-    },
-    default: () => { // If CRAWL_KEY doesn't exist, create initial list
-      return {
-        value: [pageURL],
-        carry: true
-      }
-    },
-    callback: (error, result) => {
-      // Have to check if we actually modified or not (ie if the URL was not in the list)
       
-    },
-  });
+    })
+    
+    // Technically just a put() call?
+    // global.distribution.local.atomicStore.getAndModify(CRAWL_KEY, {
+    //   modify: (_) => ({
+    //     value: Array.from(crawledURLs)
+    //   }),
+    //   default: () => { // If CRAWL_KEY doesn't exist, create initial list
+    //     return {
+    //       value: [pageURL],
+    //       carry: true
+    //     }
+    //   },
+    //   callback: (error, result) => {
+    //     // Have to check if we actually modified or not (ie if the URL was not in the list)
+        
+    //   },
+    // });
+  }
   
   // 2. If not, extract page content & URLs
 
