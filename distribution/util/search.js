@@ -4,7 +4,7 @@ const fs = require("fs");
 const http = require("http");
 const https = require("https");
 const path = require("path");
-const { URL } = require("url");
+const {URL} = require("url");
 
 const GROUP = "search";
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
@@ -95,11 +95,11 @@ function extractUrls(htmlContent, baseUrl) {
     // match[2] is for quoted URLs (href="...")
     // match[3] is for unquoted URLs (href=...)
     const href = match[2] || match[3];
-    
+
     // Skip empty links, fragments, javascript calls, mailto links
-    if (!href || href.startsWith('#') || 
-        href.toLowerCase().startsWith('javascript:') || 
-        href.toLowerCase().startsWith('mailto:')) {
+    if (!href || href.startsWith("#")
+        || href.toLowerCase().startsWith("javascript:")
+        || href.toLowerCase().startsWith("mailto:")) {
       continue;
     }
 
@@ -108,8 +108,8 @@ function extractUrls(htmlContent, baseUrl) {
       const absoluteUrl = new URL(href, baseUrl).toString();
 
       // Only crawl http and https URLs
-      if (absoluteUrl.startsWith('http:') || absoluteUrl.startsWith('https:') ) {
-         uniqueUrls.add(normalizeUrl(absoluteUrl));
+      if (absoluteUrl.startsWith("http:") || absoluteUrl.startsWith("https:") ) {
+        uniqueUrls.add(normalizeUrl(absoluteUrl));
       }
     } catch (error) {
       // Ignore URLs that cannot be parsed (e.g., malformed href or base)

@@ -52,12 +52,13 @@ function _start(clearQueue, callback) {
         };
       },
       default: () => ({
-        value: []
+        value: [],
       }),
       callback: (error, url) => {
         // Index a valid URL
         if (error) {
           console.error(error);
+          active -= 1;
           return;
         }
         if (url !== null) {
@@ -67,6 +68,8 @@ function _start(clearQueue, callback) {
             }
             active -= 1;
           });
+        } else {
+          active -= 1;
         }
       },
     });
@@ -364,7 +367,7 @@ function updateIndex(url, terms, docLen, callback) {
             score: terms[term].score / docLen[terms[term].length],
             context: terms[term].context,
           },
-        }
+        },
       }),
       callback: (error, result) => {
         if (error && updateError === null) {
