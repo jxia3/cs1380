@@ -97,17 +97,18 @@ function del(config, callback) {
     callback(cacheKey, null);
     return;
   }
-
   if (!(cacheKey in locks)) {
     locks[cacheKey] = util.sync.createMutex();
   }
-  locks[cacheKey].lock(() => {
+  const lock = locks[cacheKey];
+
+  lock.lock(() => {
     store.del(config, (error, result) => {
       let removed = null;
       if (cache.has(cacheKey)) {
         removed = cache.del(cacheKey);
       }
-      locks[cacheKey].unlock();
+      lock.unlock();
 
       if (error) {
         if (error instanceof NotFoundError && removed !== null) {
@@ -134,23 +135,24 @@ function loadItem(config, cacheKey, callback) {
   if (!(cacheKey in locks)) {
     locks[cacheKey] = util.sync.createMutex();
   }
+  const lock = locks[cacheKey];
 
-  locks[cacheKey].lock(() => {
+  lock.lock(() => {
     store.tryGet(config, (error, exists, object) => {
       // Check error conditions
       if (error) {
-        locks[cacheKey].unlock();
+        lock.unlock();
         callback(error, null, null);
         return;
       } else if (!exists) {
-        locks[cacheKey].unlock();
+        lock.unlock();
         callback(null, false, null);
         return;
       }
 
       // Add key-value pair to cache
       cacheItem(cacheKey, object, (error, result) => {
-        locks[cacheKey].unlock();
+        lock.unlock();
         if (error) {
           callback(error, null, null);
         } else {
@@ -169,7 +171,7 @@ function cacheItem(cacheKey, object, callback) {
     throw new Error("Cache item received no callback");
   }
   if (!(cacheKey in locks)) {
-    locks[cacheKey] = util.sync.createMutex();
+    throw new Error(`Key '${cacheKey}' does not have a lock`);
   }
 
   // Insert the object into the cache
@@ -196,6 +198,48 @@ function cacheItem(cacheKey, object, callback) {
 }
 
 /**
+ * Flushes modifications made to all the keys in the cache to storage.
+ */
+function flush(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const keys = cache.getKeys();
+  let active = keys.length;
+
+  for (const key of keys) {
+    if (!(key in locks)) {
+      throw new Error(`Key '${key}' does not have a lock`);
+    }
+    const lock = locks[key];
+    lock.lock(() => {
+      // Check if key is still in the cache
+      if (!cache.has(key)) {
+        lock.unlock();
+        decrementActive();
+        return;
+      }
+
+      // Write object to storage
+      const storeConfig = deserializeKey(key);
+      const object = cache.get(key);
+      store.put(object, storeConfig, (error, result) => {
+        lock.unlock();
+        if (error) {
+          console.error(error);
+        }
+        decrementActive();
+      });
+    });
+  }
+
+  function decrementActive() {
+    active -= 1;
+    if (active === 0) {
+      callback(null, null);
+    }
+  }
+}
+
+/**
  * Converts an object configuration into a cache key.
  */
 function serializeKey(config) {
@@ -213,4 +257,4 @@ function deserializeKey(cacheKey) {
   return JSON.parse(cacheKey);
 }
 
-module.exports = {get, tryGet, put, del};
+module.exports = {get, tryGet, put, del, flush};
