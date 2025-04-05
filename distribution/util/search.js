@@ -113,7 +113,6 @@ function extractUrls(htmlContent, baseUrl) {
       }
     } catch (error) {
       // Ignore URLs that cannot be parsed (e.g., malformed href or base)
-      console.warn(`Skipping invalid URL '${href}' found on ${baseUrl}: ${error.message}`);
     }
   }
 
