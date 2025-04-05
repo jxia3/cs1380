@@ -1,6 +1,7 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
+const log = require("../util/log.js");
 const store = require("./store.js");
 const util = require("../util/util.js");
 
@@ -204,6 +205,7 @@ function flush(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const keys = cache.getKeys();
   let active = keys.length;
+  log(`Flushing ${active} cache entries`);
 
   for (const key of keys) {
     if (!(key in locks)) {
