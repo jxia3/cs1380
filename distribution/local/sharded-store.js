@@ -110,11 +110,19 @@ function del(config, callback) {
       return;
     }
 
+    const object = shard[config.key];
     delete shard[config.key];
+    const storeCallback = (error, result) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, object);
+      }
+    };
     if (Object.keys(shard).length > 0) {
-      store.put(shard, shardConfig, callback);
+      store.put(shard, shardConfig, storeCallback);
     } else {
-      store.del(shardConfig, callback);
+      store.del(shardConfig, storeCallback);
     }
   });
 }
