@@ -102,7 +102,7 @@ function del(config, callback) {
     locks[cacheKey] = util.sync.createMutex();
   }
   locks[cacheKey].lock(() => {
-    global.distribution.local.store.del(config, (error, result) => {
+    store.del(config, (error, result) => {
       let removed = null;
       if (cache.has(cacheKey)) {
         removed = cache.del(cacheKey);
@@ -136,7 +136,7 @@ function loadItem(config, cacheKey, callback) {
   }
 
   locks[cacheKey].lock(() => {
-    global.distribution.local.store.tryGet(config, (error, exists, object) => {
+    store.tryGet(config, (error, exists, object) => {
       // Check error conditions
       if (error) {
         locks[cacheKey].unlock();
@@ -182,7 +182,7 @@ function cacheItem(cacheKey, object, callback) {
   // Write back an evicted item
   locks[evicted.key].lock(() => {
     const storeConfig = deserializeKey(evicted.key);
-    global.distribution.local.store.put(evicted.value, storeConfig, (error, result) => {
+    store.put(evicted.value, storeConfig, (error, result) => {
       locks[evicted.key].unlock();
       if (error) {
         callback(error, null);
