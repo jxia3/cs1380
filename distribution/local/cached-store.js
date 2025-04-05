@@ -250,7 +250,7 @@ function serializeKey(config) {
   if (config.key === null) {
     return new Error("Null keys are not supported");
   }
-  return [store._getSyncKey(config.key), JSON.stringify(config)];
+  return JSON.stringify(config);
 }
 
 /**
