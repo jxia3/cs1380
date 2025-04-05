@@ -180,10 +180,12 @@ function cacheItem(cacheKey, object, callback) {
   }
 
   // Write back an evicted item
-  locks[evicted.key].lock(() => {
+  const lock = locks[evicted.key];
+  lock.lock(() => {
     const storeConfig = deserializeKey(evicted.key);
     store.put(evicted.value, storeConfig, (error, result) => {
-      locks[evicted.key].unlock();
+      delete locks[evicted.key];
+      lock.unlock();
       if (error) {
         callback(error, null);
       } else {

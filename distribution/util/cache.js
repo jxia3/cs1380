@@ -17,6 +17,7 @@ function createCache(capacity) {
     get: (key) => get(cache, key),
     put: (key, value) => put(cache, key, value),
     del: (key) => del(cache, key),
+    evict: () => evict(cache, key),
     getKeys: () => getKeys(cache),
   };
 }
