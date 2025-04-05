@@ -1,7 +1,7 @@
+/* An atomic filesystem-backed key-value store built on the store module. */
 /** @typedef {import("../types").Callback} Callback */
 
-/* An atomic filesystem-backed key-value store built on the store module. */
-
+const store = require("./cached-store.js");
 const util = require("../util/util.js");
 
 const locks = {};
@@ -43,15 +43,14 @@ function getAndModify(config, operations) {
   }
 
   // Initialize lock for key
-  const storeModule = global.distribution.local.shardedStore;
-  const syncKey = storeModule._getSyncKey(config.key);
+  const syncKey = store._getSyncKey(config.key);
   if (!(syncKey in locks)) {
     locks[syncKey] = util.sync.createRwLock();
   }
   const lock = locks[syncKey];
 
   lock.lockWrite(() => {
-    storeModule.tryGet(config, (error, exists, value) => {
+    store.tryGet(config, (error, exists, value) => {
       // Check if there is an error
       if (error) {
         lock.unlockWrite();
@@ -60,21 +59,12 @@ function getAndModify(config, operations) {
       }
 
       // Compute updated or default value
-      let store = false;
-      let updatedValue = null;
-      let carryValue = null;
+      let result = null;
       try {
-        let result = null;
-        // Get the result based on whether the key exists or not
         if (exists && operations?.modify !== undefined) {
           result = operations.modify(value);
         } else if (!exists && operations?.default !== undefined) {
           result = operations.default();
-        }
-        if (result !== null) {
-          store = true;
-          updatedValue = result.value;
-          carryValue = result.carry;
         }
       } catch (error) {
         lock.unlockWrite();
@@ -83,19 +73,19 @@ function getAndModify(config, operations) {
       }
 
       // Store updated value
-      if (store) {
-        storeModule.put(updatedValue, config, (error, result) => {
-          lock.unlockWrite();
-          if (error) {
-            operations.callback(error, null);
-          } else {
-            operations.callback(null, carryValue);
-          }
-        });
-      } else {
+      if (result === null) {
         lock.unlockWrite();
-        operations.callback(null, carryValue);
+        operations.callback(null, null);
+        return;
       }
+      store.put(result.value, config, (error, result) => {
+        lock.unlockWrite();
+        if (error) {
+          operations.callback(error, null);
+        } else {
+          operations.callback(null, result.carry);
+        }
+      });
     });
   });
 }
