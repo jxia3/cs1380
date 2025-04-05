@@ -204,8 +204,9 @@ function cacheItem(cacheKey, object, callback) {
 function flush(callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const keys = cache.getKeys();
-  let active = keys.length;
-  log(`Flushing ${active} cache entries`);
+  const count = keys.length;
+  let active = count;
+  log(`Flushing ${count} cache entries`);
 
   for (const key of keys) {
     if (!(key in locks)) {
@@ -236,7 +237,7 @@ function flush(callback) {
   function decrementActive() {
     active -= 1;
     if (active === 0) {
-      callback(null, null);
+      callback(null, count);
     }
   }
 }

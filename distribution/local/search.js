@@ -1,6 +1,6 @@
 /* A service that coordinates crawling and indexing. */
 
-const orchestrator = null;
+let orchestrator = null;
 const counts = {
   crawled: 0,
   indexed: 0,
@@ -9,15 +9,31 @@ const counts = {
 /**
  * Starts the local crawler and indexer processing queues.
  */
-function start(orchestratorNode, callback) {
-
+function start(node, reset, callback) {
+  if (node?.ip === undefined || node?.port === undefined) {
+    throw new Error("Invalid orchestrator node");
+  }
+  orchestrator = node;
+  global.distribution.local.crawler._start(reset, (error, result) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    global.distribution.local.index._start(reset, (error, result) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, null);
+      }
+    });
+  });
 }
 
 /**
  * Flushes the local storage caches.
  */
 function flushCache(callback) {
-
+  global.distribution.local.cachedStore.flush(callback);
 }
 
 /**
