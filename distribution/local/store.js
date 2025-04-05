@@ -261,7 +261,7 @@ function decodeKey(key) {
 }
 
 /**
- * Used by atomic-store to determine which key to synchronize 
+ * Returns the minimal synchronization identifier for a key.
  */
 function _getSyncKey(key) {
   return key;

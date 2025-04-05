@@ -3,14 +3,13 @@
 const store = require("./store.js");
 const util = require("../util/util.js");
 
-const SHARD_AMOUNT = 10;
+const SHARD_COUNT = 10;
 
-// Store these keys directly instead of sharding
+// Keys to store directly instead of translating to shards
 const EXCLUDE_LIST = ["seen-urls", "crawl-queue", "index-queue"];
 
 /**
- * Given a key, find the shard containing the key,
- * and return the corresponding value of the key.
+ * Finds the shard containing a key and returns the value corresponding to the key.
  */
 function get(config, callback) {
   if (callback === undefined) {
@@ -21,46 +20,37 @@ function get(config, callback) {
     store.get(config, callback);
     return;
   }
-  
-  // Translate the key to its shard
-  const shard = getShard(config.key);
-  store.tryGet(shard, (error, exists, shardResult) => {
+
+  store.tryGet(getShardConfig(config), (error, exists, shard) => {
     if (error) {
       callback(error, null);
-    } else if (!exists) {
-      callback(new Error("Did not find the shard for the key"));
+    } else if (!exists || !(config.key in shard)) {
+      callback(new Error(`Key '${config.key}' not found`), null);
     } else {
-      if (config.key in shardResult) {
-        callback(null, shardResult[config.key]);
-      } else {
-        callback(new Error("Key does not exist in store"));
-      }
+      callback(null, shard[config.key]);
     }
   });
 }
 
 /**
- * Given a key, find the shard containing the key,
- * and return the corresponding value of the key.
+ * Finds the shard containing a key and optionally returns the value corresponding to the key.
  */
 function tryGet(config, callback) {
   if (callback === undefined) {
     return;
   }
   config = util.id.getObjectConfig(config);
-  if (config.key in EXCLUDE_LIST) {
+  if (EXCLUDE_LIST.includes(config.key)) {
     store.tryGet(config, callback);
     return;
   }
 
-  // Translate the key to its shard
-  const shard = getShard(config.key);
-  store.tryGet(shard, (error, exists, shardResult) => {
+  store.tryGet(getShardConfig(config), (error, exists, shard) => {
     if (error) {
-      callback(error, null, null);
+      callback(error, null);
     } else {
-      if (exists && (config.key in shardResult)) {
-        callback(null, true, shardResult[config.key]);
+      if (exists && config.key in shard) {
+        callback(null, true, shard[config.key]);
       } else {
         callback(null, false, null);
       }
@@ -69,36 +59,33 @@ function tryGet(config, callback) {
 }
 
 /**
- * Adds a key-value pair from its corresponding shard.
+ * Adds a key-value pair to its corresponding shard.
  */
 function put(object, config, callback) {
-  if (callback === undefined) {
-    return;
-  }
+  callback = callback === undefined ? (error, result) => {} : callback;
   config = util.id.getObjectConfig(config);
-  if (config.key in EXCLUDE_LIST) {
+  if (EXCLUDE_LIST.includes(config.key)) {
     store.put(object, config, callback);
     return;
   }
 
-  // Translate the key to its shard
-  const shard = getShard(config.key);
-  store.tryGet(shard, (error, exists, shardResult) => {
+  const shardConfig = getShardConfig(config);
+  store.tryGet(shardConfig, (error, exists, shard) => {
     if (error) {
       callback(error, null);
-    } else {
-      if (!exists) {
-        shardResult = {};
-      }
-      shardResult[config.key] = object;
-      store.put(shardResult, shard, (error, result) => {
-        if (error) {
-          callback(error, null);
-        } else {
-          callback(null, result);
-        }
-      })
+      return;
     }
+    if (!exists) {
+      shard = {};
+    }
+    shard[config.key] = object;
+    store.put(shard, shardConfig, (error, result) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, object);
+      }
+    });
   });
 }
 
@@ -106,58 +93,56 @@ function put(object, config, callback) {
  * Removes a key-value pair from its corresponding shard.
  */
 function del(config, callback) {
-  if (callback === undefined) {
-    return;
-  }
+  callback = callback === undefined ? (error, result) => {} : callback;
   config = util.id.getObjectConfig(config);
-  if (config.key in EXCLUDE_LIST) {
+  if (EXCLUDE_LIST.includes(config.key)) {
     store.del(config, callback);
     return;
   }
 
-  // Translate the key to its shard
-  const shard = getShard(config.key);
-  store.tryGet(shard, (error, exists, shardResult) => {
+  const shardConfig = getShardConfig(config);
+  store.tryGet(shardConfig, (error, exists, shard) => {
     if (error) {
       callback(error, null);
+      return;
+    } else if (!exists || !(config.key in shard)) {
+      callback(new Error(`Key '${config.key}' not found`), null);
+      return;
+    }
+
+    delete shard[config.key];
+    if (Object.keys(shard).length > 0) {
+      store.put(shard, shardConfig, callback);
     } else {
-      if (exists) {
-        if (config.key in shardResult) {
-          delete shardResult[config.key];
-        }
-        if (Object.keys(shardResult).length === 0) {
-          store.del(shard, callback);
-        } else {
-          store.put(shardResult, shard, callback);
-        }
-      }
+      store.del(shardConfig, callback);
     }
   });
 }
 
 /**
- * Converts a hexademical hash to a integer in the range [0, rangeSize - 1].
+ * Converts a key configuration to a sharded configuration.
  */
-function idToNumRange(hash, rangeSize) {
-  const shortHash = hash.slice(0, 13);
-  const decimalVal = parseInt(shortHash, 16);
-  return decimalVal % rangeSize;
+function getShardConfig(config) {
+  return {
+    key: getShardKey(config.key),
+    gid: config.gid,
+  };
 }
 
 /**
- * Hashes a key to its shard name
+ * Hashes a key to find the key of the shard shard it belongs to.
  */
-function getShard(key) {
-  const keyID = util.id.getID(key);
-  const shard = idToNumRange(keyID, SHARD_AMOUNT);
-  return `shard-${shard}`;
+function getShardKey(key) {
+  const keyId = util.id.getID(key);
+  const shard = parseInt(keyId.slice(0, 13), 16) % SHARD_COUNT;
+  return `[shard]-${shard}`;
 }
 
 /**
- * Used by atomic-store to determine which key to synchronize 
+ * Returns the minimal synchronization identifier for a key.
  */
 function _getSyncKey(key) {
-  return getShard(key);
+  return getShardKey(key);
 }
 
 module.exports = {get, tryGet, put, del, _getSyncKey};

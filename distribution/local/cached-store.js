@@ -31,7 +31,7 @@ function get(config, callback) {
     if (error) {
       callback(error, null);
     } else if (!exists) {
-      callback(new Error("Key does not exist in store"));
+      callback(new Error("Key not found"));
     } else {
       callback(null, object);
     }
@@ -39,7 +39,7 @@ function get(config, callback) {
 }
 
 /**
- * Retrieves a value from the cache or loads the value into the cache.
+ * Optionally retrieves a value from the cache or loads the value into the cache.
  */
 function tryGet(config, callback) {
   if (callback === undefined) {

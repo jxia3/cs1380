@@ -54,7 +54,7 @@ function _start(clearQueue, callback) {
       },
       default: () => ({
         value: [],
-        carry: null
+        carry: null,
       }),
       callback: (error, url) => {
         // Index a valid URL

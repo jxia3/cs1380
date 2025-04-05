@@ -2,7 +2,11 @@ const distribution = require("./distribution.js");
 
 const RESET = true;
 
-distribution.node.start(() => {
+setTimeout(() => {
+  console.log(distribution.util.search.calcTerms("mcdonalds burger cheap price"));
+}, 1000);
+
+/* distribution.node.start(() => {
   distribution.local.groups.put("search", [distribution.node.config], () => {
     console.log("added search group");
     // // This only tests crawler, use the code block below instead for crawler + index
@@ -22,4 +26,4 @@ distribution.node.start(() => {
       });
     });
   });
-});
+});*/
