@@ -126,6 +126,9 @@ function crawlURL(URL, callback) {
       return;
     }
     // TODO: first do preliminary check on whether the page is relevant (ex: look for chocolate)
+    // - can call extractText on pageContent, and search within that
+
+    // TODO: (lower priority) give the indexer the pagecontent directly instead of the URL
     const pageURLs = util.search.extractUrls(pageContent, URL);
     global.distribution[GROUP].crawler.crawl(pageURLs, callback);
   });
