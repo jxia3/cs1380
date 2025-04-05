@@ -1,5 +1,7 @@
 /* A service that coordinates crawling and indexing. */
 
+const log = require("../util/log.js");
+
 const counts = {
   crawled: 0,
   indexed: 0,
@@ -9,6 +11,7 @@ const counts = {
  * Starts the local crawler and indexer processing queues.
  */
 function start(reset, callback) {
+  log("Starting crawl and index cycle");
   global.distribution.local.crawler._start(reset, (error, result) => {
     if (error) {
       callback(error, null);

@@ -6,7 +6,7 @@ const util = require("../util/util.js");
 const GROUP = util.search.GROUP;
 
 /**
- * Sets a node as the orchestrator node and starts all the search loops.
+ * Sets a node as the orchestrator node and starts all the search cycles.
  */
 function start(node, reset, callback) {
   checkContext(this.gid, this.hash);
