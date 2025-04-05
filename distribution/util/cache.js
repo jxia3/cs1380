@@ -77,7 +77,7 @@ function insert(cache, key, value) {
 }
 
 /**
- * Marks a key as least recently used in the cache.
+ * Marks a key as the most recently used in the cache.
  */
 function refresh(cache, key) {
   if (!(key in cache.keys)) {
