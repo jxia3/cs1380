@@ -1,7 +1,7 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
-const store = require("./store.js");
+const store = require("./sharded-store.js");
 const util = require("../util/util.js");
 
 const NotFoundError = store.NotFoundError;
@@ -211,4 +211,9 @@ function deserializeKey(cacheKey) {
   return JSON.parse(cacheKey);
 }
 
-module.exports = {get, tryGet, put, del};
+// Used by atomic-store to determine which key to synchronize
+function _getSyncKey(key) {
+  return store._getSyncKey(key);
+}
+
+module.exports = {get, tryGet, put, del, _getSyncKey};

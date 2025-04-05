@@ -106,7 +106,6 @@ function _start(resetCrawler, callback) {
       if (error) {
         log("Failed to save seenURLs set to disk", "crawl");
       }
-      log("Saved seenURLs set to disk", "crawl");
     });
   }, SAVE_INTERVAL);
 }

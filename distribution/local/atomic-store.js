@@ -44,17 +44,18 @@ function getAndModify(config, operations) {
   }
 
   // Initialize lock for key
-  const key = `${config.gid}-${config.key}`;
-  if (!(key in locks)) {
-    locks[key] = util.sync.createRwLock();
+  const storeModule = global.distribution.local.shardedStore;
+  const syncKey = storeModule._getSyncKey(config.key);
+  if (!(syncKey in locks)) {
+    locks[syncKey] = util.sync.createRwLock();
   }
-  const storeModule = global.distribution.local.cachedStore;
+  const lock = locks[syncKey];
 
-  locks[key].lockWrite(() => {
+  lock.lockWrite(() => {
     storeModule.tryGet(config, (error, exists, value) => {
       // Check if there is an error
       if (error) {
-        locks[key].unlockWrite();
+        lock.unlockWrite();
         operations.callback(error, null);
         return;
       }
@@ -77,7 +78,7 @@ function getAndModify(config, operations) {
           carryValue = result.carry;
         }
       } catch (error) {
-        locks[key].unlockWrite();
+        lock.unlockWrite();
         operations.callback(error, null);
         return;
       }
@@ -85,7 +86,7 @@ function getAndModify(config, operations) {
       // Store updated value
       if (store) {
         storeModule.put(updatedValue, config, (error, result) => {
-          locks[key].unlockWrite();
+          lock.unlockWrite();
           if (error) {
             operations.callback(error, null);
           } else {
@@ -93,7 +94,7 @@ function getAndModify(config, operations) {
           }
         });
       } else {
-        locks[key].unlockWrite();
+        lock.unlockWrite();
         operations.callback(null, carryValue);
       }
     });
