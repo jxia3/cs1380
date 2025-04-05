@@ -7,7 +7,7 @@ function createCache(capacity) {
   }
   const cache = {
     capacity,
-    keys: {},
+    keys: Object.create(null),
     head: null,
     tail: null,
     size: 0,
