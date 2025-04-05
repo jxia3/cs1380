@@ -16,6 +16,7 @@ function createCache(capacity) {
     has: (key) => key in cache.keys,
     get: (key) => get(cache, key),
     put: (key, value) => put(cache, key, value),
+    del: (key) => del(cache, key),
     getKeys: () => getKeys(cache),
   };
 }
@@ -49,6 +50,38 @@ function put(cache, key, value) {
   }
   insert(cache, key, value);
   return evicted;
+}
+
+/**
+ * Removes a key and returns the value.
+ */
+function del(cache, key) {
+  if (!(key in cache.keys)) {
+    throw new Error(`Key '${key}' is not in the cache`);
+  }
+
+  const node = cache.keys[key].node;
+  if (node.prev !== null) {
+    node.prev.next = node.next;
+  }
+  if (node.next !== null) {
+    node.next.prev = node.prev;
+  }
+  if (cache.head.key === key) {
+    cache.head = node.next;
+  }
+  if (cache.tail.key === key) {
+    cache.tail = node.prev;
+  }
+
+  const removed = {
+    key,
+    value: cache.keys[key].value,
+  };
+  delete cache.keys[key];
+  cache.size -= 1;
+
+  return removed;
 }
 
 /**
