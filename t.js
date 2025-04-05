@@ -2,17 +2,7 @@ const distribution = require("./distribution.js");
 
 const RESET = true;
 
-distribution.local.cachedStore.put(1, "a", () => {
-  distribution.local.cachedStore.put(2, "b", () => {
-    distribution.local.cachedStore.put(3, "c", () => {
-      distribution.local.cachedStore.flush(() => {
-        console.log("flushed");
-      });
-    });
-  });
-});
-
-/* distribution.node.start(() => {
+distribution.node.start(() => {
   distribution.local.groups.put("search", [distribution.node.config], () => {
     console.log("added search group");
     // This only tests crawler, use the code block below instead for crawler + index
@@ -32,7 +22,7 @@ distribution.local.cachedStore.put(1, "a", () => {
       });
     });
   });
-});*/
+});
 
 // distribution.util.search.downloadPage("https://www.nba.com/", (error, content) => {
 //   const URLs = distribution.util.search.extractUrls(content, "https://www.nba.com/");

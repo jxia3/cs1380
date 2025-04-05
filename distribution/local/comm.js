@@ -8,6 +8,7 @@ const util = require("../util/util.js");
 
 const http = require("http");
 
+const OPTIMIZE_LOCAL = true;
 const REQUEST_TIMEOUT = 60000;
 const DISABLE_LOGS = ["gossip", "heartbeat"];
 
@@ -39,9 +40,22 @@ function send(message, remote, callback) {
     return;
   }
 
+  // Check for requests to the local node
+  const groupId = remote.gid === undefined ? "local" : remote.gid;
+  if (OPTIMIZE_LOCAL
+      && groupId === "local"
+      && remote.node.ip === global.nodeConfig?.ip
+      && remote.node.port == global.nodeConfig?.port) {
+    try {
+      global.distribution.local[remote.service][remote.method](...message, callback);
+    } catch (error) {
+      callback(error, null);
+    }
+    return;
+  }
+
   // Send HTTP request and parse response
   try {
-    const groupId = remote.gid === undefined ? "local" : remote.gid;
     const url = `http://${remote.node.ip}:${remote.node.port}/${groupId}/${remote.service}/${remote.method}`;
     const timeout = remote?.timeout === undefined ? REQUEST_TIMEOUT : remote?.timeout;
     if (!DISABLE_LOGS.includes(remote.service)) {
