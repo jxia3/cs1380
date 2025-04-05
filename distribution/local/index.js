@@ -51,9 +51,7 @@ function _start(clearQueue, callback) {
           carry: url,
         };
       },
-      default: () => ({
-        value: []
-      }),
+      default: () => ({value: []}),
       callback: (error, url) => {
         // Index a valid URL
         if (error) {
@@ -359,6 +357,7 @@ function updateIndex(url, terms, docLen, callback) {
         return {value: index};
       },
       default: () => ({
+        // Create index with URL
         value: {
           [url]: {
             score: terms[term].score / docLen[terms[term].length],
