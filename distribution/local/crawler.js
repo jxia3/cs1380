@@ -2,6 +2,7 @@
 
 /* A service that crawls pages and saves relevant URLs. */
 
+const log = require("../util/log.js");
 const util = require("../util/util.js");
 
 const GROUP = util.search.GROUP;
@@ -13,34 +14,38 @@ const ACTIVE_LIMIT = 10;
 const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 5000;
 
-// Consider URL as seen if crawled OR if it is currently in the queue (TODO: is this best way?)
+// IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
 const seenURLs = new Set();
 
 /**
  * Initializes the queue and starts the crawl loop. This internal function does not accept a callback
  * and should not be called by external services.
- * @param {boolean} clearQueue
- * @param {boolean} clearSeen
+ * @param {boolean} resetCrawler if true, clears the crawl queue and the seen URLs list
  * @param {Callback} callback
  */
-function _start(clearQueue, clearSeen, callback) {
+function _start(resetCrawler, callback) {
   if (callback === undefined) {
     throw new Error("Start index received no callback");
   }
-  if (clearQueue) {
-    global.distribution.local.store.put([], QUEUE_KEY, callback);
-  } else {
-    global.distribution.local.store.tryGet(QUEUE_KEY, (error, exists, result) => {
-      if (error) {
-        callback(new Error("couldn't retrieve crawler queue on _start"), null);
-      } else if (exists) {
-        callback(null, null);
-      } else {
-        global.distribution.local.store.put([], QUEUE_KEY, callback);
-      }
+
+  if (resetCrawler) {
+    log("Resetting crawl queue and seen URLs list", "crawl");
+    // TODO: will this have race conditions or don't have to worry about that?
+    global.distribution.local.store.put([], SEEN_KEY, (error, result) => {
+      global.distribution.local.store.put([], QUEUE_KEY, callback);
     });
+  } else {
+    // Sync up local seenURLs with stored seenURLs
+    global.distribution.local.store.tryGet(SEEN_KEY, (error, exists, result) => {
+      if (error) {
+        callback(new Error("couldn't retrieve seen URLs on crawler _start"), null);
+      } else if (exists) {
+        seenURLs = new Set(result);
+        callback(null, null);
+      }
+    })
   }
-  // TODO: sync up local seenURLs with stored seenURLs
+
   let active = 0;
   // Periodically check for new pages on the queue to crawl
   module.exports._crawlInterval = setInterval(() => {
@@ -50,20 +55,14 @@ function _start(clearQueue, clearSeen, callback) {
     active += 1;
     global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
       modify: (queue) => {
-        // Get the first unseen URL from queue if it exists
-        let newURL = null;
-        while (queue.length > 0) {
-          const url = queue.shift();
-          // Check if unseen
-          if (!seenURLs.has(url)) {
-            newURL = url;
-            seenURLs.add(url);
-            break;
-          }
+        // Extract the first element from the queue
+        if (queue.length === 0) {
+          return null;
         }
+        const url = queue.shift();
         return {
           value: queue,
-          carry: newURL,
+          carry: url,
         };
       },
       default: () => ({
@@ -78,13 +77,12 @@ function _start(clearQueue, clearSeen, callback) {
           return;
         }
         if (url !== null) {
-          console.log(`crawling url: ${url}`);
+          log(`Crawling url: ${url}`, "crawl");
           crawlURL(url, (errors, _) => {
             if (Object.keys(errors).length > 0) {
               console.error(Object.values(errors)[0]);
             }
             // Add this page to the index queue
-            console.log(`adding url to index queue: ${url}`);
             global.distribution.local.index.queueUrl(url, (error, result) => {
               if (error) {
                 console.error(`failed to add ${url} to index queue after crawling`);
@@ -102,12 +100,12 @@ function _start(clearQueue, clearSeen, callback) {
 
   // Periodically saves the visited URLs list
   module.exports._saveInterval = setInterval(() => {
-    console.log(`saving seenURLs set to disk...`);
     const seenList = Array.from(seenURLs);
     global.distribution.local.store.put(seenList, SEEN_KEY, (error, _) => {
       if (error) {
-        console.warn("failed to save seenURLs set to disk");
+        log("Failed to save seenURLs set to disk", "crawl");
       }
+      log("Saved seenURLs set to disk", "crawl");
     });
   }, SAVE_INTERVAL);
 }
@@ -127,7 +125,6 @@ function crawlURL(URL, callback) {
     }
     // TODO: first do preliminary check on whether the page is relevant (ex: look for chocolate)
     const pageURLs = util.search.extractUrls(pageContent, URL);
-    console.log(`found ${pageURLs.length} URLs to crawl in page ${URL}`)
     global.distribution[GROUP].crawler.crawl(pageURLs, callback);
   });
 }
@@ -142,8 +139,16 @@ function queueURLs(URLs, callback) {
     callback(new Error('crawler queueURLs must take in an array'));
     return;
   }
+  // Normalize URLs just in case
+  const normalizedURLs = URLs.map(url => util.search.normalizeUrl(url));
   // Filter out URLs that are already crawled or in the queue
-  const newURLs = URLs.filter(url => !seenURLs.has(url));
+  const newURLs = normalizedURLs.filter(url => {
+    if (!seenURLs.has(url)) {
+      seenURLs.add(url);
+      return true;
+    }
+    return false;
+  });
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
       return {

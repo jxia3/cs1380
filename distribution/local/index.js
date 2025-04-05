@@ -84,12 +84,19 @@ function queueUrl(url, callback) {
   url = util.search.normalizeUrl(url);
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
-      log(`Adding page ${url} to the index queue`);
+      log(`Adding page ${url} to the index queue`, "index");
       queue.push(url);
       return {
         value: queue,
         carry: null,
       };
+    },
+    default: () => {
+      log(`Adding page ${url} to the index queue`, "index");
+      return {
+        value: [url],
+        carry: null
+      }
     },
     callback: (error, result) => {
       callback(error, null);
@@ -122,11 +129,11 @@ function indexPage(url, data, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
 
-  log(`Indexing page ${url}`);
+  log(`Indexing page ${url}`, "index");
   const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
   global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
-    log(`Finished indexing page ${url}`);
+    log(`Finished indexing page ${url}`, "index");
     callback(errors, results);
   });
 }
