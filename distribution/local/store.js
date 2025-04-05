@@ -260,7 +260,9 @@ function decodeKey(key) {
   return Buffer.from(key, "base64").toString("utf8");
 }
 
-// Used by atomic-store to determine which key to synchronize
+/**
+ * Used by atomic-store to determine which key to synchronize 
+ */
 function _getSyncKey(key) {
   return key;
 }

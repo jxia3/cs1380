@@ -17,7 +17,7 @@ function get(config, callback) {
     return;
   }
   config = util.id.getObjectConfig(config);
-  if (config.key in EXCLUDE_LIST) {
+  if (EXCLUDE_LIST.includes(config.key)) {
     store.get(config, callback);
     return;
   }
@@ -121,16 +121,16 @@ function del(config, callback) {
     if (error) {
       callback(error, null);
     } else {
-      if (exists && (config.key in shardResult)) {
-        delete shardResult[config.key];
-      }
-      store.put(shardResult, shard, (error, result) => {
-        if (error) {
-          callback(error, null);
-        } else {
-          callback(null, result);
+      if (exists) {
+        if (config.key in shardResult) {
+          delete shardResult[config.key];
         }
-      });
+        if (Object.keys(shardResult).length === 0) {
+          store.del(shard, callback);
+        } else {
+          store.put(shardResult, shard, callback);
+        }
+      }
     }
   });
 }
@@ -139,37 +139,23 @@ function del(config, callback) {
  * Converts a hexademical hash to a integer in the range [0, rangeSize - 1].
  */
 function idToNumRange(hash, rangeSize) {
-  if (typeof rangeSize !== 'number' || rangeSize <= 0 || 
-      !Number.isInteger(rangeSize) || rangeSize >= Number.MAX_SAFE_INTEGER) {
-    throw new Error("Invalid rangeSize provided. Must be a positive integer, and less than 2^53.");
-  }
-  if (typeof hash !== 'string') {
-    throw new Error("Invalid hash, not a string");
-  }
-
-  try {
-    // Only use 13 hex digits, corresponding to 2^53
-    const shortHash = hash.slice(0, 13);
-    const decimalVal = parseInt(shortHash, 16);
-    return decimalVal % rangeSize;
-  } catch (error) {
-    throw new Error(`Integer conversion failed with '${error.message}'`);
-  }
+  const shortHash = hash.slice(0, 13);
+  const decimalVal = parseInt(shortHash, 16);
+  return decimalVal % rangeSize;
 }
 
-// Hashes a key to its shard name
+/**
+ * Hashes a key to its shard name
+ */
 function getShard(key) {
   const keyID = util.id.getID(key);
-  const shard = idToNumRange(keyID, SHARD_AMT);
-  return generateShardName(shard);
-}
-
-// Generate key name for shard files, given the shard number
-function generateShardName(shard) {
+  const shard = idToNumRange(keyID, SHARD_AMOUNT);
   return `shard-${shard}`;
 }
 
-// Used by atomic-store to determine which key to synchronize
+/**
+ * Used by atomic-store to determine which key to synchronize 
+ */
 function _getSyncKey(key) {
   return getShard(key);
 }

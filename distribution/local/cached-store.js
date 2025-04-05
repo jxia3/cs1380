@@ -260,7 +260,9 @@ function deserializeKey(cacheKey) {
   return JSON.parse(cacheKey);
 }
 
-// Used by atomic-store to determine which key to synchronize
+/**
+ * Used by atomic-store to determine which key to synchronize
+ */
 function _getSyncKey(key) {
   return store._getSyncKey(key);
 }
