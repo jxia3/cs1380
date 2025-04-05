@@ -386,7 +386,7 @@ function updateIndex(url, terms, docLen, callback) {
         if (DEBUG) {
           index[url].term = terms[term].term;
         }
-        return index;
+        return {value: index};
       },
       callback: (error, result) => {
         if (error && updateError === null) {
