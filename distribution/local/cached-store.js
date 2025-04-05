@@ -62,9 +62,10 @@ function loadItem(config, cacheKey, callback) {
       }
 
       // Write back an evicted item
-      locks[evicted].lock(() => {
-        global.distribution.local.store.put(deserializeKey(evicted), (error, result) => {
-          locks[evicted].unlock();
+      locks[evicted.key].lock(() => {
+        const storeConfig = deserializeKey(evicted.key);
+        global.distribution.local.store.put(evicted.value, storeConfig, (error, result) => {
+          locks[evicted.key].unlock();
           if (error) {
             callback(error, null);
           } else {

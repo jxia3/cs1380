@@ -122,10 +122,15 @@ function evict(cache) {
     tail.prev.next = null;
     cache.tail = tail.prev;
   }
+
+  const evicted = {
+    key: tail.key,
+    value: cache.keys[tail.key].value,
+  };
   delete cache.keys[tail.key];
   cache.size -= 1;
 
-  return tail.key;
+  return evicted;
 }
 
 /**
