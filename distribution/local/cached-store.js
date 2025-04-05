@@ -78,17 +78,25 @@ function put(object, config, callback) {
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const cacheKey = serializeKey(config);
-  if (cache.has(cacheKey)) {
-    cache.del(cacheKey);
-  }
-
   if (!(cacheKey in locks)) {
     locks[cacheKey] = util.sync.createMutex();
   }
+
   locks[cacheKey].lock(() => {
     global.distribution.store.del(config, (error, result) => {
+      let removed = null;
+      if (cache.has(cacheKey)) {
+        removed = cache.del(cacheKey);
+      }
       locks[cacheKey].unlock();
-      callback(error, result);
+
+      if (error) {
+        callback(error, null);
+      } else if (removed !== null) {
+        callback(null, removed.value);
+      } else {
+        callback(null, result);
+      }
     });
   });
 }
