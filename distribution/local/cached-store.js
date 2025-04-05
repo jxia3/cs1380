@@ -19,16 +19,38 @@ function get(config, callback) {
     return;
   }
 
-  loadItem(config, cacheKey, (error, object) => {
+  loadItem(config, cacheKey, (error, exists, object) => {
     if (error) {
       callback(error, null);
+    } else if (!exists) {
+      callback(new Error("Key does not exist in store"));
     } else {
       callback(null, object);
     }
   });
 }
 
-function tryGet(config, callback) {}
+/**
+ * Retrieves a value from the cache or loads the value into the cache.
+ */
+function tryGet(config, callback) {
+  if (callback === undefined) {
+    return;
+  }
+  const cacheKey = serializeKey(config);
+  if (cache.has(cacheKey)) {
+    callback(null, true, cache.get(cacheKey));
+    return;
+  }
+
+  loadItem(config, cacheKey, (error, exists, object) => {
+    if (error) {
+      callback(error, null, null);
+    } else {
+      callback(null, exists, object);
+    }
+  });
+}
 
 function put(object, config, callback) {}
 
@@ -46,18 +68,21 @@ function loadItem(config, cacheKey, callback) {
   }
 
   locks[cacheKey].lock(() => {
-    global.distribution.local.store.get(config, (error, object) => {
-      // Return early on error
+    global.distribution.local.store.tryGet(config, (error, exists, object) => {
+      // Check error conditions
       locks[cacheKey].unlock();
       if (error) {
-        callback(error, null);
+        callback(error, null, null);
+        return;
+      } else if (!exists) {
+        callback(null, false, null);
         return;
       }
 
       // Insert the object into the cache
       const evicted = cache.put(cacheKey, object);
       if (evicted === null) {
-        callback(null, object);
+        callback(null, true, object);
         return;
       }
 
@@ -67,9 +92,9 @@ function loadItem(config, cacheKey, callback) {
         global.distribution.local.store.put(evicted.value, storeConfig, (error, result) => {
           locks[evicted.key].unlock();
           if (error) {
-            callback(error, null);
+            callback(error, null, null);
           } else {
-            callback(null, object);
+            callback(null, true, object);
           }
         });
       });
