@@ -8,7 +8,7 @@ const util = require("../util/util.js");
 
 const http = require("http");
 
-const REQUEST_TIMEOUT = 20000;
+const REQUEST_TIMEOUT = 60000;
 const DISABLE_LOGS = ["gossip", "heartbeat"];
 
 /**

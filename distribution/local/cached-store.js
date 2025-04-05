@@ -6,7 +6,7 @@ const util = require("../util/util.js");
 
 const NotFoundError = store.NotFoundError;
 
-const cache = util.cache.createCache(10000);
+const cache = util.cache.createCache(20000);
 const locks = {};
 
 /**

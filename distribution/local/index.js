@@ -363,7 +363,7 @@ function updateIndex(url, terms, docLen, callback) {
             score: terms[term].score / docLen[terms[term].length],
             context: terms[term].context,
           },
-        }
+        },
       }),
       callback: (error, result) => {
         if (error && updateError === null) {
