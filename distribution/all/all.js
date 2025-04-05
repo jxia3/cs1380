@@ -21,4 +21,5 @@ module.exports = {
   store: require("./store.js"),
 
   index: require("./index.js"),
+  crawler: require("./crawler.js"),
 };

@@ -4,6 +4,7 @@ const fs = require("fs");
 const http = require("http");
 const https = require("https");
 const path = require("path");
+const {URL} = require("url");
 
 const GROUP = "search";
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
@@ -70,6 +71,53 @@ function handleResponse(response, callback) {
   let content = "";
   response.on("data", (chunk) => content += chunk);
   response.on("end", () => callback(null, content));
+}
+
+/**
+ * Extracts all valid, absolute HTTP/HTTPS URLs from HTML content.
+ * Uses the provided baseUrl to resolve relative URLs.
+ *
+ * @param {string} htmlContent The HTML content of the page.
+ * @param {string} baseUrl The base URL of the page where the HTML was downloaded from.
+ * @returns {string[]} An array of absolute URLs found.
+ */
+function extractUrls(htmlContent, baseUrl) {
+  if (!htmlContent || !baseUrl) {
+    return [];
+  }
+
+  const A_HREF_REGEX = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1|<a\s+(?:[^>]*?\s+)?href=([^\s>]+)/gi;
+  const uniqueUrls = new Set();
+  let match;
+
+  while ((match = A_HREF_REGEX.exec(htmlContent)) !== null) {
+    // Extract the URL from the correct capture group
+    // match[2] is for quoted URLs (href="...")
+    // match[3] is for unquoted URLs (href=...)
+    const href = match[2] || match[3];
+
+    // Skip empty links, fragments, javascript calls, mailto links
+    if (!href || href.startsWith("#")
+        || href.toLowerCase().startsWith("javascript:")
+        || href.toLowerCase().startsWith("mailto:")) {
+      continue;
+    }
+
+    try {
+      // Resolve the potentially relative URL against the base URL
+      const absoluteUrl = new URL(href, baseUrl).toString();
+
+      // Only crawl http and https URLs
+      if (absoluteUrl.startsWith("http:") || absoluteUrl.startsWith("https:") ) {
+        uniqueUrls.add(normalizeUrl(absoluteUrl));
+      }
+    } catch (error) {
+      // Ignore URLs that cannot be parsed (e.g., malformed href or base)
+      console.warn(`Skipping invalid URL '${href}' found on ${baseUrl}: ${error.message}`);
+    }
+  }
+
+  return Array.from(uniqueUrls);
 }
 
 /**
@@ -181,6 +229,7 @@ module.exports = {
   NGRAM_LEN,
   normalizeUrl,
   downloadPage,
+  extractUrls,
   calcTerms,
   createFullTermKey,
   createTopTermKey,
