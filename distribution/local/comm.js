@@ -45,7 +45,7 @@ function send(message, remote, callback) {
   if (OPTIMIZE_LOCAL
       && groupId === "local"
       && remote.node.ip === global.nodeConfig?.ip
-      && remote.node.port == global.nodeConfig?.port) {
+      && remote.node.port === global.nodeConfig?.port) {
     try {
       global.distribution.local[remote.service][remote.method](...message, callback);
     } catch (error) {
