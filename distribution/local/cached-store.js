@@ -83,7 +83,7 @@ function del(config, callback) {
   }
 
   locks[cacheKey].lock(() => {
-    global.distribution.store.del(config, (error, result) => {
+    global.distribution.local.store.del(config, (error, result) => {
       let removed = null;
       if (cache.has(cacheKey)) {
         removed = cache.del(cacheKey);
@@ -115,17 +115,19 @@ function loadItem(config, cacheKey, callback) {
   locks[cacheKey].lock(() => {
     global.distribution.local.store.tryGet(config, (error, exists, object) => {
       // Check error conditions
-      locks[cacheKey].unlock();
       if (error) {
+        locks[cacheKey].unlock();
         callback(error, null, null);
         return;
       } else if (!exists) {
+        locks[cacheKey].unlock();
         callback(null, false, null);
         return;
       }
 
       // Add key-value pair to cache
       cacheItem(cacheKey, object, (error, result) => {
+        locks[cacheKey].unlock();
         if (error) {
           callback(error, null, null);
         } else {
