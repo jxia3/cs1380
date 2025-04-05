@@ -34,6 +34,8 @@ function updateCounts(crawled, indexed, callback) {
     callback(new Error("Group is not initialized"), null);
     return;
   }
+  const remote = {node: this.orchestrator, service: "search", method: "updateCounts"};
+  global.distribution.local.comm.send([crawled, indexed], remote, callback);
 }
 
 /**
