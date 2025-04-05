@@ -75,7 +75,23 @@ function put(object, config, callback) {
 /**
  * Removes an item from the cache and the store.
  */
-function del(config, callback) {}
+function del(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const cacheKey = serializeKey(config);
+  if (cache.has(cacheKey)) {
+    cache.del(cacheKey);
+  }
+
+  if (!(cacheKey in locks)) {
+    locks[cacheKey] = util.sync.createMutex();
+  }
+  locks[cacheKey].lock(() => {
+    global.distribution.store.del(config, (error, result) => {
+      locks[cacheKey].unlock();
+      callback(error, result);
+    });
+  });
+}
 
 /**
  * Loads a key into the cache and possibly evicts the least recently used key.
