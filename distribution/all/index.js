@@ -69,7 +69,7 @@ function sendBatches(group, url, batches, docLen, callback) {
 function checkContext(groupId, hashFn) {
   remote.checkGroup(groupId);
   if (typeof hashFn !== "function") {
-    throw new Error("Invalid index hash function");
+    throw new Error("Invalid search hash function");
   }
 }
 
