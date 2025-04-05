@@ -10,6 +10,7 @@ const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
+const DEBUG = false;
 
 /**
  * Initializes the queue and starts the index loop. This internal function does not accept a callback
@@ -110,7 +111,7 @@ function indexUrl(url, callback) {
   url = util.search.normalizeUrl(url);
   util.search.downloadPage(url, (error, data) => {
     if (error) {
-      callback(error, null);
+      callback({}, null);
     } else {
       indexPage(url, data, callback);
     }
@@ -221,6 +222,9 @@ function extractTerms(title, text) {
         score: 0,
         context: [],
       };
+      if (DEBUG) {
+        termIndex[term.text].term = term.text;
+      }
     }
     termIndex[term.text].score += 5;
     if (termIndex[term.text].context.length === 0) {
@@ -252,6 +256,9 @@ function extractTerms(title, text) {
           score: 0,
           context: [],
         };
+        if (DEBUG) {
+          termIndex[term.text].term = term.text;
+        }
       }
       termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
