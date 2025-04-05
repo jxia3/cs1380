@@ -28,11 +28,22 @@ const locks = {};
  * @returns {void}
  */
 function getAndModify(config, operations) {
-  // Initialize lock for key
   if (operations?.callback === undefined) {
     throw new Error("Read and modify received no callback");
   }
+
+  // Get object key
   config = util.id.getObjectConfig(config);
+  if (config instanceof Error) {
+    operations.callback(config, null);
+    return;
+  }
+  if (config.key === null) {
+    operations.callback(new Error("Null keys are not supported"), null);
+    return;
+  }
+
+  // Initialize lock for key
   const key = `${config.gid}-${config.key}`;
   if (!(key in locks)) {
     locks[key] = util.sync.createRwLock();
