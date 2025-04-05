@@ -52,7 +52,10 @@ function _start(clearQueue, callback) {
           carry: url,
         };
       },
-      default: () => ({value: []}),
+      default: () => ({
+        value: [],
+        carry: null
+      }),
       callback: (error, url) => {
         // Index a valid URL
         if (error) {

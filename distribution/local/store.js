@@ -260,4 +260,9 @@ function decodeKey(key) {
   return Buffer.from(key, "base64").toString("utf8");
 }
 
-module.exports = {NotFoundError, get, tryGet, put, del, clear};
+// Used by atomic-store to determine which key to synchronize
+function _getSyncKey(key) {
+  return key;
+}
+
+module.exports = {NotFoundError, get, tryGet, put, del, clear, _getSyncKey};
