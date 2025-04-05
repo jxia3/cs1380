@@ -5,19 +5,36 @@ const util = require("../util/util.js");
 
 const GROUP = util.search.GROUP;
 
+/**
+ * Sets a node as the orchestrator node and starts all the search loops.
+ */
 function start(node, reset, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
   if (node?.ip === undefined || node?.port === undefined) {
     callback(new Error("Invalid orchestrator node"), null);
+    return;
   }
   if (this.orchestrator !== undefined) {
     callback(new Error("Group is already initialized"), null);
+    return;
   }
   this.orchestrator = node;
+  const service = {service: "search", method: "start"};
+  global.distribution[this.gid].comm.send([reset], service, callback);
 }
 
-function updateCounts(crawled, indexed, callback) {}
+/**
+ * Updates the search statistics on the orchestrator node.
+ */
+function updateCounts(crawled, indexed, callback) {
+  checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (this.orchestrator === undefined) {
+    callback(new Error("Group is not initialized"), null);
+    return;
+  }
+}
 
 /**
  * Checks if the current function context is valid.
