@@ -1,6 +1,5 @@
 /** @typedef {import("../types").Callback} Callback */
 
-
 /* An atomic filesystem-backed key-value store built on the store module. */
 
 const util = require("../util/util.js");

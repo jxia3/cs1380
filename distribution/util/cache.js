@@ -17,7 +17,8 @@ function createCache(capacity) {
     get: (key) => get(cache, key),
     put: (key, value) => put(cache, key, value),
     del: (key) => del(cache, key),
-    getKeys: () => getKeys(cache),
+    getKeys: () => Object.keys(cache.keys),
+    getKeysOrdered: () => getKeysOrdered(cache),
   };
 }
 
@@ -168,9 +169,9 @@ function evict(cache) {
 }
 
 /**
- * Traverses the list to get the keys in order of recency.
+ * Traverses the list to get the keys in order of recency. Only for debugging purposes.
  */
-function getKeys(cache) {
+function getKeysOrdered(cache) {
   const listKeys = [];
   let node = cache.head;
   while (node !== null) {
