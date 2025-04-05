@@ -243,13 +243,14 @@ function flush(callback) {
 
 /**
  * Converts an object configuration into a cache key.
+ * Returns the sync key and the cache key.
  */
 function serializeKey(config) {
   config = util.id.getObjectConfig(config);
   if (config.key === null) {
     return new Error("Null keys are not supported");
   }
-  return JSON.stringify(config);
+  return [store._getSyncKey(config.key), JSON.stringify(config)];
 }
 
 /**

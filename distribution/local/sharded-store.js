@@ -3,7 +3,7 @@
 const store = require("./store.js");
 const util = require("../util/util.js");
 
-const SHARD_AMT = 10;
+const SHARD_AMOUNT = 10;
 
 // Store these keys directly instead of sharding
 const EXCLUDE_LIST = ["seen-urls", "crawl-queue", "index-queue"];

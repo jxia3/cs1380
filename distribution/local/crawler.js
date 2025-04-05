@@ -15,7 +15,7 @@ const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 500;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
-const seenURLs = new Set();
+const SEEN_URLs = new Set();
 
 /**
  * Initializes the queue and starts the crawl loop. This internal function does not accept a callback
@@ -35,12 +35,12 @@ function _start(resetCrawler, callback) {
       global.distribution.local.store.put([], QUEUE_KEY, callback);
     });
   } else {
-    // Sync up local seenURLs with stored seenURLs
+    // Sync up local SEEN_URLs with stored SEEN_URLs
     global.distribution.local.store.tryGet(SEEN_KEY, (error, exists, result) => {
       if (error) {
         callback(new Error("couldn't retrieve seen URLs on crawler _start"), null);
       } else if (exists) {
-        seenURLs = new Set(result);
+        SEEN_URLs = new Set(result);
         callback(null, null);
       }
     });
@@ -101,10 +101,10 @@ function _start(resetCrawler, callback) {
 
   // Periodically saves the visited URLs list
   module.exports._saveInterval = setInterval(() => {
-    const seenList = Array.from(seenURLs);
+    const seenList = Array.from(SEEN_URLs);
     global.distribution.local.store.put(seenList, SEEN_KEY, (error, _) => {
       if (error) {
-        log("Failed to save seenURLs set to disk", "crawl");
+        log("Failed to save SEEN_URLs set to disk", "crawl");
       }
     });
   }, SAVE_INTERVAL);
@@ -147,8 +147,8 @@ function queueURLs(URLs, callback) {
   const normalizedURLs = URLs.map((url) => util.search.normalizeUrl(url));
   // Filter out URLs that are already crawled or in the queue
   const newURLs = normalizedURLs.filter((url) => {
-    if (!seenURLs.has(url)) {
-      seenURLs.add(url);
+    if (!SEEN_URLs.has(url)) {
+      SEEN_URLs.add(url);
       return true;
     }
     return false;
