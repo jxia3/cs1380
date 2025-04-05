@@ -83,6 +83,7 @@ function _start(resetCrawler, callback) {
               console.error(Object.values(errors)[0]);
             }
             // Add this page to the index queue
+            // TODO: instead of queuing it, just call indexPage (can eliminate the index queue)
             global.distribution.local.index.queueUrl(url, (error, result) => {
               if (error) {
                 console.error(`failed to add ${url} to index queue after crawling`);
