@@ -10,7 +10,7 @@ const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
-const DEBUG = false;
+const DEBUG = true;
 
 /**
  * Initializes the queue and starts the index loop. This internal function does not accept a callback
@@ -94,8 +94,8 @@ function queueUrl(url, callback) {
       log(`Adding page ${url} to the index queue`, "index");
       return {
         value: [url],
-        carry: null
-      }
+        carry: null,
+      };
     },
     callback: (error, result) => {
       callback(error, null);
@@ -371,17 +371,23 @@ function updateIndex(url, terms, docLen, callback) {
           score: terms[term].score / docLen[terms[term].length],
           context: terms[term].context,
         };
+        if (DEBUG) {
+          index[url].term = terms[term].term;
+        }
         return {value: index};
       },
-      default: () => ({
+      default: () => {
         // Create index with URL
-        value: {
-          [url]: {
-            score: terms[term].score / docLen[terms[term].length],
-            context: terms[term].context,
-          },
-        },
-      }),
+        const index = {};
+        index[url] = {
+          score: terms[term].score / docLen[terms[term].length],
+          context: terms[term].context,
+        };
+        if (DEBUG) {
+          index[url].term = terms[term].term;
+        }
+        return index;
+      },
       callback: (error, result) => {
         if (error && updateError === null) {
           updateError = error;

@@ -43,7 +43,7 @@ function _start(resetCrawler, callback) {
         seenURLs = new Set(result);
         callback(null, null);
       }
-    })
+    });
   }
 
   let active = 0;
@@ -138,13 +138,13 @@ function crawlURL(URL, callback) {
  */
 function queueURLs(URLs, callback) {
   if (!Array.isArray(URLs)) {
-    callback(new Error('crawler queueURLs must take in an array'));
+    callback(new Error("crawler queueURLs must take in an array"));
     return;
   }
   // Normalize URLs just in case
-  const normalizedURLs = URLs.map(url => util.search.normalizeUrl(url));
+  const normalizedURLs = URLs.map((url) => util.search.normalizeUrl(url));
   // Filter out URLs that are already crawled or in the queue
-  const newURLs = normalizedURLs.filter(url => {
+  const newURLs = normalizedURLs.filter((url) => {
     if (!seenURLs.has(url)) {
       seenURLs.add(url);
       return true;
