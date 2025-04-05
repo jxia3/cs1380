@@ -16,14 +16,14 @@ const locks = {};
 
 /**
  * @typedef {Object} Operations
- * @property {function(): ModifyResult} [modify] 
+ * @property {function(): ModifyResult} [modify]
  * @property {function(): ModifyResult} [default]
  * @property {Callback} callback
  */
 
 /**
  * Reads, modifies, and writes a value in the local key-value store.
- * @param {string | Object} config 
+ * @param {string | Object} config
  * @param {Operations} operations
  * @returns {void}
  */
