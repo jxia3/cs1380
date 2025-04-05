@@ -12,7 +12,7 @@ const QUEUE_KEY = "crawl-queue";
 const ACTIVE_LIMIT = 10;
 // How often we write visited URLs list to disk (ms)
 const SAVE_INTERVAL = 5000;
-const CRAWL_INTERVAL = 5000;
+const CRAWL_INTERVAL = 500;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
 const seenURLs = new Set();
