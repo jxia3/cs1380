@@ -42,8 +42,7 @@ function send(message, remote, callback) {
 
   // Check for requests to the local node
   const groupId = remote.gid === undefined ? "local" : remote.gid;
-  if (OPTIMIZE_LOCAL
-      && groupId === "local"
+  if (OPTIMIZE_LOCAL && groupId === "local"
       && remote.node.ip === global.nodeConfig?.ip
       && remote.node.port === global.nodeConfig?.port) {
     try {
