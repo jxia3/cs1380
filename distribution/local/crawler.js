@@ -120,8 +120,9 @@ function _start(resetCrawler, callback) {
 function crawlURL(URL, callback) {
   util.search.downloadPage(URL, (error, pageContent) => {
     if (error) {
-      console.warn(`error when downloading page ${URL} in crawlURL`);
-      callback(null, null);
+      console.warn(`Error when downloading page ${URL} in crawlURL`);
+      // Do nothing
+      callback({}, {});
       return;
     }
     // TODO: first do preliminary check on whether the page is relevant (ex: look for chocolate)
