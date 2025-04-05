@@ -25,4 +25,5 @@ module.exports = {
 
   index: require("./index.js"),
   atomicStore: require("./atomic-store.js"),
+  cachedStore: require("./cached-store.js"),
 };
