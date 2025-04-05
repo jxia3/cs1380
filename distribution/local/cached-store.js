@@ -63,15 +63,18 @@ function put(object, config, callback) {
     return;
   }
 
-  loadItem(config, cacheKey, (error, exists, object) => {
+  loadItem(config, cacheKey, (error, exists, prevObject) => {
     if (error) {
-      callback(error, null, null);
+      callback(error, null);
     } else {
       cacheItem(cacheKey, object, callback);
     }
   });
 }
 
+/**
+ * Removes an item from the cache and the store.
+ */
 function del(config, callback) {}
 
 /**
