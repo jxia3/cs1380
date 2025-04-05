@@ -20,6 +20,6 @@ module.exports = {
   status: require("./status.js"),
   store: require("./store.js"),
 
+  crawl: require("./crawl.js"),
   index: require("./index.js"),
-  crawler: require("./crawler.js"),
 };

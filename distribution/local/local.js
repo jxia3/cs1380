@@ -23,9 +23,9 @@ module.exports = {
   status,
   store: require("./store.js"),
 
-  index: require("./index.js"),
   atomicStore: require("./atomic-store.js"),
-  crawler: require("./crawler.js"),
   cachedStore: require("./cached-store.js"),
+  crawl: require("./crawl.js"),
+  index: require("./index.js"),
   shardedStore: require("./sharded-store.js"),
 };

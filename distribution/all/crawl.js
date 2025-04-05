@@ -61,7 +61,7 @@ function queueBatches(group, batches, callback) {
   for (const node in batches) {
     // URLs for the node
     const urls = batches[node];
-    const remote = {node: group[node], service: "crawler", method: "queueURLs"};
+    const remote = {node: group[node], service: "crawl", method: "queueURLs"};
     global.distribution.local.comm.send([urls], remote, (error, result) => {
       if (error) {
         errors[node] = error;
