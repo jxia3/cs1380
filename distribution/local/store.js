@@ -260,4 +260,4 @@ function decodeKey(key) {
   return Buffer.from(key, "base64").toString("utf8");
 }
 
-module.exports = {get, tryGet, put, del, clear};
+module.exports = {NotFoundError, get, tryGet, put, del, clear};

@@ -1,7 +1,10 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
+const store = require("./store.js");
 const util = require("../util/util.js");
+
+const NotFoundError = store.NotFoundError;
 
 const cache = util.cache.createCache(10000);
 const locks = {};
@@ -14,11 +17,15 @@ function get(config, callback) {
     return;
   }
   const cacheKey = serializeKey(config);
+  if (cacheKey instanceof Error) {
+    callback(cacheKey, null);
+    return;
+  }
+
   if (cache.has(cacheKey)) {
     callback(null, cache.get(cacheKey));
     return;
   }
-
   loadItem(config, cacheKey, (error, exists, object) => {
     if (error) {
       callback(error, null);
@@ -38,11 +45,15 @@ function tryGet(config, callback) {
     return;
   }
   const cacheKey = serializeKey(config);
+  if (cacheKey instanceof Error) {
+    callback(cacheKey, null);
+    return;
+  }
+
   if (cache.has(cacheKey)) {
     callback(null, true, cache.get(cacheKey));
     return;
   }
-
   loadItem(config, cacheKey, (error, exists, object) => {
     if (error) {
       callback(error, null, null);
@@ -58,11 +69,15 @@ function tryGet(config, callback) {
 function put(object, config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const cacheKey = serializeKey(config);
+  if (cacheKey instanceof Error) {
+    callback(cacheKey, null);
+    return;
+  }
+
   if (cache.has(cacheKey)) {
     cacheItem(cacheKey, object, callback);
     return;
   }
-
   loadItem(config, cacheKey, (error, exists, prevObject) => {
     if (error) {
       callback(error, null);
@@ -78,10 +93,14 @@ function put(object, config, callback) {
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const cacheKey = serializeKey(config);
+  if (cacheKey instanceof Error) {
+    callback(cacheKey, null);
+    return;
+  }
+
   if (!(cacheKey in locks)) {
     locks[cacheKey] = util.sync.createMutex();
   }
-
   locks[cacheKey].lock(() => {
     global.distribution.local.store.del(config, (error, result) => {
       let removed = null;
@@ -91,7 +110,11 @@ function del(config, callback) {
       locks[cacheKey].unlock();
 
       if (error) {
-        callback(error, null);
+        if (error instanceof NotFoundError && removed !== null) {
+          callback(null, removed.value);
+        } else {
+          callback(error, null);
+        }
       } else if (removed !== null) {
         callback(null, removed.value);
       } else {
@@ -175,6 +198,9 @@ function cacheItem(cacheKey, object, callback) {
  */
 function serializeKey(config) {
   config = util.id.getObjectConfig(config);
+  if (config.key === null) {
+    return new Error("Null keys are not supported");
+  }
   return JSON.stringify(config);
 }
 
