@@ -73,17 +73,17 @@ function getAndModify(config, operations) {
       }
 
       // Store updated value
-      if (result === null || result.value === undefined) {
+      if (result === null || result?.value === undefined) {
         lock.unlockWrite();
         operations.callback(null, null);
         return;
       }
-      store.put(result.value, config, (error, result) => {
+      store.put(result.value, config, (error, storeResult) => {
         lock.unlockWrite();
         if (error) {
           operations.callback(error, null);
         } else {
-          const carry = result.carry === undefined ? null : result.carry;
+          const carry = result?.carry === undefined ? null : result.carry;
           operations.callback(null, carry);
         }
       });

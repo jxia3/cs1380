@@ -1,12 +1,13 @@
 /* A sharded key-value store built on the filesystem store module. */
 
+const params = require("../params.js")
 const store = require("./store.js");
 const util = require("../util/util.js");
 
 const SHARD_COUNT = 10;
 
 // Keys to store directly instead of translating to shards
-const EXCLUDE_LIST = ["seen-urls", "crawl-queue", "index-queue"];
+const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
 
 /**
  * Finds the shard containing a key and returns the value corresponding to the key.
