@@ -1,7 +1,6 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
-const store = require("./sharded-store.js");
 const params = require("../params.js");
 const util = require("../util/util.js");
 

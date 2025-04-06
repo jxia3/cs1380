@@ -5,7 +5,7 @@ const createCachedStore = require("./cached-store.js");
 const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
-const store = createCachedStore(shardedStore);
+const store = createCachedStore(shardedStore, 10000);
 const locks = {};
 
 /**
