@@ -3,11 +3,12 @@
 /* A service that crawls pages and saves relevant URLs. */
 
 const log = require("../util/log.js");
+const params = require("../params.js");
 const util = require("../util/util.js");
 
-const GROUP = util.search.GROUP;
-const SEEN_KEY = "seen-urls";
-const QUEUE_KEY = "crawl-queue";
+const GROUP = params.searchGroup;
+const SEEN_KEY = params.crawlSeen;
+const QUEUE_KEY = params.crawlQueue;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = 10;
 // How often we write visited URLs list to disk (ms)
