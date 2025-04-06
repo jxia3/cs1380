@@ -4,7 +4,6 @@ const RESET = true;
 
 distribution.node.start(() => {
   distribution.local.groups.put("search", [distribution.node.config], () => {
-    console.log("added search group");
     distribution.local.crawl._start(RESET, () => {
       distribution.local.index._start(RESET, () => {
         setTimeout(() => {

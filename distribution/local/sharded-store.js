@@ -110,7 +110,9 @@ function del(config, callback) {
       callback(error, null);
       return;
     } else if (!exists || !(config.key in shard)) {
-      callback(new Error(`Key '${config.key}' not found`), null);
+      const notFoundError = new Error(`Key '${config.key}' not found`);
+      notFoundError[NOT_FOUND_MARK] = true;
+      callback(notFoundError, null);
       return;
     }
 
