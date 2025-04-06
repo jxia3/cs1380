@@ -153,7 +153,6 @@ function cacheItem(cacheKey, object, callback) {
 
   // Write back an evicted item
   const storeConfig = deserializeKey(evicted.key);
-  console.log("evict store:", storeConfig);
   store.put(evicted.value, storeConfig, callback);
 }
 

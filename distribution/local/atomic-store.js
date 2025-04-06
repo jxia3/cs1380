@@ -50,7 +50,6 @@ function getAndModify(config, operations) {
   const lock = locks[syncKey];
 
   lock.lockWrite(() => {
-    console.log("locked", syncKey);
     store.tryGet(config, (error, exists, value) => {
       // Check if there is an error
       if (error) {
@@ -80,7 +79,6 @@ function getAndModify(config, operations) {
         return;
       }
       store.put(result.value, config, (error, storeResult) => {
-        console.log("unlocked", syncKey);
         lock.unlockWrite();
         if (error) {
           operations.callback(error, null);
