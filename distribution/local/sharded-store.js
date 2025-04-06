@@ -1,10 +1,11 @@
 /* A sharded key-value store built on the filesystem store module. */
 
-const params = require("../params.js")
+const params = require("../params.js");
 const store = require("./store.js");
 const util = require("../util/util.js");
 
 const SHARD_COUNT = 10;
+const NOT_FOUND_MARK = params.notFoundMark;
 
 // Keys to store directly instead of translating to shards
 const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
@@ -26,7 +27,9 @@ function get(config, callback) {
     if (error) {
       callback(error, null);
     } else if (!exists || !(config.key in shard)) {
-      callback(new Error(`Key '${config.key}' not found`), null);
+      const notFoundError = new Error(`Key '${config.key}' not found`);
+      notFoundError[NOT_FOUND_MARK] = true;
+      callback(notFoundError, null);
     } else {
       callback(null, shard[config.key]);
     }

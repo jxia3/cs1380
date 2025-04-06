@@ -1,17 +1,11 @@
 /* A service that stores key-value pairs in the local file system. */
 
+const params = require("../params.js");
 const util = require("../util/util.js");
 
 const fs = require("fs");
 
-/**
- * An error that indicates if an item is not found in the store.
- */
-class NotFoundError extends Error {
-  constructor(...args) {
-    super(...args);
-  }
-}
+const NOT_FOUND_MARK = params.notFoundMark;
 
 /**
  * Retrieves an item from the file system store using its key and group ID.
@@ -61,7 +55,7 @@ function tryGet(config, callback) {
 
   getItem(config, (error, object) => {
     if (error) {
-      if (error instanceof NotFoundError) {
+      if (error[NOT_FOUND_MARK]) {
         callback(null, false, null);
       } else {
         callback(error, null, null);
@@ -141,7 +135,9 @@ function getItem(config, callback) {
   const path = `${global.nodeInfo.storePath}/${config.gid}/${encodeKey(config.key)}.dat`;
   fs.access(path, (error) => {
     if (error) {
-      callback(new NotFoundError(`Key '${config.key}' not found in group '${config.gid}'`), null);
+      const notFoundError = new Error(`Key '${config.key}' not found in group '${config.gid}'`);
+      notFoundError[NOT_FOUND_MARK] = true;
+      callback(notFoundError, null);
       return;
     }
     fs.readFile(path, "utf8", (error, data) => {
@@ -267,4 +263,4 @@ function _getSyncKey(key) {
   return key;
 }
 
-module.exports = {NotFoundError, get, tryGet, put, del, clear, _getSyncKey};
+module.exports = {get, tryGet, put, del, clear, _getSyncKey};

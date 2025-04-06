@@ -2,9 +2,10 @@
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
 const store = require("./store.js");
+const params = require("../params.js");
 const util = require("../util/util.js");
 
-const NotFoundError = store.NotFoundError;
+const NOT_FOUND_MARK = params.notFoundMark;
 
 const cache = util.cache.createCache(20000);
 
@@ -93,7 +94,7 @@ function del(config, callback) {
     }
 
     if (error) {
-      if (error instanceof NotFoundError && removed !== null) {
+      if (error[NOT_FOUND_MARK] && removed !== null) {
         callback(null, removed.value);
       } else {
         callback(error, null);
