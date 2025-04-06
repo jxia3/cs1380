@@ -78,7 +78,8 @@ function put(object, config, callback) {
 }
 
 /**
- * Removes an item from the cache and the store.
+ * Removes an item from the cache and the store. This function has a possible race condition with put,
+ * but we currently do not use it so we ignore this error.
  */
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
