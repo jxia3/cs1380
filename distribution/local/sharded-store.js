@@ -4,7 +4,7 @@ const params = require("../params.js");
 const store = require("./store.js");
 const util = require("../util/util.js");
 
-const SHARD_COUNT = 10;
+const SHARD_COUNT = 2;
 const NOT_FOUND_MARK = params.notFoundMark;
 
 // Keys to store directly instead of translating to shards
@@ -152,17 +152,17 @@ function getShardKey(key) {
   }
   const keyId = util.id.getID(key);
   const shard = parseInt(keyId.slice(0, 13), 16) % SHARD_COUNT;
-  return `[shard]-${shard}`;
+  return `shard-${shard}`;
 }
 
 /**
  * Returns the minimal synchronization identifier for a key.
  */
-function _getSyncKey(key) {
-  if (EXCLUDE_LIST.includes(key)) {
-    return key;
+function _getSyncKey(config) {
+  if (EXCLUDE_LIST.includes(config.key)) {
+    return store._getSyncKey(config);
   }
-  return getShardKey(key);
+  return store._getSyncKey(getShardConfig(config));
 }
 
 module.exports = {get, tryGet, put, del, _getSyncKey};

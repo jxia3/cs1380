@@ -153,7 +153,7 @@ function cacheItem(cacheKey, object, callback) {
 
   // Write back an evicted item
   const storeConfig = deserializeKey(evicted.key);
-  console.log("evict store:", storeConfig)
+  console.log("evict store:", storeConfig);
   store.put(evicted.value, storeConfig, callback);
 }
 
@@ -198,8 +198,8 @@ function deserializeKey(cacheKey) {
 /**
  * Returns the minimal synchronization identifier for a key.
  */
-function _getSyncKey(key) {
-  return store._getSyncKey(key);
+function _getSyncKey(config) {
+  return store._getSyncKey(config);
 }
 
 module.exports = {get, tryGet, put, del, flush, _getSyncKey};

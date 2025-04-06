@@ -259,8 +259,8 @@ function decodeKey(key) {
 /**
  * Returns the minimal synchronization identifier for a key.
  */
-function _getSyncKey(key) {
-  return key;
+function _getSyncKey(config) {
+  return `[${config.gid}]-[${config.key}]`;
 }
 
 module.exports = {get, tryGet, put, del, clear, _getSyncKey};
