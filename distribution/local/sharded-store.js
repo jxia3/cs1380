@@ -159,6 +159,9 @@ function getShardKey(key) {
  * Returns the minimal synchronization identifier for a key.
  */
 function _getSyncKey(key) {
+  if (EXCLUDE_LIST.includes(key)) {
+    return key;
+  }
   return getShardKey(key);
 }
 

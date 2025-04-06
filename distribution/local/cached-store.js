@@ -1,13 +1,13 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
-const store = require("./store.js");
+const store = require("./sharded-store.js");
 const params = require("../params.js");
 const util = require("../util/util.js");
 
 const NOT_FOUND_MARK = params.notFoundMark;
 
-const cache = util.cache.createCache(20000);
+const cache = util.cache.createCache(1000);
 
 /**
  * Retrieves a value from the cache or loads the value into the cache.
@@ -153,6 +153,7 @@ function cacheItem(cacheKey, object, callback) {
 
   // Write back an evicted item
   const storeConfig = deserializeKey(evicted.key);
+  console.log("evict store:", storeConfig)
   store.put(evicted.value, storeConfig, callback);
 }
 
