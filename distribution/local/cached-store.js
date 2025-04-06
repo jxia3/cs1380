@@ -186,7 +186,7 @@ function cacheItem(keys, object, dirty, callback) {
       if (entry.dirty) {
         value = entry.data;
       } else {
-        cache.put(evicted, {data: value, dirty: false});
+        cache.put(evicted.key, {data: value, dirty: false});
       }
     }
 

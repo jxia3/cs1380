@@ -4,7 +4,7 @@ const params = require("../params.js");
 const store = require("./store.js");
 const util = require("../util/util.js");
 
-const SHARD_COUNT = 2;
+const SHARD_COUNT = 10000;
 const NOT_FOUND_MARK = params.notFoundMark;
 
 // Keys to store directly instead of translating to shards
