@@ -7,7 +7,7 @@ const util = require("../util/util.js");
 
 const NOT_FOUND_MARK = params.notFoundMark;
 
-const cache = util.cache.createCache(100);
+const cache = util.cache.createCache(20000);
 const locks = {};
 
 /**
