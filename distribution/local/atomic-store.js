@@ -1,9 +1,11 @@
 /* An atomic filesystem-backed key-value store built on the store module. */
 /** @typedef {import("../types").Callback} Callback */
 
-const store = require("./cached-store.js");
+const createCachedStore = require("./cached-store.js");
+const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
+const store = createCachedStore(shardedStore);
 const locks = {};
 
 /**
