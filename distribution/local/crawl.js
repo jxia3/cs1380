@@ -10,7 +10,7 @@ const GROUP = params.searchGroup;
 const SEEN_KEY = params.crawlSeen;
 const QUEUE_KEY = params.crawlQueue;
 // How many pages a single node can crawl at once
-const ACTIVE_LIMIT = 3;
+const ACTIVE_LIMIT = 2;
 // How often we write visited URLs list to disk (ms)
 const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 500;
