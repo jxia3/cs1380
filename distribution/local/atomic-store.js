@@ -73,7 +73,7 @@ function getAndModify(config, operations) {
       }
 
       // Store updated value
-      if (result === null) {
+      if (result === null || result.value === undefined) {
         lock.unlockWrite();
         operations.callback(null, null);
         return;
@@ -83,7 +83,8 @@ function getAndModify(config, operations) {
         if (error) {
           operations.callback(error, null);
         } else {
-          operations.callback(null, result.carry);
+          const carry = result.carry === undefined ? null : result.carry;
+          operations.callback(null, carry);
         }
       });
     });
