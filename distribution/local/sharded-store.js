@@ -141,6 +141,9 @@ function getShardConfig(config) {
  * Hashes a key to find the key of the shard shard it belongs to.
  */
 function getShardKey(key) {
+  if (key === null) {
+    throw new Error("Null keys are not supported");
+  }
   const keyId = util.id.getID(key);
   const shard = parseInt(keyId.slice(0, 13), 16) % SHARD_COUNT;
   return `[shard]-${shard}`;

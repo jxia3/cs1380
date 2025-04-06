@@ -21,7 +21,7 @@ module.exports = {
   routes: require("./routes.js"),
   rpc: require("./rpc.js"),
   status,
-  store: require("./atomic-store.js"),
+  store: require("./store.js"),
 
   atomicStore: require("./atomic-store.js"),
   cachedStore: require("./cached-store.js"),
