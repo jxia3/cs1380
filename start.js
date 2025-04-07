@@ -8,7 +8,7 @@ const localNode = {
   port: distribution.node.config.port,
 };
 const nodes = [localNode];
-const urls = ["https://nba.com"];
+const urls = ["https://deepmind.google"];
 
 distribution.node.start(() => {
   distribution.local.groups.put(GROUP, nodes, (error, result) => {
@@ -29,7 +29,7 @@ distribution.node.start(() => {
               throw error;
             }
           });
-        }, 1000)
+        }, 1000);
       });
     });
   });
@@ -38,4 +38,4 @@ distribution.node.start(() => {
 process.on("SIGINT", () => {
   console.log("handling sigint");
   process.exit(0);
-})
+});
