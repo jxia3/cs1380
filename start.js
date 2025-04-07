@@ -40,6 +40,8 @@ process.on("SIGQUIT", () => {
 });
 
 process.on("SIGINT", () => {
-  console.log("handling sigint");
-  process.exit(0);
+  distribution[GROUP].search.stop((error, result) => {
+    console.log("stop:", error, result);
+    process.exit(0);
+  });
 });
