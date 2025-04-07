@@ -20,7 +20,7 @@ const EXCLUDED_NATIVE = ["sys", "wasi", "_stream_wrap"];
 // Enable optimized type flags
 const OPTIMIZE_FLAGS = true;
 // Indicates if an object is a path reference
-const REFERENCE_MARKER = "_ref_5cc4ec3fb84a7c34";
+const REFERENCE_MARK = "_ref_5cc4ec3fb84a7c34";
 
 // Marker flags that indicate structure
 const Marker = {
@@ -497,15 +497,15 @@ function decodeReference(path) {
   if (!(path instanceof Array)) {
     throw new Error("Cannot deserialize invalid reference: " + path.toString());
   }
-  return {[REFERENCE_MARKER]: path};
+  return {[REFERENCE_MARK]: path};
 }
 
 /**
  * Resolves cyclic references in a value object.
  */
 function resolveReferences(root, value) {
-  if (typeof value === "object" && value[REFERENCE_MARKER] !== undefined) {
-    return resolvePath(root, value[REFERENCE_MARKER]);
+  if (typeof value === "object" && value !== null && value[REFERENCE_MARK] !== undefined) {
+    return resolvePath(root, value[REFERENCE_MARK]);
   } else if (value instanceof Error) {
     value.name = resolveReferences(root, value.name);
     value.cause = resolveReferences(root, value.cause);

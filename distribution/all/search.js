@@ -22,7 +22,6 @@ function start(node, reset, callback) {
   }
   this.orchestrator = node;
   const service = {service: "search", method: "start"};
-  console.log("sending start", service)
   global.distribution[this.gid].comm.send([reset], service, callback);
 }
 
