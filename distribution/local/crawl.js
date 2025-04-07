@@ -18,6 +18,8 @@ const CRAWL_INTERVAL = 500;
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
 const SEEN_URLS = new Set();
 
+let stopped = false;
+
 /**
  * Initializes the queue and starts the crawl loop. This internal function does not accept a callback
  * and should not be called by external services.
@@ -112,6 +114,22 @@ function _start(resetCrawler, callback) {
 }
 
 /**
+ * Stops the crawl loop. This internal function does not accept a callback and should not
+ * be called by external services.
+ */
+function _stop(callback) {
+  if (callback === undefined) {
+    throw new Error("Stop crawl received no callback");
+  }
+  stopped = true;
+  clearInterval(module.exports._crawlInterval);
+  setTimeout(() => {
+    clearInterval(module.exports._saveInterval);
+  }, SAVE_INTERVAL + 1000);
+  callback(null, null);
+}
+
+/**
  * Crawls a URL, then adds the page to index queue.
  * @param {string} URL
  * @param {Callback} [callback]
@@ -130,6 +148,12 @@ function crawlURL(URL, callback) {
 
     // TODO: (lower priority) give the indexer the pagecontent directly instead of the URL
     const pageURLs = util.search.extractUrls(pageContent, URL);
+    if (stopped) {
+      log(`Aborted crawling ${URL}`, "crawl");
+      callback({}, {});
+      return;
+    }
+
     global.distribution[GROUP].crawl.crawl(pageURLs, callback);
     global.distribution[GROUP].search.updateCounts(1, 0, (error, result) => {
       if (error) {
@@ -176,4 +200,4 @@ function queueURLs(URLs, callback) {
   });
 }
 
-module.exports = {queueURLs, _start};
+module.exports = {queueURLs, _start, _stop};
