@@ -40,8 +40,21 @@ process.on("SIGQUIT", () => {
 });
 
 process.on("SIGINT", () => {
-  distribution[GROUP].search.stop((error, result) => {
-    console.log("stop:", error, result);
-    process.exit(0);
-  });
+  try {
+    distribution[GROUP].search.stop((error, result) => {
+      console.log("stop:", error, result);
+      try {
+        distribution[GROUP].search.flushCache((error, result) => {
+          console.log("flush:", error, result);
+          process.exit(0);
+        });
+      } catch (error) {
+        console.error(error);
+        process.exit(1);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 });
