@@ -138,6 +138,11 @@ function indexPage(url, data, callback) {
   global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
     log(`Finished indexing page ${url}`, "index");
     callback(errors, results);
+    global.distribution[GROUP].search.updateCounts(0, 1, (error, result) => {
+      if (error) {
+        console.error(error);
+      }
+    });
   });
 }
 

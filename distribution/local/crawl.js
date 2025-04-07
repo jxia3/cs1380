@@ -131,6 +131,11 @@ function crawlURL(URL, callback) {
     // TODO: (lower priority) give the indexer the pagecontent directly instead of the URL
     const pageURLs = util.search.extractUrls(pageContent, URL);
     global.distribution[GROUP].crawl.crawl(pageURLs, callback);
+    global.distribution[GROUP].search.updateCounts(1, 0, (error, result) => {
+      if (error) {
+        console.error(error);
+      }
+    });
   });
 }
 
