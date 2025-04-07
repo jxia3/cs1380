@@ -22,4 +22,5 @@ module.exports = {
 
   crawl: require("./crawl.js"),
   index: require("./index.js"),
+  search: require("./search.js"),
 };

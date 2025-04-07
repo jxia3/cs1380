@@ -25,6 +25,15 @@ function start(node, reset, callback) {
 }
 
 /**
+ * Flushes the local caches on all the nodes.
+ */
+function flushCache(callback) {
+  checkContext(this.gid, this.hash);
+  const service = {service: "search", method: "flushCache"};
+  global.distribution[this.gid].comm.send([], service, callback);
+}
+
+/**
  * Updates the search statistics on the orchestrator node.
  */
 function updateCounts(crawled, indexed, callback) {
@@ -51,4 +60,4 @@ function checkContext(groupId, hashFn) {
   }
 }
 
-module.exports = {start, updateCounts};
+module.exports = {start, flushCache, updateCounts};

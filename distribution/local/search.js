@@ -31,7 +31,7 @@ function start(reset, callback) {
  * Flushes the local storage caches.
  */
 function flushCache(callback) {
-  global.distribution.local.cachedStore.flush(callback);
+  throw new Error("cannot flush the cache");
 }
 
 /**

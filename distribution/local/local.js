@@ -28,4 +28,5 @@ module.exports = {
   createCachedStore: require("./cached-store.js"),
   index: require("./index.js"),
   shardedStore: require("./sharded-store.js"),
+  search: require("./search.js"),
 };
