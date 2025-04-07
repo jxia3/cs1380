@@ -7,7 +7,7 @@ distribution.node.start(() => {
     distribution.local.crawl._start(RESET, () => {
       distribution.local.index._start(RESET, () => {
         setTimeout(() => {
-          distribution.local.crawl.queueURLs(["https://www.nba.com/"], () => {});
+          distribution.local.crawl.queueURLs(["https://www.nba.com"], () => {});
         }, 1000);
       });
     });
