@@ -166,4 +166,4 @@ function _getSyncKey(config) {
   return store._getSyncKey(getShardConfig(config));
 }
 
-module.exports = {get, tryGet, put, del, _getSyncKey};
+module.exports = {get, tryGet, put, del, _getSyncKey, _store: store};
