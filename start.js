@@ -35,6 +35,10 @@ distribution.node.start(() => {
   });
 });
 
+process.on("SIGQUIT", () => {
+  console.log("handling sigquit");
+});
+
 process.on("SIGINT", () => {
   console.log("handling sigint");
   process.exit(0);
