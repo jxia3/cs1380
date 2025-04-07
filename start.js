@@ -8,6 +8,7 @@ const localNode = {
   port: distribution.node.config.port,
 };
 const nodes = [localNode];
+const urls = ["https://nba.com"];
 
 distribution.node.start(() => {
   distribution.local.groups.put(GROUP, nodes, (error, result) => {
@@ -20,9 +21,21 @@ distribution.node.start(() => {
       }
       distribution[GROUP].search.start(localNode, RESET, (error, result) => {
         if (Object.keys(error).length > 0) {
-          console.error(error);
+          throw error;
         }
+        setTimeout(() => {
+          distribution[GROUP].crawl.crawl(urls, (error, result) => {
+            if (Object.keys(error).length > 0) {
+              throw error;
+            }
+          });
+        }, 1000)
       });
     });
   });
 });
+
+process.on("SIGINT", () => {
+  console.log("handling sigint");
+  process.exit(0);
+})
