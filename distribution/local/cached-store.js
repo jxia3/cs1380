@@ -1,6 +1,7 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
+const log = require("../util/log.js");
 const params = require("../params.js");
 const util = require("../util/util.js");
 
@@ -196,9 +197,34 @@ function cacheItem(keys, object, dirty, callback) {
 }
 
 /**
+ * Flushes all the items in the cache to storage.
+ */
+function flush(callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const keys = this.cache.getKeys();
+  const count = keys.length;
+  let active = keys.length;
+  log(`Flushing ${count} keys to storage`, "cache");
+
+  let flushError = null;
+  for (const key of keys) {
+    const config = deserializeKey(key);
+    flushItem.call(this, config, (error, result) => {
+      if (error) {
+        flushError = error;
+      }
+      active -= 1;
+      if (active === 0) {
+        callback(flushError, null);
+      }
+    });
+  }
+}
+
+/**
  * Flushes modifications made to an item in the cache to storage.
  */
-function flush(config, callback) {
+function flushItem(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   const keys = serializeKey.call(this, config);
   if (keys instanceof Error) {

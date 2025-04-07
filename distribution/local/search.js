@@ -51,7 +51,12 @@ function stop(callback) {
  * Flushes the local storage caches.
  */
 function flushCache(callback) {
-  throw new Error("cannot flush the cache");
+  global.distribution.local.atomicStore._store.flush((error, result) => {
+    if (error) {
+      callback(error, null);
+    }
+    global.distribution.local.shardedStore._store.flush(callback);
+  });
 }
 
 /**

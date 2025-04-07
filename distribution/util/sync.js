@@ -24,7 +24,11 @@ function createGuardedCallback(callback) {
  * Creates a mutex object that exposes methods for synchronization.
  */
 function createMutex() {
-  const state = {locked: false};
+  const state = {
+    locked: false,
+    index: 0,
+    waitIndex: 0,
+  };
   return {
     lock: (callback) => lockMutex(state, callback),
     unlock: () => unlockMutex(state),
@@ -38,11 +42,17 @@ function lockMutex(state, callback) {
   if (callback === undefined) {
     throw new Error("Lock mutex received no callback");
   }
-  if (state.locked) {
-    setTimeout(() => lockMutex(state, callback), 10);
-  } else {
-    state.locked = true;
-    callback();
+  const index = state.waitIndex;
+  state.waitIndex += 1;
+  lockWithIndex(state, index, callback);
+
+  function lockWithIndex(state, index, callback) {
+    if (state.locked || state.index !== index) {
+      setTimeout(() => lockWithIndex(state, index, callback), 5);
+    } else {
+      state.locked = true;
+      callback();
+    }
   }
 }
 
@@ -53,6 +63,7 @@ function unlockMutex(state) {
   if (!state.locked) {
     throw new Error("Mutex is not locked");
   }
+  state.index += 1;
   state.locked = false;
 }
 

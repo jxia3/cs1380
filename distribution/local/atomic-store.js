@@ -93,4 +93,4 @@ function getAndModify(config, operations) {
   });
 }
 
-module.exports = {getAndModify};
+module.exports = {getAndModify, _store: store};

@@ -42,11 +42,11 @@ process.on("SIGQUIT", () => {
 process.on("SIGINT", () => {
   try {
     distribution[GROUP].search.stop((error, result) => {
-      console.log("stop:", error, result);
+      console.log("Stop:", error, result);
       setTimeout(() => {
         try {
           distribution[GROUP].search.flushCache((error, result) => {
-            console.log("flush:", error, result);
+            console.log("Flush:", error, result);
             process.exit(0);
           });
         } catch (error) {
