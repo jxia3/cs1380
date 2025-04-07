@@ -1,7 +1,7 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
-const log = require("../util.log.js");
+const log = require("../util/log.js");
 const params = require("../params.js");
 const util = require("../util/util.js");
 
@@ -209,7 +209,7 @@ function flush(callback) {
   let flushError = null;
   for (const key of keys) {
     const config = deserializeKey(key);
-    flushItem(config, (error, result) => {
+    flushItem.call(this, config, (error, result) => {
       if (error) {
         flushError = error;
       }
