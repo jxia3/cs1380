@@ -11,7 +11,6 @@ const ACTIVE_LIMIT = 3;
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
-const DEBUG = true;
 
 let stopped = false;
 
@@ -252,16 +251,11 @@ function extractTerms(title, text) {
       termIndex[term.text] = {
         length: term.length,
         score: 0,
+        title,
         context: [],
       };
-      if (DEBUG) {
-        termIndex[term.text].term = term.text;
-      }
     }
     termIndex[term.text].score += 5;
-    if (termIndex[term.text].context.length === 0) {
-      termIndex[term.text].context.push(title);
-    }
   }
 
   // Format text and lines
@@ -286,11 +280,9 @@ function extractTerms(title, text) {
         termIndex[term.text] = {
           length: term.length,
           score: 0,
+          title,
           context: [],
         };
-        if (DEBUG) {
-          termIndex[term.text].term = term.text;
-        }
       }
       termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
@@ -401,11 +393,9 @@ function updateIndex(url, terms, docLen, callback) {
         }
         index[url] = {
           score: terms[term].score / docLen[terms[term].length],
+          title: terms[term].title,
           context: terms[term].context,
         };
-        if (DEBUG) {
-          index[url].term = terms[term].term;
-        }
         return {value: index};
       },
       default: () => {
@@ -413,11 +403,9 @@ function updateIndex(url, terms, docLen, callback) {
         const index = {};
         index[url] = {
           score: terms[term].score / docLen[terms[term].length],
+          title: terms[term].title,
           context: terms[term].context,
         };
-        if (DEBUG) {
-          index[url].term = terms[term].term;
-        }
         return {value: index};
       },
       callback: (error, result) => {
