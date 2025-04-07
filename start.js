@@ -1,6 +1,6 @@
 const distribution = require("./distribution.js");
 
-const GROUP = distribution.util.search.GROUP;
+const GROUP = distribution.searchParams.searchGroup;
 const RESET = true;
 
 const localNode = {

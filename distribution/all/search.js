@@ -1,9 +1,10 @@
 /* A service that coordinates crawling and indexing across a node group. */
 
+const params = require("../params.js");
 const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
-const GROUP = util.search.GROUP;
+const GROUP = params.searchGroup;
 
 /**
  * Sets a node as the orchestrator node and starts all the search cycles.
@@ -21,6 +22,7 @@ function start(node, reset, callback) {
   }
   this.orchestrator = node;
   const service = {service: "search", method: "start"};
+  console.log("sending start", service)
   global.distribution[this.gid].comm.send([reset], service, callback);
 }
 
@@ -60,4 +62,16 @@ function checkContext(groupId, hashFn) {
   }
 }
 
-module.exports = {start, flushCache, updateCounts};
+module.exports = (config) => {
+  const context = {};
+  context.gid = config?.gid === undefined ? "all" : config.gid;
+  context.hash = config?.hash;
+  if (typeof context.hash !== "function") {
+    context.hash = util.id.rendezvousHash;
+  }
+  return {
+    start: start.bind(context),
+    flushCache: flushCache.bind(context),
+    updateCounts: updateCounts.bind(context),
+  };
+};

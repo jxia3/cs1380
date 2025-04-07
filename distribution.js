@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const log = require("./distribution/util/log.js");
+const params = require("./distribution/params.js");
 const util = require("./distribution/util/util.js");
 
 const args = require("yargs").argv;
@@ -12,6 +13,7 @@ global.nodeConfig = global.nodeConfig || {
   heartbeat: false,
   onStart: () => {},
 };
+global.searchParams = params;
 
 /*
   You can pass "ip" and "port" arguments directly.
@@ -61,6 +63,7 @@ if (global.distribution === undefined) {
 distribution.util = require("./distribution/util/util.js");
 distribution.local = require("./distribution/local/local.js");
 distribution.node = require("./distribution/local/node.js");
+distribution.searchParams = params;
 distribution.disableLogs = log.disable;
 
 for (const key in distribution.local) {
