@@ -15,11 +15,11 @@ distribution.node.start(() => {
       throw error;
     }
     distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
-      if (error) {
+      if (Object.keys(error).length > 0) {
         throw error;
       }
       distribution[GROUP].search.start(localNode, RESET, (error, result) => {
-        if (error) {
+        if (Object.keys(error).length > 0) {
           console.error(error);
         }
       });

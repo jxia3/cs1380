@@ -12,7 +12,7 @@ const counts = {
  */
 function start(reset, callback) {
   log("Starting crawl and index cycle");
-  global.distribution.local.crawler._start(reset, (error, result) => {
+  global.distribution.local.crawl._start(reset, (error, result) => {
     if (error) {
       callback(error, null);
       return;

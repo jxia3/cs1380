@@ -45,10 +45,18 @@ function send(message, remote, callback) {
   if (OPTIMIZE_LOCAL && groupId === "local"
       && remote.node.ip === global.nodeConfig?.ip
       && remote.node.port === global.nodeConfig?.port) {
+    let returned = false;
     try {
-      global.distribution.local[remote.service][remote.method](...message, callback);
+      global.distribution.local[remote.service][remote.method](...message, (...args) => {
+        returned = true;
+        callback(...args);
+      });
     } catch (error) {
-      callback(error, null);
+      if (!returned) {
+        callback(error, null);
+      } else {
+        console.error(error);
+      }
     }
     return;
   }
