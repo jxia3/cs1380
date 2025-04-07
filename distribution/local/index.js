@@ -9,7 +9,7 @@ const NGRAM_LEN = params.ngramLen;
 const QUEUE_KEY = params.indexQueue;
 const ACTIVE_LIMIT = 3;
 const CONTEXT_COUNT = 3;
-const CONTEXT_WORDS = 4;
+const CONTEXT_WORDS = 5;
 const MAX_CONTEXT_LEN = 50;
 
 let stopped = false;
