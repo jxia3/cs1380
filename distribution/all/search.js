@@ -26,6 +26,15 @@ function start(node, reset, callback) {
 }
 
 /**
+ * Stops the search cycles on all the nodes.
+ */
+function stop(callback) {
+  checkContext(this.gid, this.hash);
+  const service = {service: "search", method: "stop"};
+  global.distribution[this.gid].comm.send([], service, callback);
+}
+
+/**
  * Flushes the local caches on all the nodes.
  */
 function flushCache(callback) {
@@ -70,6 +79,7 @@ module.exports = (config) => {
   }
   return {
     start: start.bind(context),
+    stop: stop.bind(context),
     flushCache: flushCache.bind(context),
     updateCounts: updateCounts.bind(context),
   };

@@ -13,6 +13,8 @@ const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
 const DEBUG = true;
 
+let stopped = false;
+
 /**
  * Initializes the queue and starts the index loop. This internal function does not accept a callback
  * and should not be called by external services.
@@ -80,6 +82,19 @@ function _start(clearQueue, callback) {
 }
 
 /**
+ * Stops the index loop. This internal function does not accept a callback and should not
+ * be called by external services.
+ */
+function _stop(callback) {
+  if (callback === undefined) {
+    throw new Error("Stop index received no callback");
+  }
+  stopped = true;
+  clearInterval(module.exports._interval);
+  callback(null, null);
+}
+
+/**
  * Adds a URL to the indexing queue.
  */
 function queueUrl(url, callback) {
@@ -135,6 +150,12 @@ function indexPage(url, data, callback) {
   log(`Indexing page ${url}`, "index");
   const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
+  if (stopped) {
+    log(`Aborted indexing ${url}`, "index");
+    callback({}, {});
+    return;
+  }
+
   global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
     log(`Finished indexing page ${url}`, "index");
     callback(errors, results);
@@ -412,4 +433,4 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queueUrl, updateIndex, _start};
+module.exports = {queueUrl, updateIndex, _start, _stop};

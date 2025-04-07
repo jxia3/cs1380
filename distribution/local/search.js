@@ -28,6 +28,26 @@ function start(reset, callback) {
 }
 
 /**
+ * Stops the local crawler and indexer processing queues.
+ */
+function stop(callback) {
+  log("Stopping crawl and index cycle");
+  global.distribution.local.crawl._stop((error, result) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    global.distribution.local.index._stop((error, result) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, null);
+      }
+    });
+  });
+}
+
+/**
  * Flushes the local storage caches.
  */
 function flushCache(callback) {
@@ -50,4 +70,4 @@ function updateCounts(crawled, indexed, callback) {
   callback(null, null);
 }
 
-module.exports = {start, flushCache, getCounts, updateCounts};
+module.exports = {start, stop, flushCache, getCounts, updateCounts};
