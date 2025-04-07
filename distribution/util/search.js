@@ -1,15 +1,16 @@
 /* A module with operations for a search engine. */
 
+const params = require("../params.js");
+
 const fs = require("fs");
 const http = require("http");
 const https = require("https");
 const path = require("path");
 const {URL} = require("url");
 
-const GROUP = "search";
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 60000;
-const NGRAM_LEN = 2;
+const NGRAM_LEN = params.ngramLen;
 
 const stopwords = new Set();
 
@@ -224,8 +225,6 @@ function createTopTermKey(term) {
 }
 
 module.exports = {
-  GROUP,
-  NGRAM_LEN,
   normalizeUrl,
   downloadPage,
   extractUrls,

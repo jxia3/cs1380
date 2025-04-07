@@ -164,7 +164,6 @@ function evict(cache) {
   delete cache.keys[tail.key];
   cache.size -= 1;
 
-  console.log("evicting", tail.key, cache.size);
   return evicted;
 }
 

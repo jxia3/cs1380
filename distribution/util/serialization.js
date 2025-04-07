@@ -19,6 +19,8 @@ const ENABLE_NATIVE = false;
 const EXCLUDED_NATIVE = ["sys", "wasi", "_stream_wrap"];
 // Enable optimized type flags
 const OPTIMIZE_FLAGS = true;
+// Indicates if an object is a path reference
+const REFERENCE_MARKER = "_ref_5cc4ec3fb84a7c34";
 
 // Marker flags that indicate structure
 const Marker = {
@@ -45,17 +47,6 @@ const ObjectType = {
   Object: OPTIMIZE_FLAGS ? "o" : "object",
   Reference: OPTIMIZE_FLAGS ? "r" : "reference",
 };
-
-/**
- * An internal type used to track reference nodes during deserialization. Since references
- * are resolved after all owned properties have been resolved, this type is used as an
- * intermediate representation for reference paths.
- */
-class ReferencePath {
-  constructor(path) {
-    this.path = path;
-  }
-}
 
 // Discover native objects
 const nativeIds = new Map();
@@ -506,15 +497,15 @@ function decodeReference(path) {
   if (!(path instanceof Array)) {
     throw new Error("Cannot deserialize invalid reference: " + path.toString());
   }
-  return new ReferencePath(path);
+  return {[REFERENCE_MARKER]: path};
 }
 
 /**
  * Resolves cyclic references in a value object.
  */
 function resolveReferences(root, value) {
-  if (value instanceof ReferencePath) {
-    return resolvePath(root, value.path);
+  if (typeof value === "object" && value[REFERENCE_MARKER] !== undefined) {
+    return resolvePath(root, value[REFERENCE_MARKER]);
   } else if (value instanceof Error) {
     value.name = resolveReferences(root, value.name);
     value.cause = resolveReferences(root, value.cause);

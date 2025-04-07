@@ -1,12 +1,13 @@
 /* A service that indexes pages and manages the global search index. */
 
 const log = require("../util/log.js");
+const params = require("../params.js");
 const util = require("../util/util.js");
 
-const GROUP = util.search.GROUP;
-const NGRAM_LEN = util.search.NGRAM_LEN;
+const GROUP = params.searchGroup;
+const NGRAM_LEN = params.ngramLen;
+const QUEUE_KEY = params.indexQueue;
 const ACTIVE_LIMIT = 3;
-const QUEUE_KEY = "index-queue";
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 4;
 const MAX_CONTEXT_LEN = 50;
@@ -52,7 +53,10 @@ function _start(clearQueue, callback) {
           carry: url,
         };
       },
-      default: () => ({value: []}),
+      default: () => ({
+        value: [],
+        carry: null,
+      }),
       callback: (error, url) => {
         // Index a valid URL
         if (error) {
@@ -153,6 +157,7 @@ function extractText(content) {
     "“": "\"",
     "”": "\"",
     "&#8217;": "'",
+    "&#x27;": "'",
     "‘": "'",
     "’": "'",
     "&amp;": "&",

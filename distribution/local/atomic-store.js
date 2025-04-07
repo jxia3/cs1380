@@ -1,9 +1,11 @@
+/* An atomic filesystem-backed key-value store built on the store module. */
 /** @typedef {import("../types").Callback} Callback */
 
-/* An atomic filesystem-backed key-value store built on the store module. */
-
+const createCachedStore = require("./cached-store.js");
+const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
+const store = createCachedStore(shardedStore, 10000);
 const locks = {};
 
 /**
@@ -43,58 +45,50 @@ function getAndModify(config, operations) {
   }
 
   // Initialize lock for key
-  const key = `${config.gid}-${config.key}`;
-  if (!(key in locks)) {
-    locks[key] = util.sync.createRwLock();
+  const syncKey = store._getSyncKey(config);
+  if (!(syncKey in locks)) {
+    locks[syncKey] = util.sync.createRwLock();
   }
-  const storeModule = global.distribution.local.cachedStore;
+  const lock = locks[syncKey];
 
-  locks[key].lockWrite(() => {
-    storeModule.tryGet(config, (error, exists, value) => {
+  lock.lockWrite(() => {
+    store.tryGet(config, (error, exists, value) => {
       // Check if there is an error
       if (error) {
-        locks[key].unlockWrite();
+        lock.unlockWrite();
         operations.callback(error, null);
         return;
       }
 
       // Compute updated or default value
-      let store = false;
-      let updatedValue = null;
-      let carryValue = null;
+      let result = null;
       try {
-        let result = null;
-        // Get the result based on whether the key exists or not
         if (exists && operations?.modify !== undefined) {
           result = operations.modify(value);
         } else if (!exists && operations?.default !== undefined) {
           result = operations.default();
         }
-        if (result !== null) {
-          store = true;
-          updatedValue = result.value;
-          carryValue = result.carry;
-        }
       } catch (error) {
-        locks[key].unlockWrite();
+        lock.unlockWrite();
         operations.callback(error, null);
         return;
       }
 
       // Store updated value
-      if (store) {
-        storeModule.put(updatedValue, config, (error, result) => {
-          locks[key].unlockWrite();
-          if (error) {
-            operations.callback(error, null);
-          } else {
-            operations.callback(null, carryValue);
-          }
-        });
-      } else {
-        locks[key].unlockWrite();
-        operations.callback(null, carryValue);
+      if (result === null || result?.value === undefined) {
+        lock.unlockWrite();
+        operations.callback(null, null);
+        return;
       }
+      store.put(result.value, config, (error, storeResult) => {
+        lock.unlockWrite();
+        if (error) {
+          operations.callback(error, null);
+        } else {
+          const carry = result?.carry === undefined ? null : result.carry;
+          operations.callback(null, carry);
+        }
+      });
     });
   });
 }

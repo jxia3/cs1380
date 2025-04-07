@@ -1,14 +1,10 @@
 /* A cached key-value store built on the filesystem store module. The clear operation
    is not supported. Keys that are cached cannot be accessed by other store modules. */
 
-const log = require("../util/log.js");
-const store = require("./store.js");
+const params = require("../params.js");
 const util = require("../util/util.js");
 
-const NotFoundError = store.NotFoundError;
-
-const cache = util.cache.createCache(20000);
-const locks = {};
+const NOT_FOUND_MARK = params.notFoundMark;
 
 /**
  * Retrieves a value from the cache or loads the value into the cache.
@@ -17,21 +13,21 @@ function get(config, callback) {
   if (callback === undefined) {
     return;
   }
-  const cacheKey = serializeKey(config);
-  if (cacheKey instanceof Error) {
-    callback(cacheKey, null);
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
     return;
   }
 
-  if (cache.has(cacheKey)) {
-    callback(null, cache.get(cacheKey));
+  if (this.cache.has(keys.cacheKey)) {
+    callback(null, this.cache.get(keys.cacheKey).data);
     return;
   }
-  loadItem(config, cacheKey, (error, exists, object) => {
+  loadItem.call(this, config, keys, (error, exists, object) => {
     if (error) {
       callback(error, null);
     } else if (!exists) {
-      callback(new Error("Key does not exist in store"));
+      callback(new Error("Key not found"));
     } else {
       callback(null, object);
     }
@@ -39,23 +35,23 @@ function get(config, callback) {
 }
 
 /**
- * Retrieves a value from the cache or loads the value into the cache.
+ * Optionally retrieves a value from the cache or loads the value into the cache.
  */
 function tryGet(config, callback) {
   if (callback === undefined) {
     return;
   }
-  const cacheKey = serializeKey(config);
-  if (cacheKey instanceof Error) {
-    callback(cacheKey, null);
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
     return;
   }
 
-  if (cache.has(cacheKey)) {
-    callback(null, true, cache.get(cacheKey));
+  if (this.cache.has(keys.cacheKey)) {
+    callback(null, true, this.cache.get(keys.cacheKey).data);
     return;
   }
-  loadItem(config, cacheKey, (error, exists, object) => {
+  loadItem.call(this, config, keys, (error, exists, object) => {
     if (error) {
       callback(error, null, null);
     } else {
@@ -69,58 +65,52 @@ function tryGet(config, callback) {
  */
 function put(object, config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  const cacheKey = serializeKey(config);
-  if (cacheKey instanceof Error) {
-    callback(cacheKey, null);
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
     return;
   }
-
-  if (cache.has(cacheKey)) {
-    cacheItem(cacheKey, object, callback);
-    return;
-  }
-  loadItem(config, cacheKey, (error, exists, prevObject) => {
-    if (error) {
-      callback(error, null);
-    } else {
-      cacheItem(cacheKey, object, callback);
-    }
-  });
+  cacheItem.call(this, keys, object, true, callback);
 }
 
 /**
- * Removes an item from the cache and the store.
+ * Removes an item from the cache and the store. This function has a possible race condition with put,
+ * but we currently do not use it so we ignore this error.
  */
 function del(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  const cacheKey = serializeKey(config);
-  if (cacheKey instanceof Error) {
-    callback(cacheKey, null);
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
     return;
   }
-  if (!(cacheKey in locks)) {
-    locks[cacheKey] = util.sync.createMutex();
+
+  // Create lock for sync key
+  if (!(keys.syncKey in this.locks)) {
+    this.locks[keys.syncKey] = util.sync.createMutex();
   }
-  const lock = locks[cacheKey];
+  const lock = this.locks[keys.syncKey];
 
   lock.lock(() => {
-    store.del(config, (error, result) => {
+    this.store.del(config, (error, object) => {
+      // Remove key from cache
       let removed = null;
-      if (cache.has(cacheKey)) {
-        removed = cache.del(cacheKey);
+      if (this.cache.has(keys.cacheKey)) {
+        removed = this.cache.del(keys.cacheKey);
       }
       lock.unlock();
 
+      // Check error conditions
       if (error) {
-        if (error instanceof NotFoundError && removed !== null) {
-          callback(null, removed.value);
+        if (error[NOT_FOUND_MARK] && removed !== null) {
+          callback(null, removed.value.data);
         } else {
           callback(error, null);
         }
       } else if (removed !== null) {
-        callback(null, removed.value);
+        callback(null, removed.value.data);
       } else {
-        callback(null, result);
+        callback(null, object);
       }
     });
   });
@@ -129,31 +119,29 @@ function del(config, callback) {
 /**
  * Loads a key into the cache and possibly evicts the least recently used key.
  */
-function loadItem(config, cacheKey, callback) {
+function loadItem(config, keys, callback) {
   if (callback === undefined) {
     throw new Error("Load item received no callback");
   }
-  if (!(cacheKey in locks)) {
-    locks[cacheKey] = util.sync.createMutex();
+  if (!(keys.syncKey in this.locks)) {
+    this.locks[keys.syncKey] = util.sync.createMutex();
   }
-  const lock = locks[cacheKey];
+  const lock = this.locks[keys.syncKey];
 
   lock.lock(() => {
-    store.tryGet(config, (error, exists, object) => {
+    this.store.tryGet(config, (error, exists, object) => {
       // Check error conditions
+      lock.unlock();
       if (error) {
-        lock.unlock();
         callback(error, null, null);
         return;
       } else if (!exists) {
-        lock.unlock();
         callback(null, false, null);
         return;
       }
 
       // Add key-value pair to cache
-      cacheItem(cacheKey, object, (error, result) => {
-        lock.unlock();
+      cacheItem.call(this, keys, object, false, (error, result) => {
         if (error) {
           callback(error, null, null);
         } else {
@@ -167,79 +155,76 @@ function loadItem(config, cacheKey, callback) {
 /**
  * Inserts a key-value pair into the cache and handles evictions.
  */
-function cacheItem(cacheKey, object, callback) {
+function cacheItem(keys, object, dirty, callback) {
   if (callback === undefined) {
     throw new Error("Cache item received no callback");
   }
-  if (!(cacheKey in locks)) {
-    throw new Error(`Key '${cacheKey}' does not have a lock`);
-  }
 
   // Insert the object into the cache
-  const evicted = cache.put(cacheKey, object);
-  if (evicted === null) {
+  const evicted = this.cache.put(keys.cacheKey, {data: object, dirty});
+  if (evicted === null || !evicted.value.dirty) {
     callback(null, object);
     return;
   }
 
   // Write back an evicted item
-  const lock = locks[evicted.key];
+  const storeConfig = deserializeKey(evicted.key);
+  const syncKey = this.store._getSyncKey(storeConfig);
+  if (!(syncKey in this.locks)) {
+    throw new Error(`Key '${syncKey}' does not have a lock`);
+  }
+  const lock = this.locks[syncKey];
+
   lock.lock(() => {
-    const storeConfig = deserializeKey(evicted.key);
-    store.put(evicted.value, storeConfig, (error, result) => {
-      delete locks[evicted.key];
-      lock.unlock();
-      if (error) {
-        callback(error, null);
+    // Check if the value has been reinserted
+    let value = evicted.value.data;
+    if (this.cache.has(evicted.key)) {
+      const entry = this.cache.get(evicted.key);
+      if (entry.dirty) {
+        value = entry.data;
       } else {
-        callback(null, object);
+        this.cache.put(evicted.key, {data: value, dirty: false});
       }
+    }
+
+    // Write the most updated value to storage
+    this.store.put(value, storeConfig, (error, result) => {
+      lock.unlock();
+      callback(error, result);
     });
   });
 }
 
 /**
- * Flushes modifications made to all the keys in the cache to storage.
+ * Flushes modifications made to an item in the cache to storage.
  */
-function flush(callback) {
+function flush(config, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  const keys = cache.getKeys();
-  const count = keys.length;
-  let active = count;
-  log(`Flushing ${count} cache entries`);
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
+    return;
+  }
 
-  for (const key of keys) {
-    if (!(key in locks)) {
-      throw new Error(`Key '${key}' does not have a lock`);
-    }
-    const lock = locks[key];
-    lock.lock(() => {
-      // Check if key is still in the cache
-      if (!cache.has(key)) {
-        lock.unlock();
-        decrementActive();
-        return;
-      }
+  // Get lock for sync key
+  if (!(keys.syncKey in this.locks)) {
+    throw new Error(`Key '${keys.syncKey} has no lock'`);
+  }
+  const lock = this.locks[keys.syncKey];
 
-      // Write object to storage
-      const storeConfig = deserializeKey(key);
-      const object = cache.get(key);
-      store.put(object, storeConfig, (error, result) => {
+  // Write the item if it still exists
+  lock.lock(() => {
+    if (this.cache.has(keys.cacheKey)) {
+      const value = this.cache.get(keys.cacheKey).data;
+      this.store.put(value, config, (error, result) => {
         lock.unlock();
-        if (error) {
-          console.error(error);
-        }
-        decrementActive();
+        callback(error, result);
       });
-    });
-  }
-
-  function decrementActive() {
-    active -= 1;
-    if (active === 0) {
-      callback(null, count);
+    } else {
+      lock.unlock();
+      callback(null, null);
     }
-  }
+  });
 }
 
 /**
@@ -250,7 +235,10 @@ function serializeKey(config) {
   if (config.key === null) {
     return new Error("Null keys are not supported");
   }
-  return JSON.stringify(config);
+  return {
+    cacheKey: JSON.stringify(config),
+    syncKey: this.store._getSyncKey(config),
+  };
 }
 
 /**
@@ -260,4 +248,25 @@ function deserializeKey(cacheKey) {
   return JSON.parse(cacheKey);
 }
 
-module.exports = {get, tryGet, put, del, flush};
+/**
+ * Returns the minimal synchronization identifier for a key.
+ */
+function _getSyncKey(config) {
+  return this.store._getSyncKey(config);
+}
+
+module.exports = (store, capacity) => {
+  const context = {
+    store,
+    cache: util.cache.createCache(capacity),
+    locks: {},
+  };
+  return {
+    get: get.bind(context),
+    tryGet: tryGet.bind(context),
+    put: put.bind(context),
+    del: del.bind(context),
+    flush: flush.bind(context),
+    _getSyncKey: _getSyncKey.bind(context),
+  };
+};
