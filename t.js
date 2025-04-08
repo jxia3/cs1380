@@ -1,15 +1,27 @@
 const distribution = require("./distribution.js");
 
-const RESET = true;
+const GROUP = distribution.searchParams.searchGroup;
+
+const localNode = {
+  ip: distribution.node.config.ip,
+  port: distribution.node.config.port,
+};
+const nodes = [localNode];
+const query = "google ai model";
 
 distribution.node.start(() => {
-  distribution.local.groups.put("search", [distribution.node.config], () => {
-    distribution.local.crawl._start(RESET, () => {
-      distribution.local.index._start(RESET, () => {
-        setTimeout(() => {
-          distribution.local.crawl.queueURLs(["https://www.nba.com"], () => {});
-        }, 1000);
-      });
+  distribution.local.groups.put(GROUP, nodes, (error, result) => {
+    if (error) {
+      throw error;
+    }
+    distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
+      if (Object.keys(error).length > 0) {
+        throw error;
+      }
+      setTimeout(() => {
+        const terms = distribution.util.search.calcTerms(query).terms;
+        distribution[GROUP].termLookup.lookup(terms, console.log);
+      }, 100);
     });
   });
 });

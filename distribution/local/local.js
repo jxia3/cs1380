@@ -29,4 +29,5 @@ module.exports = {
   index: require("./index.js"),
   shardedStore: require("./sharded-store.js"),
   search: require("./search.js"),
+  termLookup: require("./term-lookup.js"),
 };
