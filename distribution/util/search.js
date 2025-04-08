@@ -16,15 +16,23 @@ const DEBUG = false;
 const stopwords = new Set();
 
 // Load stopwords asynchronously on startup
-fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
-  if (error) {
-    throw error;
-  }
-  const words = data.toString().trim().split(/\s+/g);
-  for (const word of words) {
-    stopwords.add(word);
-  }
-});
+// fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
+//   if (error) {
+//     throw error;
+//   }
+//   const words = data.toString().trim().split(/\s+/g);
+//   for (const word of words) {
+//     stopwords.add(word);
+//   }
+// });
+
+data = fs.readFileSync(path.join(__dirname, "stopwords.txt"));
+const words = data.toString().trim().split(/\s+/g);
+for (const word of words) {
+  stopwords.add(word);
+}
+
+// console.log(stopwords);
 
 /**
  * Normalizes a URL string.

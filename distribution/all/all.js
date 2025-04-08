@@ -24,4 +24,5 @@ module.exports = {
   index: require("./index.js"),
   search: require("./search.js"),
   termLookup: require("./term-lookup.js"),
+  query: require("./query.js")
 };
