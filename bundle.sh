@@ -1,0 +1,1 @@
+zip -r distribution.zip distribution config.js distribution.js package.json install.sh
