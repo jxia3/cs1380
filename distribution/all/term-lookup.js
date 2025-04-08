@@ -54,6 +54,7 @@ function lookup(terms, callback) {
         return;
       }
       for (const term in batchResults) {
+        cache.put(term, batchResults[term]);
         results[term] = batchResults[term];
       }
       callback(null, results);
