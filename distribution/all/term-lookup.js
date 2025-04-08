@@ -72,7 +72,7 @@ function lookupBatches(group, batches, callback) {
   }
 
   for (const node in batches) {
-    const remote = {node: group[node], service: "query2", method: "lookup"};
+    const remote = {node: group[node], service: "termLookup", method: "lookup"};
     global.distribution.local.comm.send([batches[node].keys], remote, (error, result) => {
       if (error) {
         console.error(error);
