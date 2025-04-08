@@ -34,13 +34,60 @@ function lookupTerms(terms, callback) {
       const termKey = util.search.createFullTermKey(term.text);
       const node = util.id.applyHash(termKey, group, this.hash);
       if (!(node in batches)) {
-        batches[node] = [];
+        batches[node] = {
+          keys: [],
+          terms: [],
+        };
       }
-      batches[node].push({term: term.text, key: termKey});
+      batches[node].keys.push(termKey);
+      batches[node].terms.push(term.text);
     }
 
-    console.log(batches);
+    // Send requests
+    if (Object.keys(batches).length === 0) {
+      callback(null, results);
+      return;
+    }
+    lookupBatches(group, batches, (error, batchResults) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      for (const term in batchResults) {
+        results[term] = batchResults[term];
+      }
+      callback(null, results);
+    });
   });
+}
+
+/**
+ * Sends requests with batches of terms to remote nodes.
+ */
+function lookupBatches(group, batches, callback) {
+  const results = {};
+  let active = Object.keys(batches).length;
+  if (active === 0) {
+    throw new Error("Cannot lookup an empty batch");
+  }
+
+  for (const node in batches) {
+    const remote = {node: group[node], service: "query2", method: "lookup"};
+    global.distribution.local.comm.send([batches[node].keys], remote, (error, result) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      for (let r = 0; r < result.length; r += 1) {
+        results[batches[node].terms[r]] = result[r];
+      }
+      active -= 1;
+      if (active === 0) {
+        callback(null, results);
+      }
+    });
+  }
 }
 
 /**
