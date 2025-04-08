@@ -63,7 +63,7 @@ function lookup(terms, callback) {
 }
 
 /**
- * Sends requests with batches of terms to remote nodes.
+ * Sends requests with batches of terms to remote nodes. Handles entry compression.
  */
 function lookupBatches(group, batches, callback) {
   const results = {};
@@ -80,11 +80,19 @@ function lookupBatches(group, batches, callback) {
         return;
       }
 
+      // Decompress results
       for (let r = 0; r < result.length; r += 1) {
-        if (result[r] !== null) {
-          results[batches[node].terms[r]] = result[r];
+        if (result[r] === null) {
+          continue;
         }
+        const entries = {};
+        for (const url in result[r]) {
+          entries[url] = util.search.decompressEntry(result[r][url]);
+        }
+        results[batches[node].terms[r]] = entries;
       }
+
+      // Return to callback
       active -= 1;
       if (active === 0) {
         callback(null, results);

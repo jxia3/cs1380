@@ -11,6 +11,7 @@ const {URL} = require("url");
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 60000;
 const NGRAM_LEN = params.ngramLen;
+const DEBUG = false;
 
 const stopwords = new Set();
 
@@ -224,6 +225,30 @@ function createTopTermKey(term) {
   return `[${term}]-top`;
 }
 
+/**
+ * Compresses a term entry for compact storage.
+ */
+function compressEntry(entry) {
+  if (DEBUG) {
+    return entry;
+  }
+  return [entry.score, entry.title, entry.context];
+}
+
+/**
+ * Decompresses a term entry from its storage representation.
+ */
+function decompressEntry(entry) {
+  if (DEBUG) {
+    return entry;
+  }
+  return {
+    score: entry[0],
+    title: entry[1],
+    context: entry[2],
+  };
+}
+
 module.exports = {
   normalizeUrl,
   downloadPage,
@@ -231,4 +256,6 @@ module.exports = {
   calcTerms,
   createFullTermKey,
   createTopTermKey,
+  compressEntry,
+  decompressEntry,
 };

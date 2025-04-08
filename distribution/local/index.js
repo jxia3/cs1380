@@ -391,21 +391,21 @@ function updateIndex(url, terms, docLen, callback) {
         if (url in index) {
           throw new Error(`Page ${url} is already in the index`);
         }
-        index[url] = {
+        index[url] = util.search.compressEntry({
           score: terms[term].score / docLen[terms[term].length],
           title: terms[term].title,
           context: terms[term].context,
-        };
+        });
         return {value: index};
       },
       default: () => {
         // Create index with URL
         const index = {};
-        index[url] = {
+        index[url] = util.search.compressEntry({
           score: terms[term].score / docLen[terms[term].length],
           title: terms[term].title,
           context: terms[term].context,
-        };
+        });
         return {value: index};
       },
       callback: (error, result) => {
