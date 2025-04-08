@@ -211,6 +211,9 @@ function extractText(content) {
   content = content.replaceAll(TAG_REGEX, " ");
   for (const code in HTML_CODES) {
     content = content.replaceAll(code, HTML_CODES[code]);
+    if (title !== null) {
+      title = title.replaceAll(code, HTML_CODES[code]);
+    }
   }
   content = content.replaceAll(SPECIAL_CHAR_REGEX, " ");
   content = content.replaceAll(/\s*\n+\s*/g, "\n");
