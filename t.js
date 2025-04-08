@@ -20,7 +20,7 @@ distribution.node.start(() => {
       }
       setTimeout(() => {
         const terms = distribution.util.search.calcTerms(query).terms;
-        distribution[GROUP].query2.lookupTerms(terms, console.log);
+        distribution[GROUP].termLookup.lookup(terms, console.log);
       }, 100);
     });
   });

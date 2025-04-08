@@ -11,7 +11,7 @@ const cache = util.cache.createCache(20000);
 /**
  * Routes remote requests to get the data associated with each term and caches the data.
  */
-function lookupTerms(terms, callback) {
+function lookup(terms, callback) {
   checkContext(this.gid, this.hash);
   if (callback === undefined) {
     return;
@@ -80,7 +80,9 @@ function lookupBatches(group, batches, callback) {
       }
 
       for (let r = 0; r < result.length; r += 1) {
-        results[batches[node].terms[r]] = result[r];
+        if (result[r] !== null) {
+          results[batches[node].terms[r]] = result[r];
+        }
       }
       active -= 1;
       if (active === 0) {
@@ -110,5 +112,5 @@ module.exports = (config) => {
   if (typeof context.hash !== "function") {
     context.hash = util.id.rendezvousHash;
   }
-  return {lookupTerms: lookupTerms.bind(context)};
+  return {lookup: lookup.bind(context)};
 };
