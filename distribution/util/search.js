@@ -232,7 +232,11 @@ function compressEntry(entry) {
   if (DEBUG) {
     return entry;
   }
-  return [entry.score, entry.title, entry.context];
+  const contexts = [];
+  for (const context of entry.context) {
+    contexts.push([context.text, context.start, context.end]);
+  }
+  return [entry.score, entry.title, contexts];
 }
 
 /**
@@ -242,10 +246,18 @@ function decompressEntry(entry) {
   if (DEBUG) {
     return entry;
   }
+  const contexts = [];
+  for (const context of entry[2]) {
+    contexts.push({
+      text: context[0],
+      start: context[1],
+      end: context[2],
+    });
+  }
   return {
     score: entry[0],
     title: entry[1],
-    context: entry[2],
+    context: contexts,
   };
 }
 
