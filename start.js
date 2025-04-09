@@ -37,6 +37,7 @@ distribution.node.start(() => {
 
 process.on("SIGQUIT", () => {
   distribution.local.search.getCounts(console.log);
+  distribution.local.search.getCrawlStats(console.log);
 });
 
 process.on("SIGINT", () => {

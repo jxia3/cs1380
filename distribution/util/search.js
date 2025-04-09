@@ -40,12 +40,20 @@ function normalizeUrl(url) {
 /**
  * Downloads the HTML content of a page at a URL.
  */
-function downloadPage(url, callback) {
+function downloadPage(url, callback, redirectCount = 0) {
   if (callback === undefined) {
     throw new Error("No callback provided");
   }
+  if (ignoreURL(url)) {
+    return callback(null, null);
+  }
+
+  if (redirectCount > 10) { // Prevent infinite redirect loops
+    return callback(new Error("Too many redirects"), null);
+  }
   callback = global.distribution.util.sync.createGuardedCallback(callback);
 
+  let hasTimedOut = false; // Flag to track timeout state
   const module = url.startsWith("https") ? https : http;
   const request = module.request(url, {
     method: "GET",
@@ -53,14 +61,27 @@ function downloadPage(url, callback) {
       "User-Agent": USER_AGENT,
     },
     timeout: REQUEST_TIMEOUT,
-  }, (response) => handleResponse(response, callback));
+  }, (response) => {
+    if (response.statusCode === 301 || response.statusCode === 302) {
+      const redirectUrl = response.headers.location;
+      // Resolve redirect URL to base URL
+      const absoluteUrl = new URL(redirectUrl, url).toString();
+      downloadPage(absoluteUrl, callback, redirectCount + 1); // Recursively follow redirect
+    } else {
+      handleResponse(response, callback, () => hasTimedOut);
+    }
+  });
 
   request.on("timeout", () => {
-    request.destroy(new Error("Request timed out"));
+    hasTimedOut = true;
+    request.destroy(); // Destroy without passing error; handle in error event
+    callback(new Error("Request timed out"), null);
   });
 
   request.on("error", (error) => {
-    callback(error, null);
+    if (!hasTimedOut) { // Only call if not already timed out
+      callback(error, null);
+    }
   });
 
   request.end();
@@ -69,10 +90,63 @@ function downloadPage(url, callback) {
 /**
  * Saves the HTML content from an HTTP response.
  */
-function handleResponse(response, callback) {
+function handleResponse(response, callback, hasTimedOutCheck) {
   let content = "";
-  response.on("data", (chunk) => content += chunk);
-  response.on("end", () => callback(null, content));
+  response.on("data", (chunk) => {
+    if (hasTimedOutCheck()) return; // Stop if timed out during streaming
+    content += chunk;
+  });
+  response.on("end", () => {
+    if (hasTimedOutCheck()) return; // Stop if timed out before end
+    callback(null, content);
+  });
+  response.on("error", (error) => {
+    if (hasTimedOutCheck()) return;
+    callback(error, null);
+  });
+}
+
+/**
+ * Checks if a URL should be ignored
+ */
+function ignoreURL(url) {
+  // Convert URL to lowercase for case-insensitive checks
+  const lowerUrl = url.toLowerCase();
+
+  // Check for bad file extensions
+  const badExtensions = [
+    '.pdf', '.csv', '.jpg', '.jpeg', '.png', 
+    '.mp4', '.zip', '.webm', '.webp', '.tar.gz', '.gz'
+  ];
+  for (const extension of badExtensions) {
+    if (lowerUrl.endsWith(extension)) {
+      return true;
+    }
+  }
+
+  // Check for authentication-related domains
+  const authDomains = [
+    'accounts.google.com', 'login', 'auth', 'signin', 'sso', 'idp', 'identity'
+  ];
+  const urlHost = new URL(url).hostname.toLowerCase();
+  for (const domain of authDomains) {
+    if (urlHost.includes(domain)) {
+      return true;
+    }
+  }
+
+  // Check for authentication-related paths
+  const authPaths = [
+    '/auth', '/oauth', '/oauth2', '/login', '/signin', '/sso', '/account'
+  ];
+  const urlPath = new URL(url).pathname.toLowerCase();
+  for (const path of authPaths) {
+    if (urlPath.includes(path)) {
+      return true;
+    }
+  }
+  // If none of the above conditions match, the URL is relevant
+  return false;
 }
 
 /**

@@ -128,7 +128,7 @@ function indexUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
   util.search.downloadPage(url, (error, data) => {
-    if (error) {
+    if (error || data === null) {
       callback({}, null);
     } else {
       indexPage(url, data, callback);
@@ -421,4 +421,4 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queueUrl, updateIndex, _start, _stop};
+module.exports = {queueUrl, extractText, updateIndex, _start, _stop};
