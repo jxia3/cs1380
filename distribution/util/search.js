@@ -44,16 +44,16 @@ function downloadPage(url, callback, redirectCount = 0) {
   if (callback === undefined) {
     throw new Error("No callback provided");
   }
+  
+  const guardedCallback = global.distribution.util.sync.createGuardedCallback(callback);
   if (ignoreURL(url)) {
-    return callback(null, null);
+    return guardedCallback(null, null);
+  }
+  // Prevent infinite redirects
+  if (redirectCount > 10) {
+    return guardedCallback(new Error("Too many redirects"), null);
   }
 
-  if (redirectCount > 10) { // Prevent infinite redirect loops
-    return callback(new Error("Too many redirects"), null);
-  }
-  callback = global.distribution.util.sync.createGuardedCallback(callback);
-
-  let hasTimedOut = false; // Flag to track timeout state
   const module = url.startsWith("https") ? https : http;
   const request = module.request(url, {
     method: "GET",
@@ -62,26 +62,31 @@ function downloadPage(url, callback, redirectCount = 0) {
     },
     timeout: REQUEST_TIMEOUT,
   }, (response) => {
-    if (response.statusCode === 301 || response.statusCode === 302) {
-      const redirectUrl = response.headers.location;
+    // Check for redirects
+    if (response.statusCode >= 301 && response.statusCode <= 308 && response.headers.location) {
+      // Clean up listeners on current request
+      request.removeAllListeners('timeout');
+      request.removeAllListeners('error');
+      request.destroy();
+
       // Resolve redirect URL to base URL
+      const redirectUrl = response.headers.location;
       const absoluteUrl = new URL(redirectUrl, url).toString();
-      downloadPage(absoluteUrl, callback, redirectCount + 1); // Recursively follow redirect
+      downloadPage(absoluteUrl, guardedCallback, redirectCount + 1); // Recursively follow redirect
     } else {
-      handleResponse(response, callback, () => hasTimedOut);
+      handleResponse(response, guardedCallback);
     }
   });
 
   request.on("timeout", () => {
-    hasTimedOut = true;
-    request.destroy(); // Destroy without passing error; handle in error event
-    callback(new Error("Request timed out"), null);
+    request.destroy(new Error("Request timed out"));
   });
 
   request.on("error", (error) => {
-    if (!hasTimedOut) { // Only call if not already timed out
-      callback(error, null);
+    if (!request.destroyed) {
+      request.destroy();
     }
+    guardedCallback(error, null);
   });
 
   request.end();
@@ -90,20 +95,10 @@ function downloadPage(url, callback, redirectCount = 0) {
 /**
  * Saves the HTML content from an HTTP response.
  */
-function handleResponse(response, callback, hasTimedOutCheck) {
+function handleResponse(response, callback) {
   let content = "";
-  response.on("data", (chunk) => {
-    if (hasTimedOutCheck()) return; // Stop if timed out during streaming
-    content += chunk;
-  });
-  response.on("end", () => {
-    if (hasTimedOutCheck()) return; // Stop if timed out before end
-    callback(null, content);
-  });
-  response.on("error", (error) => {
-    if (hasTimedOutCheck()) return;
-    callback(error, null);
-  });
+  response.on("data", (chunk) => content += chunk);
+  response.on("end", () => callback(null, content));
 }
 
 /**
