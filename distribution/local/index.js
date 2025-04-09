@@ -138,15 +138,16 @@ function indexUrl(url, callback) {
     if (error || data === null) {
       callback({}, null);
     } else {
-      indexPage(url, data, callback);
+      const {title, content} = extractText(data);
+      indexContent(url, title, content, callback);
     }
   });
 }
 
 /**
- * Updates the distributed index with the HTML data from a page.
+ * Indexes the content in a page.
  */
-function indexPage(url, data, callback) {
+function indexContent(url, title, content, callback) {
   if (!global.distribution[GROUP]?._isGroup) {
     throw new Error(`Group '${GROUP}' does not exist`);
   }
@@ -154,7 +155,6 @@ function indexPage(url, data, callback) {
   url = util.search.normalizeUrl(url);
 
   log(`Indexing page ${url}`, "index");
-  const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
   if (stopped) {
     log(`Aborted indexing ${url}`, "index");
@@ -431,4 +431,12 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queueUrl, extractText, extractTerms, updateIndex, _start, _stop};
+module.exports = {
+  queueUrl,
+  indexContent,
+  extractText,
+  extractTerms,
+  updateIndex,
+  _start,
+  _stop,
+};

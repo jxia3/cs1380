@@ -16,8 +16,7 @@ distribution.node.start(() => {
     console.log(a);
     console.log(typeof(a));
     console.log(a.length);
-
-  })
+  });
   // distribution.local.groups.put(GROUP, nodes, (error, result) => {
   //   if (error) {
   //     throw error;

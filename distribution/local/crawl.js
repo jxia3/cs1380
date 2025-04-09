@@ -155,7 +155,7 @@ function crawlURL(url, callback) {
         if (error) {
           console.error(error);
         }
-      })
+      });
 
       // TODO: if not relevant, should we not do anything, or still crawl the urls on the page?
       if (params.pageRelevant(pageContent)) {
@@ -181,23 +181,9 @@ function crawlURL(url, callback) {
             });
           } else if (CRAWL_SETTING === "index-directly") {
             // TODO: this is copied directly from indexPage, maybe a better way to do it?
-            
+
             // Just call updateIndex directly (eliminate the index queue)
-            const {terms, docLen} = global.distribution.local.index.extractTerms(pageTitle, pageContent);
-            if (stopped) {
-              log(`Aborted indexing ${url}`, "index");
-              callback({}, {});
-              return;
-            }
-            global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
-              log(`Finished indexing page ${url}`, "index");
-              callback(errors, results);
-              global.distribution[GROUP].search.updateCounts(0, 1, (error, result) => {
-                if (error) {
-                  console.error(error);
-                }
-              });
-            });
+            global.distribution.local.index.indexContent(url, pageTitle, pageContent, callback);
           } else {
             // Default to "isolate"
             callback(null, null);
@@ -216,7 +202,7 @@ function crawlURL(url, callback) {
           if (error) {
             console.error(error);
           }
-        })
+        });
         callback({}, {});
       }
     }

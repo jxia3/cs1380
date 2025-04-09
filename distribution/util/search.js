@@ -44,7 +44,7 @@ function downloadPage(url, callback, redirectCount = 0) {
   if (callback === undefined) {
     throw new Error("No callback provided");
   }
-  
+
   const guardedCallback = global.distribution.util.sync.createGuardedCallback(callback);
   if (ignoreURL(url)) {
     return guardedCallback(null, null);
@@ -65,8 +65,8 @@ function downloadPage(url, callback, redirectCount = 0) {
     // Check for redirects
     if (response.statusCode >= 301 && response.statusCode <= 308 && response.headers.location) {
       // Clean up listeners on current request
-      request.removeAllListeners('timeout');
-      request.removeAllListeners('error');
+      request.removeAllListeners("timeout");
+      request.removeAllListeners("error");
       request.destroy();
 
       // Resolve redirect URL to base URL
@@ -110,8 +110,8 @@ function ignoreURL(url) {
 
   // Check for bad file extensions
   const badExtensions = [
-    '.pdf', '.csv', '.jpg', '.jpeg', '.png', 
-    '.mp4', '.zip', '.webm', '.webp', '.tar.gz', '.gz'
+    ".pdf", ".csv", ".jpg", ".jpeg", ".png",
+    ".mp4", ".zip", ".webm", ".webp", ".tar.gz", ".gz",
   ];
   for (const extension of badExtensions) {
     if (lowerUrl.endsWith(extension)) {
@@ -121,7 +121,7 @@ function ignoreURL(url) {
 
   // Check for authentication-related domains
   const authDomains = [
-    'accounts.google.com', 'login', 'auth', 'signin', 'sso', 'idp', 'identity'
+    "accounts.google.com", "login", "auth", "signin", "sso", "idp", "identity",
   ];
   const urlHost = new URL(url).hostname.toLowerCase();
   for (const domain of authDomains) {
@@ -132,7 +132,7 @@ function ignoreURL(url) {
 
   // Check for authentication-related paths
   const authPaths = [
-    '/auth', '/oauth', '/oauth2', '/login', '/signin', '/sso', '/account'
+    "/auth", "/oauth", "/oauth2", "/login", "/signin", "/sso", "/account",
   ];
   const urlPath = new URL(url).pathname.toLowerCase();
   for (const path of authPaths) {

@@ -96,6 +96,6 @@ module.exports = (config) => {
     stop: stop.bind(context),
     flushCache: flushCache.bind(context),
     updateCounts: updateCounts.bind(context),
-    updateCrawlerStats: updateCrawlerStats.bind(context)
+    updateCrawlerStats: updateCrawlerStats.bind(context),
   };
 };

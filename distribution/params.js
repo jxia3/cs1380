@@ -8,6 +8,6 @@ module.exports = {
   notFoundMark: "_not_found_97189983cb4254d7",
   pageRelevant: (pageContent) => {
     // Returns true if the page is relevant to our search engine based on some metric
-    return pageContent.toLowerCase().includes('google')
-  }
+    return pageContent.toLowerCase().includes("google");
+  },
 };

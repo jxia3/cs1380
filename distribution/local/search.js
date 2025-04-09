@@ -12,8 +12,8 @@ const crawlerStats = {
   irrelevantURLCount: 0,
   ignoredURLs: [],
   irrelevantURLs: [],
-  pageContentLengths: []
-}
+  pageContentLengths: [],
+};
 
 /**
  * Starts the local crawler and indexer processing queues.
@@ -92,9 +92,9 @@ function updateCounts(crawled, indexed, callback) {
 
 /**
  * Updates crawler-specific stats
- * @param {?string} ignoredURL 
- * @param {?string} irrelevantURL 
- * @param {?number} pageContentLength 
+ * @param {?string} ignoredURL
+ * @param {?string} irrelevantURL
+ * @param {?number} pageContentLength
  */
 function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
   if (ignoredURL !== null) {
