@@ -36,11 +36,13 @@ distribution.node.start(() => {
 });
 
 process.on("SIGQUIT", () => {
+  console.log();
   distribution.local.search.getCounts(console.log);
   distribution.local.search.getCrawlStats(console.log);
 });
 
 process.on("SIGINT", () => {
+  console.log();
   try {
     distribution[GROUP].search.stop((error, result) => {
       console.log("Stop:", error, result);

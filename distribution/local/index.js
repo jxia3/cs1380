@@ -421,4 +421,4 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queueUrl, extractText, updateIndex, _start, _stop};
+module.exports = {queueUrl, extractText, extractTerms, updateIndex, _start, _stop};

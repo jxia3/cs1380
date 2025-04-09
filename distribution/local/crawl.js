@@ -183,7 +183,7 @@ function crawlURL(url, callback) {
             // TODO: this is copied directly from indexPage, maybe a better way to do it?
             
             // Just call updateIndex directly (eliminate the index queue)
-            const {terms, docLen} = extractTerms(title, content);
+            const {terms, docLen} = global.distribution.local.index.extractTerms(pageTitle, pageContent);
             if (stopped) {
               log(`Aborted indexing ${url}`, "index");
               callback({}, {});
