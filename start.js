@@ -57,6 +57,8 @@ process.on("SIGINT", () => {
           process.exit(1);
         }
       }, 1000);
+      distribution.local.search.getCounts(console.log);
+      distribution.local.search.getCrawlStats(console.log);
     });
   } catch (error) {
     console.error(error);
