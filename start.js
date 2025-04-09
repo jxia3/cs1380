@@ -9,6 +9,7 @@ const localNode = {
 };
 const nodes = [localNode];
 const urls = ["https://deepmind.google"];
+let startTime;
 
 distribution.node.start(() => {
   distribution.local.groups.put(GROUP, nodes, (error, result) => {
@@ -24,6 +25,7 @@ distribution.node.start(() => {
           throw error;
         }
         setTimeout(() => {
+          startTime = performance.now();
           distribution[GROUP].crawl.crawl(urls, (error, result) => {
             if (Object.keys(error).length > 0) {
               throw error;
@@ -37,8 +39,7 @@ distribution.node.start(() => {
 
 process.on("SIGQUIT", () => {
   console.log();
-  distribution.local.search.getCounts(console.log);
-  distribution.local.search.getCrawlStats(console.log);
+  printStats();
 });
 
 process.on("SIGINT", () => {
@@ -57,11 +58,16 @@ process.on("SIGINT", () => {
           process.exit(1);
         }
       }, 1000);
-      distribution.local.search.getCounts(console.log);
-      distribution.local.search.getCrawlStats(console.log);
+      printStats();
     });
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
 });
+
+function printStats() {
+  console.log(`Time elapsed: ${(performance.now() - startTime) / 1000} seconds`);
+  distribution.local.search.getCounts(console.log);
+  distribution.local.search.getCrawlStats(console.log);
+}
