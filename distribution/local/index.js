@@ -7,6 +7,7 @@ const util = require("../util/util.js");
 const GROUP = params.searchGroup;
 const NGRAM_LEN = params.ngramLen;
 const QUEUE_KEY = params.indexQueue;
+const CRAWL_SETTING = params.crawlSetting;
 const ACTIVE_LIMIT = 3;
 const CONTEXT_COUNT = 3;
 const CONTEXT_WORDS = 5;
@@ -37,47 +38,51 @@ function _start(clearQueue, callback) {
   }
 
   let active = 0;
-  module.exports._interval = setInterval(() => {
-    if (active > ACTIVE_LIMIT) {
-      return;
-    }
-    active += 1;
-    global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
-      modify: (queue) => {
-        // Extract the first element from the queue
-        if (queue.length === 0) {
-          return null;
-        }
-        const url = queue.shift();
-        return {
-          value: queue,
-          carry: url,
-        };
-      },
-      default: () => ({
-        value: [],
-        carry: null,
-      }),
-      callback: (error, url) => {
-        // Index a valid URL
-        if (error) {
-          console.error(error);
-          active -= 1;
-          return;
-        }
-        if (url !== null) {
-          indexUrl(url, (errors, results) => {
-            if (Object.keys(errors).length > 0) {
-              console.error(Object.values(errors)[0]);
-            }
+
+  // If indexing directly, the index queue will not be used
+  if (CRAWL_SETTING !== "index-directly") {
+    module.exports._interval = setInterval(() => {
+      if (active > ACTIVE_LIMIT) {
+        return;
+      }
+      active += 1;
+      global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
+        modify: (queue) => {
+          // Extract the first element from the queue
+          if (queue.length === 0) {
+            return null;
+          }
+          const url = queue.shift();
+          return {
+            value: queue,
+            carry: url,
+          };
+        },
+        default: () => ({
+          value: [],
+          carry: null,
+        }),
+        callback: (error, url) => {
+          // Index a valid URL
+          if (error) {
+            console.error(error);
             active -= 1;
-          });
-        } else {
-          active -= 1;
-        }
-      },
-    });
-  }, 500);
+            return;
+          }
+          if (url !== null) {
+            indexUrl(url, (errors, results) => {
+              if (Object.keys(errors).length > 0) {
+                console.error(Object.values(errors)[0]);
+              }
+              active -= 1;
+            });
+          } else {
+            active -= 1;
+          }
+        },
+      });
+    }, 500);
+  }
 }
 
 /**
@@ -89,7 +94,9 @@ function _stop(callback) {
     throw new Error("Stop index received no callback");
   }
   stopped = true;
-  clearInterval(module.exports._interval);
+  if (CRAWL_SETTING !== "index-directly") {
+    clearInterval(module.exports._interval);
+  }
   callback(null, null);
 }
 
