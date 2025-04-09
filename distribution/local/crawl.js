@@ -9,6 +9,7 @@ const util = require("../util/util.js");
 const GROUP = params.searchGroup;
 const SEEN_KEY = params.crawlSeen;
 const QUEUE_KEY = params.crawlQueue;
+const CRAWL_SETTING = params.crawlSetting;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = 1;
 // How often we write visited URLs list to disk (ms)
@@ -31,9 +32,13 @@ function _start(resetCrawler, callback) {
     throw new Error("Start index received no callback");
   }
 
+  if ((CRAWL_SETTING !== "isolate") && (CRAWL_SETTING !== "index-queue") && (CRAWL_SETTING !== "index-directly")) {
+    log("Invalid crawl setting given, defaulting to isolate (will not index)", "crawl");
+  }
+
   if (resetCrawler) {
     log("Resetting crawl queue and seen URLs list", "crawl");
-    // TODO: will this have race conditions or don't have to worry about that?
+    // TODO: could technically cause issues if start crawling too quickly (before these resets are done)
     global.distribution.local.store.put([], SEEN_KEY, (error, result) => {
       global.distribution.local.store.put([], QUEUE_KEY, callback);
     });
@@ -81,19 +86,8 @@ function _start(resetCrawler, callback) {
         }
         if (url !== null) {
           log(`Crawling url: ${url}`, "crawl");
-          crawlURL(url, (errors, _) => {
-            if (Object.keys(errors).length > 0) {
-              console.error(Object.values(errors)[0]);
-            }
-            // Add this page to the index queue
-            // TODO: instead of queuing it, just call indexPage (can eliminate the index queue)
-            global.distribution.local.index.queueUrl(url, (error, result) => {
-              if (error) {
-                console.error(`failed to add ${url} to index queue after crawling`);
-              }
-              // Done
-              active -= 1;
-            });
+          crawlURL(url, (error, result) => {
+            active -= 1;
           });
         } else {
           active -= 1;
@@ -130,36 +124,102 @@ function _stop(callback) {
 }
 
 /**
- * Crawls a URL, then adds the page to index queue.
- * @param {string} URL
+ * Crawls a url, then adds the page to index queue.
+ * @param {string} url
  * @param {Callback} [callback]
  * @return {void}
  */
-function crawlURL(URL, callback) {
-  util.search.downloadPage(URL, (error, pageContent) => {
+function crawlURL(url, callback) {
+  util.search.downloadPage(url, (error, htmlContent) => {
     if (error) {
-      console.warn(`Error when downloading page ${URL} in crawlURL`);
+      console.warn(`Error when downloading page ${url} in crawlURL`);
       // Do nothing
-      callback({}, {});
+      callback(error, null);
       return;
     }
-    // TODO: first do preliminary check on whether the page is relevant (ex: look for chocolate)
-    // - can call extractText on pageContent, and search within that
-
-    // TODO: (lower priority) give the indexer the pagecontent directly instead of the URL
-    const pageURLs = util.search.extractUrls(pageContent, URL);
-    if (stopped) {
-      log(`Aborted crawling ${URL}`, "crawl");
+    // If the URL was ignored, htmlContent will be null
+    if (htmlContent === null) {
+      // DEBUG
+      log(`Ignoring url: ${url}`, "crawl");
+      global.distribution[GROUP].search.updateCrawlerStats(url, null, null, (error, result) => {
+        if (error) {
+          console.error(error);
+        }
+      });
       callback({}, {});
-      return;
-    }
+    } else {
+      // Get page content of url and check if the page is relevant
+      const {title: pageTitle, content: pageContent} = global.distribution.local.index.extractText(htmlContent);
+      // DEBUG : check average page content length
+      global.distribution[GROUP].search.updateCrawlerStats(null, null, pageContent.length, (error, result) => {
+        if (error) {
+          console.error(error);
+        }
+      })
 
-    global.distribution[GROUP].crawl.crawl(pageURLs, callback);
-    global.distribution[GROUP].search.updateCounts(1, 0, (error, result) => {
-      if (error) {
-        console.error(error);
+      // TODO: if not relevant, should we not do anything, or still crawl the urls on the page?
+      if (params.pageRelevant(pageContent)) {
+        const pageURLs = util.search.extractUrls(htmlContent, url);
+        if (stopped) {
+          log(`Aborted crawling ${url}`, "crawl");
+          callback(null, null);
+          return;
+        }
+        // Queue up the other URLs
+        global.distribution[GROUP].crawl.crawl(pageURLs, (errors, _) => {
+          if (Object.keys(errors).length > 0) {
+            console.error(Object.values(errors)[0]);
+          }
+          // Index the page
+          if (CRAWL_SETTING === "index-queue") {
+            // Add this page to the index queue
+            global.distribution.local.index.queueUrl(url, (error, result) => {
+              if (error) {
+                log(`Error when indexing page: ${url}`, "crawl");
+              }
+              callback(error, result);
+            });
+          } else if (CRAWL_SETTING === "index-directly") {
+            // TODO: this is copied directly from indexPage, maybe a better way to do it?
+            
+            // Just call updateIndex directly (eliminate the index queue)
+            const {terms, docLen} = global.distribution.local.index.extractTerms(pageTitle, pageContent);
+            if (stopped) {
+              log(`Aborted indexing ${url}`, "index");
+              callback({}, {});
+              return;
+            }
+            global.distribution[GROUP].index.updateIndex(url, terms, docLen, (errors, results) => {
+              log(`Finished indexing page ${url}`, "index");
+              callback(errors, results);
+              global.distribution[GROUP].search.updateCounts(0, 1, (error, result) => {
+                if (error) {
+                  console.error(error);
+                }
+              });
+            });
+          } else {
+            // Default to "isolate"
+            callback(null, null);
+          }
+        });
+        // Update the stats
+        global.distribution[GROUP].search.updateCounts(1, 0, (error, result) => {
+          if (error) {
+            console.error(error);
+          }
+        });
+      } else {
+        // DEBUG
+        log(`WARNING: page ${url} has irrelevant content`, "crawl");
+        global.distribution[GROUP].search.updateCrawlerStats(null, url, null, (error, result) => {
+          if (error) {
+            console.error(error);
+          }
+        })
+        callback({}, {});
       }
-    });
+    }
   });
 }
 
