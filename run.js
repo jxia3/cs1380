@@ -1,7 +1,10 @@
 const distribution = require("./distribution.js");
 
+const fs = require("fs");
+
 const GROUP = distribution.searchParams.searchGroup;
 const FREQUENT_COUNT = 1000;
+const FREQUENT_FILE = "frequent.json";
 const RESET = true;
 
 const localNode = {
@@ -45,6 +48,7 @@ function calc() {
         throw error;
       }
       console.log(result);
+      fs.writeFileSync(FREQUENT_FILE, JSON.stringify(result, null, 4));
     });
   });
 }

@@ -122,8 +122,9 @@ function calcMostFrequent(limit, callback) {
         callback(errors, null);
         return;
       }
-
-      console.log(results);
+      const terms = Object.values(results).flat();
+      terms.sort((a, b) => b.count - a.count);
+      callback(null, terms.slice(0, limit));
     });
   });
 }
