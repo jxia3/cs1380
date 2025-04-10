@@ -36,7 +36,34 @@ function calcMostFrequent(limit, callback) {
   if (callback === undefined) {
     return;
   }
-  callback(null, "most frequent");
-}
+
+  global.distribution.local.store.get({gid: GROUP, key: null}, (error, shards) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    const terms = [];
+    let active = shards.length;
+
+    for (const shard of shards) {
+      global.distribution.local.store.get({gid: GROUP, key: shard}, (error, shardData) => {
+        if (error) {
+          return;
+        }
+        for (const term in shardData) {
+          terms.push({
+            text: term,
+            count: Object.keys(shardData[term]).length,
+          });
+        }
+
+        active -= 1;
+        if (active === 0) {
+          terms.sort((a, b) => b.count - a.count);
+          callback(null, terms.slice(0, limit));
+        }
+      });
+    }
+  });}
 
 module.exports = {lookup, calcMostFrequent};
