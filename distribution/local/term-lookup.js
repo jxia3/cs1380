@@ -1,6 +1,7 @@
 /* A service that supports low-latency term lookups. */
 
 const params = require("../params.js");
+const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
 
@@ -52,7 +53,7 @@ function calcMostFrequent(limit, callback) {
         }
         for (const term in shardData) {
           terms.push({
-            text: term,
+            text: util.search.recoverFullTerm(term),
             count: Object.keys(shardData[term]).length,
           });
         }
@@ -64,6 +65,7 @@ function calcMostFrequent(limit, callback) {
         }
       });
     }
-  });}
+  });
+}
 
 module.exports = {lookup, calcMostFrequent};
