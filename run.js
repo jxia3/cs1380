@@ -11,10 +11,27 @@ const nodes = [localNode];
 const urls = ["https://deepmind.google"];
 let startTime;
 
-if (process.argv[2] === "download") {
+if (process.argv[2] === "clear") {
+  clear();
+} else if (process.argv[2] === "download") {
   download();
 } else {
   console.log("Unknown command");
+}
+
+function clear() {
+  startLocal(() => {
+    for (const node of nodes) {
+      const remote = {node, service: "store", method: "clear"};
+      distribution.local.comm.send(["local"], remote, (error, result) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("Cleared", node);
+        }
+      });
+    }
+  });
 }
 
 function download() {
