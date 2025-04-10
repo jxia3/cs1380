@@ -11,28 +11,54 @@ const nodes = [localNode];
 const urls = ["https://deepmind.google"];
 let startTime;
 
-function run() {
+if (process.argv[2] === "download") {
+  download();
+} else {
+  console.log("Unknown command");
+}
+
+function download() {
+  startGroup(() => {
+    distribution[GROUP].search.start(localNode, RESET, (error, result) => {
+      if (Object.keys(error).length > 0) {
+        throw error;
+      }
+      setTimeout(() => {
+        startTime = performance.now();
+        distribution[GROUP].crawl.crawl(urls, (error, result) => {
+          if (Object.keys(error).length > 0) {
+            throw error;
+          }
+        });
+      }, 1000);
+    });
+  });
+  handleSignals();
+}
+
+function startLocal(callback) {
+  distribution.node.start(() => {
+    distribution.local.groups.put(GROUP, nodes, (error, result) => {
+      if (error) {
+        throw error;
+      }
+    });
+    callback();
+  });
+}
+
+function startGroup(callback) {
   startLocal(() => {
     distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
       if (Object.keys(error).length > 0) {
         throw error;
       }
-      distribution[GROUP].search.start(localNode, RESET, (error, result) => {
-        if (Object.keys(error).length > 0) {
-          throw error;
-        }
-        setTimeout(() => {
-          startTime = performance.now();
-          distribution[GROUP].crawl.crawl(urls, (error, result) => {
-            if (Object.keys(error).length > 0) {
-              throw error;
-            }
-          });
-        }, 1000);
-      });
+      callback();
     });
   });
+}
 
+function handleSignals() {
   process.on("SIGQUIT", () => {
     console.log();
     printStats();
@@ -63,25 +89,8 @@ function run() {
   });
 }
 
-function startLocal(callback) {
-  distribution.node.start(() => {
-    distribution.local.groups.put(GROUP, nodes, (error, result) => {
-      if (error) {
-        throw error;
-      }
-    });
-    callback();
-  });
-}
-
 function printStats() {
   console.log(`Time elapsed: ${(performance.now() - startTime) / 1000} seconds`);
   distribution.local.search.getCounts(console.log);
   distribution.local.search.getCrawlStats(console.log);
 }
-
-if (require.main === module) {
-  run();
-}
-
-module.exports = {GROUP, distribution, startLocal};
