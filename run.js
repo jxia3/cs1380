@@ -11,12 +11,14 @@ const nodes = [localNode];
 const urls = ["https://deepmind.google"];
 let startTime;
 
-if (process.argv[2] === "clear") {
-  clear();
-} else if (process.argv[2] === "download") {
-  download();
-} else {
-  console.log("Unknown command");
+if (require.main === module) {
+  if (process.argv[2] === "clear") {
+    clear();
+  } else if (process.argv[2] === "download") {
+    download();
+  } else {
+    console.log("Unknown command");
+  }
 }
 
 function clear() {
@@ -111,3 +113,5 @@ function printStats() {
   distribution.local.search.getCounts(console.log);
   distribution.local.search.getCrawlStats(console.log);
 }
+
+module.exports = {distribution, startLocal};
