@@ -29,4 +29,14 @@ function lookup(termKeys, callback) {
   }
 }
 
-module.exports = {lookup};
+/**
+ * Computes the most frequent terms from each the local store.
+ */
+function calcMostFrequent(limit, callback) {
+  if (callback === undefined) {
+    return;
+  }
+  callback(null, "most frequent");
+}
+
+module.exports = {lookup, calcMostFrequent};

@@ -1,6 +1,7 @@
 const distribution = require("./distribution.js");
 
 const GROUP = distribution.searchParams.searchGroup;
+const FREQUENT_COUNT = 1000;
 const RESET = true;
 
 const localNode = {
@@ -14,6 +15,8 @@ let startTime;
 if (require.main === module) {
   if (process.argv[2] === "clear") {
     clear();
+  } else if (process.argv[2] === "calc") {
+    calc();
   } else if (process.argv[2] === "download") {
     download();
   } else {
@@ -27,12 +30,22 @@ function clear() {
       const remote = {node, service: "store", method: "clear"};
       distribution.local.comm.send([GROUP], remote, (error, result) => {
         if (error) {
-          console.error(error);
-        } else {
-          console.log("Cleared", node);
+          throw error;
         }
+        console.log("Cleared", node);
       });
     }
+  });
+}
+
+function calc() {
+  startLocal(() => {
+    distribution[GROUP].termLookup.calcMostFrequent(FREQUENT_COUNT, (error, result) => {
+      if (error) {
+        throw error;
+      }
+      console.log(result);
+    });
   });
 }
 

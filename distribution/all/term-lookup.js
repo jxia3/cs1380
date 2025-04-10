@@ -102,6 +102,33 @@ function lookupBatches(group, batches, callback) {
 }
 
 /**
+ * Computes the most frequent terms across each of the local stores.
+ */
+function calcMostFrequent(limit, callback) {
+  checkContext(this.gid, this.hash);
+  if (callback === undefined) {
+    return;
+  }
+
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    const service = {service: "termLookup", method: "calcMostFrequent"};
+    remote.sendRequests(group, service, [limit], (errors, results) => {
+      if (Object.keys(errors).length > 0) {
+        callback(errors, null);
+        return;
+      }
+
+      console.log(results);
+    });
+  });
+}
+
+/**
  * Checks if the current function context is valid.
  */
 function checkContext(groupId, hashFn) {
@@ -121,5 +148,8 @@ module.exports = (config) => {
   if (typeof context.hash !== "function") {
     context.hash = util.id.rendezvousHash;
   }
-  return {lookup: lookup.bind(context)};
+  return {
+    lookup: lookup.bind(context),
+    calcMostFrequent: calcMostFrequent.bind(context),
+  };
 };
