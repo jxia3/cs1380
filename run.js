@@ -1,6 +1,10 @@
 const distribution = require("./distribution.js");
 
+const fs = require("fs");
+
 const GROUP = distribution.searchParams.searchGroup;
+const FREQUENT_COUNT = 1000;
+const FREQUENT_FILE = "frequent.json";
 const RESET = true;
 
 const localNode = {
@@ -14,6 +18,8 @@ let startTime;
 if (require.main === module) {
   if (process.argv[2] === "clear") {
     clear();
+  } else if (process.argv[2] === "calc") {
+    calc();
   } else if (process.argv[2] === "download") {
     download();
   } else {
@@ -25,14 +31,25 @@ function clear() {
   startLocal(() => {
     for (const node of nodes) {
       const remote = {node, service: "store", method: "clear"};
-      distribution.local.comm.send(["local"], remote, (error, result) => {
+      distribution.local.comm.send([GROUP], remote, (error, result) => {
         if (error) {
-          console.error(error);
-        } else {
-          console.log("Cleared", node);
+          throw error;
         }
+        console.log("Cleared", node);
       });
     }
+  });
+}
+
+function calc() {
+  startLocal(() => {
+    distribution[GROUP].termLookup.calcMostFrequent(FREQUENT_COUNT, (error, result) => {
+      if (error) {
+        throw error;
+      }
+      console.log(result);
+      fs.writeFileSync(FREQUENT_FILE, JSON.stringify(result, null, 4));
+    });
   });
 }
 
@@ -114,4 +131,4 @@ function printStats() {
   distribution.local.search.getCrawlStats(console.log);
 }
 
-module.exports = {distribution, startLocal};
+module.exports = {GROUP, distribution, startLocal};
