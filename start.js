@@ -11,11 +11,8 @@ const nodes = [localNode];
 const urls = ["https://deepmind.google"];
 let startTime;
 
-distribution.node.start(() => {
-  distribution.local.groups.put(GROUP, nodes, (error, result) => {
-    if (error) {
-      throw error;
-    }
+function run() {
+  startLocal(() => {
     distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
       if (Object.keys(error).length > 0) {
         throw error;
@@ -35,39 +32,56 @@ distribution.node.start(() => {
       });
     });
   });
-});
 
-process.on("SIGQUIT", () => {
-  console.log();
-  printStats();
-});
+  process.on("SIGQUIT", () => {
+    console.log();
+    printStats();
+  });
 
-process.on("SIGINT", () => {
-  console.log();
-  try {
-    distribution[GROUP].search.stop((error, result) => {
-      console.log("Stop:", error, result);
-      setTimeout(() => {
-        try {
-          distribution[GROUP].search.flushCache((error, result) => {
-            console.log("Flush:", error, result);
-            process.exit(0);
-          });
-        } catch (error) {
-          console.error(error);
-          process.exit(1);
-        }
-      }, 1000);
-      printStats();
+  process.on("SIGINT", () => {
+    console.log();
+    try {
+      distribution[GROUP].search.stop((error, result) => {
+        console.log("Stop:", error, result);
+        setTimeout(() => {
+          try {
+            distribution[GROUP].search.flushCache((error, result) => {
+              console.log("Flush:", error, result);
+              process.exit(0);
+            });
+          } catch (error) {
+            console.error(error);
+            process.exit(1);
+          }
+        }, 1000);
+        printStats();
+      });
+    } catch (error) {
+      console.error(error);
+      process.exit(1);
+    }
+  });
+}
+
+function startLocal(callback) {
+  distribution.node.start(() => {
+    distribution.local.groups.put(GROUP, nodes, (error, result) => {
+      if (error) {
+        throw error;
+      }
     });
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-});
+    callback();
+  });
+}
 
 function printStats() {
   console.log(`Time elapsed: ${(performance.now() - startTime) / 1000} seconds`);
   distribution.local.search.getCounts(console.log);
   distribution.local.search.getCrawlStats(console.log);
 }
+
+if (require.main === module) {
+  run();
+}
+
+module.exports = {GROUP, distribution, startLocal};
