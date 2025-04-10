@@ -25,7 +25,7 @@ function clear() {
   startLocal(() => {
     for (const node of nodes) {
       const remote = {node, service: "store", method: "clear"};
-      distribution.local.comm.send(["local"], remote, (error, result) => {
+      distribution.local.comm.send([GROUP], remote, (error, result) => {
         if (error) {
           console.error(error);
         } else {
@@ -114,4 +114,4 @@ function printStats() {
   distribution.local.search.getCrawlStats(console.log);
 }
 
-module.exports = {distribution, startLocal};
+module.exports = {GROUP, distribution, startLocal};

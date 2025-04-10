@@ -1,5 +1,9 @@
 /* A service that supports low-latency term lookups. */
 
+const params = require("../params.js");
+
+const GROUP = params.searchGroup;
+
 /**
  * Looks up an ordered array of terms in the local cached store.
  */
@@ -12,7 +16,8 @@ function lookup(termKeys, callback) {
 
   const storeModule = global.distribution.local.atomicStore._store;
   for (let k = 0; k < termKeys.length; k += 1) {
-    storeModule.get(termKeys[k], (error, result) => {
+    const config = {gid: GROUP, key: termKeys[k]};
+    storeModule.get(config, (error, result) => {
       if (!error) {
         results[k] = result;
       }

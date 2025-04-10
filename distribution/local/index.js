@@ -395,7 +395,8 @@ function updateIndex(url, terms, docLen, callback) {
 
   for (const term in terms) {
     const key = util.search.createFullTermKey(term);
-    global.distribution.local.atomicStore.getAndModify(key, {
+    const config = {gid: GROUP, key};
+    global.distribution.local.atomicStore.getAndModify(config, {
       modify: (index) => {
         // Insert URL into index
         if (url in index) {
