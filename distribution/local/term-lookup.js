@@ -4,6 +4,7 @@ const params = require("../params.js");
 const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
+const ONLY_WORDS = true;
 
 /**
  * Looks up an ordered array of terms in the local cached store.
@@ -52,14 +53,17 @@ function calcMostFrequent(limit, callback) {
           return;
         }
         for (const term in shardData) {
-          terms.push({
-            text: util.search.recoverFullTerm(term),
-            count: Object.keys(shardData[term]).length,
-            score: Object.values(shardData[term])
-                .map(util.search.decompressEntry)
-                .map((e) => e.score)
-                .reduce((a, b) => a + b, 0),
-          });
+          const text = util.search.recoverFullTerm(term);
+          if (!ONLY_WORDS || text.split(" ").length === 1) {
+            terms.push({
+              text,
+              count: Object.keys(shardData[term]).length,
+              score: Object.values(shardData[term])
+                  .map(util.search.decompressEntry)
+                  .map((e) => e.score)
+                  .reduce((a, b) => a + b, 0),
+            });
+          }
         }
 
         active -= 1;
