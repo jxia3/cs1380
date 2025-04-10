@@ -55,12 +55,21 @@ function calcMostFrequent(limit, callback) {
           terms.push({
             text: util.search.recoverFullTerm(term),
             count: Object.keys(shardData[term]).length,
+            score: Object.values(shardData[term])
+                .map(util.search.decompressEntry)
+                .map((e) => e.score)
+                .reduce((a, b) => a + b, 0),
           });
         }
 
         active -= 1;
         if (active === 0) {
-          terms.sort((a, b) => b.count - a.count);
+          terms.sort((a, b) => {
+            if (a.count !== b.count) {
+              return b.count - a.count;
+            }
+            return b.score - a.score;
+          });
           callback(null, terms.slice(0, limit));
         }
       });

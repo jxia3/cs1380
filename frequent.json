@@ -1,4002 +1,5002 @@
 [
     {
         "text": "google",
-        "count": 28
-    },
-    {
-        "text": "conditions acknowledge",
-        "count": 27
-    },
-    {
-        "text": "nameexamplecom",
-        "count": 27
-    },
-    {
-        "text": "google privacy",
-        "count": 27
-    },
-    {
-        "text": "updates",
-        "count": 27
-    },
-    {
-        "text": "privacy",
-        "count": 27
-    },
-    {
-        "text": "search",
-        "count": 27
-    },
-    {
-        "text": "accept google",
-        "count": 27
-    },
-    {
-        "text": "accept",
-        "count": 27
-    },
-    {
-        "text": "conditions",
-        "count": 27
-    },
-    {
-        "text": "follow",
-        "count": 27
-    },
-    {
-        "text": "valid",
-        "count": 27
-    },
-    {
-        "text": "posts",
-        "count": 27
-    },
-    {
-        "text": "email nameexamplecom",
-        "count": 27
-    },
-    {
-        "text": "links",
-        "count": 27
-    },
-    {
-        "text": "updates innovations",
-        "count": 27
-    },
-    {
-        "text": "terms",
-        "count": 27
-    },
-    {
-        "text": "policy",
-        "count": 27
-    },
-    {
-        "text": "innovations",
-        "count": 27
-    },
-    {
-        "text": "deepmind",
-        "count": 27
-    },
-    {
-        "text": "acknowledge google",
-        "count": 27
-    },
-    {
-        "text": "valid email",
-        "count": 27
-    },
-    {
-        "text": "enter",
-        "count": 27
+        "count": 28,
+        "score": 1.7280131663084084
     },
     {
         "text": "google deepmind",
-        "count": 27
+        "count": 27,
+        "score": 1.7126051702165814
+    },
+    {
+        "text": "deepmind",
+        "count": 27,
+        "score": 1.090277981777196
+    },
+    {
+        "text": "posts",
+        "count": 27,
+        "score": 0.4519746616736465
+    },
+    {
+        "text": "search",
+        "count": 27,
+        "score": 0.42671199215137623
+    },
+    {
+        "text": "conditions acknowledge",
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "google privacy",
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "accept google",
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "email nameexamplecom",
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "acknowledge google",
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "valid email",
+        "count": 27,
+        "score": 0.3780066340506459
     },
     {
         "text": "privacy policy",
-        "count": 27
-    },
-    {
-        "text": "technology posts",
-        "count": 27
+        "count": 27,
+        "score": 0.3780066340506459
     },
     {
         "text": "enter valid",
-        "count": 27
-    },
-    {
-        "text": "email address",
-        "count": 27
-    },
-    {
-        "text": "technology",
-        "count": 27
-    },
-    {
-        "text": "footer",
-        "count": 27
-    },
-    {
-        "text": "sign",
-        "count": 27
-    },
-    {
-        "text": "address",
-        "count": 27
+        "count": 27,
+        "score": 0.3780066340506459
     },
     {
         "text": "google terms",
-        "count": 27
+        "count": 27,
+        "score": 0.3780066340506459
     },
     {
         "text": "terms conditions",
-        "count": 27
+        "count": 27,
+        "score": 0.3780066340506459
+    },
+    {
+        "text": "updates innovations",
+        "count": 27,
+        "score": 0.371547669690842
     },
     {
         "text": "sign updates",
-        "count": 27
-    },
-    {
-        "text": "learn",
-        "count": 27
+        "count": 27,
+        "score": 0.371547669690842
     },
     {
         "text": "email",
-        "count": 27
+        "count": 27,
+        "score": 0.3406874168217923
+    },
+    {
+        "text": "innovations",
+        "count": 27,
+        "score": 0.25306893054436064
+    },
+    {
+        "text": "updates",
+        "count": 27,
+        "score": 0.2517650365289003
+    },
+    {
+        "text": "policy",
+        "count": 27,
+        "score": 0.23128973687054857
     },
     {
         "text": "acknowledge",
-        "count": 27
+        "count": 27,
+        "score": 0.230808833315545
+    },
+    {
+        "text": "terms",
+        "count": 27,
+        "score": 0.22920295078188024
+    },
+    {
+        "text": "privacy",
+        "count": 27,
+        "score": 0.2289317440262222
+    },
+    {
+        "text": "enter",
+        "count": 27,
+        "score": 0.22855555971238226
+    },
+    {
+        "text": "conditions",
+        "count": 27,
+        "score": 0.22824351278052366
+    },
+    {
+        "text": "nameexamplecom",
+        "count": 27,
+        "score": 0.2271249445478615
+    },
+    {
+        "text": "accept",
+        "count": 27,
+        "score": 0.2271249445478615
+    },
+    {
+        "text": "valid",
+        "count": 27,
+        "score": 0.2271249445478615
+    },
+    {
+        "text": "sign",
+        "count": 27,
+        "score": 0.2271249445478615
+    },
+    {
+        "text": "email address",
+        "count": 27,
+        "score": 0.18900331702532294
+    },
+    {
+        "text": "technology posts",
+        "count": 27,
+        "score": 0.185773834845421
     },
     {
         "text": "footer links",
-        "count": 27
+        "count": 27,
+        "score": 0.185773834845421
+    },
+    {
+        "text": "technology",
+        "count": 27,
+        "score": 0.1437097246693133
+    },
+    {
+        "text": "learn",
+        "count": 27,
+        "score": 0.13613775475233417
+    },
+    {
+        "text": "address",
+        "count": 27,
+        "score": 0.12481517731667643
+    },
+    {
+        "text": "follow",
+        "count": 27,
+        "score": 0.11875175984362188
+    },
+    {
+        "text": "links",
+        "count": 27,
+        "score": 0.11090751976000772
+    },
+    {
+        "text": "footer",
+        "count": 27,
+        "score": 0.11090751976000772
     },
     {
         "text": "teams",
-        "count": 24
+        "count": 24,
+        "score": 0.18121435406854747
     },
     {
         "text": "explore",
-        "count": 23
+        "count": 23,
+        "score": 0.22649865115692558
     },
     {
         "text": "product",
-        "count": 22
+        "count": 22,
+        "score": 0.16894560642843082
     },
     {
         "text": "teams product",
-        "count": 21
+        "count": 21,
+        "score": 0.2555943409859042
     },
     {
         "text": "explore teams",
-        "count": 21
+        "count": 21,
+        "score": 0.2555943409859042
     },
     {
         "text": "ai",
-        "count": 19
-    },
-    {
-        "text": "models",
-        "count": 13
+        "count": 19,
+        "score": 0.5661314777936667
     },
     {
         "text": "technologies",
-        "count": 13
+        "count": 13,
+        "score": 0.16489683384563972
+    },
+    {
+        "text": "models",
+        "count": 13,
+        "score": 0.13415634883455538
     },
     {
         "text": "generation",
-        "count": 12
+        "count": 12,
+        "score": 0.07145467511452201
     },
     {
         "text": "safety",
-        "count": 11
-    },
-    {
-        "text": "advanced",
-        "count": 11
+        "count": 11,
+        "score": 0.19536084303096726
     },
     {
         "text": "model",
-        "count": 11
+        "count": 11,
+        "score": 0.1045757767640885
     },
     {
-        "text": "complex",
-        "count": 10
-    },
-    {
-        "text": "challenges",
-        "count": 10
-    },
-    {
-        "text": "field",
-        "count": 10
+        "text": "advanced",
+        "count": 11,
+        "score": 0.06367485426112143
     },
     {
         "text": "time",
-        "count": 10
+        "count": 10,
+        "score": 0.06465260800268058
+    },
+    {
+        "text": "challenges",
+        "count": 10,
+        "score": 0.052373419510619905
     },
     {
         "text": "create",
-        "count": 10
+        "count": 10,
+        "score": 0.04214445999683056
     },
     {
-        "text": "science",
-        "count": 9
+        "text": "field",
+        "count": 10,
+        "score": 0.0376019386964519
     },
     {
-        "text": "understanding",
-        "count": 9
-    },
-    {
-        "text": "image",
-        "count": 9
-    },
-    {
-        "text": "community",
-        "count": 9
-    },
-    {
-        "text": "real",
-        "count": 9
-    },
-    {
-        "text": "including",
-        "count": 9
+        "text": "complex",
+        "count": 10,
+        "score": 0.03351814061581059
     },
     {
         "text": "breakthroughs",
-        "count": 9
+        "count": 9,
+        "score": 0.1885306899269663
     },
     {
-        "text": "range",
-        "count": 9
+        "text": "community",
+        "count": 9,
+        "score": 0.06264720831457997
+    },
+    {
+        "text": "image",
+        "count": 9,
+        "score": 0.06080780995235606
+    },
+    {
+        "text": "science",
+        "count": 9,
+        "score": 0.04444142284442583
+    },
+    {
+        "text": "real",
+        "count": 9,
+        "score": 0.03615581413291301
     },
     {
         "text": "building",
-        "count": 9
+        "count": 9,
+        "score": 0.0331425467137662
     },
     {
-        "text": "artificial intelligence",
-        "count": 8
+        "text": "including",
+        "count": 9,
+        "score": 0.02944810931598844
     },
     {
-        "text": "capabilities",
-        "count": 8
+        "text": "understanding",
+        "count": 9,
+        "score": 0.024592840471905866
     },
     {
-        "text": "support",
-        "count": 8
-    },
-    {
-        "text": "art",
-        "count": 8
-    },
-    {
-        "text": "intelligence",
-        "count": 8
-    },
-    {
-        "text": "visual",
-        "count": 8
-    },
-    {
-        "text": "artificial",
-        "count": 8
-    },
-    {
-        "text": "generative",
-        "count": 8
+        "text": "range",
+        "count": 9,
+        "score": 0.024359811554045537
     },
     {
         "text": "responsibility",
-        "count": 8
-    },
-    {
-        "text": "wide",
-        "count": 8
-    },
-    {
-        "text": "challenge",
-        "count": 8
-    },
-    {
-        "text": "david",
-        "count": 8
-    },
-    {
-        "text": "responsibly",
-        "count": 8
-    },
-    {
-        "text": "researchers",
-        "count": 8
+        "count": 8,
+        "score": 0.18347035384509877
     },
     {
         "text": "learning",
-        "count": 8
+        "count": 8,
+        "score": 0.05441672267164823
+    },
+    {
+        "text": "artificial intelligence",
+        "count": 8,
+        "score": 0.05169743461801744
+    },
+    {
+        "text": "intelligence",
+        "count": 8,
+        "score": 0.05106891783485087
+    },
+    {
+        "text": "researchers",
+        "count": 8,
+        "score": 0.04166480727306814
+    },
+    {
+        "text": "artificial",
+        "count": 8,
+        "score": 0.040611867799964424
     },
     {
         "text": "future",
-        "count": 8
+        "count": 8,
+        "score": 0.04024407490472466
+    },
+    {
+        "text": "support",
+        "count": 8,
+        "score": 0.038509545654871295
+    },
+    {
+        "text": "capabilities",
+        "count": 8,
+        "score": 0.03571366035414139
+    },
+    {
+        "text": "david",
+        "count": 8,
+        "score": 0.03431423613624601
+    },
+    {
+        "text": "responsibly",
+        "count": 8,
+        "score": 0.026544097115741242
+    },
+    {
+        "text": "challenge",
+        "count": 8,
+        "score": 0.02633591280351706
+    },
+    {
+        "text": "art",
+        "count": 8,
+        "score": 0.0232165469425297
+    },
+    {
+        "text": "generative",
+        "count": 8,
+        "score": 0.019690056897340623
+    },
+    {
+        "text": "wide",
+        "count": 8,
+        "score": 0.016939286828270537
+    },
+    {
+        "text": "visual",
+        "count": 8,
+        "score": 0.01602203753807142
     },
     {
         "text": "gemini",
-        "count": 7
-    },
-    {
-        "text": "process",
-        "count": 7
-    },
-    {
-        "text": "ability",
-        "count": 7
-    },
-    {
-        "text": "creating",
-        "count": 7
-    },
-    {
-        "text": "people",
-        "count": 7
-    },
-    {
-        "text": "single",
-        "count": 7
-    },
-    {
-        "text": "capable",
-        "count": 7
-    },
-    {
-        "text": "potential",
-        "count": 7
-    },
-    {
-        "text": "scientific",
-        "count": 7
-    },
-    {
-        "text": "experience",
-        "count": 7
-    },
-    {
-        "text": "accurately",
-        "count": 7
-    },
-    {
-        "text": "training",
-        "count": 7
+        "count": 7,
+        "score": 1.7757325920126703
     },
     {
         "text": "video",
-        "count": 7
+        "count": 7,
+        "score": 0.061503679864157106
     },
     {
-        "text": "leading",
-        "count": 7
+        "text": "scientific",
+        "count": 7,
+        "score": 0.059215742343930865
+    },
+    {
+        "text": "potential",
+        "count": 7,
+        "score": 0.04199138231847211
+    },
+    {
+        "text": "people",
+        "count": 7,
+        "score": 0.0365611843384489
+    },
+    {
+        "text": "single",
+        "count": 7,
+        "score": 0.03548621868481516
     },
     {
         "text": "watch",
-        "count": 7
+        "count": 7,
+        "score": 0.03219860148512514
+    },
+    {
+        "text": "training",
+        "count": 7,
+        "score": 0.029142039718861895
+    },
+    {
+        "text": "experience",
+        "count": 7,
+        "score": 0.021635731509220484
+    },
+    {
+        "text": "ability",
+        "count": 7,
+        "score": 0.019527853755543775
+    },
+    {
+        "text": "creating",
+        "count": 7,
+        "score": 0.018594984182440946
+    },
+    {
+        "text": "leading",
+        "count": 7,
+        "score": 0.01620565923494971
     },
     {
         "text": "wide range",
-        "count": 7
+        "count": 7,
+        "score": 0.015607666468638473
     },
     {
-        "text": "critical",
-        "count": 6
+        "text": "capable",
+        "count": 7,
+        "score": 0.015515090040917069
     },
     {
-        "text": "based",
-        "count": 6
+        "text": "process",
+        "count": 7,
+        "score": 0.015321417550551135
     },
     {
-        "text": "understand",
-        "count": 6
-    },
-    {
-        "text": "tom",
-        "count": 6
-    },
-    {
-        "text": "helping",
-        "count": 6
-    },
-    {
-        "text": "prompt",
-        "count": 6
-    },
-    {
-        "text": "john",
-        "count": 6
-    },
-    {
-        "text": "engineering",
-        "count": 6
-    },
-    {
-        "text": "data",
-        "count": 6
-    },
-    {
-        "text": "human",
-        "count": 6
-    },
-    {
-        "text": "developing",
-        "count": 6
-    },
-    {
-        "text": "news",
-        "count": 6
-    },
-    {
-        "text": "hassabis",
-        "count": 6
-    },
-    {
-        "text": "advancing",
-        "count": 6
-    },
-    {
-        "text": "designed",
-        "count": 6
-    },
-    {
-        "text": "identifying",
-        "count": 6
-    },
-    {
-        "text": "van",
-        "count": 6
-    },
-    {
-        "text": "build",
-        "count": 6
-    },
-    {
-        "text": "zhang",
-        "count": 6
-    },
-    {
-        "text": "wang",
-        "count": 6
-    },
-    {
-        "text": "natural",
-        "count": 6
-    },
-    {
-        "text": "transform",
-        "count": 6
-    },
-    {
-        "text": "ldquo",
-        "count": 6
-    },
-    {
-        "text": "deep",
-        "count": 6
-    },
-    {
-        "text": "performance",
-        "count": 6
-    },
-    {
-        "text": "chen",
-        "count": 6
-    },
-    {
-        "text": "quality",
-        "count": 6
-    },
-    {
-        "text": "tools",
-        "count": 6
-    },
-    {
-        "text": "content",
-        "count": 6
-    },
-    {
-        "text": "systems",
-        "count": 6
-    },
-    {
-        "text": "han",
-        "count": 6
-    },
-    {
-        "text": "life",
-        "count": 6
-    },
-    {
-        "text": "demis",
-        "count": 6
-    },
-    {
-        "text": "accuracy",
-        "count": 6
-    },
-    {
-        "text": "camera",
-        "count": 6
-    },
-    {
-        "text": "advance",
-        "count": 6
-    },
-    {
-        "text": "gupta",
-        "count": 6
-    },
-    {
-        "text": "demis hassabis",
-        "count": 6
+        "text": "accurately",
+        "count": 7,
+        "score": 0.013776624010534397
     },
     {
         "text": "discover",
-        "count": 6
+        "count": 6,
+        "score": 0.10709436514946548
     },
     {
-        "text": "develop",
-        "count": 5
+        "text": "prompt",
+        "count": 6,
+        "score": 0.07229771669093751
     },
     {
-        "text": "biology",
-        "count": 5
+        "text": "systems",
+        "count": 6,
+        "score": 0.05789164639532527
     },
     {
-        "text": "view",
-        "count": 5
+        "text": "chen",
+        "count": 6,
+        "score": 0.04791363933285113
     },
     {
-        "text": "action",
-        "count": 5
+        "text": "helping",
+        "count": 6,
+        "score": 0.0410068403547908
     },
     {
-        "text": "resources",
-        "count": 5
+        "text": "tools",
+        "count": 6,
+        "score": 0.03563122974535427
     },
     {
-        "text": "scenes",
-        "count": 5
+        "text": "engineering",
+        "count": 6,
+        "score": 0.034965013898579846
     },
     {
-        "text": "kim",
-        "count": 5
+        "text": "wang",
+        "count": 6,
+        "score": 0.029253933129336177
     },
     {
-        "text": "videos",
-        "count": 5
+        "text": "quality",
+        "count": 6,
+        "score": 0.02803771059493223
     },
     {
-        "text": "agentic",
-        "count": 5
+        "text": "content",
+        "count": 6,
+        "score": 0.026779018096727746
     },
     {
-        "text": "biggest",
-        "count": 5
+        "text": "based",
+        "count": 6,
+        "score": 0.02642931393621142
     },
     {
-        "text": "creative",
-        "count": 5
+        "text": "data",
+        "count": 6,
+        "score": 0.026109261202656504
     },
     {
-        "text": "daniel",
-        "count": 5
+        "text": "transform",
+        "count": 6,
+        "score": 0.02597460444201783
     },
     {
-        "text": "enables",
-        "count": 5
+        "text": "designed",
+        "count": 6,
+        "score": 0.025582604794876524
     },
     {
-        "text": "scientists",
-        "count": 5
+        "text": "human",
+        "count": 6,
+        "score": 0.025468857521819085
     },
     {
-        "text": "march",
-        "count": 5
+        "text": "advancing",
+        "count": 6,
+        "score": 0.025191455451806604
     },
     {
-        "text": "generative ai",
-        "count": 5
+        "text": "camera",
+        "count": 6,
+        "score": 0.02166804607072997
     },
     {
-        "text": "unique",
-        "count": 5
+        "text": "build",
+        "count": 6,
+        "score": 0.0213795050614049
     },
     {
-        "text": "helps",
-        "count": 5
+        "text": "van",
+        "count": 6,
+        "score": 0.021139221530879784
     },
     {
-        "text": "language",
-        "count": 5
+        "text": "understand",
+        "count": 6,
+        "score": 0.020585336208483185
     },
     {
-        "text": "level",
-        "count": 5
+        "text": "han",
+        "count": 6,
+        "score": 0.01781236738811284
     },
     {
-        "text": "access",
-        "count": 5
+        "text": "zhang",
+        "count": 6,
+        "score": 0.017432765537157655
     },
     {
-        "text": "development",
-        "count": 5
+        "text": "ldquo",
+        "count": 6,
+        "score": 0.017326648828145337
     },
     {
-        "text": "patterns",
-        "count": 5
+        "text": "advance",
+        "count": 6,
+        "score": 0.016786955700664425
     },
     {
-        "text": "2024",
-        "count": 5
+        "text": "life",
+        "count": 6,
+        "score": 0.01653260720164141
     },
     {
-        "text": "generated",
-        "count": 5
+        "text": "accuracy",
+        "count": 6,
+        "score": 0.01649002868021456
     },
     {
-        "text": "enable",
-        "count": 5
+        "text": "performance",
+        "count": 6,
+        "score": 0.01556607949088527
     },
     {
-        "text": "approach",
-        "count": 5
+        "text": "john",
+        "count": 6,
+        "score": 0.015051481246003275
     },
     {
-        "text": "imagen",
-        "count": 5
+        "text": "demis hassabis",
+        "count": 6,
+        "score": 0.015024183731618892
     },
     {
-        "text": "instructions",
-        "count": 5
+        "text": "critical",
+        "count": 6,
+        "score": 0.014226148448065922
     },
     {
-        "text": "impact",
-        "count": 5
+        "text": "news",
+        "count": 6,
+        "score": 0.014006932225822038
     },
     {
-        "text": "images",
-        "count": 5
+        "text": "hassabis",
+        "count": 6,
+        "score": 0.013511235377213557
     },
     {
-        "text": "progress",
-        "count": 5
+        "text": "demis",
+        "count": 6,
+        "score": 0.013511235377213557
     },
     {
-        "text": "users",
-        "count": 5
+        "text": "tom",
+        "count": 6,
+        "score": 0.013006988064495255
     },
     {
-        "text": "3d",
-        "count": 5
+        "text": "identifying",
+        "count": 6,
+        "score": 0.012226397828529433
     },
     {
-        "text": "industry",
-        "count": 5
+        "text": "deep",
+        "count": 6,
+        "score": 0.011573251060722673
     },
     {
-        "text": "project",
-        "count": 5
+        "text": "gupta",
+        "count": 6,
+        "score": 0.009379794327399592
     },
     {
-        "text": "eleni",
-        "count": 5
+        "text": "developing",
+        "count": 6,
+        "score": 0.00896869771305529
     },
     {
-        "text": "frame",
-        "count": 5
-    },
-    {
-        "text": "structures",
-        "count": 5
-    },
-    {
-        "text": "solving",
-        "count": 5
-    },
-    {
-        "text": "machine learning",
-        "count": 5
-    },
-    {
-        "text": "generates",
-        "count": 5
-    },
-    {
-        "text": "security",
-        "count": 5
+        "text": "natural",
+        "count": 6,
+        "score": 0.007814683452556124
     },
     {
         "text": "alphafold",
-        "count": 5
+        "count": 5,
+        "score": 0.2753910843618193
     },
     {
-        "text": "lab",
-        "count": 5
-    },
-    {
-        "text": "intricate",
-        "count": 5
-    },
-    {
-        "text": "key",
-        "count": 5
-    },
-    {
-        "text": "scene",
-        "count": 5
-    },
-    {
-        "text": "mathematics",
-        "count": 5
-    },
-    {
-        "text": "aim",
-        "count": 5
-    },
-    {
-        "text": "ensure",
-        "count": 5
-    },
-    {
-        "text": "products",
-        "count": 5
-    },
-    {
-        "text": "city",
-        "count": 5
-    },
-    {
-        "text": "experiences",
-        "count": 5
-    },
-    {
-        "text": "exploring",
-        "count": 5
-    },
-    {
-        "text": "applications",
-        "count": 5
-    },
-    {
-        "text": "sequence",
-        "count": 5
-    },
-    {
-        "text": "machine",
-        "count": 5
-    },
-    {
-        "text": "alphago",
-        "count": 5
+        "text": "impact",
+        "count": 5,
+        "score": 0.08139329230161149
     },
     {
         "text": "2025",
-        "count": 5
+        "count": 5,
+        "score": 0.07679993835659409
     },
     {
-        "text": "improve",
-        "count": 5
+        "text": "generated",
+        "count": 5,
+        "score": 0.05433563027546879
     },
     {
-        "text": "responsible",
-        "count": 5
+        "text": "structures",
+        "count": 5,
+        "score": 0.05081022441997428
+    },
+    {
+        "text": "access",
+        "count": 5,
+        "score": 0.049648653481024554
+    },
+    {
+        "text": "3d",
+        "count": 5,
+        "score": 0.04417574074080606
+    },
+    {
+        "text": "project",
+        "count": 5,
+        "score": 0.041759315450705096
+    },
+    {
+        "text": "biggest",
+        "count": 5,
+        "score": 0.040340581038255455
+    },
+    {
+        "text": "solving",
+        "count": 5,
+        "score": 0.0381189266193317
+    },
+    {
+        "text": "march",
+        "count": 5,
+        "score": 0.03757221009431681
+    },
+    {
+        "text": "industry",
+        "count": 5,
+        "score": 0.03565878286539258
+    },
+    {
+        "text": "2024",
+        "count": 5,
+        "score": 0.031166858782573373
+    },
+    {
+        "text": "products",
+        "count": 5,
+        "score": 0.030431892487785703
+    },
+    {
+        "text": "biology",
+        "count": 5,
+        "score": 0.029213099733700183
+    },
+    {
+        "text": "imagen",
+        "count": 5,
+        "score": 0.028633577348302578
+    },
+    {
+        "text": "users",
+        "count": 5,
+        "score": 0.027999166857410794
     },
     {
         "text": "generate",
-        "count": 5
+        "count": 5,
+        "score": 0.02784134831870201
     },
     {
-        "text": "faster",
-        "count": 4
+        "text": "resources",
+        "count": 5,
+        "score": 0.027678612223884923
     },
     {
-        "text": "xu",
-        "count": 4
+        "text": "daniel",
+        "count": 5,
+        "score": 0.025374076939726483
     },
     {
-        "text": "xiao",
-        "count": 4
+        "text": "images",
+        "count": 5,
+        "score": 0.025109012869023475
     },
     {
-        "text": "zhou",
-        "count": 4
+        "text": "lab",
+        "count": 5,
+        "score": 0.025000678764490962
     },
     {
-        "text": "guidance",
-        "count": 4
+        "text": "view",
+        "count": 5,
+        "score": 0.022207871470981418
     },
     {
-        "text": "collins",
-        "count": 4
+        "text": "agentic",
+        "count": 5,
+        "score": 0.021781873784968476
     },
     {
-        "text": "types",
-        "count": 4
+        "text": "scientists",
+        "count": 5,
+        "score": 0.02141239220661064
     },
     {
-        "text": "lighting",
-        "count": 4
+        "text": "machine",
+        "count": 5,
+        "score": 0.020842595853181628
     },
     {
-        "text": "benchmark",
-        "count": 4
+        "text": "alphago",
+        "count": 5,
+        "score": 0.020347723927048866
     },
     {
-        "text": "jan",
-        "count": 4
+        "text": "machine learning",
+        "count": 5,
+        "score": 0.0200008071309765
     },
     {
-        "text": "accelerate",
-        "count": 4
+        "text": "development",
+        "count": 5,
+        "score": 0.01986435836863862
     },
     {
-        "text": "ai models",
-        "count": 4
+        "text": "language",
+        "count": 5,
+        "score": 0.019730388079054785
     },
     {
-        "text": "enabling",
-        "count": 4
+        "text": "level",
+        "count": 5,
+        "score": 0.019336692700989193
     },
     {
-        "text": "marc",
-        "count": 4
+        "text": "approach",
+        "count": 5,
+        "score": 0.018526773645413764
     },
     {
-        "text": "video generation",
-        "count": 4
+        "text": "action",
+        "count": 5,
+        "score": 0.017594704739246063
     },
     {
-        "text": "partners",
-        "count": 4
+        "text": "responsible",
+        "count": 5,
+        "score": 0.017327066727583072
     },
     {
-        "text": "capability",
-        "count": 4
+        "text": "security",
+        "count": 5,
+        "score": 0.017287403986789938
     },
     {
-        "text": "fall",
-        "count": 4
+        "text": "scene",
+        "count": 5,
+        "score": 0.015787093258776964
     },
     {
-        "text": "innovations google",
-        "count": 4
+        "text": "videos",
+        "count": 5,
+        "score": 0.015024475668885068
     },
     {
-        "text": "walker",
-        "count": 4
+        "text": "eleni",
+        "count": 5,
+        "score": 0.014435580099883024
     },
     {
-        "text": "underpin",
-        "count": 4
+        "text": "experiences",
+        "count": 5,
+        "score": 0.013936054763938704
     },
     {
-        "text": "version",
-        "count": 4
+        "text": "creative",
+        "count": 5,
+        "score": 0.013924968285674069
     },
     {
-        "text": "predicts",
-        "count": 4
+        "text": "enable",
+        "count": 5,
+        "score": 0.013624071469621702
     },
     {
-        "text": "scale",
-        "count": 4
+        "text": "kim",
+        "count": 5,
+        "score": 0.013573348316421692
     },
     {
-        "text": "music",
-        "count": 4
+        "text": "enables",
+        "count": 5,
+        "score": 0.013486254141639033
     },
     {
-        "text": "vikas",
-        "count": 4
+        "text": "frame",
+        "count": 5,
+        "score": 0.013318765371490245
     },
     {
-        "text": "details",
-        "count": 4
+        "text": "improve",
+        "count": 5,
+        "score": 0.012986036068030003
     },
     {
-        "text": "efforts",
-        "count": 4
+        "text": "unique",
+        "count": 5,
+        "score": 0.012902959105427356
     },
     {
-        "text": "colors",
-        "count": 4
+        "text": "generative ai",
+        "count": 5,
+        "score": 0.012631743092194943
     },
     {
-        "text": "solution",
-        "count": 4
+        "text": "scenes",
+        "count": 5,
+        "score": 0.012567670465465242
     },
     {
-        "text": "filters",
-        "count": 4
+        "text": "progress",
+        "count": 5,
+        "score": 0.012538611278127042
     },
     {
-        "text": "edge",
-        "count": 4
+        "text": "exploring",
+        "count": 5,
+        "score": 0.012256695828084167
     },
     {
-        "text": "interactions",
-        "count": 4
+        "text": "ensure",
+        "count": 5,
+        "score": 0.012095074048125699
     },
     {
-        "text": "countries",
-        "count": 4
+        "text": "applications",
+        "count": 5,
+        "score": 0.012021442123392585
     },
     {
-        "text": "feedback",
-        "count": 4
+        "text": "sequence",
+        "count": 5,
+        "score": 0.011723120987666003
     },
     {
-        "text": "era",
-        "count": 4
+        "text": "mathematics",
+        "count": 5,
+        "score": 0.011673062721527015
     },
     {
-        "text": "extensive",
-        "count": 4
+        "text": "instructions",
+        "count": 5,
+        "score": 0.01149702518617144
     },
     {
-        "text": "paul",
-        "count": 4
+        "text": "generates",
+        "count": 5,
+        "score": 0.011441152704737606
     },
     {
-        "text": "share",
-        "count": 4
+        "text": "city",
+        "count": 5,
+        "score": 0.01070137964304734
     },
     {
-        "text": "sander dieleman",
-        "count": 4
+        "text": "intricate",
+        "count": 5,
+        "score": 0.010604912418766484
     },
     {
-        "text": "outputs",
-        "count": 4
+        "text": "helps",
+        "count": 5,
+        "score": 0.010299689291739751
     },
     {
-        "text": "launched",
-        "count": 4
+        "text": "aim",
+        "count": 5,
+        "score": 0.010237649274304761
     },
     {
-        "text": "ai community",
-        "count": 4
+        "text": "patterns",
+        "count": 5,
+        "score": 0.008272428715747257
     },
     {
-        "text": "shot",
-        "count": 4
+        "text": "develop",
+        "count": 5,
+        "score": 0.008145648696308724
     },
     {
-        "text": "news innovations",
-        "count": 4
-    },
-    {
-        "text": "figure",
-        "count": 4
-    },
-    {
-        "text": "garcia",
-        "count": 4
-    },
-    {
-        "text": "day",
-        "count": 4
-    },
-    {
-        "text": "effective",
-        "count": 4
-    },
-    {
-        "text": "continue",
-        "count": 4
-    },
-    {
-        "text": "andrew",
-        "count": 4
-    },
-    {
-        "text": "dieleman",
-        "count": 4
-    },
-    {
-        "text": "liang",
-        "count": 4
-    },
-    {
-        "text": "glowing",
-        "count": 4
-    },
-    {
-        "text": "dan",
-        "count": 4
-    },
-    {
-        "text": "25",
-        "count": 4
-    },
-    {
-        "text": "close",
-        "count": 4
-    },
-    {
-        "text": "standing",
-        "count": 4
-    },
-    {
-        "text": "knowledge",
-        "count": 4
-    },
-    {
-        "text": "identify",
-        "count": 4
-    },
-    {
-        "text": "billions",
-        "count": 4
-    },
-    {
-        "text": "rich",
-        "count": 4
-    },
-    {
-        "text": "score",
-        "count": 4
-    },
-    {
-        "text": "eleni shaw",
-        "count": 4
-    },
-    {
-        "text": "styles",
-        "count": 4
-    },
-    {
-        "text": "ai systems",
-        "count": 4
+        "text": "key",
+        "count": 5,
+        "score": 0.0067822255154566385
     },
     {
         "text": "responsibility safety",
-        "count": 4
+        "count": 4,
+        "score": 0.2931688809436329
     },
     {
-        "text": "accessible",
-        "count": 4
+        "text": "ai systems",
+        "count": 4,
+        "score": 0.06066130392616661
     },
     {
-        "text": "extend",
-        "count": 4
-    },
-    {
-        "text": "frames",
-        "count": 4
-    },
-    {
-        "text": "blue",
-        "count": 4
-    },
-    {
-        "text": "unlock",
-        "count": 4
-    },
-    {
-        "text": "depth",
-        "count": 4
-    },
-    {
-        "text": "michael",
-        "count": 4
-    },
-    {
-        "text": "team",
-        "count": 4
-    },
-    {
-        "text": "simon",
-        "count": 4
-    },
-    {
-        "text": "ai powered",
-        "count": 4
-    },
-    {
-        "text": "huang",
-        "count": 4
-    },
-    {
-        "text": "powered",
-        "count": 4
-    },
-    {
-        "text": "evaluations",
-        "count": 4
-    },
-    {
-        "text": "sign news",
-        "count": 4
-    },
-    {
-        "text": "shaw",
-        "count": 4
-    },
-    {
-        "text": "black",
-        "count": 4
-    },
-    {
-        "text": "hope",
-        "count": 4
-    },
-    {
-        "text": "april",
-        "count": 4
-    },
-    {
-        "text": "animation",
-        "count": 4
-    },
-    {
-        "text": "diverse",
-        "count": 4
-    },
-    {
-        "text": "generation models",
-        "count": 4
-    },
-    {
-        "text": "include",
-        "count": 4
-    },
-    {
-        "text": "sharma",
-        "count": 4
-    },
-    {
-        "text": "individual",
-        "count": 4
-    },
-    {
-        "text": "examples",
-        "count": 4
-    },
-    {
-        "text": "created",
-        "count": 4
-    },
-    {
-        "text": "rui",
-        "count": 4
-    },
-    {
-        "text": "trained",
-        "count": 4
-    },
-    {
-        "text": "common",
-        "count": 4
-    },
-    {
-        "text": "evaluation",
-        "count": 4
-    },
-    {
-        "text": "fruchter",
-        "count": 4
-    },
-    {
-        "text": "benefit",
-        "count": 4
-    },
-    {
-        "text": "step",
-        "count": 4
-    },
-    {
-        "text": "global",
-        "count": 4
-    },
-    {
-        "text": "sander",
-        "count": 4
-    },
-    {
-        "text": "focus",
-        "count": 4
-    },
-    {
-        "text": "jonas",
-        "count": 4
-    },
-    {
-        "text": "frank",
-        "count": 4
-    },
-    {
-        "text": "powerful",
-        "count": 4
-    },
-    {
-        "text": "effects",
-        "count": 4
-    },
-    {
-        "text": "founder",
-        "count": 4
+        "text": "25",
+        "count": 4,
+        "score": 0.05692660453503941
     },
     {
         "text": "agi",
-        "count": 4
+        "count": 4,
+        "score": 0.04708000240566538
     },
     {
-        "text": "light",
-        "count": 4
+        "text": "ai models",
+        "count": 4,
+        "score": 0.037122289924268304
     },
     {
-        "text": "paper",
-        "count": 4
+        "text": "underpin",
+        "count": 4,
+        "score": 0.03521428558937936
     },
     {
-        "text": "led",
-        "count": 4
+        "text": "team",
+        "count": 4,
+        "score": 0.03093142775407762
     },
     {
-        "text": "safety security",
-        "count": 4
+        "text": "shot",
+        "count": 4,
+        "score": 0.02788902299572414
+    },
+    {
+        "text": "accelerate",
+        "count": 4,
+        "score": 0.025497709020532805
+    },
+    {
+        "text": "era",
+        "count": 4,
+        "score": 0.022802221539122904
+    },
+    {
+        "text": "benefit",
+        "count": 4,
+        "score": 0.02100445576560855
+    },
+    {
+        "text": "predicts",
+        "count": 4,
+        "score": 0.021003886380462702
+    },
+    {
+        "text": "identify",
+        "count": 4,
+        "score": 0.02043629828002079
+    },
+    {
+        "text": "ai powered",
+        "count": 4,
+        "score": 0.02011503982671591
+    },
+    {
+        "text": "countries",
+        "count": 4,
+        "score": 0.01963185721116722
+    },
+    {
+        "text": "interactions",
+        "count": 4,
+        "score": 0.019314113778314837
     },
     {
         "text": "10",
-        "count": 4
+        "count": 4,
+        "score": 0.019098066657202838
     },
     {
-        "text": "ibrahim",
-        "count": 4
+        "text": "scale",
+        "count": 4,
+        "score": 0.018749537936364448
     },
     {
-        "text": "train",
-        "count": 4
+        "text": "music",
+        "count": 4,
+        "score": 0.01841279889526641
+    },
+    {
+        "text": "powered",
+        "count": 4,
+        "score": 0.017617534497022563
+    },
+    {
+        "text": "diverse",
+        "count": 4,
+        "score": 0.017109359793591163
+    },
+    {
+        "text": "shaw",
+        "count": 4,
+        "score": 0.016555450081912775
+    },
+    {
+        "text": "dan",
+        "count": 4,
+        "score": 0.016368268657540683
+    },
+    {
+        "text": "benchmark",
+        "count": 4,
+        "score": 0.015450853783989835
+    },
+    {
+        "text": "light",
+        "count": 4,
+        "score": 0.015267377610935624
+    },
+    {
+        "text": "effective",
+        "count": 4,
+        "score": 0.014990980729019089
+    },
+    {
+        "text": "eleni shaw",
+        "count": 4,
+        "score": 0.014480399820177415
+    },
+    {
+        "text": "hope",
+        "count": 4,
+        "score": 0.014309795942321485
+    },
+    {
+        "text": "billions",
+        "count": 4,
+        "score": 0.013953092433567817
+    },
+    {
+        "text": "evaluations",
+        "count": 4,
+        "score": 0.013625339486630502
+    },
+    {
+        "text": "michael",
+        "count": 4,
+        "score": 0.013557629106060967
+    },
+    {
+        "text": "jan",
+        "count": 4,
+        "score": 0.01193941458969051
+    },
+    {
+        "text": "evaluation",
+        "count": 4,
+        "score": 0.011928823210415109
+    },
+    {
+        "text": "safety security",
+        "count": 4,
+        "score": 0.011921699705588179
+    },
+    {
+        "text": "zhou",
+        "count": 4,
+        "score": 0.010996374810080808
+    },
+    {
+        "text": "include",
+        "count": 4,
+        "score": 0.010970813762854841
+    },
+    {
+        "text": "enabling",
+        "count": 4,
+        "score": 0.010932613419674594
+    },
+    {
+        "text": "lighting",
+        "count": 4,
+        "score": 0.010897414866131534
+    },
+    {
+        "text": "unlock",
+        "count": 4,
+        "score": 0.010581405517577103
+    },
+    {
+        "text": "types",
+        "count": 4,
+        "score": 0.010441910452980208
+    },
+    {
+        "text": "day",
+        "count": 4,
+        "score": 0.010356240689136289
+    },
+    {
+        "text": "frames",
+        "count": 4,
+        "score": 0.010235546071851951
+    },
+    {
+        "text": "trained",
+        "count": 4,
+        "score": 0.010121899838526932
+    },
+    {
+        "text": "huang",
+        "count": 4,
+        "score": 0.01011803981673824
+    },
+    {
+        "text": "styles",
+        "count": 4,
+        "score": 0.010109126720660491
+    },
+    {
+        "text": "details",
+        "count": 4,
+        "score": 0.010035794355014562
+    },
+    {
+        "text": "simon",
+        "count": 4,
+        "score": 0.009946577602726873
+    },
+    {
+        "text": "founder",
+        "count": 4,
+        "score": 0.00993222077052788
+    },
+    {
+        "text": "animation",
+        "count": 4,
+        "score": 0.009789918281603117
+    },
+    {
+        "text": "individual",
+        "count": 4,
+        "score": 0.009601985411795078
+    },
+    {
+        "text": "solution",
+        "count": 4,
+        "score": 0.009596770922467402
+    },
+    {
+        "text": "paper",
+        "count": 4,
+        "score": 0.009432220317270179
+    },
+    {
+        "text": "powerful",
+        "count": 4,
+        "score": 0.009250838077698973
+    },
+    {
+        "text": "ai community",
+        "count": 4,
+        "score": 0.009242873304130301
+    },
+    {
+        "text": "global",
+        "count": 4,
+        "score": 0.009062959968807108
+    },
+    {
+        "text": "efforts",
+        "count": 4,
+        "score": 0.00904196949142351
+    },
+    {
+        "text": "score",
+        "count": 4,
+        "score": 0.008964904264509275
+    },
+    {
+        "text": "examples",
+        "count": 4,
+        "score": 0.008951487880627492
+    },
+    {
+        "text": "common",
+        "count": 4,
+        "score": 0.008765920722928568
+    },
+    {
+        "text": "colors",
+        "count": 4,
+        "score": 0.008663893203955124
+    },
+    {
+        "text": "led",
+        "count": 4,
+        "score": 0.00859607722560975
+    },
+    {
+        "text": "video generation",
+        "count": 4,
+        "score": 0.008595197741559113
+    },
+    {
+        "text": "launched",
+        "count": 4,
+        "score": 0.00855302365671439
+    },
+    {
+        "text": "paul",
+        "count": 4,
+        "score": 0.008309721552723774
     },
     {
         "text": "lee",
-        "count": 4
+        "count": 4,
+        "score": 0.008309721552723774
+    },
+    {
+        "text": "depth",
+        "count": 4,
+        "score": 0.008215291773167875
+    },
+    {
+        "text": "blue",
+        "count": 4,
+        "score": 0.007929638581219308
+    },
+    {
+        "text": "faster",
+        "count": 4,
+        "score": 0.007798173536211895
+    },
+    {
+        "text": "rich",
+        "count": 4,
+        "score": 0.007727747676747848
+    },
+    {
+        "text": "fall",
+        "count": 4,
+        "score": 0.007577425716149941
+    },
+    {
+        "text": "close",
+        "count": 4,
+        "score": 0.007573115192997594
+    },
+    {
+        "text": "share",
+        "count": 4,
+        "score": 0.007563853538460056
+    },
+    {
+        "text": "april",
+        "count": 4,
+        "score": 0.0073626914616990655
+    },
+    {
+        "text": "andrew",
+        "count": 4,
+        "score": 0.0072625870467927615
+    },
+    {
+        "text": "filters",
+        "count": 4,
+        "score": 0.00706111632566134
+    },
+    {
+        "text": "step",
+        "count": 4,
+        "score": 0.0068746268845376966
+    },
+    {
+        "text": "glowing",
+        "count": 4,
+        "score": 0.006844043771098442
+    },
+    {
+        "text": "rui",
+        "count": 4,
+        "score": 0.006745702767070054
+    },
+    {
+        "text": "sander dieleman",
+        "count": 4,
+        "score": 0.006637262565275455
+    },
+    {
+        "text": "created",
+        "count": 4,
+        "score": 0.006508709787635459
+    },
+    {
+        "text": "innovations google",
+        "count": 4,
+        "score": 0.006458964359803859
+    },
+    {
+        "text": "news innovations",
+        "count": 4,
+        "score": 0.006458964359803859
+    },
+    {
+        "text": "sign news",
+        "count": 4,
+        "score": 0.006458964359803859
+    },
+    {
+        "text": "frank",
+        "count": 4,
+        "score": 0.006452907830722934
     },
     {
         "text": "eric",
-        "count": 4
+        "count": 4,
+        "score": 0.006377032995066116
     },
     {
-        "text": "gemini 2.5",
-        "count": 3
+        "text": "capability",
+        "count": 4,
+        "score": 0.006337330432294258
     },
     {
-        "text": "characters",
-        "count": 3
+        "text": "focus",
+        "count": 4,
+        "score": 0.006298257085090982
     },
     {
-        "text": "researcher",
-        "count": 3
+        "text": "ibrahim",
+        "count": 4,
+        "score": 0.006254692762393518
     },
     {
-        "text": "rj",
-        "count": 3
+        "text": "extend",
+        "count": 4,
+        "score": 0.006233072164866408
     },
     {
-        "text": "anand",
-        "count": 3
+        "text": "train",
+        "count": 4,
+        "score": 0.006214346477876484
     },
     {
-        "text": "developed",
-        "count": 3
+        "text": "accessible",
+        "count": 4,
+        "score": 0.006195975201869478
     },
     {
-        "text": "blok",
-        "count": 3
+        "text": "continue",
+        "count": 4,
+        "score": 0.0061419293366524
     },
     {
-        "text": "capture",
-        "count": 3
+        "text": "sharma",
+        "count": 4,
+        "score": 0.006126242546679759
     },
     {
-        "text": "discovery",
-        "count": 3
+        "text": "knowledge",
+        "count": 4,
+        "score": 0.006096368685430553
     },
     {
-        "text": "wearing",
-        "count": 3
+        "text": "edge",
+        "count": 4,
+        "score": 0.006064243275270261
     },
     {
-        "text": "generated content",
-        "count": 3
+        "text": "xiao",
+        "count": 4,
+        "score": 0.0060574715213715
     },
     {
-        "text": "output",
-        "count": 3
+        "text": "walker",
+        "count": 4,
+        "score": 0.0060574715213715
     },
     {
-        "text": "previous",
-        "count": 3
+        "text": "effects",
+        "count": 4,
+        "score": 0.006030437733777504
     },
     {
-        "text": "wenlei zhou",
-        "count": 3
+        "text": "dieleman",
+        "count": 4,
+        "score": 0.006000227866206048
     },
     {
-        "text": "gratitude",
-        "count": 3
+        "text": "sander",
+        "count": 4,
+        "score": 0.006000227866206048
     },
     {
-        "text": "fei",
-        "count": 3
+        "text": "generation models",
+        "count": 4,
+        "score": 0.005978963527194759
     },
     {
-        "text": "fundamental",
-        "count": 3
+        "text": "liang",
+        "count": 4,
+        "score": 0.0058658489880737685
     },
     {
-        "text": "yori",
-        "count": 3
+        "text": "feedback",
+        "count": 4,
+        "score": 0.0057555352744455895
     },
     {
-        "text": "choi",
-        "count": 3
+        "text": "outputs",
+        "count": 4,
+        "score": 0.0056830669645469645
     },
     {
-        "text": "october",
-        "count": 3
+        "text": "extensive",
+        "count": 4,
+        "score": 0.005589671768158509
     },
     {
-        "text": "safe",
-        "count": 3
+        "text": "black",
+        "count": 4,
+        "score": 0.005453123544849389
     },
     {
-        "text": "frontier",
-        "count": 3
+        "text": "guidance",
+        "count": 4,
+        "score": 0.005356401680503789
     },
     {
-        "text": "consistency",
-        "count": 3
+        "text": "jonas",
+        "count": 4,
+        "score": 0.005246388767683472
     },
     {
-        "text": "hands",
-        "count": 3
+        "text": "partners",
+        "count": 4,
+        "score": 0.005114503932204216
     },
     {
-        "text": "veo",
-        "count": 3
+        "text": "xu",
+        "count": 4,
+        "score": 0.005060351259080581
     },
     {
-        "text": "du",
-        "count": 3
+        "text": "standing",
+        "count": 4,
+        "score": 0.00489480408036989
     },
     {
-        "text": "sahil",
-        "count": 3
+        "text": "vikas",
+        "count": 4,
+        "score": 0.0043721200133820266
     },
     {
-        "text": "tasks",
-        "count": 3
+        "text": "garcia",
+        "count": 4,
+        "score": 0.0043721200133820266
     },
     {
-        "text": "2.5",
-        "count": 3
+        "text": "fruchter",
+        "count": 4,
+        "score": 0.0043721200133820266
     },
     {
-        "text": "20",
-        "count": 3
+        "text": "collins",
+        "count": 4,
+        "score": 0.00412630174936756
     },
     {
-        "text": "den",
-        "count": 3
+        "text": "marc",
+        "count": 4,
+        "score": 0.00412630174936756
     },
     {
-        "text": "benchmarks",
-        "count": 3
+        "text": "version",
+        "count": 4,
+        "score": 0.004082026953401467
     },
     {
-        "text": "andeep toor",
-        "count": 3
-    },
-    {
-        "text": "austin waters",
-        "count": 3
-    },
-    {
-        "text": "program",
-        "count": 3
-    },
-    {
-        "text": "eli collins",
-        "count": 3
-    },
-    {
-        "text": "language models",
-        "count": 3
-    },
-    {
-        "text": "proteins",
-        "count": 3
-    },
-    {
-        "text": "synthid",
-        "count": 3
-    },
-    {
-        "text": "professor",
-        "count": 3
-    },
-    {
-        "text": "zwols",
-        "count": 3
-    },
-    {
-        "text": "yang",
-        "count": 3
-    },
-    {
-        "text": "discover ai",
-        "count": 3
-    },
-    {
-        "text": "eli",
-        "count": 3
-    },
-    {
-        "text": "complex scenes",
-        "count": 3
-    },
-    {
-        "text": "capturing",
-        "count": 3
-    },
-    {
-        "text": "engineers",
-        "count": 3
-    },
-    {
-        "text": "complex challenges",
-        "count": 3
-    },
-    {
-        "text": "foundation",
-        "count": 3
-    },
-    {
-        "text": "specific",
-        "count": 3
-    },
-    {
-        "text": "rong",
-        "count": 3
-    },
-    {
-        "text": "water",
-        "count": 3
-    },
-    {
-        "text": "journey",
-        "count": 3
-    },
-    {
-        "text": "student researcher",
-        "count": 3
-    },
-    {
-        "text": "rao",
-        "count": 3
-    },
-    {
-        "text": "age",
-        "count": 3
-    },
-    {
-        "text": "harmful",
-        "count": 3
-    },
-    {
-        "text": "engaging",
-        "count": 3
-    },
-    {
-        "text": "warm",
-        "count": 3
-    },
-    {
-        "text": "keran",
-        "count": 3
-    },
-    {
-        "text": "ecosystem",
-        "count": 3
-    },
-    {
-        "text": "person",
-        "count": 3
-    },
-    {
-        "text": "taylor",
-        "count": 3
-    },
-    {
-        "text": "rakesh",
-        "count": 3
-    },
-    {
-        "text": "oord",
-        "count": 3
-    },
-    {
-        "text": "learned",
-        "count": 3
-    },
-    {
-        "text": "pfaff",
-        "count": 3
-    },
-    {
-        "text": "insights",
-        "count": 3
-    },
-    {
-        "text": "framework",
-        "count": 3
-    },
-    {
-        "text": "waters",
-        "count": 3
-    },
-    {
-        "text": "predictions",
-        "count": 3
-    },
-    {
-        "text": "robust",
-        "count": 3
-    },
-    {
-        "text": "humanity",
-        "count": 3
-    },
-    {
-        "text": "shixin luo",
-        "count": 3
-    },
-    {
-        "text": "tobias pfaff",
-        "count": 3
-    },
-    {
-        "text": "vinyals",
-        "count": 3
-    },
-    {
-        "text": "communities",
-        "count": 3
-    },
-    {
-        "text": "entire",
-        "count": 3
-    },
-    {
-        "text": "ai breakthroughs",
-        "count": 3
-    },
-    {
-        "text": "plants",
-        "count": 3
-    },
-    {
-        "text": "resolution",
-        "count": 3
-    },
-    {
-        "text": "cutting",
-        "count": 3
-    },
-    {
-        "text": "explores",
-        "count": 3
-    },
-    {
-        "text": "public",
-        "count": 3
-    },
-    {
-        "text": "projects",
-        "count": 3
-    },
-    {
-        "text": "creativity",
-        "count": 3
-    },
-    {
-        "text": "introduced",
-        "count": 3
-    },
-    {
-        "text": "adding",
-        "count": 3
-    },
-    {
-        "text": "zee",
-        "count": 3
-    },
-    {
-        "text": "contributions",
-        "count": 3
-    },
-    {
-        "text": "bauer",
-        "count": 3
-    },
-    {
-        "text": "actions",
-        "count": 3
-    },
-    {
-        "text": "beautiful",
-        "count": 3
-    },
-    {
-        "text": "50",
-        "count": 3
-    },
-    {
-        "text": "van den",
-        "count": 3
-    },
-    {
-        "text": "ai underpin",
-        "count": 3
-    },
-    {
-        "text": "developers",
-        "count": 3
-    },
-    {
-        "text": "goodfellow",
-        "count": 3
-    },
-    {
-        "text": "flare",
-        "count": 3
-    },
-    {
-        "text": "robert",
-        "count": 3
-    },
-    {
-        "text": "established",
-        "count": 3
-    },
-    {
-        "text": "ceo google",
-        "count": 3
-    },
-    {
-        "text": "gladchenko",
-        "count": 3
-    },
-    {
-        "text": "yao",
-        "count": 3
-    },
-    {
-        "text": "tool",
-        "count": 3
-    },
-    {
-        "text": "song",
-        "count": 3
-    },
-    {
-        "text": "douglas eck",
-        "count": 3
-    },
-    {
-        "text": "green",
-        "count": 3
-    },
-    {
-        "text": "respond",
-        "count": 3
-    },
-    {
-        "text": "yan",
-        "count": 3
-    },
-    {
-        "text": "updated",
-        "count": 3
-    },
-    {
-        "text": "lens flare",
-        "count": 3
-    },
-    {
-        "text": "march 2025",
-        "count": 3
-    },
-    {
-        "text": "aida",
-        "count": 3
-    },
-    {
-        "text": "success",
-        "count": 3
-    },
-    {
-        "text": "austin",
-        "count": 3
-    },
-    {
-        "text": "solve",
-        "count": 3
-    },
-    {
-        "text": "botadra",
-        "count": 3
-    },
-    {
-        "text": "individuals contributed",
-        "count": 3
-    },
-    {
-        "text": "van zee",
-        "count": 3
-    },
-    {
-        "text": "henna",
-        "count": 3
-    },
-    {
-        "text": "visual styles",
-        "count": 3
-    },
-    {
-        "text": "evgeny",
-        "count": 3
-    },
-    {
-        "text": "glow",
-        "count": 3
-    },
-    {
-        "text": "liu",
-        "count": 3
-    },
-    {
-        "text": "evgeny gladchenko",
-        "count": 3
-    },
-    {
-        "text": "harmful content",
-        "count": 3
-    },
-    {
-        "text": "commitment",
-        "count": 3
-    },
-    {
-        "text": "improves",
-        "count": 3
-    },
-    {
-        "text": "le",
-        "count": 3
-    },
-    {
-        "text": "ai industry",
-        "count": 3
-    },
-    {
-        "text": "jump",
-        "count": 3
-    },
-    {
-        "text": "dataset",
-        "count": 3
-    },
-    {
-        "text": "brown",
-        "count": 3
-    },
-    {
-        "text": "ryan",
-        "count": 3
-    },
-    {
-        "text": "den oord",
-        "count": 3
-    },
-    {
-        "text": "lau",
-        "count": 3
-    },
-    {
-        "text": "nematzadeh",
-        "count": 3
-    },
-    {
-        "text": "frankie",
-        "count": 3
-    },
-    {
-        "text": "built",
-        "count": 3
-    },
-    {
-        "text": "education",
-        "count": 3
-    },
-    {
-        "text": "advanced ai",
-        "count": 3
-    },
-    {
-        "text": "controls",
-        "count": 3
-    },
-    {
-        "text": "rly",
-        "count": 3
-    },
-    {
-        "text": "pankil botadra",
-        "count": 3
-    },
-    {
-        "text": "ali",
-        "count": 3
-    },
-    {
-        "text": "bring",
-        "count": 3
-    },
-    {
-        "text": "remains",
-        "count": 3
-    },
-    {
-        "text": "yichang",
-        "count": 3
-    },
-    {
-        "text": "billions people",
-        "count": 3
-    },
-    {
-        "text": "sound",
-        "count": 3
-    },
-    {
-        "text": "cobo",
-        "count": 3
-    },
-    {
-        "text": "tall",
-        "count": 3
-    },
-    {
-        "text": "pankil",
-        "count": 3
-    },
-    {
-        "text": "pixels",
-        "count": 3
-    },
-    {
-        "text": "koray kavukcuoglu",
-        "count": 3
-    },
-    {
-        "text": "natural language",
-        "count": 3
-    },
-    {
-        "text": "challenge ai",
-        "count": 3
-    },
-    {
-        "text": "shallow depth",
-        "count": 3
-    },
-    {
-        "text": "captures",
-        "count": 3
-    },
-    {
-        "text": "interact",
-        "count": 3
-    },
-    {
-        "text": "oliver",
-        "count": 3
-    },
-    {
-        "text": "called",
-        "count": 3
-    },
-    {
-        "text": "acknowledge individuals",
-        "count": 3
-    },
-    {
-        "text": "creators",
-        "count": 3
-    },
-    {
-        "text": "physics",
-        "count": 3
-    },
-    {
-        "text": "scores",
-        "count": 3
-    },
-    {
-        "text": "ron",
-        "count": 3
-    },
-    {
-        "text": "neon",
-        "count": 3
-    },
-    {
-        "text": "jakob bauer",
-        "count": 3
-    },
-    {
-        "text": "played",
-        "count": 3
-    },
-    {
-        "text": "pont tuset",
-        "count": 3
-    },
-    {
-        "text": "luis cobo",
-        "count": 3
-    },
-    {
-        "text": "yukun",
-        "count": 3
-    },
-    {
-        "text": "director",
-        "count": 3
-    },
-    {
-        "text": "experts",
-        "count": 3
-    },
-    {
-        "text": "generation ai",
-        "count": 3
-    },
-    {
-        "text": "shlomi",
-        "count": 3
-    },
-    {
-        "text": "exceptional",
-        "count": 3
-    },
-    {
-        "text": "october 2024",
-        "count": 3
-    },
-    {
-        "text": "miaosen",
-        "count": 3
-    },
-    {
-        "text": "power",
-        "count": 3
-    },
-    {
-        "text": "organizations",
-        "count": 3
-    },
-    {
-        "text": "frankie garcia",
-        "count": 3
-    },
-    {
-        "text": "produce",
-        "count": 3
-    },
-    {
-        "text": "josh",
-        "count": 3
-    },
-    {
-        "text": "control",
-        "count": 3
-    },
-    {
-        "text": "shah",
-        "count": 3
-    },
-    {
-        "text": "gregory",
-        "count": 3
-    },
-    {
-        "text": "rendering",
-        "count": 3
-    },
-    {
-        "text": "deep learning",
-        "count": 3
-    },
-    {
-        "text": "marc van",
-        "count": 3
-    },
-    {
-        "text": "society",
-        "count": 3
-    },
-    {
-        "text": "contributed google",
-        "count": 3
-    },
-    {
-        "text": "play",
-        "count": 3
-    },
-    {
-        "text": "trees",
-        "count": 3
-    },
-    {
-        "text": "invaluable",
-        "count": 3
-    },
-    {
-        "text": "27",
-        "count": 3
-    },
-    {
-        "text": "remain",
-        "count": 3
-    },
-    {
-        "text": "tuset",
-        "count": 3
-    },
-    {
-        "text": "mitchell",
-        "count": 3
-    },
-    {
-        "text": "detailed",
-        "count": 3
-    },
-    {
-        "text": "challenging",
-        "count": 3
-    },
-    {
-        "text": "keran rong",
-        "count": 3
-    },
-    {
-        "text": "roles",
-        "count": 3
-    },
-    {
-        "text": "acknowledgements",
-        "count": 3
-    },
-    {
-        "text": "middle",
-        "count": 3
-    },
-    {
-        "text": "realistic",
-        "count": 3
-    },
-    {
-        "text": "kavukcuoglu",
-        "count": 3
-    },
-    {
-        "text": "lens",
-        "count": 3
-    },
-    {
-        "text": "oriol",
-        "count": 3
-    },
-    {
-        "text": "pont",
-        "count": 3
-    },
-    {
-        "text": "jeff",
-        "count": 3
-    },
-    {
-        "text": "hassabis founder",
-        "count": 3
-    },
-    {
-        "text": "hume",
-        "count": 3
-    },
-    {
-        "text": "11",
-        "count": 3
-    },
-    {
-        "text": "collaboration",
-        "count": 3
-    },
-    {
-        "text": "luo",
-        "count": 3
+        "text": "figure",
+        "count": 4,
+        "score": 0.004082026953401467
     },
     {
         "text": "server",
-        "count": 3
+        "count": 3,
+        "score": 0.10937019969278033
     },
     {
-        "text": "identifying ai",
-        "count": 3
+        "text": "gemini 2.5",
+        "count": 3,
+        "score": 0.09434697855750487
     },
     {
-        "text": "final",
-        "count": 3
+        "text": "proteins",
+        "count": 3,
+        "score": 0.06559139784946236
+    },
+    {
+        "text": "synthid",
+        "count": 3,
+        "score": 0.06228196146540178
+    },
+    {
+        "text": "2.5",
+        "count": 3,
+        "score": 0.056639985904503004
+    },
+    {
+        "text": "generation ai",
+        "count": 3,
+        "score": 0.04901902632659579
+    },
+    {
+        "text": "march 2025",
+        "count": 3,
+        "score": 0.04830385647413675
+    },
+    {
+        "text": "ai underpin",
+        "count": 3,
+        "score": 0.044521015376971944
+    },
+    {
+        "text": "ai industry",
+        "count": 3,
+        "score": 0.044521015376971944
     },
     {
         "text": "modern ai",
-        "count": 3
+        "count": 3,
+        "score": 0.044521015376971944
     },
     {
-        "text": "cao",
-        "count": 3
+        "text": "discover ai",
+        "count": 3,
+        "score": 0.04009216589861751
     },
     {
-        "text": "mitigate",
-        "count": 3
+        "text": "ai breakthroughs",
+        "count": 3,
+        "score": 0.04009216589861751
     },
     {
-        "text": "single prompt",
-        "count": 3
+        "text": "professor",
+        "count": 3,
+        "score": 0.03740161844584858
     },
     {
-        "text": "set",
-        "count": 3
+        "text": "veo",
+        "count": 3,
+        "score": 0.03610087926069268
     },
     {
-        "text": "koray",
-        "count": 3
+        "text": "built",
+        "count": 3,
+        "score": 0.0333793357875474
     },
     {
-        "text": "jordi",
-        "count": 3
-    },
-    {
-        "text": "helpful",
-        "count": 3
-    },
-    {
-        "text": "ceo",
-        "count": 3
-    },
-    {
-        "text": "safely",
-        "count": 3
-    },
-    {
-        "text": "internal",
-        "count": 3
-    },
-    {
-        "text": "reduce",
-        "count": 3
-    },
-    {
-        "text": "aida nematzadeh",
-        "count": 3
-    },
-    {
-        "text": "founder ceo",
-        "count": 3
-    },
-    {
-        "text": "closely",
-        "count": 3
-    },
-    {
-        "text": "eric lau",
-        "count": 3
-    },
-    {
-        "text": "ensuring",
-        "count": 3
-    },
-    {
-        "text": "creation",
-        "count": 3
-    },
-    {
-        "text": "signe",
-        "count": 3
-    },
-    {
-        "text": "represents",
-        "count": 3
-    },
-    {
-        "text": "2d",
-        "count": 3
-    },
-    {
-        "text": "tobias",
-        "count": 3
-    },
-    {
-        "text": "jakob",
-        "count": 3
-    },
-    {
-        "text": "nathaniel",
-        "count": 3
-    },
-    {
-        "text": "prompts",
-        "count": 3
-    },
-    {
-        "text": "evaluate",
-        "count": 3
-    },
-    {
-        "text": "interactive",
-        "count": 3
-    },
-    {
-        "text": "student",
-        "count": 3
-    },
-    {
-        "text": "shixin",
-        "count": 3
-    },
-    {
-        "text": "technical",
-        "count": 3
-    },
-    {
-        "text": "cutting edge",
-        "count": 3
-    },
-    {
-        "text": "provide",
-        "count": 3
-    },
-    {
-        "text": "enhanced",
-        "count": 3
-    },
-    {
-        "text": "movie",
-        "count": 3
-    },
-    {
-        "text": "douglas",
-        "count": 3
-    },
-    {
-        "text": "adams",
-        "count": 3
-    },
-    {
-        "text": "wu",
-        "count": 3
-    },
-    {
-        "text": "ali razavi",
-        "count": 3
-    },
-    {
-        "text": "training data",
-        "count": 3
-    },
-    {
-        "text": "european",
-        "count": 3
-    },
-    {
-        "text": "irina",
-        "count": 3
-    },
-    {
-        "text": "watermarking",
-        "count": 3
-    },
-    {
-        "text": "ian",
-        "count": 3
-    },
-    {
-        "text": "minute",
-        "count": 3
-    },
-    {
-        "text": "demonstrates",
-        "count": 3
-    },
-    {
-        "text": "wenlei",
-        "count": 3
-    },
-    {
-        "text": "alex",
-        "count": 3
-    },
-    {
-        "text": "network",
-        "count": 3
-    },
-    {
-        "text": "depth field",
-        "count": 3
-    },
-    {
-        "text": "katie zhang",
-        "count": 3
-    },
-    {
-        "text": "yuqing du",
-        "count": 3
-    },
-    {
-        "text": "nature",
-        "count": 3
-    },
-    {
-        "text": "luis",
-        "count": 3
-    },
-    {
-        "text": "srinivasan",
-        "count": 3
-    },
-    {
-        "text": "red",
-        "count": 3
-    },
-    {
-        "text": "shlomi fruchter",
-        "count": 3
-    },
-    {
-        "text": "nandwani",
-        "count": 3
-    },
-    {
-        "text": "scientific community",
-        "count": 3
-    },
-    {
-        "text": "bright",
-        "count": 3
-    },
-    {
-        "text": "tom hume",
-        "count": 3
-    },
-    {
-        "text": "extraordinary",
-        "count": 3
-    },
-    {
-        "text": "jordi pont",
-        "count": 3
-    },
-    {
-        "text": "transforming",
-        "count": 3
-    },
-    {
-        "text": "partners google",
-        "count": 3
-    },
-    {
-        "text": "yichang chen",
-        "count": 3
-    },
-    {
-        "text": "ian goodfellow",
-        "count": 3
-    },
-    {
-        "text": "deepmind partners",
-        "count": 3
-    },
-    {
-        "text": "background",
-        "count": 3
-    },
-    {
-        "text": "yelin kim",
-        "count": 3
-    },
-    {
-        "text": "lights",
-        "count": 3
-    },
-    {
-        "text": "extend gratitude",
-        "count": 3
-    },
-    {
-        "text": "contributed",
-        "count": 3
-    },
-    {
-        "text": "diffusion",
-        "count": 3
-    },
-    {
-        "text": "intelligence agi",
-        "count": 3
-    },
-    {
-        "text": "takes",
-        "count": 3
-    },
-    {
-        "text": "dawn",
-        "count": 3
-    },
-    {
-        "text": "transformer",
-        "count": 3
+        "text": "advanced ai",
+        "count": 3,
+        "score": 0.028510078572797436
     },
     {
         "text": "modern",
-        "count": 3
+        "count": 3,
+        "score": 0.028274988327501457
     },
     {
-        "text": "lin",
-        "count": 3
-    },
-    {
-        "text": "soft",
-        "count": 3
-    },
-    {
-        "text": "razavi",
-        "count": 3
-    },
-    {
-        "text": "presence",
-        "count": 3
-    },
-    {
-        "text": "matthew",
-        "count": 3
-    },
-    {
-        "text": "film",
-        "count": 3
-    },
-    {
-        "text": "goal",
-        "count": 3
-    },
-    {
-        "text": "shuo",
-        "count": 3
-    },
-    {
-        "text": "precisely",
-        "count": 3
-    },
-    {
-        "text": "yuqing",
-        "count": 3
-    },
-    {
-        "text": "irina blok",
-        "count": 3
-    },
-    {
-        "text": "prioritize",
-        "count": 3
-    },
-    {
-        "text": "ron van",
-        "count": 3
-    },
-    {
-        "text": "zhu",
-        "count": 3
-    },
-    {
-        "text": "simulation",
-        "count": 3
-    },
-    {
-        "text": "tang",
-        "count": 3
-    },
-    {
-        "text": "bias",
-        "count": 3
-    },
-    {
-        "text": "yelin",
-        "count": 3
-    },
-    {
-        "text": "flowing",
-        "count": 3
-    },
-    {
-        "text": "oriol vinyals",
-        "count": 3
-    },
-    {
-        "text": "creates",
-        "count": 3
-    },
-    {
-        "text": "signe rly",
-        "count": 3
-    },
-    {
-        "text": "26",
-        "count": 3
-    },
-    {
-        "text": "risks",
-        "count": 3
-    },
-    {
-        "text": "efficient",
-        "count": 3
-    },
-    {
-        "text": "input",
-        "count": 3
-    },
-    {
-        "text": "andeep",
-        "count": 3
-    },
-    {
-        "text": "eck",
-        "count": 3
-    },
-    {
-        "text": "programs",
-        "count": 3
-    },
-    {
-        "text": "digital",
-        "count": 3
-    },
-    {
-        "text": "katie",
-        "count": 3
-    },
-    {
-        "text": "ai researchers",
-        "count": 3
-    },
-    {
-        "text": "yilin",
-        "count": 3
-    },
-    {
-        "text": "design",
-        "count": 3
-    },
-    {
-        "text": "includes",
-        "count": 3
-    },
-    {
-        "text": "innovative",
-        "count": 3
-    },
-    {
-        "text": "henna nandwani",
-        "count": 3
-    },
-    {
-        "text": "approaches",
-        "count": 3
-    },
-    {
-        "text": "zach",
-        "count": 3
+        "text": "interact",
+        "count": 3,
+        "score": 0.027050650660400525
     },
     {
         "text": "agentic era",
-        "count": 3
+        "count": 3,
+        "score": 0.02668543504880924
     },
     {
-        "text": "toor",
-        "count": 3
+        "text": "scientific community",
+        "count": 3,
+        "score": 0.025248920609745353
     },
     {
-        "text": "dark",
-        "count": 3
+        "text": "framework",
+        "count": 3,
+        "score": 0.022607151763465363
     },
     {
-        "text": "individuals",
-        "count": 3
-    },
-    {
-        "text": "easier",
-        "count": 3
-    },
-    {
-        "text": "modeling",
-        "count": 3
-    },
-    {
-        "text": "start",
-        "count": 3
+        "text": "specific",
+        "count": 3,
+        "score": 0.021069015078085163
     },
     {
         "text": "breakthrough",
-        "count": 3
+        "count": 3,
+        "score": 0.01967540711138414
     },
     {
-        "text": "live",
-        "count": 3
+        "text": "program",
+        "count": 3,
+        "score": 0.019659008929395195
     },
     {
-        "text": "highlighting",
-        "count": 3
+        "text": "student researcher",
+        "count": 3,
+        "score": 0.019255882733841115
     },
     {
-        "text": "short",
-        "count": 3
+        "text": "watermarking",
+        "count": 3,
+        "score": 0.019085417188943903
     },
     {
-        "text": "shallow",
-        "count": 3
+        "text": "interactive",
+        "count": 3,
+        "score": 0.018474447937200236
     },
     {
-        "text": "howard",
-        "count": 3
+        "text": "11",
+        "count": 3,
+        "score": 0.018433303336563754
     },
     {
-        "text": "improved",
-        "count": 3
+        "text": "helpful",
+        "count": 3,
+        "score": 0.018140216877118243
     },
     {
-        "text": "miaosen wang",
-        "count": 3
+        "text": "foundation",
+        "count": 3,
+        "score": 0.017715893037371155
     },
     {
-        "text": "yori zwols",
-        "count": 3
+        "text": "50",
+        "count": 3,
+        "score": 0.01714780745732611
+    },
+    {
+        "text": "society",
+        "count": 3,
+        "score": 0.017102671898936758
+    },
+    {
+        "text": "projects",
+        "count": 3,
+        "score": 0.01691478527069981
+    },
+    {
+        "text": "education",
+        "count": 3,
+        "score": 0.016740509351553842
+    },
+    {
+        "text": "predictions",
+        "count": 3,
+        "score": 0.01639559144958713
+    },
+    {
+        "text": "frontier",
+        "count": 3,
+        "score": 0.015866897220069495
+    },
+    {
+        "text": "extraordinary",
+        "count": 3,
+        "score": 0.01566841854685072
+    },
+    {
+        "text": "collaboration",
+        "count": 3,
+        "score": 0.015136384894084958
+    },
+    {
+        "text": "risks",
+        "count": 3,
+        "score": 0.014297293409720935
+    },
+    {
+        "text": "researcher",
+        "count": 3,
+        "score": 0.014180608112533494
+    },
+    {
+        "text": "student",
+        "count": 3,
+        "score": 0.014180608112533494
+    },
+    {
+        "text": "transforming",
+        "count": 3,
+        "score": 0.014094418486855201
+    },
+    {
+        "text": "power",
+        "count": 3,
+        "score": 0.01397755364945293
+    },
+    {
+        "text": "digital",
+        "count": 3,
+        "score": 0.013688457864596298
+    },
+    {
+        "text": "matthew",
+        "count": 3,
+        "score": 0.01333704076950808
     },
     {
         "text": "composition",
-        "count": 3
+        "count": 3,
+        "score": 0.013268516409234456
     },
     {
-        "text": "white",
-        "count": 3
+        "text": "solve",
+        "count": 3,
+        "score": 0.012637302959883606
+    },
+    {
+        "text": "person",
+        "count": 3,
+        "score": 0.012627510951863099
+    },
+    {
+        "text": "provide",
+        "count": 3,
+        "score": 0.012423177197412774
+    },
+    {
+        "text": "experts",
+        "count": 3,
+        "score": 0.012283896546498963
+    },
+    {
+        "text": "fundamental",
+        "count": 3,
+        "score": 0.01227021416201448
+    },
+    {
+        "text": "design",
+        "count": 3,
+        "score": 0.012189566429858448
+    },
+    {
+        "text": "generated content",
+        "count": 3,
+        "score": 0.012166259221963795
+    },
+    {
+        "text": "takes",
+        "count": 3,
+        "score": 0.011958167230155928
+    },
+    {
+        "text": "sound",
+        "count": 3,
+        "score": 0.011949508932329577
+    },
+    {
+        "text": "scores",
+        "count": 3,
+        "score": 0.011641787606851289
+    },
+    {
+        "text": "simulation",
+        "count": 3,
+        "score": 0.011634472067666414
+    },
+    {
+        "text": "middle",
+        "count": 3,
+        "score": 0.011560121069081785
+    },
+    {
+        "text": "27",
+        "count": 3,
+        "score": 0.011362574415062995
+    },
+    {
+        "text": "20",
+        "count": 3,
+        "score": 0.011139866513462139
+    },
+    {
+        "text": "ceo",
+        "count": 3,
+        "score": 0.010947433627845999
+    },
+    {
+        "text": "programs",
+        "count": 3,
+        "score": 0.010902465838088156
+    },
+    {
+        "text": "background",
+        "count": 3,
+        "score": 0.010702224489631817
+    },
+    {
+        "text": "public",
+        "count": 3,
+        "score": 0.010450221288528398
+    },
+    {
+        "text": "alex",
+        "count": 3,
+        "score": 0.010416535025815722
+    },
+    {
+        "text": "organizations",
+        "count": 3,
+        "score": 0.010399041128437758
+    },
+    {
+        "text": "26",
+        "count": 3,
+        "score": 0.010127360346184108
+    },
+    {
+        "text": "tasks",
+        "count": 3,
+        "score": 0.010009234616046869
+    },
+    {
+        "text": "ceo google",
+        "count": 3,
+        "score": 0.009833242269041944
+    },
+    {
+        "text": "hassabis founder",
+        "count": 3,
+        "score": 0.009833242269041944
+    },
+    {
+        "text": "founder ceo",
+        "count": 3,
+        "score": 0.009833242269041944
+    },
+    {
+        "text": "creation",
+        "count": 3,
+        "score": 0.009813054711861956
+    },
+    {
+        "text": "actions",
+        "count": 3,
+        "score": 0.009423239614173018
+    },
+    {
+        "text": "water",
+        "count": 3,
+        "score": 0.00942115801738904
+    },
+    {
+        "text": "director",
+        "count": 3,
+        "score": 0.009360510521398274
+    },
+    {
+        "text": "red",
+        "count": 3,
+        "score": 0.009354459299270519
+    },
+    {
+        "text": "shah",
+        "count": 3,
+        "score": 0.009189575331720061
+    },
+    {
+        "text": "soft",
+        "count": 3,
+        "score": 0.009101738087195844
+    },
+    {
+        "text": "safe",
+        "count": 3,
+        "score": 0.009093723672376349
+    },
+    {
+        "text": "developers",
+        "count": 3,
+        "score": 0.008866875790253177
+    },
+    {
+        "text": "success",
+        "count": 3,
+        "score": 0.008813386393530015
+    },
+    {
+        "text": "insights",
+        "count": 3,
+        "score": 0.00875967666240093
+    },
+    {
+        "text": "prioritize",
+        "count": 3,
+        "score": 0.008711379379058335
+    },
+    {
+        "text": "commitment",
+        "count": 3,
+        "score": 0.008514805480768172
+    },
+    {
+        "text": "humanity",
+        "count": 3,
+        "score": 0.008432037700330384
+    },
+    {
+        "text": "prompts",
+        "count": 3,
+        "score": 0.008310865468492978
+    },
+    {
+        "text": "goal",
+        "count": 3,
+        "score": 0.008309230574140201
+    },
+    {
+        "text": "control",
+        "count": 3,
+        "score": 0.008289718919592171
     },
     {
         "text": "cinematic",
-        "count": 3
+        "count": 3,
+        "score": 0.008190513260374576
     },
     {
-        "text": "simon wang",
-        "count": 2
+        "text": "benchmarks",
+        "count": 3,
+        "score": 0.008039689929084392
     },
     {
-        "text": "authors",
-        "count": 2
+        "text": "anand",
+        "count": 3,
+        "score": 0.007867308571039686
     },
     {
-        "text": "whimsical",
-        "count": 2
+        "text": "play",
+        "count": 3,
+        "score": 0.007834240586067596
     },
     {
-        "text": "viewed",
-        "count": 2
+        "text": "song",
+        "count": 3,
+        "score": 0.007621490307025219
     },
     {
-        "text": "thousands",
-        "count": 2
+        "text": "keran rong",
+        "count": 3,
+        "score": 0.00759035688097647
     },
     {
-        "text": "aims",
-        "count": 2
+        "text": "october 2024",
+        "count": 3,
+        "score": 0.007497617371397921
     },
     {
-        "text": "balloons",
-        "count": 2
+        "text": "complex challenges",
+        "count": 3,
+        "score": 0.007407185810312185
     },
     {
-        "text": "shuo huang",
-        "count": 2
+        "text": "billions people",
+        "count": 3,
+        "score": 0.00725938253646967
     },
     {
-        "text": "tracking shot",
-        "count": 2
+        "text": "ian goodfellow",
+        "count": 3,
+        "score": 0.007210696784795912
     },
     {
-        "text": "partnership developing",
-        "count": 2
+        "text": "yang",
+        "count": 3,
+        "score": 0.0071840495097130206
     },
     {
-        "text": "ultimately",
-        "count": 2
+        "text": "robust",
+        "count": 3,
+        "score": 0.007148303205414719
     },
     {
-        "text": "december",
-        "count": 2
+        "text": "language models",
+        "count": 3,
+        "score": 0.007064541886799825
     },
     {
-        "text": "garg",
-        "count": 2
+        "text": "jump",
+        "count": 3,
+        "score": 0.007047867126549658
     },
     {
-        "text": "zhe",
-        "count": 2
+        "text": "physics",
+        "count": 3,
+        "score": 0.007005015317040253
     },
     {
-        "text": "freely",
-        "count": 2
+        "text": "movie",
+        "count": 3,
+        "score": 0.006954515768887715
     },
     {
-        "text": "novikov",
-        "count": 2
+        "text": "discovery",
+        "count": 3,
+        "score": 0.006852964365697813
     },
     {
-        "text": "kaifeng chen",
-        "count": 2
+        "text": "harmful",
+        "count": 3,
+        "score": 0.006836690216534461
     },
     {
-        "text": "deepmind podcast",
-        "count": 2
+        "text": "white",
+        "count": 3,
+        "score": 0.006830731274175404
     },
     {
-        "text": "peter",
-        "count": 2
+        "text": "established",
+        "count": 3,
+        "score": 0.006815542230166331
     },
     {
-        "text": "komal",
-        "count": 2
+        "text": "diffusion",
+        "count": 3,
+        "score": 0.006786294766855411
     },
     {
-        "text": "reflections",
-        "count": 2
+        "text": "communities",
+        "count": 3,
+        "score": 0.006705091964128539
     },
     {
-        "text": "technique",
-        "count": 2
+        "text": "input",
+        "count": 3,
+        "score": 0.006693470238014569
     },
     {
-        "text": "gustavo",
-        "count": 2
+        "text": "live",
+        "count": 3,
+        "score": 0.006692864484089901
     },
     {
-        "text": "image generation",
-        "count": 2
+        "text": "neon",
+        "count": 3,
+        "score": 0.00667650871836095
     },
     {
-        "text": "duration",
-        "count": 2
+        "text": "captures",
+        "count": 3,
+        "score": 0.006641608040748746
     },
     {
-        "text": "surrounded",
-        "count": 2
+        "text": "josh",
+        "count": 3,
+        "score": 0.006610775264360131
     },
     {
-        "text": "inspired",
-        "count": 2
+        "text": "engineers",
+        "count": 3,
+        "score": 0.0066106203445259245
     },
     {
-        "text": "king",
-        "count": 2
+        "text": "intelligence agi",
+        "count": 3,
+        "score": 0.006593039522124256
     },
     {
-        "text": "controlling",
-        "count": 2
+        "text": "evaluate",
+        "count": 3,
+        "score": 0.006591105337820944
     },
     {
-        "text": "multi",
-        "count": 2
+        "text": "october",
+        "count": 3,
+        "score": 0.006583557542864382
     },
     {
-        "text": "seyedhosseini",
-        "count": 2
+        "text": "innovative",
+        "count": 3,
+        "score": 0.006562952702870844
     },
     {
-        "text": "kindermans",
-        "count": 2
+        "text": "choi",
+        "count": 3,
+        "score": 0.0065014032887093075
     },
     {
-        "text": "pablo",
-        "count": 2
+        "text": "cutting edge",
+        "count": 3,
+        "score": 0.006499011667604525
     },
     {
-        "text": "xuhui jia",
-        "count": 2
+        "text": "cutting",
+        "count": 3,
+        "score": 0.0064945802622338985
     },
     {
-        "text": "challenges including",
-        "count": 2
+        "text": "learned",
+        "count": 3,
+        "score": 0.006485869561110829
     },
     {
-        "text": "industries",
-        "count": 2
+        "text": "challenge ai",
+        "count": 3,
+        "score": 0.006433486971950913
     },
     {
-        "text": "model capable",
-        "count": 2
+        "text": "dataset",
+        "count": 3,
+        "score": 0.006424728805200031
     },
     {
-        "text": "addressing",
-        "count": 2
+        "text": "approaches",
+        "count": 3,
+        "score": 0.0064212433066168865
     },
     {
-        "text": "blair",
-        "count": 2
+        "text": "deep learning",
+        "count": 3,
+        "score": 0.0063899422369932
     },
     {
-        "text": "digital watermark",
-        "count": 2
+        "text": "mitigate",
+        "count": 3,
+        "score": 0.0063886696074712465
     },
     {
-        "text": "cer",
-        "count": 2
+        "text": "explores",
+        "count": 3,
+        "score": 0.006379900585443952
     },
     {
-        "text": "keyang xu",
-        "count": 2
+        "text": "identifying ai",
+        "count": 3,
+        "score": 0.0063587649520444895
     },
     {
-        "text": "salz michael",
-        "count": 2
+        "text": "wenlei zhou",
+        "count": 3,
+        "score": 0.006353352123157487
     },
     {
-        "text": "context",
-        "count": 2
+        "text": "yichang chen",
+        "count": 3,
+        "score": 0.006353352123157487
     },
     {
-        "text": "cathy yip",
-        "count": 2
+        "text": "final",
+        "count": 3,
+        "score": 0.006353255601668195
     },
     {
-        "text": "capable generating",
-        "count": 2
+        "text": "respond",
+        "count": 3,
+        "score": 0.006352472281308628
     },
     {
-        "text": "ev",
-        "count": 2
+        "text": "creativity",
+        "count": 3,
+        "score": 0.006324619536509954
     },
     {
-        "text": "chang",
-        "count": 2
+        "text": "safely",
+        "count": 3,
+        "score": 0.00628879973071032
     },
     {
-        "text": "song dara",
-        "count": 2
+        "text": "rendering",
+        "count": 3,
+        "score": 0.006169385518630912
     },
     {
-        "text": "service",
-        "count": 2
+        "text": "rong",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "daniel cer",
-        "count": 2
+        "text": "rao",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "suganthan feng",
-        "count": 2
+        "text": "keran",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "transformer architecture",
-        "count": 2
+        "text": "taylor",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "analysis",
-        "count": 2
+        "text": "cao",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "salz zhe",
-        "count": 2
+        "text": "nathaniel",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "mariserla",
-        "count": 2
+        "text": "shuo",
+        "count": 3,
+        "score": 0.00605899030702522
     },
     {
-        "text": "behaviors",
-        "count": 2
+        "text": "bring",
+        "count": 3,
+        "score": 0.005985609514021424
     },
     {
-        "text": "golden light",
-        "count": 2
+        "text": "easier",
+        "count": 3,
+        "score": 0.005958332620507609
     },
     {
-        "text": "cityscape",
-        "count": 2
+        "text": "improved",
+        "count": 3,
+        "score": 0.0059442844854065225
     },
     {
-        "text": "blog",
-        "count": 2
+        "text": "journey",
+        "count": 3,
+        "score": 0.005868236425703735
     },
     {
-        "text": "insightful",
-        "count": 2
+        "text": "natural language",
+        "count": 3,
+        "score": 0.005797023830646383
     },
     {
-        "text": "dong mojtaba",
-        "count": 2
+        "text": "internal",
+        "count": 3,
+        "score": 0.0057908085828496615
     },
     {
-        "text": "david elson",
-        "count": 2
+        "text": "output",
+        "count": 3,
+        "score": 0.005764887944351156
     },
     {
-        "text": "cybersecurity",
-        "count": 2
+        "text": "goodfellow",
+        "count": 3,
+        "score": 0.005763531347095474
     },
     {
-        "text": "srivatsan",
-        "count": 2
+        "text": "ian",
+        "count": 3,
+        "score": 0.005763531347095474
     },
     {
-        "text": "tom duerig",
-        "count": 2
+        "text": "depth field",
+        "count": 3,
+        "score": 0.0057316228762753565
     },
     {
-        "text": "hannah",
-        "count": 2
+        "text": "includes",
+        "count": 3,
+        "score": 0.005688210372051767
     },
     {
-        "text": "supporting",
-        "count": 2
+        "text": "brown",
+        "count": 3,
+        "score": 0.005638661904550668
     },
     {
-        "text": "algorithms",
-        "count": 2
+        "text": "zach",
+        "count": 3,
+        "score": 0.005627134534407862
     },
     {
-        "text": "speech",
-        "count": 2
+        "text": "bright",
+        "count": 3,
+        "score": 0.005557940485698758
     },
     {
-        "text": "search google",
-        "count": 2
+        "text": "presence",
+        "count": 3,
+        "score": 0.005555351912270341
     },
     {
-        "text": "special",
-        "count": 2
+        "text": "highlighting",
+        "count": 3,
+        "score": 0.005528989460851369
     },
     {
-        "text": "millions",
-        "count": 2
+        "text": "shallow",
+        "count": 3,
+        "score": 0.005523039808086553
     },
     {
-        "text": "cer madhuri",
-        "count": 2
+        "text": "warm",
+        "count": 3,
+        "score": 0.005454268782778295
     },
     {
-        "text": "dawn bloxwich",
-        "count": 2
+        "text": "creates",
+        "count": 3,
+        "score": 0.005454268308037384
     },
     {
-        "text": "chen sai",
-        "count": 2
+        "text": "consistency",
+        "count": 3,
+        "score": 0.005433710932005279
     },
     {
-        "text": "deniz altinb",
-        "count": 2
+        "text": "start",
+        "count": 3,
+        "score": 0.005398760642358105
     },
     {
-        "text": "shadows",
-        "count": 2
+        "text": "reduce",
+        "count": 3,
+        "score": 0.0053760120295717065
     },
     {
-        "text": "detection",
-        "count": 2
+        "text": "rakesh",
+        "count": 3,
+        "score": 0.005369240275672945
     },
     {
-        "text": "change",
-        "count": 2
+        "text": "realistic",
+        "count": 3,
+        "score": 0.005357866177100677
     },
     {
-        "text": "product teams",
-        "count": 2
+        "text": "ai researchers",
+        "count": 3,
+        "score": 0.005305948342077144
     },
     {
-        "text": "ringel",
-        "count": 2
+        "text": "closely",
+        "count": 3,
+        "score": 0.005283360555349252
     },
     {
-        "text": "responding",
-        "count": 2
+        "text": "minute",
+        "count": 3,
+        "score": 0.005273435462770691
     },
     {
-        "text": "jay",
-        "count": 2
+        "text": "entire",
+        "count": 3,
+        "score": 0.005271095202116452
     },
     {
-        "text": "orange",
-        "count": 2
+        "text": "liu",
+        "count": 3,
+        "score": 0.005258464762403923
     },
     {
-        "text": "ktena",
-        "count": 2
+        "text": "capture",
+        "count": 3,
+        "score": 0.00522032412648416
     },
     {
-        "text": "kelly",
-        "count": 2
+        "text": "lens",
+        "count": 3,
+        "score": 0.005196374524043378
     },
     {
-        "text": "brego",
-        "count": 2
+        "text": "pixels",
+        "count": 3,
+        "score": 0.005179060790523779
     },
     {
-        "text": "walker wenlei",
-        "count": 2
+        "text": "called",
+        "count": 3,
+        "score": 0.0051596511087712614
     },
     {
-        "text": "morris",
-        "count": 2
+        "text": "single prompt",
+        "count": 3,
+        "score": 0.005148715362314671
     },
     {
-        "text": "sai meher",
-        "count": 2
+        "text": "zhu",
+        "count": 3,
+        "score": 0.005127603498735121
     },
     {
-        "text": "server predicts",
-        "count": 2
+        "text": "2d",
+        "count": 3,
+        "score": 0.005103724842188143
     },
     {
-        "text": "2020",
-        "count": 2
+        "text": "remains",
+        "count": 3,
+        "score": 0.005098510352860464
     },
     {
-        "text": "closed",
-        "count": 2
+        "text": "ryan",
+        "count": 3,
+        "score": 0.005061870044734301
     },
     {
-        "text": "lluis castrejon",
-        "count": 2
+        "text": "ensuring",
+        "count": 3,
+        "score": 0.005050093398786124
     },
     {
-        "text": "broader",
-        "count": 2
+        "text": "shallow depth",
+        "count": 3,
+        "score": 0.005011680471667724
     },
     {
-        "text": "pioneering",
-        "count": 2
+        "text": "harmful content",
+        "count": 3,
+        "score": 0.004992647260611101
     },
     {
-        "text": "weathered",
-        "count": 2
+        "text": "remain",
+        "count": 3,
+        "score": 0.004988475991591825
     },
     {
-        "text": "shanbhogue iftekhar",
-        "count": 2
+        "text": "detailed",
+        "count": 3,
+        "score": 0.004981523221925372
     },
     {
-        "text": "scientific engineering",
-        "count": 2
+        "text": "green",
+        "count": 3,
+        "score": 0.004968473267429437
     },
     {
-        "text": "instance",
-        "count": 2
+        "text": "introduced",
+        "count": 3,
+        "score": 0.0049677957676984305
     },
     {
-        "text": "kurtis david",
-        "count": 2
+        "text": "played",
+        "count": 3,
+        "score": 0.0049677957676984305
     },
     {
-        "text": "topics",
-        "count": 2
+        "text": "efficient",
+        "count": 3,
+        "score": 0.004962429867749243
     },
     {
-        "text": "variety",
-        "count": 2
+        "text": "updated",
+        "count": 3,
+        "score": 0.004952769933301789
     },
     {
-        "text": "varma david",
-        "count": 2
+        "text": "sahil",
+        "count": 3,
+        "score": 0.004938903288709308
     },
     {
-        "text": "challenges time",
-        "count": 2
+        "text": "yichang",
+        "count": 3,
+        "score": 0.004938903288709308
     },
     {
-        "text": "serene",
-        "count": 2
+        "text": "wenlei",
+        "count": 3,
+        "score": 0.004938903288709308
     },
     {
-        "text": "california",
-        "count": 2
+        "text": "howard",
+        "count": 3,
+        "score": 0.004938903288709308
     },
     {
-        "text": "ben",
-        "count": 2
+        "text": "yan",
+        "count": 3,
+        "score": 0.004802457000345664
     },
     {
-        "text": "matthieu",
-        "count": 2
+        "text": "creators",
+        "count": 3,
+        "score": 0.004792399988498713
     },
     {
-        "text": "empowering",
-        "count": 2
+        "text": "transformer",
+        "count": 3,
+        "score": 0.004770574526676412
     },
     {
-        "text": "cover",
-        "count": 2
+        "text": "short",
+        "count": 3,
+        "score": 0.004642543146823398
     },
     {
-        "text": "parashar shah",
-        "count": 2
+        "text": "previous",
+        "count": 3,
+        "score": 0.004515338055644431
     },
     {
-        "text": "noemielteto siddhant",
-        "count": 2
+        "text": "network",
+        "count": 3,
+        "score": 0.004514092931109638
     },
     {
-        "text": "feng han",
-        "count": 2
+        "text": "plants",
+        "count": 3,
+        "score": 0.004478055454230854
     },
     {
-        "text": "builds",
-        "count": 2
+        "text": "capturing",
+        "count": 3,
+        "score": 0.004472097362803714
     },
     {
-        "text": "real images",
-        "count": 2
+        "text": "austin",
+        "count": 3,
+        "score": 0.004439372253036565
     },
     {
-        "text": "salz guangxing",
-        "count": 2
+        "text": "film",
+        "count": 3,
+        "score": 0.004439372253036565
     },
     {
-        "text": "yip aashi",
-        "count": 2
+        "text": "le",
+        "count": 3,
+        "score": 0.004438227015107659
     },
     {
-        "text": "achieved",
-        "count": 2
+        "text": "challenging",
+        "count": 3,
+        "score": 0.004403794075693354
     },
     {
-        "text": "camera slowly",
-        "count": 2
+        "text": "represents",
+        "count": 3,
+        "score": 0.0043478678091102355
     },
     {
-        "text": "robinson",
-        "count": 2
+        "text": "characters",
+        "count": 3,
+        "score": 0.004315142699343087
     },
     {
-        "text": "doumanoglou",
-        "count": 2
+        "text": "srinivasan",
+        "count": 3,
+        "score": 0.004303348988073769
     },
     {
-        "text": "madhuri",
-        "count": 2
+        "text": "dawn",
+        "count": 3,
+        "score": 0.004303348988073769
     },
     {
-        "text": "rivadeneira",
-        "count": 2
+        "text": "glow",
+        "count": 3,
+        "score": 0.004211470996422624
     },
     {
-        "text": "explore stories",
-        "count": 2
+        "text": "roles",
+        "count": 3,
+        "score": 0.004199202610527544
     },
     {
-        "text": "ai music",
-        "count": 2
+        "text": "nature",
+        "count": 3,
+        "score": 0.0041690624225333385
     },
     {
-        "text": "ken",
-        "count": 2
+        "text": "technical",
+        "count": 3,
+        "score": 0.0041638479332056595
     },
     {
-        "text": "feng",
-        "count": 2
+        "text": "precisely",
+        "count": 3,
+        "score": 0.004083755944146001
     },
     {
-        "text": "committed",
-        "count": 2
+        "text": "developed",
+        "count": 3,
+        "score": 0.0040674086012168435
     },
     {
-        "text": "setting",
-        "count": 2
+        "text": "engaging",
+        "count": 3,
+        "score": 0.0040674086012168435
     },
     {
-        "text": "seyedhosseini yunhsuan",
-        "count": 2
+        "text": "wu",
+        "count": 3,
+        "score": 0.004059049509713021
     },
     {
-        "text": "pieter",
-        "count": 2
+        "text": "tang",
+        "count": 3,
+        "score": 0.004059049509713021
     },
     {
-        "text": "apply",
-        "count": 2
+        "text": "produce",
+        "count": 3,
+        "score": 0.0040353977174919
     },
     {
-        "text": "photo",
-        "count": 2
+        "text": "tool",
+        "count": 3,
+        "score": 0.004007890028144022
     },
     {
-        "text": "meher karthik",
-        "count": 2
+        "text": "adding",
+        "count": 3,
+        "score": 0.003966626692183641
     },
     {
-        "text": "palma gomez",
-        "count": 2
+        "text": "individuals contributed",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "ren shanfeng",
-        "count": 2
+        "text": "acknowledge individuals",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "wood",
-        "count": 2
+        "text": "contributed google",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "harness",
-        "count": 2
+        "text": "partners google",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "career",
-        "count": 2
+        "text": "deepmind partners",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "preference",
-        "count": 2
+        "text": "extend gratitude",
+        "count": 3,
+        "score": 0.003952698695643458
     },
     {
-        "text": "shot captures",
-        "count": 2
+        "text": "gregory",
+        "count": 3,
+        "score": 0.003941783026418389
     },
     {
-        "text": "masterpieces",
-        "count": 2
+        "text": "ali",
+        "count": 3,
+        "score": 0.003940264240764669
     },
     {
-        "text": "interaction",
-        "count": 2
+        "text": "van den",
+        "count": 3,
+        "score": 0.003923423406423508
     },
     {
-        "text": "mist",
-        "count": 2
+        "text": "lens flare",
+        "count": 3,
+        "score": 0.003923423406423508
     },
     {
-        "text": "lindner",
-        "count": 2
+        "text": "den oord",
+        "count": 3,
+        "score": 0.003923423406423508
     },
     {
-        "text": "blair chen",
-        "count": 2
+        "text": "ron van",
+        "count": 3,
+        "score": 0.003923423406423508
     },
     {
-        "text": "ankit",
-        "count": 2
+        "text": "hands",
+        "count": 3,
+        "score": 0.003828252047874782
     },
     {
-        "text": "thomas",
-        "count": 2
+        "text": "set",
+        "count": 3,
+        "score": 0.003704022494181304
     },
     {
-        "text": "hassabis insightful",
-        "count": 2
+        "text": "demonstrates",
+        "count": 3,
+        "score": 0.003704022494181304
     },
     {
-        "text": "volumetric",
-        "count": 2
+        "text": "rj",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "advancements",
-        "count": 2
+        "text": "gratitude",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "views",
-        "count": 2
+        "text": "contributions",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "matthieu kim",
-        "count": 2
+        "text": "yao",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "trusted",
-        "count": 2
+        "text": "jeff",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "chen trevor",
-        "count": 2
+        "text": "adams",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "strudel",
-        "count": 2
+        "text": "contributed",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "nithi",
-        "count": 2
+        "text": "individuals",
+        "count": 3,
+        "score": 0.0036838887676834717
     },
     {
-        "text": "chi",
-        "count": 2
+        "text": "den",
+        "count": 3,
+        "score": 0.0036823699820297522
     },
     {
-        "text": "stylized",
-        "count": 2
+        "text": "oord",
+        "count": 3,
+        "score": 0.0036823699820297522
     },
     {
-        "text": "gomez",
-        "count": 2
+        "text": "flare",
+        "count": 3,
+        "score": 0.0036823699820297522
     },
     {
-        "text": "principles",
-        "count": 2
+        "text": "ron",
+        "count": 3,
+        "score": 0.0036823699820297522
     },
     {
-        "text": "hashemi",
-        "count": 2
+        "text": "douglas",
+        "count": 3,
+        "score": 0.0036823699820297522
     },
     {
-        "text": "workshops",
-        "count": 2
+        "text": "exceptional",
+        "count": 3,
+        "score": 0.0036151177423752135
     },
     {
-        "text": "shawe taylor",
-        "count": 2
+        "text": "acknowledgements",
+        "count": 3,
+        "score": 0.0036151177423752135
     },
     {
-        "text": "kristian",
-        "count": 2
+        "text": "lin",
+        "count": 3,
+        "score": 0.0036151177423752135
     },
     {
-        "text": "hold",
-        "count": 2
+        "text": "improves",
+        "count": 3,
+        "score": 0.0035856510487757435
     },
     {
-        "text": "nandwani hernan",
-        "count": 2
+        "text": "complex scenes",
+        "count": 3,
+        "score": 0.0035730385994629
     },
     {
-        "text": "schmitt",
-        "count": 2
+        "text": "modeling",
+        "count": 3,
+        "score": 0.003522094512795164
     },
     {
-        "text": "khadke",
-        "count": 2
+        "text": "training data",
+        "count": 3,
+        "score": 0.003504958939452722
     },
     {
-        "text": "women",
-        "count": 2
+        "text": "oriol vinyals",
+        "count": 3,
+        "score": 0.003504958939452722
     },
     {
-        "text": "advance ai",
-        "count": 2
+        "text": "pankil botadra",
+        "count": 3,
+        "score": 0.0034649116316520555
     },
     {
-        "text": "sam",
-        "count": 2
+        "text": "flowing",
+        "count": 3,
+        "score": 0.0034544687254158112
     },
     {
-        "text": "xinchen yan",
-        "count": 2
+        "text": "mitchell",
+        "count": 3,
+        "score": 0.0034380705036690055
     },
     {
-        "text": "mark",
-        "count": 2
+        "text": "ali razavi",
+        "count": 3,
+        "score": 0.003435636342432106
     },
     {
-        "text": "jonas adler",
-        "count": 2
+        "text": "robert",
+        "count": 3,
+        "score": 0.0033692994783607474
     },
     {
-        "text": "christopher",
-        "count": 2
+        "text": "oliver",
+        "count": 3,
+        "score": 0.003320804020374373
     },
     {
-        "text": "shanfeng",
-        "count": 2
+        "text": "dark",
+        "count": 3,
+        "score": 0.003320804020374373
     },
     {
-        "text": "dabney",
-        "count": 2
+        "text": "vinyals",
+        "count": 3,
+        "score": 0.0033196587824454674
     },
     {
-        "text": "brings",
-        "count": 2
+        "text": "oriol",
+        "count": 3,
+        "score": 0.0033196587824454674
     },
     {
-        "text": "min",
-        "count": 2
+        "text": "fei",
+        "count": 3,
+        "score": 0.003253551780719834
     },
     {
-        "text": "mojtaba seyedhosseini",
-        "count": 2
+        "text": "botadra",
+        "count": 3,
+        "score": 0.003253551780719834
     },
     {
-        "text": "alexander",
-        "count": 2
+        "text": "pankil",
+        "count": 3,
+        "score": 0.003253551780719834
     },
     {
-        "text": "achieving",
-        "count": 2
+        "text": "du",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "goenka chen",
-        "count": 2
+        "text": "evgeny",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "rakesh ghiya",
-        "count": 2
+        "text": "tall",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "norman",
-        "count": 2
+        "text": "luo",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "gong wang",
-        "count": 2
+        "text": "lights",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "powered products",
-        "count": 2
+        "text": "razavi",
+        "count": 3,
+        "score": 0.0032520329950661148
     },
     {
-        "text": "foundations",
-        "count": 2
+        "text": "european",
+        "count": 3,
+        "score": 0.0032374146428814908
     },
     {
-        "text": "hernan",
-        "count": 2
+        "text": "controls",
+        "count": 3,
+        "score": 0.0031965744666808942
     },
     {
-        "text": "continuing",
-        "count": 2
+        "text": "trees",
+        "count": 3,
+        "score": 0.0031965744666808942
     },
     {
-        "text": "michael boratko",
-        "count": 2
+        "text": "invaluable",
+        "count": 3,
+        "score": 0.003191359977353216
     },
     {
-        "text": "palma",
-        "count": 2
+        "text": "bias",
+        "count": 3,
+        "score": 0.0031225889520449576
     },
     {
-        "text": "norman casagrande",
-        "count": 2
+        "text": "resolution",
+        "count": 3,
+        "score": 0.003071249776867969
     },
     {
-        "text": "interact molecules",
-        "count": 2
+        "text": "enhanced",
+        "count": 3,
+        "score": 0.003071249776867969
     },
     {
-        "text": "rises",
-        "count": 2
+        "text": "ecosystem",
+        "count": 3,
+        "score": 0.0028857998747723245
     },
     {
-        "text": "special douglas",
-        "count": 2
+        "text": "age",
+        "count": 3,
+        "score": 0.0028758486812261114
     },
     {
-        "text": "hand",
-        "count": 2
+        "text": "andeep toor",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "goodfellow rohin",
-        "count": 2
+        "text": "austin waters",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "curious",
-        "count": 2
+        "text": "eli collins",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "ai agents",
-        "count": 2
+        "text": "shixin luo",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "kyle",
-        "count": 2
+        "text": "tobias pfaff",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "petko",
-        "count": 2
+        "text": "douglas eck",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "emanuel",
-        "count": 2
+        "text": "van zee",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "nikhil",
-        "count": 2
+        "text": "visual styles",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "david lindner",
-        "count": 2
+        "text": "evgeny gladchenko",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "organization",
-        "count": 2
+        "text": "koray kavukcuoglu",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "enhancing",
-        "count": 2
+        "text": "jakob bauer",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "wind",
-        "count": 2
+        "text": "pont tuset",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "database",
-        "count": 2
+        "text": "luis cobo",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "extraordinary ai",
-        "count": 2
+        "text": "frankie garcia",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "han andreas",
-        "count": 2
+        "text": "marc van",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "blend",
-        "count": 2
+        "text": "aida nematzadeh",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "gleicher",
-        "count": 2
+        "text": "eric lau",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "dara bahri",
-        "count": 2
+        "text": "katie zhang",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "pu",
-        "count": 2
+        "text": "yuqing du",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "attempts",
-        "count": 2
+        "text": "shlomi fruchter",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "zhai",
-        "count": 2
+        "text": "tom hume",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "house",
-        "count": 2
+        "text": "jordi pont",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "exciting",
-        "count": 2
+        "text": "yelin kim",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "attacks",
-        "count": 2
+        "text": "irina blok",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "andreas",
-        "count": 2
+        "text": "signe rly",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "ai safety",
-        "count": 2
+        "text": "henna nandwani",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "tiny",
-        "count": 2
+        "text": "miaosen wang",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "select",
-        "count": 2
+        "text": "yori zwols",
+        "count": 3,
+        "score": 0.0027156939378244743
     },
     {
-        "text": "riachi",
-        "count": 2
+        "text": "blok",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "jacob",
-        "count": 2
+        "text": "wearing",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "tunnel",
-        "count": 2
+        "text": "yori",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "2017",
-        "count": 2
+        "text": "zwols",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "week",
-        "count": 2
+        "text": "eli",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "william",
-        "count": 2
+        "text": "pfaff",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "pedro fonseca",
-        "count": 2
+        "text": "waters",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "weizhe",
-        "count": 2
+        "text": "zee",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "malicious",
-        "count": 2
+        "text": "bauer",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "ira",
-        "count": 2
+        "text": "beautiful",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "brubaker",
-        "count": 2
+        "text": "gladchenko",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "sai",
-        "count": 2
+        "text": "aida",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "queen",
-        "count": 2
+        "text": "henna",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "considered",
-        "count": 2
+        "text": "lau",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "asplos",
-        "count": 2
+        "text": "nematzadeh",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "path",
-        "count": 2
+        "text": "frankie",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "huang vikram",
-        "count": 2
+        "text": "rly",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "detect",
-        "count": 2
+        "text": "cobo",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "planning",
-        "count": 2
+        "text": "yukun",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "ucl",
-        "count": 2
+        "text": "shlomi",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "frontier ai",
-        "count": 2
+        "text": "miaosen",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "mar",
-        "count": 2
+        "text": "tuset",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "imperceptible",
-        "count": 2
+        "text": "kavukcuoglu",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "jain kyle",
-        "count": 2
+        "text": "pont",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "lluis",
-        "count": 2
+        "text": "hume",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "elson caleb",
-        "count": 2
+        "text": "koray",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "woohyun",
-        "count": 2
+        "text": "jordi",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "crystal",
-        "count": 2
+        "text": "signe",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "responsibly agentic",
-        "count": 2
+        "text": "tobias",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "misused",
-        "count": 2
+        "text": "jakob",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "chen soham",
-        "count": 2
+        "text": "shixin",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "zu kim",
-        "count": 2
+        "text": "irina",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "miller",
-        "count": 2
+        "text": "luis",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "watermark",
-        "count": 2
+        "text": "nandwani",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "biorxiv",
-        "count": 2
+        "text": "yuqing",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "karpur koert",
-        "count": 2
+        "text": "yelin",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "saffar",
-        "count": 2
+        "text": "andeep",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "jacob kelly",
-        "count": 2
+        "text": "eck",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "questions",
-        "count": 2
+        "text": "katie",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "lorrain",
-        "count": 2
+        "text": "yilin",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "family",
-        "count": 2
+        "text": "toor",
+        "count": 3,
+        "score": 0.0025638017493675603
     },
     {
-        "text": "clouds",
-        "count": 2
-    },
-    {
-        "text": "vera",
-        "count": 2
-    },
-    {
-        "text": "alphafold server",
-        "count": 2
-    },
-    {
-        "text": "moiseev cathy",
-        "count": 2
-    },
-    {
-        "text": "extreme close",
-        "count": 2
-    },
-    {
-        "text": "experiment",
-        "count": 2
-    },
-    {
-        "text": "suganthan",
-        "count": 2
-    },
-    {
-        "text": "alignment",
-        "count": 2
-    },
-    {
-        "text": "character",
-        "count": 2
-    },
-    {
-        "text": "objectives",
-        "count": 2
-    },
-    {
-        "text": "junlin",
-        "count": 2
-    },
-    {
-        "text": "refine",
-        "count": 2
-    },
-    {
-        "text": "hern ndez",
-        "count": 2
-    },
-    {
-        "text": "steam",
-        "count": 2
-    },
-    {
-        "text": "ai understand",
-        "count": 2
-    },
-    {
-        "text": "floating",
-        "count": 2
-    },
-    {
-        "text": "parashar",
-        "count": 2
-    },
-    {
-        "text": "xingyu",
-        "count": 2
-    },
-    {
-        "text": "pressing",
-        "count": 2
-    },
-    {
-        "text": "easy",
-        "count": 2
-    },
-    {
-        "text": "gustavo hern",
-        "count": 2
-    },
-    {
-        "text": "bench",
-        "count": 2
-    },
-    {
-        "text": "qian",
-        "count": 2
-    },
-    {
-        "text": "2.5 intelligent",
-        "count": 2
-    },
-    {
-        "text": "achievement",
-        "count": 2
-    },
-    {
-        "text": "muted",
-        "count": 2
-    },
-    {
-        "text": "colors soft",
-        "count": 2
-    },
-    {
-        "text": "neon signs",
-        "count": 2
+        "text": "events",
+        "count": 2,
+        "score": 0.16952789699570814
     },
     {
         "text": "apps",
-        "count": 2
+        "count": 2,
+        "score": 0.16817952597075136
     },
     {
-        "text": "shah sonam",
-        "count": 2
+        "text": "alphafold server",
+        "count": 2,
+        "score": 0.13670309653916213
     },
     {
-        "text": "mountain",
-        "count": 2
+        "text": "blog",
+        "count": 2,
+        "score": 0.09781223203318733
     },
     {
-        "text": "doumanoglou nithi",
-        "count": 2
+        "text": "search google",
+        "count": 2,
+        "score": 0.06274509803921569
     },
     {
-        "text": "aaai 2025",
-        "count": 2
+        "text": "2.5 intelligent",
+        "count": 2,
+        "score": 0.05925925925925926
     },
     {
-        "text": "tony",
-        "count": 2
+        "text": "intelligent ai",
+        "count": 2,
+        "score": 0.05925925925925926
     },
     {
-        "text": "benigno uria",
-        "count": 2
+        "text": "stories",
+        "count": 2,
+        "score": 0.05698924731182796
     },
     {
-        "text": "physics ability",
-        "count": 2
+        "text": "podcast",
+        "count": 2,
+        "score": 0.045779320200061244
     },
     {
-        "text": "beasts",
-        "count": 2
-    },
-    {
-        "text": "generating",
-        "count": 2
-    },
-    {
-        "text": "alabdulmohsin daniel",
-        "count": 2
-    },
-    {
-        "text": "weather",
-        "count": 2
-    },
-    {
-        "text": "entails",
-        "count": 2
-    },
-    {
-        "text": "castro rivadeneira",
-        "count": 2
-    },
-    {
-        "text": "medium",
-        "count": 2
-    },
-    {
-        "text": "scalable",
-        "count": 2
-    },
-    {
-        "text": "meher",
-        "count": 2
-    },
-    {
-        "text": "blues",
-        "count": 2
-    },
-    {
-        "text": "immense",
-        "count": 2
-    },
-    {
-        "text": "daniel tanis",
-        "count": 2
-    },
-    {
-        "text": "zhe dong",
-        "count": 2
-    },
-    {
-        "text": "universal",
-        "count": 2
+        "text": "cybersecurity",
+        "count": 2,
+        "score": 0.042209415358977924
     },
     {
         "text": "underpin modern",
-        "count": 2
+        "count": 2,
+        "score": 0.042045767852219466
     },
     {
-        "text": "shahrokh",
-        "count": 2
+        "text": "biggest innovations",
+        "count": 2,
+        "score": 0.042045767852219466
+    },
+    {
+        "text": "explore biggest",
+        "count": 2,
+        "score": 0.042045767852219466
+    },
+    {
+        "text": "innovations ai",
+        "count": 2,
+        "score": 0.042045767852219466
+    },
+    {
+        "text": "scientific engineering",
+        "count": 2,
+        "score": 0.03473331204088151
+    },
+    {
+        "text": "challenges time",
+        "count": 2,
+        "score": 0.03473331204088151
+    },
+    {
+        "text": "hardest scientific",
+        "count": 2,
+        "score": 0.03473331204088151
+    },
+    {
+        "text": "engineering challenges",
+        "count": 2,
+        "score": 0.03473331204088151
+    },
+    {
+        "text": "solving hardest",
+        "count": 2,
+        "score": 0.03473331204088151
+    },
+    {
+        "text": "intelligent",
+        "count": 2,
+        "score": 0.032249742002063986
+    },
+    {
+        "text": "shaping future",
+        "count": 2,
+        "score": 0.03215565796210958
+    },
+    {
+        "text": "university",
+        "count": 2,
+        "score": 0.030983036991620683
+    },
+    {
+        "text": "agents",
+        "count": 2,
+        "score": 0.030788785255917037
+    },
+    {
+        "text": "authors",
+        "count": 2,
+        "score": 0.029065860215053765
+    },
+    {
+        "text": "venue",
+        "count": 2,
+        "score": 0.029065860215053765
+    },
+    {
+        "text": "hannah",
+        "count": 2,
+        "score": 0.029053908934707905
+    },
+    {
+        "text": "broader",
+        "count": 2,
+        "score": 0.02849002849002849
+    },
+    {
+        "text": "title",
+        "count": 2,
+        "score": 0.02828461021505376
+    },
+    {
+        "text": "proteins interact",
+        "count": 2,
+        "score": 0.02750455373406193
+    },
+    {
+        "text": "ai generated",
+        "count": 2,
+        "score": 0.027398205659075223
+    },
+    {
+        "text": "breakthroughs updates",
+        "count": 2,
+        "score": 0.025806451612903226
+    },
+    {
+        "text": "updates lab",
+        "count": 2,
+        "score": 0.025806451612903226
+    },
+    {
+        "text": "database",
+        "count": 2,
+        "score": 0.023655913978494626
+    },
+    {
+        "text": "feb 25",
+        "count": 2,
+        "score": 0.022533638874199423
+    },
+    {
+        "text": "february 2025",
+        "count": 2,
+        "score": 0.022533638874199423
+    },
+    {
+        "text": "shaping",
+        "count": 2,
+        "score": 0.022490152241030556
+    },
+    {
+        "text": "threats",
+        "count": 2,
+        "score": 0.022423968893209276
+    },
+    {
+        "text": "watermark",
+        "count": 2,
+        "score": 0.022286503383927497
+    },
+    {
+        "text": "deepmind podcast",
+        "count": 2,
+        "score": 0.022128851540616244
+    },
+    {
+        "text": "server predicts",
+        "count": 2,
+        "score": 0.021948998178506377
+    },
+    {
+        "text": "interact molecules",
+        "count": 2,
+        "score": 0.021948998178506377
+    },
+    {
+        "text": "predicts proteins",
+        "count": 2,
+        "score": 0.021948998178506377
+    },
+    {
+        "text": "stage",
+        "count": 2,
+        "score": 0.021689626973642826
+    },
+    {
+        "text": "hardest",
+        "count": 2,
+        "score": 0.021198926859304218
+    },
+    {
+        "text": "molecules",
+        "count": 2,
+        "score": 0.021121351766513058
+    },
+    {
+        "text": "protein",
+        "count": 2,
+        "score": 0.020764182054504636
+    },
+    {
+        "text": "robotics",
+        "count": 2,
+        "score": 0.019367887014945837
+    },
+    {
+        "text": "protein structures",
+        "count": 2,
+        "score": 0.01914191419141914
+    },
+    {
+        "text": "generate predictions",
+        "count": 2,
+        "score": 0.018774395003903203
+    },
+    {
+        "text": "field biology",
+        "count": 2,
+        "score": 0.018376068376068377
+    },
+    {
+        "text": "helping scientists",
+        "count": 2,
+        "score": 0.018376068376068377
+    },
+    {
+        "text": "games",
+        "count": 2,
+        "score": 0.018260031470071103
+    },
+    {
+        "text": "extraordinary ai",
+        "count": 2,
+        "score": 0.018207282913165264
+    },
+    {
+        "text": "ai transforming",
+        "count": 2,
+        "score": 0.018207282913165264
+    },
+    {
+        "text": "ai create",
+        "count": 2,
+        "score": 0.018207282913165264
+    },
+    {
+        "text": "learn ai",
+        "count": 2,
+        "score": 0.018207282913165264
+    },
+    {
+        "text": "california",
+        "count": 2,
+        "score": 0.01785101936502391
+    },
+    {
+        "text": "worlds",
+        "count": 2,
+        "score": 0.017827013877081237
+    },
+    {
+        "text": "evaluating",
+        "count": 2,
+        "score": 0.01715213852765569
+    },
+    {
+        "text": "feb",
+        "count": 2,
+        "score": 0.017002688172043014
+    },
+    {
+        "text": "february",
+        "count": 2,
+        "score": 0.017002688172043014
+    },
+    {
+        "text": "ai agents",
+        "count": 2,
+        "score": 0.016922457218634165
+    },
+    {
+        "text": "daniel salz",
+        "count": 2,
+        "score": 0.01690022915564957
+    },
+    {
+        "text": "ai transform",
+        "count": 2,
+        "score": 0.01676096181046676
+    },
+    {
+        "text": "series",
+        "count": 2,
+        "score": 0.016594707316356802
+    },
+    {
+        "text": "audio",
+        "count": 2,
+        "score": 0.016395389399775855
+    },
+    {
+        "text": "academic",
+        "count": 2,
+        "score": 0.01631196259752518
+    },
+    {
+        "text": "environments",
+        "count": 2,
+        "score": 0.0160439028972155
+    },
+    {
+        "text": "university oxford",
+        "count": 2,
+        "score": 0.015887997483089507
+    },
+    {
+        "text": "researcher curious",
+        "count": 2,
+        "score": 0.01581945661700263
+    },
+    {
+        "text": "explore fascinating",
+        "count": 2,
+        "score": 0.01581945661700263
+    },
+    {
+        "text": "curious explore",
+        "count": 2,
+        "score": 0.01581945661700263
+    },
+    {
+        "text": "fascinating artificial",
+        "count": 2,
+        "score": 0.01581945661700263
+    },
+    {
+        "text": "students",
+        "count": 2,
+        "score": 0.01562194111889165
+    },
+    {
+        "text": "questions",
+        "count": 2,
+        "score": 0.015341188021600392
+    },
+    {
+        "text": "millions",
+        "count": 2,
+        "score": 0.015255499957147473
+    },
+    {
+        "text": "production",
+        "count": 2,
+        "score": 0.014864272700016144
+    },
+    {
+        "text": "discoveries",
+        "count": 2,
+        "score": 0.014753764753764753
+    },
+    {
+        "text": "22",
+        "count": 2,
+        "score": 0.014751344086021505
+    },
+    {
+        "text": "harness",
+        "count": 2,
+        "score": 0.014543284332202536
+    },
+    {
+        "text": "attacks",
+        "count": 2,
+        "score": 0.014508401610887378
+    },
+    {
+        "text": "principles",
+        "count": 2,
+        "score": 0.014473684210526316
+    },
+    {
+        "text": "aims",
+        "count": 2,
+        "score": 0.014191325954370906
+    },
+    {
+        "text": "freely",
+        "count": 2,
+        "score": 0.014132104454685102
+    },
+    {
+        "text": "saved",
+        "count": 2,
+        "score": 0.014132104454685102
+    },
+    {
+        "text": "disease",
+        "count": 2,
+        "score": 0.014132104454685102
+    },
+    {
+        "text": "months",
+        "count": 2,
+        "score": 0.014132104454685102
+    },
+    {
+        "text": "oxford",
+        "count": 2,
+        "score": 0.013815655017371756
+    },
+    {
+        "text": "south",
+        "count": 2,
+        "score": 0.013477528010311761
+    },
+    {
+        "text": "hear",
+        "count": 2,
+        "score": 0.013337416215848389
+    },
+    {
+        "text": "institute",
+        "count": 2,
+        "score": 0.013335377069282648
+    },
+    {
+        "text": "arxiv",
+        "count": 2,
+        "score": 0.013188844086021506
+    },
+    {
+        "text": "reasoning",
+        "count": 2,
+        "score": 0.012894973125222933
+    },
+    {
+        "text": "york",
+        "count": 2,
+        "score": 0.01282662656053214
+    },
+    {
+        "text": "fascinating",
+        "count": 2,
+        "score": 0.012762220428051389
+    },
+    {
+        "text": "zhe",
+        "count": 2,
+        "score": 0.012752016129032259
+    },
+    {
+        "text": "salz",
+        "count": 2,
+        "score": 0.012752016129032259
+    },
+    {
+        "text": "23",
+        "count": 2,
+        "score": 0.012648809523809524
+    },
+    {
+        "text": "papers",
+        "count": 2,
+        "score": 0.012549528131978965
+    },
+    {
+        "text": "mountain",
+        "count": 2,
+        "score": 0.012514579628673589
+    },
+    {
+        "text": "study",
+        "count": 2,
+        "score": 0.012385039852851012
+    },
+    {
+        "text": "pioneering",
+        "count": 2,
+        "score": 0.012231992430012231
+    },
+    {
+        "text": "explore stories",
+        "count": 2,
+        "score": 0.011965811965811965
+    },
+    {
+        "text": "llm",
+        "count": 2,
+        "score": 0.01188395094806939
+    },
+    {
+        "text": "cyber",
+        "count": 2,
+        "score": 0.011869879183446744
+    },
+    {
+        "text": "threat",
+        "count": 2,
+        "score": 0.011869879183446744
+    },
+    {
+        "text": "2020",
+        "count": 2,
+        "score": 0.011547592192753482
+    },
+    {
+        "text": "categories",
+        "count": 2,
+        "score": 0.011410452252002035
+    },
+    {
+        "text": "hundreds",
+        "count": 2,
+        "score": 0.011376417075574047
+    },
+    {
+        "text": "neurips",
+        "count": 2,
+        "score": 0.011371265128593041
+    },
+    {
+        "text": "curious",
+        "count": 2,
+        "score": 0.011331605263530645
+    },
+    {
+        "text": "kaifeng chen",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "mojtaba seyedhosseini",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "chen xia",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "meredith ringel",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "koert chen",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "ringel morris",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "mar 25",
+        "count": 2,
+        "score": 0.011266819437099711
+    },
+    {
+        "text": "artists",
+        "count": 2,
+        "score": 0.01122199406202179
+    },
+    {
+        "text": "prototype",
+        "count": 2,
+        "score": 0.011196284945093532
+    },
+    {
+        "text": "managed",
+        "count": 2,
+        "score": 0.010954424688330269
+    },
+    {
+        "text": "environment",
+        "count": 2,
+        "score": 0.010775026627074183
+    },
+    {
+        "text": "path",
+        "count": 2,
+        "score": 0.010531530278801361
+    },
+    {
+        "text": "powered products",
+        "count": 2,
+        "score": 0.010457081624357979
+    },
+    {
+        "text": "multiple",
+        "count": 2,
+        "score": 0.010455948734979029
+    },
+    {
+        "text": "context",
+        "count": 2,
+        "score": 0.010229634822823266
+    },
+    {
+        "text": "object",
+        "count": 2,
+        "score": 0.010014449105374548
     },
     {
         "text": "veo google",
-        "count": 2
+        "count": 2,
+        "score": 0.009978757666084215
     },
     {
-        "text": "models imagen",
-        "count": 2
+        "text": "game",
+        "count": 2,
+        "score": 0.009857052335384649
     },
     {
-        "text": "ndez",
-        "count": 2
+        "text": "google ai",
+        "count": 2,
+        "score": 0.009649122807017543
+    },
+    {
+        "text": "accelerating",
+        "count": 2,
+        "score": 0.009554450322337142
+    },
+    {
+        "text": "learning resources",
+        "count": 2,
+        "score": 0.009443470639789658
+    },
+    {
+        "text": "december",
+        "count": 2,
+        "score": 0.009325359304084721
+    },
+    {
+        "text": "mission",
+        "count": 2,
+        "score": 0.009194509194509195
+    },
+    {
+        "text": "alphafold tools",
+        "count": 2,
+        "score": 0.009188034188034188
+    },
+    {
+        "text": "publications",
+        "count": 2,
+        "score": 0.009156586021505377
+    },
+    {
+        "text": "frontier ai",
+        "count": 2,
+        "score": 0.009124395595667153
+    },
+    {
+        "text": "image generated",
+        "count": 2,
+        "score": 0.009066065450570471
+    },
+    {
+        "text": "player",
+        "count": 2,
+        "score": 0.008936022146061776
+    },
+    {
+        "text": "neurips 2024",
+        "count": 2,
+        "score": 0.008911025495164709
+    },
+    {
+        "text": "supporting",
+        "count": 2,
+        "score": 0.008900140424437809
+    },
+    {
+        "text": "san francisco",
+        "count": 2,
+        "score": 0.00882979939610359
+    },
+    {
+        "text": "planning",
+        "count": 2,
+        "score": 0.008683016163707301
+    },
+    {
+        "text": "london",
+        "count": 2,
+        "score": 0.008571463507085824
+    },
+    {
+        "text": "seyedhosseini",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "ringel",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "morris",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "mar",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "meredith",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "koert",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "kaifeng",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "jain",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "mojtaba",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "xia",
+        "count": 2,
+        "score": 0.008501344086021507
+    },
+    {
+        "text": "neural",
+        "count": 2,
+        "score": 0.008382439547341212
+    },
+    {
+        "text": "attempts",
+        "count": 2,
+        "score": 0.008329579338009738
+    },
+    {
+        "text": "objects",
+        "count": 2,
+        "score": 0.008288573681663264
+    },
+    {
+        "text": "decade",
+        "count": 2,
+        "score": 0.00809843077884315
+    },
+    {
+        "text": "goals",
+        "count": 2,
+        "score": 0.008091806672505773
+    },
+    {
+        "text": "centre",
+        "count": 2,
+        "score": 0.008044721047714063
+    },
+    {
+        "text": "commitment learning",
+        "count": 2,
+        "score": 0.007909728308501314
+    },
+    {
+        "text": "benefits",
+        "count": 2,
+        "score": 0.007901680322177475
+    },
+    {
+        "text": "mitigations",
+        "count": 2,
+        "score": 0.007901680322177475
+    },
+    {
+        "text": "digital watermark",
+        "count": 2,
+        "score": 0.007862799547464773
+    },
+    {
+        "text": "22 january",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "jan 25",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "nenad toma",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "toma ev",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "22 jan",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "xingyou song",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "january 2025",
+        "count": 2,
+        "score": 0.007682590046418709
+    },
+    {
+        "text": "thousands",
+        "count": 2,
+        "score": 0.007634013539045016
+    },
+    {
+        "text": "francisco",
+        "count": 2,
+        "score": 0.0075063239620201646
+    },
+    {
+        "text": "san",
+        "count": 2,
+        "score": 0.0075063239620201646
+    },
+    {
+        "text": "motion",
+        "count": 2,
+        "score": 0.007501251684759872
+    },
+    {
+        "text": "hard",
+        "count": 2,
+        "score": 0.007457297779878426
+    },
+    {
+        "text": "requires",
+        "count": 2,
+        "score": 0.00738758076125701
+    },
+    {
+        "text": "increasingly",
+        "count": 2,
+        "score": 0.007300527089445295
+    },
+    {
+        "text": "robot",
+        "count": 2,
+        "score": 0.007293251060758
+    },
+    {
+        "text": "backgrounds",
+        "count": 2,
+        "score": 0.0072108650020904184
+    },
+    {
+        "text": "traditional",
+        "count": 2,
+        "score": 0.007177100339694794
+    },
+    {
+        "text": "scientific challenges",
+        "count": 2,
+        "score": 0.007089297886843899
+    },
+    {
+        "text": "increase",
+        "count": 2,
+        "score": 0.007038250131767186
+    },
+    {
+        "text": "sourced",
+        "count": 2,
+        "score": 0.007037875994310699
+    },
+    {
+        "text": "scientific discovery",
+        "count": 2,
+        "score": 0.0070206555075194915
+    },
+    {
+        "text": "dedicated",
+        "count": 2,
+        "score": 0.007013795171689909
+    },
+    {
+        "text": "complex 3d",
+        "count": 2,
+        "score": 0.006990275785110793
+    },
+    {
+        "text": "consistent",
+        "count": 2,
+        "score": 0.006988730497205107
+    },
+    {
+        "text": "pursue",
+        "count": 2,
+        "score": 0.006923424440930652
+    },
+    {
+        "text": "community advance",
+        "count": 2,
+        "score": 0.006903264450434262
+    },
+    {
+        "text": "cybersecurity evaluation",
+        "count": 2,
+        "score": 0.006887875099864856
+    },
+    {
+        "text": "relevant",
+        "count": 2,
+        "score": 0.006841028890745168
+    },
+    {
+        "text": "algorithms",
+        "count": 2,
+        "score": 0.006821831875827557
+    },
+    {
+        "text": "considered",
+        "count": 2,
+        "score": 0.006821831875827557
+    },
+    {
+        "text": "frontier safety",
+        "count": 2,
+        "score": 0.006813209787129194
+    },
+    {
+        "text": "chang",
+        "count": 2,
+        "score": 0.0068014172834405095
+    },
+    {
+        "text": "prevent",
+        "count": 2,
+        "score": 0.006776017198821562
+    },
+    {
+        "text": "spectrum",
+        "count": 2,
+        "score": 0.00676812214469847
+    },
+    {
+        "text": "suite",
+        "count": 2,
+        "score": 0.00676812214469847
+    },
+    {
+        "text": "predicted",
+        "count": 2,
+        "score": 0.00676812214469847
+    },
+    {
+        "text": "studio",
+        "count": 2,
+        "score": 0.006688458637163691
+    },
+    {
+        "text": "golden",
+        "count": 2,
+        "score": 0.006606707363136542
+    },
+    {
+        "text": "stages",
+        "count": 2,
+        "score": 0.006598048817893156
+    },
+    {
+        "text": "misused",
+        "count": 2,
+        "score": 0.006592834328565477
+    },
+    {
+        "text": "enhance",
+        "count": 2,
+        "score": 0.006592834328565477
+    },
+    {
+        "text": "comprehensive",
+        "count": 2,
+        "score": 0.006592834328565477
+    },
+    {
+        "text": "actors",
+        "count": 2,
+        "score": 0.006592834328565477
+    },
+    {
+        "text": "term",
+        "count": 2,
+        "score": 0.006585890848493265
+    },
+    {
+        "text": "christopher",
+        "count": 2,
+        "score": 0.006495818264014466
+    },
+    {
+        "text": "house",
+        "count": 2,
+        "score": 0.006431832134556078
+    },
+    {
+        "text": "apr 25",
+        "count": 2,
+        "score": 0.006400934249955932
+    },
+    {
+        "text": "april 2025",
+        "count": 2,
+        "score": 0.006400934249955932
+    },
+    {
+        "text": "capable models",
+        "count": 2,
+        "score": 0.006396816152203456
+    },
+    {
+        "text": "acm",
+        "count": 2,
+        "score": 0.006376008064516129
+    },
+    {
+        "text": "degree accuracy",
+        "count": 2,
+        "score": 0.006343577620173365
+    },
+    {
+        "text": "host",
+        "count": 2,
+        "score": 0.006297656445879976
+    },
+    {
+        "text": "infrastructure",
+        "count": 2,
+        "score": 0.006288020922167264
+    },
+    {
+        "text": "foundations",
+        "count": 2,
+        "score": 0.006285428965841337
+    },
+    {
+        "text": "compute",
+        "count": 2,
+        "score": 0.0062777511284946436
+    },
+    {
+        "text": "character",
+        "count": 2,
+        "score": 0.006122839102858562
+    },
+    {
+        "text": "produced",
+        "count": 2,
+        "score": 0.006121154234960296
+    },
+    {
+        "text": "humans",
+        "count": 2,
+        "score": 0.0061071956348755264
+    },
+    {
+        "text": "analysis",
+        "count": 2,
+        "score": 0.006074948544279121
+    },
+    {
+        "text": "helped",
+        "count": 2,
+        "score": 0.006074948544279121
+    },
+    {
+        "text": "challenges ai",
+        "count": 2,
+        "score": 0.006059476915433478
+    },
+    {
+        "text": "fast",
+        "count": 2,
+        "score": 0.00599422712542721
+    },
+    {
+        "text": "tracking shot",
+        "count": 2,
+        "score": 0.00598725459965053
+    },
+    {
+        "text": "generating",
+        "count": 2,
+        "score": 0.005972247097746111
+    },
+    {
+        "text": "watermarking identifying",
+        "count": 2,
+        "score": 0.005969634230503796
+    },
+    {
+        "text": "predict",
+        "count": 2,
+        "score": 0.005929298893887465
+    },
+    {
+        "text": "medical",
+        "count": 2,
+        "score": 0.005924084404559786
+    },
+    {
+        "text": "innovation",
+        "count": 2,
+        "score": 0.005924084404559786
+    },
+    {
+        "text": "valuable",
+        "count": 2,
+        "score": 0.005924084404559786
+    },
+    {
+        "text": "field ai",
+        "count": 2,
+        "score": 0.005911673641590964
+    },
+    {
+        "text": "advance science",
+        "count": 2,
+        "score": 0.005911673641590964
+    },
+    {
+        "text": "inference",
+        "count": 2,
+        "score": 0.00585958187526605
+    },
+    {
+        "text": "llms",
+        "count": 2,
+        "score": 0.005854367385938371
+    },
+    {
+        "text": "vibrant",
+        "count": 2,
+        "score": 0.005849705092129729
+    },
+    {
+        "text": "technique",
+        "count": 2,
+        "score": 0.005832513731730509
+    },
+    {
+        "text": "ev",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "ken",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "andreas",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "kevin",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "nenad",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "xingyou",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "january",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "toma",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "sebastian",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "raphael",
+        "count": 2,
+        "score": 0.005813172043010753
+    },
+    {
+        "text": "inspired",
+        "count": 2,
+        "score": 0.005767428447840819
+    },
+    {
+        "text": "wavenet",
+        "count": 2,
+        "score": 0.005767428447840819
+    },
+    {
+        "text": "career",
+        "count": 2,
+        "score": 0.0057102331780443365
+    },
+    {
+        "text": "talks",
+        "count": 2,
+        "score": 0.005707497320511764
+    },
+    {
+        "text": "user",
+        "count": 2,
+        "score": 0.005657146144916353
+    },
+    {
+        "text": "variety",
+        "count": 2,
+        "score": 0.005640658390657678
+    },
+    {
+        "text": "detect",
+        "count": 2,
+        "score": 0.005635443901329999
+    },
+    {
+        "text": "integrated",
+        "count": 2,
+        "score": 0.005635443901329999
+    },
+    {
+        "text": "shuo huang",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "salz michael",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "cathy yip",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "song dara",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "daniel cer",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "suganthan feng",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "salz zhe",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "dong mojtaba",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "david elson",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "tom duerig",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "cer madhuri",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "chen sai",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "deniz altinb",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "sai meher",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "walker wenlei",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "shanbhogue iftekhar",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "varma david",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "feng han",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "parashar shah",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "noemielteto siddhant",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "salz guangxing",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "yip aashi",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "seyedhosseini yunhsuan",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "meher karthik",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "palma gomez",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "ren shanfeng",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "blair chen",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "chen trevor",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "shawe taylor",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "goenka chen",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "rakesh ghiya",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "gong wang",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "michael boratko",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "goodfellow rohin",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "david lindner",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "han andreas",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "dara bahri",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "pedro fonseca",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "huang vikram",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "jain kyle",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "elson caleb",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "chen soham",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "karpur koert",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "moiseev cathy",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "hern ndez",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "gustavo hern",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "shah sonam",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "doumanoglou nithi",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "alabdulmohsin daniel",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "castro rivadeneira",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "zhe dong",
+        "count": 2,
+        "score": 0.005633409718549856
     },
     {
         "text": "jan dlabal",
-        "count": 2
-    },
-    {
-        "text": "huisheng wang",
-        "count": 2
+        "count": 2,
+        "score": 0.005633409718549856
     },
     {
         "text": "aashi jain",
-        "count": 2
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "wang ibrahim",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "zhe keran",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "baumgartner shahrokh",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "xia bingyi",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "andreas doumanoglou",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "sung raphael",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "soham ghosh",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "fedor moiseev",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "20 february",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "shanfeng zhang",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "zach gleicher",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "27 february",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "simon schmitt",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "feiyang chen",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "van hasselt",
+        "count": 2,
+        "score": 0.005633409718549856
+    },
+    {
+        "text": "rivadeneira kim",
+        "count": 2,
+        "score": 0.005633409718549856
     }
 ]
