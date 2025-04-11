@@ -37,8 +37,6 @@ const urls = [
   "https://github.com",
   "https://apnews.com",
   "https://www.nba.com",
-  "https://en.wikipedia.org/wiki/Main_Page",
-  "https://www.reddit.com",
 ];
 let startTime;
 
