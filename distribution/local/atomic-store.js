@@ -2,10 +2,14 @@
 /** @typedef {import("../types").Callback} Callback */
 
 const createCachedStore = require("./cached-store.js");
+const params = require("../params.js");
 const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
-const store = createCachedStore(shardedStore, 10000);
+let store = shardedStore;
+if (!params.disableCache) {
+  store = createCachedStore(shardedStore, 5000);
+}
 const locks = {};
 
 /**

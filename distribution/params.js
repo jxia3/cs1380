@@ -10,5 +10,6 @@ module.exports = {
     // Returns true if the page is relevant to our search engine based on some metric
     return pageContent.toLowerCase().includes("google");
   },
+  disableCache: false,
   debug: true,
 };

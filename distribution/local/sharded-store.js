@@ -9,7 +9,10 @@ const SHARD_COUNT = 10000;
 const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
 const NOT_FOUND_MARK = params.notFoundMark;
 
-const store = createCachedStore(baseStore, 2000);
+let store = baseStore;
+if (!params.disableCache) {
+  store = createCachedStore(baseStore, 1000);
+}
 
 /**
  * Finds the shard containing a key and returns the value corresponding to the key.

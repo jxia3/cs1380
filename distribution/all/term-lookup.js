@@ -6,7 +6,7 @@ const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
 
-const cache = util.cache.createCache(10000);
+const cache = util.cache.createCache(5000);
 
 /**
  * Routes remote requests to get the data associated with each term and caches the data.
