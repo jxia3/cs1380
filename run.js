@@ -16,12 +16,15 @@ const urls = ["https://deepmind.google"];
 let startTime;
 
 if (require.main === module) {
-  if (process.argv[2] === "clear") {
+  const command = process.argv[2];
+  if (command === "clear") {
     clear();
-  } else if (process.argv[2] === "calc") {
-    calc();
-  } else if (process.argv[2] === "download") {
+  } else if (command === "idle") {
+    idle();
+  } else if (command === "download") {
     download();
+  } else if (command === "calc") {
+    calc();
   } else {
     console.log("Unknown command");
   }
@@ -41,15 +44,9 @@ function clear() {
   });
 }
 
-function calc() {
+function idle() {
   startLocal(() => {
-    distribution[GROUP].termLookup.calcMostFrequent(FREQUENT_COUNT, (error, result) => {
-      if (error) {
-        throw error;
-      }
-      console.log(result);
-      fs.writeFileSync(FREQUENT_FILE, JSON.stringify(result, null, 4));
-    });
+    console.log("Idling");
   });
 }
 
@@ -70,6 +67,18 @@ function download() {
     });
   });
   handleSignals();
+}
+
+function calc() {
+  startLocal(() => {
+    distribution[GROUP].termLookup.calcMostFrequent(FREQUENT_COUNT, (error, result) => {
+      if (error) {
+        throw error;
+      }
+      console.log(result);
+      fs.writeFileSync(FREQUENT_FILE, JSON.stringify(result, null, 4));
+    });
+  });
 }
 
 function startLocal(callback) {
