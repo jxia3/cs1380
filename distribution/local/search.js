@@ -23,7 +23,7 @@ const crawlerStats = {
  */
 function start(node, reset, callback) {
   log("Starting crawl and index cycle");
-  global.distribution[GROUP]._setOrchestrator(node);
+  global.distribution[GROUP].search._setOrchestrator(node);
   global.distribution.local.crawl._start(reset, (error, result) => {
     if (error) {
       callback(error, null);
