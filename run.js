@@ -106,13 +106,21 @@ function startGroup(nodeCount, callback) {
 }
 
 function handleSignals() {
+  let exiting = false;
+
   process.on("SIGQUIT", () => {
     console.log();
     printStats();
   });
 
   process.on("SIGINT", () => {
+    if (exiting) {
+      console.log("Already exiting");
+      return;
+    }
+    exiting = true;
     console.log();
+
     try {
       distribution[GROUP].search.stop((error, result) => {
         console.log("Stop:", error, result);

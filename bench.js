@@ -33,7 +33,7 @@ const interval = setInterval(() => {
     }
     data.push({
       time: Date.now(),
-      data: counts,
+      counts: {...counts},
     });
     fs.writeFileSync(`data/${name}.json`, JSON.stringify(data, null, 4));
     console.log(counts);
