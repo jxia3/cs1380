@@ -5,6 +5,7 @@ const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
+const DEBUG = params.debug;
 
 /**
  * Sets a node as the orchestrator node and starts all the search cycles.
@@ -63,6 +64,10 @@ function updateCounts(crawled, indexed, callback) {
 function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
+  if (DEBUG) {
+    callback(null, null);
+    return;
+  }
   if (this.orchestrator === undefined) {
     callback(new Error("Group is not initialized"), null);
     return;
