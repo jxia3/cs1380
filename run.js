@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const GROUP = distribution.searchParams.searchGroup;
 const FREQUENT_COUNT = 1000;
-const FREQUENT_FILE = "frequent.json";
+const FREQUENT_FILE = "data/frequent.json";
 const RESET = true;
 
 const localNode = {

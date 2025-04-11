@@ -15,7 +15,7 @@ const NGRAM_LEN = params.ngramLen;
 const stopwords = new Set();
 
 // Load stopwords asynchronously on startup
-fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
+fs.readFile(path.join(__dirname, "../../data/stopwords.txt"), (error, data) => {
   if (error) {
     throw error;
   }
