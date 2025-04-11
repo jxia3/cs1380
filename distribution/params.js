@@ -12,6 +12,6 @@ module.exports = {
   },
   shardLocality: false,
   fifoCache: false,
-  disableCache: true,
+  disableCache: false,
   debug: true,
 };
