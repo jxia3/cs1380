@@ -7,25 +7,32 @@ const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
 const RESET = true;
 
+const offset = [3, 8];
 const nodes = [{
-  ip: "3.137.170.209",
+  ip: "",
   port: 80,
 }, {
-  ip: "3.135.186.201",
+  ip: "",
   port: 80,
 }, {
-  ip: "3.17.157.78",
+  ip: "",
   port: 80,
 }, {
-  ip: "18.216.21.233",
+  ip: "18.225.117.228",
   port: 80,
 }, {
-  ip: "3.145.145.84",
+  ip: "3.149.2.95",
   port: 80,
 }, {
-  ip: "3.149.12.161",
+  ip: "3.23.89.97",
   port: 80,
-}];
+}, {
+  ip: "3.141.13.195",
+  port: 80,
+}, {
+  ip: "3.17.145.30",
+  port: 80,
+}].slice(offset[0], offset[1]);
 
 const localNode = nodes[0];
 if (true) {
