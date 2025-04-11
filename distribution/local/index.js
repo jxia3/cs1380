@@ -7,8 +7,10 @@ const util = require("../util/util.js");
 const GROUP = params.searchGroup;
 const NGRAM_LEN = params.ngramLen;
 const QUEUE_KEY = params.indexQueue;
-const ACTIVE_LIMIT = 3;
-const CONTEXT_COUNT = 3;
+const CRAWL_SETTING = params.crawlSetting;
+const SHARD_LOCALITY = params.shardLocality;
+const ACTIVE_LIMIT = 2;
+const CONTEXT_COUNT = 2;
 const CONTEXT_WORDS = 5;
 const MAX_CONTEXT_LEN = 50;
 
@@ -37,47 +39,51 @@ function _start(clearQueue, callback) {
   }
 
   let active = 0;
-  module.exports._interval = setInterval(() => {
-    if (active > ACTIVE_LIMIT) {
-      return;
-    }
-    active += 1;
-    global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
-      modify: (queue) => {
-        // Extract the first element from the queue
-        if (queue.length === 0) {
-          return null;
-        }
-        const url = queue.shift();
-        return {
-          value: queue,
-          carry: url,
-        };
-      },
-      default: () => ({
-        value: [],
-        carry: null,
-      }),
-      callback: (error, url) => {
-        // Index a valid URL
-        if (error) {
-          console.error(error);
-          active -= 1;
-          return;
-        }
-        if (url !== null) {
-          indexUrl(url, (errors, results) => {
-            if (Object.keys(errors).length > 0) {
-              console.error(Object.values(errors)[0]);
-            }
+
+  // If indexing directly, the index queue will not be used
+  if (CRAWL_SETTING !== "index-directly") {
+    module.exports._interval = setInterval(() => {
+      if (active > ACTIVE_LIMIT) {
+        return;
+      }
+      active += 1;
+      global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
+        modify: (queue) => {
+          // Extract the first element from the queue
+          if (queue.length === 0) {
+            return null;
+          }
+          const url = queue.shift();
+          return {
+            value: queue,
+            carry: url,
+          };
+        },
+        default: () => ({
+          value: [],
+          carry: null,
+        }),
+        callback: (error, url) => {
+          // Index a valid URL
+          if (error) {
+            console.error(error);
             active -= 1;
-          });
-        } else {
-          active -= 1;
-        }
-      },
-    });
-  }, 500);
+            return;
+          }
+          if (url !== null) {
+            indexUrl(url, (errors, results) => {
+              if (Object.keys(errors).length > 0) {
+                console.error(Object.values(errors)[0]);
+              }
+              active -= 1;
+            });
+          } else {
+            active -= 1;
+          }
+        },
+      });
+    }, 500);
+  }
 }
 
 /**
@@ -89,7 +95,9 @@ function _stop(callback) {
     throw new Error("Stop index received no callback");
   }
   stopped = true;
-  clearInterval(module.exports._interval);
+  if (CRAWL_SETTING !== "index-directly") {
+    clearInterval(module.exports._interval);
+  }
   callback(null, null);
 }
 
@@ -128,18 +136,19 @@ function indexUrl(url, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
   url = util.search.normalizeUrl(url);
   util.search.downloadPage(url, (error, data) => {
-    if (error) {
+    if (error || data === null) {
       callback({}, null);
     } else {
-      indexPage(url, data, callback);
+      const {title, content} = extractText(data);
+      indexContent(url, title, content, callback);
     }
   });
 }
 
 /**
- * Updates the distributed index with the HTML data from a page.
+ * Indexes the content in a page.
  */
-function indexPage(url, data, callback) {
+function indexContent(url, title, content, callback) {
   if (!global.distribution[GROUP]?._isGroup) {
     throw new Error(`Group '${GROUP}' does not exist`);
   }
@@ -147,7 +156,6 @@ function indexPage(url, data, callback) {
   url = util.search.normalizeUrl(url);
 
   log(`Indexing page ${url}`, "index");
-  const {title, content} = extractText(data);
   const {terms, docLen} = extractTerms(title, content);
   if (stopped) {
     log(`Aborted indexing ${url}`, "index");
@@ -211,6 +219,9 @@ function extractText(content) {
   content = content.replaceAll(TAG_REGEX, " ");
   for (const code in HTML_CODES) {
     content = content.replaceAll(code, HTML_CODES[code]);
+    if (title !== null) {
+      title = title.replaceAll(code, HTML_CODES[code]);
+    }
   }
   content = content.replaceAll(SPECIAL_CHAR_REGEX, " ");
   content = content.replaceAll(/\s*\n+\s*/g, "\n");
@@ -228,6 +239,7 @@ function extractText(content) {
       title = "<unknown>";
     }
   }
+  title = title.replaceAll(/\s+/g, " ").trim();
 
   return {title, content};
 }
@@ -238,7 +250,7 @@ function extractText(content) {
  */
 function extractTerms(title, text) {
   // Extract terms from title
-  const termIndex = {};
+  const termIndex = Object.create(null);
   const docLen = new Array(NGRAM_LEN + 1).fill(0);
   const {terms: titleTerms, wordCount: titleCount} = util.search.calcTerms(title);
   for (let n = 1; n <= NGRAM_LEN; n += 1) {
@@ -284,12 +296,19 @@ function extractTerms(title, text) {
           context: [],
         };
       }
-      termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
+      termIndex[term.text].score += wordCount > 2 ? 3 : 1;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
         termIndex[term.text].context.push(extractContext(text, textIndex + term.start, textIndex + term.end));
       }
     }
     textIndex += lines[l].length + 1;
+  }
+
+  // Weight scores by the document length
+  const len = title.split(" ").length + docLen[0];
+  const factor = Math.max(0.2, Math.min(len / 50, 1));
+  for (const term in termIndex) {
+    termIndex[term].score *= factor;
   }
 
   return {terms: termIndex, docLen};
@@ -380,12 +399,22 @@ function createCharStream(text, index, increment) {
  */
 function updateIndex(url, terms, docLen, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  let active = Object.keys(terms).length;
+  let termData = [];
+  for (const term in terms) {
+    termData.push({
+      text: term,
+      key: util.search.createFullTermKey(term),
+    });
+  }
+  if (SHARD_LOCALITY) {
+    termData = localizeTerms(termData);
+  }
+  let active = termData.length;
   let updateError = null;
 
-  for (const term in terms) {
-    const key = util.search.createFullTermKey(term);
-    global.distribution.local.atomicStore.getAndModify(key, {
+  for (const {text: term, key} of termData) {
+    const config = {gid: GROUP, key};
+    global.distribution.local.atomicStore.getAndModify(config, {
       modify: (index) => {
         // Insert URL into index
         if (url in index) {
@@ -421,4 +450,27 @@ function updateIndex(url, terms, docLen, callback) {
   }
 }
 
-module.exports = {queueUrl, updateIndex, _start, _stop};
+/**
+ * Localizes an array of terms and keys by shard.
+ */
+function localizeTerms(terms) {
+  const shards = {};
+  for (const term of terms) {
+    const shard = global.distribution.local.shardedStore._getShardKey(term.key);
+    if (!(shard in shards)) {
+      shards[shard] = [];
+    }
+    shards[shard].push(term);
+  }
+  return Object.values(shards).flat();
+}
+
+module.exports = {
+  queueUrl,
+  indexContent,
+  extractText,
+  extractTerms,
+  updateIndex,
+  _start,
+  _stop,
+};

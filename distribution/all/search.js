@@ -5,6 +5,7 @@ const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
+const DEBUG = params.debug;
 
 /**
  * Sets a node as the orchestrator node and starts all the search cycles.
@@ -22,7 +23,7 @@ function start(node, reset, callback) {
   }
   this.orchestrator = node;
   const service = {service: "search", method: "start"};
-  global.distribution[this.gid].comm.send([reset], service, callback);
+  global.distribution[this.gid].comm.send([node, reset], service, callback);
 }
 
 /**
@@ -58,6 +59,24 @@ function updateCounts(crawled, indexed, callback) {
 }
 
 /**
+ * Updates crawler-specific stats on orchestrator node.
+ */
+function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
+  checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (DEBUG) {
+    callback(null, null);
+    return;
+  }
+  if (this.orchestrator === undefined) {
+    callback(new Error("Group is not initialized"), null);
+    return;
+  }
+  const remote = {node: this.orchestrator, service: "search", method: "updateCrawlerStats"};
+  global.distribution.local.comm.send([ignoredURL, irrelevantURL, pageContentLength], remote, callback);
+}
+
+/**
  * Checks if the current function context is valid.
  */
 function checkContext(groupId, hashFn) {
@@ -82,5 +101,7 @@ module.exports = (config) => {
     stop: stop.bind(context),
     flushCache: flushCache.bind(context),
     updateCounts: updateCounts.bind(context),
+    updateCrawlerStats: updateCrawlerStats.bind(context),
+    _setOrchestrator: (node) => context.orchestrator = node,
   };
 };

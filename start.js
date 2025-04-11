@@ -8,7 +8,7 @@ const localNode = {
   port: distribution.node.config.port,
 };
 const nodes = [localNode];
-const urls = ["https://deepmind.google"];
+const urls = ["https://www.nba.com/"];
 
 distribution.node.start(() => {
   distribution.local.groups.put(GROUP, nodes, (error, result) => {

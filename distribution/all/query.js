@@ -1,10 +1,11 @@
 const util = require("../util/util.js");
 const remote = require("./remote-service.js");
+const params = require("../params.js");
 
-const NUM_DOCUMENTS = 1000;
+const GROUP = params.searchGroup;
 
 /**
- * Distributes update index requests across the node group.
+ * Distributes get term requests across the node group.
  */
 function superDih(terms, callback) {
   checkContext(this.gid, this.hash);
@@ -15,7 +16,7 @@ function superDih(terms, callback) {
       return;
     }
     const batches = calcBatches.call(this, group, terms);
-    ultraDih(group, batches, callback);
+    getTerms(group, batches, callback);
   });
 }
 
@@ -36,62 +37,53 @@ function calcBatches(group, terms) {
 }
 
 /**
- * Sends batches of index updates across a node group. The callback must be valid.
+ * Gets term information across batches. The callback must be valid.
  */
-function ultraDih(group, batches, callback) {
-    const errors = {};
-    const urls = {};
-    // let active = Object.keys(batches).length;
-    let dih = 0;
-  
-    for (const node in batches) {
-      for (const term of batches[node]) {
-        // console.log('term: ', term);
-        const key = `[${term.text}]-full`;
-        // console.log('key:', key);
-        const remote = {node: group[node], service: "shardedStore", method: "get"};
-        dih++;
+function getTerms(group, batches, callback) {
+  const errors = {};
+  const results = {};
+  let batchKeys = Object.keys(batches);
+  let active = 0
 
-        global.distribution.local.comm.send([key], remote, (error, result) => {
-          // console.log('result: ', result);
-          if (error) {
-            errors[node] = error;
+  if (batchKeys.length === 0) {
+    callback(errors, results);
+  }
+
+  for (const node in batches) {
+    for (const term of batches[node]) {
+      // console.log('term: ', term);
+
+      // use create function thing
+      const key = `[${term.text}]-full`;
+      // console.log('key:', key);
+      const remote = {node: group[node], service: "shardedStore", method: "get"};
+      active++;
+      global.distribution.local.comm.send([{gid: GROUP, key}], remote, (error, result) => {
+        // console.log('result: ', result);
+        if (error) {
+          if (!(node in errors)) {
+            errors[node] = [];
+            results[term.text] = {};
           }
-          else {
-            const numUrls = Object.keys(result).length;
-            const idf = Math.log(NUM_DOCUMENTS / numUrls);
-            for (const url in result) {
-              if (!(url in urls)) {
-                urls[url] = {score: 0, title: "", context: []};
-              }
-              urls[url].score += result[url].score * idf;
-              // console.log('wtf:', result[url].context);
-
-              // UPDATE THIS LATER
-              if (typeof result[url].context[0] == 'object') {
-                urls[url].context.push(result[url].context[0].text);
-              } else {
-                urls[url].context.push(result[url].context[0])
-              }
-
-              // urls[url].context.push(result[url].context[0].text);
-              // console.log('hello: ', result[url].title);
-              urls[url].title = result[url].title;
-
-              // console.log('urls: ', urls);
+          errors[node].push(error);
+        }
+        else {
+          results[term.text] = result;
+        }
+        active--;
+        if (active == 0) {
+          for (const result in results) {
+            for (const url in results[result]) {
+              results[result][url] = util.search.decompressEntry(results[result][url]);
             }
           }
-          dih--;
-          if (dih == 0) {
-            callback(errors, urls);
-          }  
-        });
-      }
-    }
-    if (dih == 0) {
-      callback(errors, urls);
+          console.log("results: ", results);
+          callback(errors, results);
+        }  
+      });
     }
   }
+}
 
 /**
  * Checks if the current function context is valid.

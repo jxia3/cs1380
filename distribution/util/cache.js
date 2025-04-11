@@ -1,3 +1,7 @@
+const params = require("../params.js");
+
+const FIFO = params.fifoCache;
+
 /**
  * Creates an efficient LRU cache backed by a mapping and a linked list.
  */
@@ -118,6 +122,9 @@ function refresh(cache, key) {
     throw new Error(`Key '${key}' is not in the cache`);
   }
   if (cache.head.key === key) {
+    return;
+  }
+  if (FIFO) {
     return;
   }
 

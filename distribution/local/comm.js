@@ -9,7 +9,7 @@ const util = require("../util/util.js");
 const http = require("http");
 
 const OPTIMIZE_LOCAL = true;
-const REQUEST_TIMEOUT = 120000;
+const REQUEST_TIMEOUT = 300000;
 const DISABLE_LOGS = ["gossip", "heartbeat"];
 
 /**

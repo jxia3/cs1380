@@ -1,0 +1,5002 @@
+[
+    {
+        "text": "google",
+        "count": 48,
+        "score": 0.7113044159054682
+    },
+    {
+        "text": "technology",
+        "count": 43,
+        "score": 0.06573131731703821
+    },
+    {
+        "text": "learn",
+        "count": 43,
+        "score": 0.048515468132001936
+    },
+    {
+        "text": "privacy",
+        "count": 42,
+        "score": 0.06203761876562257
+    },
+    {
+        "text": "search",
+        "count": 41,
+        "score": 0.11000706640407437
+    },
+    {
+        "text": "terms",
+        "count": 40,
+        "score": 0.0925230984530672
+    },
+    {
+        "text": "policy",
+        "count": 40,
+        "score": 0.07118609682668767
+    },
+    {
+        "text": "deepmind",
+        "count": 39,
+        "score": 0.32428947862705926
+    },
+    {
+        "text": "sign",
+        "count": 39,
+        "score": 0.05591424814338954
+    },
+    {
+        "text": "address",
+        "count": 39,
+        "score": 0.03248428075080681
+    },
+    {
+        "text": "footer",
+        "count": 39,
+        "score": 0.029102593589737522
+    },
+    {
+        "text": "email",
+        "count": 38,
+        "score": 0.07828721412452315
+    },
+    {
+        "text": "updates",
+        "count": 38,
+        "score": 0.05667825329041711
+    },
+    {
+        "text": "follow",
+        "count": 38,
+        "score": 0.028113122830786142
+    },
+    {
+        "text": "valid",
+        "count": 37,
+        "score": 0.051376387696398476
+    },
+    {
+        "text": "links",
+        "count": 37,
+        "score": 0.028306191950804426
+    },
+    {
+        "text": "posts",
+        "count": 36,
+        "score": 0.09815597286854659
+    },
+    {
+        "text": "innovations",
+        "count": 36,
+        "score": 0.056406285625702976
+    },
+    {
+        "text": "explore",
+        "count": 36,
+        "score": 0.0558596910523205
+    },
+    {
+        "text": "enter",
+        "count": 36,
+        "score": 0.051279368966850515
+    },
+    {
+        "text": "conditions",
+        "count": 35,
+        "score": 0.05115713307733792
+    },
+    {
+        "text": "nameexamplecom",
+        "count": 35,
+        "score": 0.05093341943080548
+    },
+    {
+        "text": "accept",
+        "count": 35,
+        "score": 0.05093341943080548
+    },
+    {
+        "text": "ai",
+        "count": 34,
+        "score": 0.19944985760472161
+    },
+    {
+        "text": "acknowledge",
+        "count": 33,
+        "score": 0.051275322112413056
+    },
+    {
+        "text": "product",
+        "count": 33,
+        "score": 0.0470793158359497
+    },
+    {
+        "text": "teams",
+        "count": 29,
+        "score": 0.038891670090091236
+    },
+    {
+        "text": "models",
+        "count": 23,
+        "score": 0.03714669230063499
+    },
+    {
+        "text": "safety",
+        "count": 20,
+        "score": 0.06356827806286862
+    },
+    {
+        "text": "time",
+        "count": 20,
+        "score": 0.023540615783049276
+    },
+    {
+        "text": "create",
+        "count": 20,
+        "score": 0.02131125194562244
+    },
+    {
+        "text": "complex",
+        "count": 20,
+        "score": 0.018048228629675627
+    },
+    {
+        "text": "range",
+        "count": 19,
+        "score": 0.010517099711479731
+    },
+    {
+        "text": "model",
+        "count": 18,
+        "score": 0.041819330021746794
+    },
+    {
+        "text": "learning",
+        "count": 18,
+        "score": 0.027528307879264097
+    },
+    {
+        "text": "generation",
+        "count": 18,
+        "score": 0.01902195806071753
+    },
+    {
+        "text": "including",
+        "count": 18,
+        "score": 0.014090081148799777
+    },
+    {
+        "text": "capabilities",
+        "count": 18,
+        "score": 0.013865215791328555
+    },
+    {
+        "text": "gemini",
+        "count": 17,
+        "score": 0.40860526267326974
+    },
+    {
+        "text": "technologies",
+        "count": 17,
+        "score": 0.034628273959551384
+    },
+    {
+        "text": "real",
+        "count": 17,
+        "score": 0.014633292260528041
+    },
+    {
+        "text": "human",
+        "count": 16,
+        "score": 0.016868852843821815
+    },
+    {
+        "text": "challenges",
+        "count": 16,
+        "score": 0.01599081495404566
+    },
+    {
+        "text": "based",
+        "count": 16,
+        "score": 0.01110747015420531
+    },
+    {
+        "text": "responsibility",
+        "count": 15,
+        "score": 0.04028573627017626
+    },
+    {
+        "text": "advanced",
+        "count": 15,
+        "score": 0.015379690388232168
+    },
+    {
+        "text": "watch",
+        "count": 15,
+        "score": 0.012252541450183008
+    },
+    {
+        "text": "support",
+        "count": 15,
+        "score": 0.011592927738648852
+    },
+    {
+        "text": "building",
+        "count": 15,
+        "score": 0.011511217676638257
+    },
+    {
+        "text": "future",
+        "count": 15,
+        "score": 0.010502915327702884
+    },
+    {
+        "text": "approach",
+        "count": 15,
+        "score": 0.01037118893994
+    },
+    {
+        "text": "wide",
+        "count": 15,
+        "score": 0.007803795483764535
+    },
+    {
+        "text": "process",
+        "count": 15,
+        "score": 0.006410277824223587
+    },
+    {
+        "text": "video",
+        "count": 14,
+        "score": 0.015353293563386786
+    },
+    {
+        "text": "understanding",
+        "count": 14,
+        "score": 0.012086480334873865
+    },
+    {
+        "text": "action",
+        "count": 14,
+        "score": 0.011204839010888076
+    },
+    {
+        "text": "understand",
+        "count": 14,
+        "score": 0.010785881971587453
+    },
+    {
+        "text": "training",
+        "count": 14,
+        "score": 0.010163000874021416
+    },
+    {
+        "text": "field",
+        "count": 14,
+        "score": 0.009411516548263077
+    },
+    {
+        "text": "ability",
+        "count": 14,
+        "score": 0.008069395696061464
+    },
+    {
+        "text": "art",
+        "count": 14,
+        "score": 0.008068965492669007
+    },
+    {
+        "text": "develop",
+        "count": 14,
+        "score": 0.0062557620124193665
+    },
+    {
+        "text": "products",
+        "count": 13,
+        "score": 0.06720892661921983
+    },
+    {
+        "text": "systems",
+        "count": 13,
+        "score": 0.017858649876873064
+    },
+    {
+        "text": "people",
+        "count": 13,
+        "score": 0.015365276719796948
+    },
+    {
+        "text": "tools",
+        "count": 13,
+        "score": 0.015293562795630542
+    },
+    {
+        "text": "deep",
+        "count": 13,
+        "score": 0.012635445951650354
+    },
+    {
+        "text": "intelligence",
+        "count": 13,
+        "score": 0.012377244529935345
+    },
+    {
+        "text": "science",
+        "count": 13,
+        "score": 0.012364305699443339
+    },
+    {
+        "text": "artificial",
+        "count": 13,
+        "score": 0.010510282996301462
+    },
+    {
+        "text": "responsibly",
+        "count": 13,
+        "score": 0.010507457780610577
+    },
+    {
+        "text": "news",
+        "count": 13,
+        "score": 0.010120623451766031
+    },
+    {
+        "text": "performance",
+        "count": 13,
+        "score": 0.009962205511341683
+    },
+    {
+        "text": "challenge",
+        "count": 13,
+        "score": 0.008271965779165877
+    },
+    {
+        "text": "designed",
+        "count": 13,
+        "score": 0.008006367139023881
+    },
+    {
+        "text": "improve",
+        "count": 13,
+        "score": 0.006265787866978676
+    },
+    {
+        "text": "visual",
+        "count": 13,
+        "score": 0.004653337699174667
+    },
+    {
+        "text": "data",
+        "count": 12,
+        "score": 0.013773476635896188
+    },
+    {
+        "text": "build",
+        "count": 12,
+        "score": 0.01187647970592871
+    },
+    {
+        "text": "resources",
+        "count": 12,
+        "score": 0.011117481333326287
+    },
+    {
+        "text": "researchers",
+        "count": 12,
+        "score": 0.010213203224134364
+    },
+    {
+        "text": "single",
+        "count": 12,
+        "score": 0.00948715741892949
+    },
+    {
+        "text": "capable",
+        "count": 12,
+        "score": 0.005459660200095883
+    },
+    {
+        "text": "key",
+        "count": 12,
+        "score": 0.003931151917347621
+    },
+    {
+        "text": "discover",
+        "count": 11,
+        "score": 0.022986157266706594
+    },
+    {
+        "text": "impact",
+        "count": 11,
+        "score": 0.02269306319692285
+    },
+    {
+        "text": "image",
+        "count": 11,
+        "score": 0.01259990649058362
+    },
+    {
+        "text": "security",
+        "count": 11,
+        "score": 0.009287000410801726
+    },
+    {
+        "text": "language",
+        "count": 11,
+        "score": 0.008593978568757777
+    },
+    {
+        "text": "solve",
+        "count": 11,
+        "score": 0.008484831430720078
+    },
+    {
+        "text": "images",
+        "count": 11,
+        "score": 0.008370280874805801
+    },
+    {
+        "text": "instructions",
+        "count": 11,
+        "score": 0.008266717365436303
+    },
+    {
+        "text": "generative",
+        "count": 11,
+        "score": 0.006329149693048449
+    },
+    {
+        "text": "progress",
+        "count": 11,
+        "score": 0.0058123530420946205
+    },
+    {
+        "text": "breakthroughs",
+        "count": 10,
+        "score": 0.039709857538437254
+    },
+    {
+        "text": "scientific",
+        "count": 10,
+        "score": 0.014937448187003096
+    },
+    {
+        "text": "content",
+        "count": 10,
+        "score": 0.014435571400703473
+    },
+    {
+        "text": "specific",
+        "count": 10,
+        "score": 0.013530512891309354
+    },
+    {
+        "text": "industry",
+        "count": 10,
+        "score": 0.01022241422396015
+    },
+    {
+        "text": "network",
+        "count": 10,
+        "score": 0.009610508076215576
+    },
+    {
+        "text": "solving",
+        "count": 10,
+        "score": 0.009447640936451097
+    },
+    {
+        "text": "built",
+        "count": 10,
+        "score": 0.009427892277367612
+    },
+    {
+        "text": "level",
+        "count": 10,
+        "score": 0.009244194254358226
+    },
+    {
+        "text": "details",
+        "count": 10,
+        "score": 0.00830893933392678
+    },
+    {
+        "text": "development",
+        "count": 10,
+        "score": 0.006774112771485857
+    },
+    {
+        "text": "control",
+        "count": 10,
+        "score": 0.0066136735067139065
+    },
+    {
+        "text": "experience",
+        "count": 10,
+        "score": 0.006520892410159888
+    },
+    {
+        "text": "enabling",
+        "count": 10,
+        "score": 0.00581852104043659
+    },
+    {
+        "text": "videos",
+        "count": 10,
+        "score": 0.005780157153943911
+    },
+    {
+        "text": "applications",
+        "count": 10,
+        "score": 0.005388466420223149
+    },
+    {
+        "text": "life",
+        "count": 10,
+        "score": 0.005296321844917107
+    },
+    {
+        "text": "creating",
+        "count": 10,
+        "score": 0.005245454814874719
+    },
+    {
+        "text": "advance",
+        "count": 10,
+        "score": 0.004728921556436257
+    },
+    {
+        "text": "developing",
+        "count": 10,
+        "score": 0.004495544012872262
+    },
+    {
+        "text": "version",
+        "count": 10,
+        "score": 0.004043150680032846
+    },
+    {
+        "text": "set",
+        "count": 10,
+        "score": 0.003287402011009328
+    },
+    {
+        "text": "alphago",
+        "count": 9,
+        "score": 0.02243472544361056
+    },
+    {
+        "text": "prompt",
+        "count": 9,
+        "score": 0.01682428036792366
+    },
+    {
+        "text": "access",
+        "count": 9,
+        "score": 0.012571660049665517
+    },
+    {
+        "text": "community",
+        "count": 9,
+        "score": 0.012529441662915992
+    },
+    {
+        "text": "helpful",
+        "count": 9,
+        "score": 0.012451973007365901
+    },
+    {
+        "text": "helping",
+        "count": 9,
+        "score": 0.010834507475220193
+    },
+    {
+        "text": "potential",
+        "count": 9,
+        "score": 0.009337517297999384
+    },
+    {
+        "text": "play",
+        "count": 9,
+        "score": 0.008251001609104577
+    },
+    {
+        "text": "engineering",
+        "count": 9,
+        "score": 0.007561134495775164
+    },
+    {
+        "text": "responsible",
+        "count": 9,
+        "score": 0.007447880755228239
+    },
+    {
+        "text": "developers",
+        "count": 9,
+        "score": 0.007361806032887843
+    },
+    {
+        "text": "2024",
+        "count": 9,
+        "score": 0.0071115359472162095
+    },
+    {
+        "text": "david",
+        "count": 9,
+        "score": 0.0066214907291334574
+    },
+    {
+        "text": "advancing",
+        "count": 9,
+        "score": 0.006505527469369192
+    },
+    {
+        "text": "machine",
+        "count": 9,
+        "score": 0.006246795511884601
+    },
+    {
+        "text": "view",
+        "count": 9,
+        "score": 0.005780803693086224
+    },
+    {
+        "text": "day",
+        "count": 9,
+        "score": 0.005754352338131399
+    },
+    {
+        "text": "challenging",
+        "count": 9,
+        "score": 0.005433267023069561
+    },
+    {
+        "text": "benefit",
+        "count": 9,
+        "score": 0.005394947072541206
+    },
+    {
+        "text": "knowledge",
+        "count": 9,
+        "score": 0.004809837175378159
+    },
+    {
+        "text": "trained",
+        "count": 9,
+        "score": 0.004234989654943742
+    },
+    {
+        "text": "accuracy",
+        "count": 9,
+        "score": 0.004151008202883739
+    },
+    {
+        "text": "tackle",
+        "count": 9,
+        "score": 0.004114818956019346
+    },
+    {
+        "text": "leading",
+        "count": 9,
+        "score": 0.0037941387268941164
+    },
+    {
+        "text": "partners",
+        "count": 9,
+        "score": 0.0037774132258366587
+    },
+    {
+        "text": "step",
+        "count": 9,
+        "score": 0.003716735381607871
+    },
+    {
+        "text": "helps",
+        "count": 9,
+        "score": 0.0036854820308880824
+    },
+    {
+        "text": "natural",
+        "count": 9,
+        "score": 0.003048784302318722
+    },
+    {
+        "text": "alphafold",
+        "count": 8,
+        "score": 0.05819897355172408
+    },
+    {
+        "text": "services",
+        "count": 8,
+        "score": 0.043763819356465256
+    },
+    {
+        "text": "2025",
+        "count": 8,
+        "score": 0.03893623102138766
+    },
+    {
+        "text": "project",
+        "count": 8,
+        "score": 0.019814526983774162
+    },
+    {
+        "text": "features",
+        "count": 8,
+        "score": 0.01837321888941591
+    },
+    {
+        "text": "feedback",
+        "count": 8,
+        "score": 0.01575039431659476
+    },
+    {
+        "text": "tasks",
+        "count": 8,
+        "score": 0.013068794939486338
+    },
+    {
+        "text": "10",
+        "count": 8,
+        "score": 0.011623527804104236
+    },
+    {
+        "text": "march",
+        "count": 8,
+        "score": 0.011414681395943128
+    },
+    {
+        "text": "generated",
+        "count": 8,
+        "score": 0.01133378085407075
+    },
+    {
+        "text": "start",
+        "count": 8,
+        "score": 0.010893917782595519
+    },
+    {
+        "text": "powered",
+        "count": 8,
+        "score": 0.009455953986506525
+    },
+    {
+        "text": "biggest",
+        "count": 8,
+        "score": 0.009444415395694843
+    },
+    {
+        "text": "code",
+        "count": 8,
+        "score": 0.009354553900900722
+    },
+    {
+        "text": "benchmark",
+        "count": 8,
+        "score": 0.007850022166698863
+    },
+    {
+        "text": "users",
+        "count": 8,
+        "score": 0.007659064398550231
+    },
+    {
+        "text": "provide",
+        "count": 8,
+        "score": 0.00762291925965118
+    },
+    {
+        "text": "photos",
+        "count": 8,
+        "score": 0.007275926181108233
+    },
+    {
+        "text": "quality",
+        "count": 8,
+        "score": 0.007073976073525038
+    },
+    {
+        "text": "camera",
+        "count": 8,
+        "score": 0.006513042076105963
+    },
+    {
+        "text": "actions",
+        "count": 8,
+        "score": 0.00571620197485875
+    },
+    {
+        "text": "include",
+        "count": 8,
+        "score": 0.0055459058202161115
+    },
+    {
+        "text": "creative",
+        "count": 8,
+        "score": 0.005172123332356324
+    },
+    {
+        "text": "power",
+        "count": 8,
+        "score": 0.004615545382846074
+    },
+    {
+        "text": "approaches",
+        "count": 8,
+        "score": 0.004505070602130411
+    },
+    {
+        "text": "share",
+        "count": 8,
+        "score": 0.004437350777357945
+    },
+    {
+        "text": "enables",
+        "count": 8,
+        "score": 0.004416929435019196
+    },
+    {
+        "text": "enable",
+        "count": 8,
+        "score": 0.0043027603496823075
+    },
+    {
+        "text": "experiences",
+        "count": 8,
+        "score": 0.004254429681111389
+    },
+    {
+        "text": "ldquo",
+        "count": 8,
+        "score": 0.004218686675239788
+    },
+    {
+        "text": "faster",
+        "count": 8,
+        "score": 0.004012080944137115
+    },
+    {
+        "text": "programs",
+        "count": 8,
+        "score": 0.003915254112815303
+    },
+    {
+        "text": "ensure",
+        "count": 8,
+        "score": 0.0037837772786346565
+    },
+    {
+        "text": "previous",
+        "count": 8,
+        "score": 0.0037540344564225715
+    },
+    {
+        "text": "select",
+        "count": 8,
+        "score": 0.0037119103950151427
+    },
+    {
+        "text": "input",
+        "count": 8,
+        "score": 0.0034488473087604227
+    },
+    {
+        "text": "critical",
+        "count": 8,
+        "score": 0.0034320119177616362
+    },
+    {
+        "text": "common",
+        "count": 8,
+        "score": 0.003314776765770735
+    },
+    {
+        "text": "created",
+        "count": 8,
+        "score": 0.003108757778477928
+    },
+    {
+        "text": "hassabis",
+        "count": 8,
+        "score": 0.0030819580319271797
+    },
+    {
+        "text": "demis",
+        "count": 8,
+        "score": 0.0030819580319271797
+    },
+    {
+        "text": "accurately",
+        "count": 8,
+        "score": 0.002906725256308242
+    },
+    {
+        "text": "continue",
+        "count": 8,
+        "score": 0.0026100962195308524
+    },
+    {
+        "text": "train",
+        "count": 8,
+        "score": 0.0025297287563807733
+    },
+    {
+        "text": "patterns",
+        "count": 8,
+        "score": 0.0022304963776905704
+    },
+    {
+        "text": "represents",
+        "count": 8,
+        "score": 0.0020162727258608913
+    },
+    {
+        "text": "apps",
+        "count": 7,
+        "score": 0.05147552706193765
+    },
+    {
+        "text": "settings",
+        "count": 7,
+        "score": 0.015391386402621101
+    },
+    {
+        "text": "report",
+        "count": 7,
+        "score": 0.014456650692816389
+    },
+    {
+        "text": "games",
+        "count": 7,
+        "score": 0.01282452582561436
+    },
+    {
+        "text": "chen",
+        "count": 7,
+        "score": 0.009862528372465904
+    },
+    {
+        "text": "neural",
+        "count": 7,
+        "score": 0.009414243868624059
+    },
+    {
+        "text": "player",
+        "count": 7,
+        "score": 0.009048011174846247
+    },
+    {
+        "text": "countries",
+        "count": 7,
+        "score": 0.008480579967846246
+    },
+    {
+        "text": "everyday",
+        "count": 7,
+        "score": 0.008460998696329122
+    },
+    {
+        "text": "english",
+        "count": 7,
+        "score": 0.008362362765395537
+    },
+    {
+        "text": "espa",
+        "count": 7,
+        "score": 0.008174822341437276
+    },
+    {
+        "text": "biology",
+        "count": 7,
+        "score": 0.007506664935878801
+    },
+    {
+        "text": "ol",
+        "count": 7,
+        "score": 0.0072573911487767255
+    },
+    {
+        "text": "fran",
+        "count": 7,
+        "score": 0.006968373807736262
+    },
+    {
+        "text": "ais",
+        "count": 7,
+        "score": 0.006968373807736262
+    },
+    {
+        "text": "indonesia",
+        "count": 7,
+        "score": 0.0067808333837780016
+    },
+    {
+        "text": "wang",
+        "count": 7,
+        "score": 0.006602038796247288
+    },
+    {
+        "text": "assistant",
+        "count": 7,
+        "score": 0.006591748626530657
+    },
+    {
+        "text": "environments",
+        "count": 7,
+        "score": 0.0065792610494961054
+    },
+    {
+        "text": "connect",
+        "count": 7,
+        "score": 0.006554569388551472
+    },
+    {
+        "text": "generate",
+        "count": 7,
+        "score": 0.006394921413383016
+    },
+    {
+        "text": "predicts",
+        "count": 7,
+        "score": 0.006308368247359547
+    },
+    {
+        "text": "diverse",
+        "count": 7,
+        "score": 0.00584453875066313
+    },
+    {
+        "text": "topics",
+        "count": 7,
+        "score": 0.005824883941677355
+    },
+    {
+        "text": "portugu",
+        "count": 7,
+        "score": 0.005592227018745437
+    },
+    {
+        "text": "transform",
+        "count": 7,
+        "score": 0.005483938229444029
+    },
+    {
+        "text": "algorithms",
+        "count": 7,
+        "score": 0.005463684828405394
+    },
+    {
+        "text": "italiano",
+        "count": 7,
+        "score": 0.005404686594787176
+    },
+    {
+        "text": "deutsch",
+        "count": 7,
+        "score": 0.005404686594787176
+    },
+    {
+        "text": "platforms",
+        "count": 7,
+        "score": 0.005113026383488253
+    },
+    {
+        "text": "identify",
+        "count": 7,
+        "score": 0.0050171894353109965
+    },
+    {
+        "text": "benchmarks",
+        "count": 7,
+        "score": 0.004733236083389139
+    },
+    {
+        "text": "lee",
+        "count": 7,
+        "score": 0.0046846402869836065
+    },
+    {
+        "text": "physics",
+        "count": 7,
+        "score": 0.004543232006153685
+    },
+    {
+        "text": "van",
+        "count": 7,
+        "score": 0.004527770164265301
+    },
+    {
+        "text": "experts",
+        "count": 7,
+        "score": 0.004402825118604921
+    },
+    {
+        "text": "powerful",
+        "count": 7,
+        "score": 0.00414912839507289
+    },
+    {
+        "text": "zhang",
+        "count": 7,
+        "score": 0.0040892798739236005
+    },
+    {
+        "text": "unique",
+        "count": 7,
+        "score": 0.003934610372765053
+    },
+    {
+        "text": "paper",
+        "count": 7,
+        "score": 0.003857184229198231
+    },
+    {
+        "text": "goal",
+        "count": 7,
+        "score": 0.0038533100925060245
+    },
+    {
+        "text": "easier",
+        "count": 7,
+        "score": 0.00373135837027557
+    },
+    {
+        "text": "20",
+        "count": 7,
+        "score": 0.0037150455629141404
+    },
+    {
+        "text": "han",
+        "count": 7,
+        "score": 0.00370524878088379
+    },
+    {
+        "text": "takes",
+        "count": 7,
+        "score": 0.0033465793194839125
+    },
+    {
+        "text": "exploring",
+        "count": 7,
+        "score": 0.0032759176201300312
+    },
+    {
+        "text": "individual",
+        "count": 7,
+        "score": 0.0032758274569243025
+    },
+    {
+        "text": "professional",
+        "count": 7,
+        "score": 0.00316987177049223
+    },
+    {
+        "text": "john",
+        "count": 7,
+        "score": 0.0031588216530886366
+    },
+    {
+        "text": "ecosystem",
+        "count": 7,
+        "score": 0.003027971290271399
+    },
+    {
+        "text": "tom",
+        "count": 7,
+        "score": 0.002901323470988396
+    },
+    {
+        "text": "safe",
+        "count": 7,
+        "score": 0.002830863612946729
+    },
+    {
+        "text": "identifying",
+        "count": 7,
+        "score": 0.002505106068846778
+    },
+    {
+        "text": "assess",
+        "count": 7,
+        "score": 0.002432549347306144
+    },
+    {
+        "text": "ensuring",
+        "count": 7,
+        "score": 0.0022564036967126213
+    },
+    {
+        "text": "technical",
+        "count": 7,
+        "score": 0.002216318033015822
+    },
+    {
+        "text": "ideas",
+        "count": 7,
+        "score": 0.0021956927567337416
+    },
+    {
+        "text": "gupta",
+        "count": 7,
+        "score": 0.002175884723569263
+    },
+    {
+        "text": "accessible",
+        "count": 7,
+        "score": 0.0018283418900349674
+    },
+    {
+        "text": "controls",
+        "count": 7,
+        "score": 0.0017795912943688063
+    },
+    {
+        "text": "age",
+        "count": 7,
+        "score": 0.001202247619828842
+    },
+    {
+        "text": "youtube",
+        "count": 6,
+        "score": 0.08339250191104992
+    },
+    {
+        "text": "contact",
+        "count": 6,
+        "score": 0.018819260409475458
+    },
+    {
+        "text": "business",
+        "count": 6,
+        "score": 0.018507887542620432
+    },
+    {
+        "text": "game",
+        "count": 6,
+        "score": 0.016155948212937993
+    },
+    {
+        "text": "dark",
+        "count": 6,
+        "score": 0.013784926736324978
+    },
+    {
+        "text": "agents",
+        "count": 6,
+        "score": 0.013735782705379802
+    },
+    {
+        "text": "planning",
+        "count": 6,
+        "score": 0.010633347769530344
+    },
+    {
+        "text": "reinforcement",
+        "count": 6,
+        "score": 0.00950974769114439
+    },
+    {
+        "text": "3d",
+        "count": 6,
+        "score": 0.009372782556763364
+    },
+    {
+        "text": "updated",
+        "count": 6,
+        "score": 0.008853479426402458
+    },
+    {
+        "text": "reasoning",
+        "count": 6,
+        "score": 0.007409526898051216
+    },
+    {
+        "text": "type",
+        "count": 6,
+        "score": 0.007345419185914848
+    },
+    {
+        "text": "team",
+        "count": 6,
+        "score": 0.006780871412245188
+    },
+    {
+        "text": "personalized",
+        "count": 6,
+        "score": 0.006571468549938333
+    },
+    {
+        "text": "interact",
+        "count": 6,
+        "score": 0.006472813706283942
+    },
+    {
+        "text": "accelerate",
+        "count": 6,
+        "score": 0.00636820025293076
+    },
+    {
+        "text": "imagen",
+        "count": 6,
+        "score": 0.006015732810700979
+    },
+    {
+        "text": "era",
+        "count": 6,
+        "score": 0.0059769613854033146
+    },
+    {
+        "text": "plan",
+        "count": 6,
+        "score": 0.005916745414427882
+    },
+    {
+        "text": "light",
+        "count": 6,
+        "score": 0.005860433029817639
+    },
+    {
+        "text": "program",
+        "count": 6,
+        "score": 0.005826835993564336
+    },
+    {
+        "text": "scale",
+        "count": 6,
+        "score": 0.005786583494332608
+    },
+    {
+        "text": "bahasa",
+        "count": 6,
+        "score": 0.0057619252740352496
+    },
+    {
+        "text": "rules",
+        "count": 6,
+        "score": 0.005620329648770855
+    },
+    {
+        "text": "threats",
+        "count": 6,
+        "score": 0.005582014597577959
+    },
+    {
+        "text": "availability",
+        "count": 6,
+        "score": 0.00550051732896464
+    },
+    {
+        "text": "50",
+        "count": 6,
+        "score": 0.005477484907936057
+    },
+    {
+        "text": "society",
+        "count": 6,
+        "score": 0.0053578594126509225
+    },
+    {
+        "text": "lab",
+        "count": 6,
+        "score": 0.0053000616109875375
+    },
+    {
+        "text": "user",
+        "count": 6,
+        "score": 0.005287061094243366
+    },
+    {
+        "text": "daniel",
+        "count": 6,
+        "score": 0.005214715640893137
+    },
+    {
+        "text": "agentic",
+        "count": 6,
+        "score": 0.005179420024483408
+    },
+    {
+        "text": "rk",
+        "count": 6,
+        "score": 0.0051156692537467135
+    },
+    {
+        "text": "nederlands",
+        "count": 6,
+        "score": 0.0051156692537467135
+    },
+    {
+        "text": "polski",
+        "count": 6,
+        "score": 0.0051156692537467135
+    },
+    {
+        "text": "interactions",
+        "count": 6,
+        "score": 0.0049573304952147184
+    },
+    {
+        "text": "android",
+        "count": 6,
+        "score": 0.0049255565227005645
+    },
+    {
+        "text": "scientists",
+        "count": 6,
+        "score": 0.004856366533144223
+    },
+    {
+        "text": "scene",
+        "count": 6,
+        "score": 0.004368622285366294
+    },
+    {
+        "text": "digital",
+        "count": 6,
+        "score": 0.004222404644523077
+    },
+    {
+        "text": "screen",
+        "count": 6,
+        "score": 0.004203994560160289
+    },
+    {
+        "text": "organizations",
+        "count": 6,
+        "score": 0.004140046518304029
+    },
+    {
+        "text": "innovation",
+        "count": 6,
+        "score": 0.0041237684337382405
+    },
+    {
+        "text": "dan",
+        "count": 6,
+        "score": 0.004092560993566883
+    },
+    {
+        "text": "benefits",
+        "count": 6,
+        "score": 0.0038861102677433955
+    },
+    {
+        "text": "perform",
+        "count": 6,
+        "score": 0.0037955495412797507
+    },
+    {
+        "text": "purpose",
+        "count": 6,
+        "score": 0.003755781992180707
+    },
+    {
+        "text": "insights",
+        "count": 6,
+        "score": 0.00370812999561782
+    },
+    {
+        "text": "achieved",
+        "count": 6,
+        "score": 0.003679075501294529
+    },
+    {
+        "text": "evaluation",
+        "count": 6,
+        "score": 0.003665430914138944
+    },
+    {
+        "text": "transforming",
+        "count": 6,
+        "score": 0.003658834623186262
+    },
+    {
+        "text": "evaluate",
+        "count": 6,
+        "score": 0.0036347352325474995
+    },
+    {
+        "text": "read",
+        "count": 6,
+        "score": 0.003577368741048471
+    },
+    {
+        "text": "26",
+        "count": 6,
+        "score": 0.0035177156918154463
+    },
+    {
+        "text": "achieve",
+        "count": 6,
+        "score": 0.0035160754146594266
+    },
+    {
+        "text": "dynamic",
+        "count": 6,
+        "score": 0.003458663752763675
+    },
+    {
+        "text": "design",
+        "count": 6,
+        "score": 0.0034286665613355734
+    },
+    {
+        "text": "creativity",
+        "count": 6,
+        "score": 0.0034273620450049388
+    },
+    {
+        "text": "kim",
+        "count": 6,
+        "score": 0.0033173964297764083
+    },
+    {
+        "text": "humans",
+        "count": 6,
+        "score": 0.00327988227869581
+    },
+    {
+        "text": "trusted",
+        "count": 6,
+        "score": 0.003203804128579367
+    },
+    {
+        "text": "effective",
+        "count": 6,
+        "score": 0.003185736569762078
+    },
+    {
+        "text": "eleni",
+        "count": 6,
+        "score": 0.003038516474177968
+    },
+    {
+        "text": "efforts",
+        "count": 6,
+        "score": 0.003034664972226027
+    },
+    {
+        "text": "hand",
+        "count": 6,
+        "score": 0.0030097640474209143
+    },
+    {
+        "text": "developed",
+        "count": 6,
+        "score": 0.0029686920147014083
+    },
+    {
+        "text": "frame",
+        "count": 6,
+        "score": 0.0029665539827007743
+    },
+    {
+        "text": "aim",
+        "count": 6,
+        "score": 0.002870575122350664
+    },
+    {
+        "text": "introduced",
+        "count": 6,
+        "score": 0.002783185100959315
+    },
+    {
+        "text": "mathematics",
+        "count": 6,
+        "score": 0.0027362189700082143
+    },
+    {
+        "text": "types",
+        "count": 6,
+        "score": 0.002716158313742465
+    },
+    {
+        "text": "score",
+        "count": 6,
+        "score": 0.0026711699663850863
+    },
+    {
+        "text": "scenes",
+        "count": 6,
+        "score": 0.002664934547294411
+    },
+    {
+        "text": "improved",
+        "count": 6,
+        "score": 0.0026294968427172274
+    },
+    {
+        "text": "choose",
+        "count": 6,
+        "score": 0.0026211786424183746
+    },
+    {
+        "text": "shape",
+        "count": 6,
+        "score": 0.0025993120341657136
+    },
+    {
+        "text": "frames",
+        "count": 6,
+        "score": 0.0025164746924191297
+    },
+    {
+        "text": "sequence",
+        "count": 6,
+        "score": 0.0024960246517345634
+    },
+    {
+        "text": "respond",
+        "count": 6,
+        "score": 0.0024856164164871967
+    },
+    {
+        "text": "animation",
+        "count": 6,
+        "score": 0.0024273491343693625
+    },
+    {
+        "text": "solution",
+        "count": 6,
+        "score": 0.0024164818910776607
+    },
+    {
+        "text": "situations",
+        "count": 6,
+        "score": 0.0023993084201081967
+    },
+    {
+        "text": "examples",
+        "count": 6,
+        "score": 0.002344857933464694
+    },
+    {
+        "text": "term",
+        "count": 6,
+        "score": 0.002293253185575873
+    },
+    {
+        "text": "city",
+        "count": 6,
+        "score": 0.0022916763828108306
+    },
+    {
+        "text": "intricate",
+        "count": 6,
+        "score": 0.0022723829379546596
+    },
+    {
+        "text": "dataset",
+        "count": 6,
+        "score": 0.002262997964883982
+    },
+    {
+        "text": "outputs",
+        "count": 6,
+        "score": 0.00226245956880183
+    },
+    {
+        "text": "entire",
+        "count": 6,
+        "score": 0.002248873064495487
+    },
+    {
+        "text": "close",
+        "count": 6,
+        "score": 0.0022242522428383453
+    },
+    {
+        "text": "increase",
+        "count": 6,
+        "score": 0.0022021728151995373
+    },
+    {
+        "text": "includes",
+        "count": 6,
+        "score": 0.0021977078795551858
+    },
+    {
+        "text": "rich",
+        "count": 6,
+        "score": 0.0021663154675996715
+    },
+    {
+        "text": "add",
+        "count": 6,
+        "score": 0.002066337647906844
+    },
+    {
+        "text": "guide",
+        "count": 6,
+        "score": 0.0020443907254723294
+    },
+    {
+        "text": "tool",
+        "count": 6,
+        "score": 0.0020053830254368153
+    },
+    {
+        "text": "live",
+        "count": 6,
+        "score": 0.0019743607869103816
+    },
+    {
+        "text": "center",
+        "count": 6,
+        "score": 0.0019032589934546561
+    },
+    {
+        "text": "bringing",
+        "count": 6,
+        "score": 0.0018496844910456504
+    },
+    {
+        "text": "responding",
+        "count": 6,
+        "score": 0.0017998977573557506
+    },
+    {
+        "text": "demonstrates",
+        "count": 6,
+        "score": 0.001756445503015482
+    },
+    {
+        "text": "hands",
+        "count": 6,
+        "score": 0.001735674896780749
+    },
+    {
+        "text": "capability",
+        "count": 6,
+        "score": 0.0017078838817006768
+    },
+    {
+        "text": "called",
+        "count": 6,
+        "score": 0.0016487109346202157
+    },
+    {
+        "text": "improves",
+        "count": 6,
+        "score": 0.0015389542939603978
+    },
+    {
+        "text": "extend",
+        "count": 6,
+        "score": 0.0015257288079920136
+    },
+    {
+        "text": "apply",
+        "count": 6,
+        "score": 0.0013439858346841914
+    },
+    {
+        "text": "marc",
+        "count": 6,
+        "score": 0.0012049713063579798
+    },
+    {
+        "text": "figure",
+        "count": 6,
+        "score": 0.0010276323480225475
+    },
+    {
+        "text": "robotics",
+        "count": 5,
+        "score": 0.03037176776205481
+    },
+    {
+        "text": "blog",
+        "count": 5,
+        "score": 0.020195665775260472
+    },
+    {
+        "text": "predictions",
+        "count": 5,
+        "score": 0.01635300638173952
+    },
+    {
+        "text": "store",
+        "count": 5,
+        "score": 0.015058121744157459
+    },
+    {
+        "text": "25",
+        "count": 5,
+        "score": 0.012278314172004699
+    },
+    {
+        "text": "structures",
+        "count": 5,
+        "score": 0.010162044883994857
+    },
+    {
+        "text": "cloud",
+        "count": 5,
+        "score": 0.008515273384348591
+    },
+    {
+        "text": "shot",
+        "count": 5,
+        "score": 0.007848811412165268
+    },
+    {
+        "text": "public",
+        "count": 5,
+        "score": 0.007405271498125373
+    },
+    {
+        "text": "visit",
+        "count": 5,
+        "score": 0.006710802642359829
+    },
+    {
+        "text": "environment",
+        "count": 5,
+        "score": 0.006586786121456577
+    },
+    {
+        "text": "chrome",
+        "count": 5,
+        "score": 0.006442043689305954
+    },
+    {
+        "text": "service",
+        "count": 5,
+        "score": 0.006411707404674623
+    },
+    {
+        "text": "played",
+        "count": 5,
+        "score": 0.005924253027772442
+    },
+    {
+        "text": "framework",
+        "count": 5,
+        "score": 0.005862277612700847
+    },
+    {
+        "text": "initiatives",
+        "count": 5,
+        "score": 0.005394329295988919
+    },
+    {
+        "text": "pixel",
+        "count": 5,
+        "score": 0.005208172504904783
+    },
+    {
+        "text": "editing",
+        "count": 5,
+        "score": 0.005167641340931657
+    },
+    {
+        "text": "networks",
+        "count": 5,
+        "score": 0.005074801419222101
+    },
+    {
+        "text": "audio",
+        "count": 5,
+        "score": 0.004703666852105579
+    },
+    {
+        "text": "saved",
+        "count": 5,
+        "score": 0.004677113017847323
+    },
+    {
+        "text": "agent",
+        "count": 5,
+        "score": 0.004583592770459711
+    },
+    {
+        "text": "risks",
+        "count": 5,
+        "score": 0.004525710887896324
+    },
+    {
+        "text": "foundation",
+        "count": 5,
+        "score": 0.004369830357116844
+    },
+    {
+        "text": "questions",
+        "count": 5,
+        "score": 0.004233035724079782
+    },
+    {
+        "text": "music",
+        "count": 5,
+        "score": 0.004136761141657371
+    },
+    {
+        "text": "multimodal",
+        "count": 5,
+        "score": 0.004126354957631602
+    },
+    {
+        "text": "california",
+        "count": 5,
+        "score": 0.004096685175122666
+    },
+    {
+        "text": "moves",
+        "count": 5,
+        "score": 0.0040870578644754095
+    },
+    {
+        "text": "lives",
+        "count": 5,
+        "score": 0.00398206830684268
+    },
+    {
+        "text": "millions",
+        "count": 5,
+        "score": 0.003913125088675586
+    },
+    {
+        "text": "learned",
+        "count": 5,
+        "score": 0.0037984358653954478
+    },
+    {
+        "text": "solutions",
+        "count": 5,
+        "score": 0.003709715057931826
+    },
+    {
+        "text": "education",
+        "count": 5,
+        "score": 0.0036969457144921227
+    },
+    {
+        "text": "humanity",
+        "count": 5,
+        "score": 0.0036880395661784944
+    },
+    {
+        "text": "billions",
+        "count": 5,
+        "score": 0.003651450624446706
+    },
+    {
+        "text": "shaw",
+        "count": 5,
+        "score": 0.003613890924785281
+    },
+    {
+        "text": "testers",
+        "count": 5,
+        "score": 0.0035604484073519034
+    },
+    {
+        "text": "dynamics",
+        "count": 5,
+        "score": 0.003531282939946307
+    },
+    {
+        "text": "variety",
+        "count": 5,
+        "score": 0.0034660913619230325
+    },
+    {
+        "text": "skills",
+        "count": 5,
+        "score": 0.003460633032411329
+    },
+    {
+        "text": "software",
+        "count": 5,
+        "score": 0.0032249982807806
+    },
+    {
+        "text": "computing",
+        "count": 5,
+        "score": 0.0031171654863402045
+    },
+    {
+        "text": "person",
+        "count": 5,
+        "score": 0.00302829695910651
+    },
+    {
+        "text": "strong",
+        "count": 5,
+        "score": 0.0030065308855837967
+    },
+    {
+        "text": "evaluations",
+        "count": 5,
+        "score": 0.002876468351527463
+    },
+    {
+        "text": "michael",
+        "count": 5,
+        "score": 0.0028600512251001757
+    },
+    {
+        "text": "considered",
+        "count": 5,
+        "score": 0.0028394470007675494
+    },
+    {
+        "text": "vision",
+        "count": 5,
+        "score": 0.002838138007145961
+    },
+    {
+        "text": "commitment",
+        "count": 5,
+        "score": 0.002793117993470304
+    },
+    {
+        "text": "scores",
+        "count": 5,
+        "score": 0.002706149048358526
+    },
+    {
+        "text": "unlock",
+        "count": 5,
+        "score": 0.0026901691953375153
+    },
+    {
+        "text": "searches",
+        "count": 5,
+        "score": 0.002594034088254304
+    },
+    {
+        "text": "speech",
+        "count": 5,
+        "score": 0.0025666672093661866
+    },
+    {
+        "text": "jan",
+        "count": 5,
+        "score": 0.0025335332715127044
+    },
+    {
+        "text": "method",
+        "count": 5,
+        "score": 0.00252284441101941
+    },
+    {
+        "text": "lighting",
+        "count": 5,
+        "score": 0.0024822838816290324
+    },
+    {
+        "text": "styles",
+        "count": 5,
+        "score": 0.002476026706736186
+    },
+    {
+        "text": "october",
+        "count": 5,
+        "score": 0.002470407408297752
+    },
+    {
+        "text": "pixels",
+        "count": 5,
+        "score": 0.0024190815152303224
+    },
+    {
+        "text": "tree",
+        "count": 5,
+        "score": 0.002419077652367315
+    },
+    {
+        "text": "standard",
+        "count": 5,
+        "score": 0.0023888176063380576
+    },
+    {
+        "text": "relevant",
+        "count": 5,
+        "score": 0.0023832020714157796
+    },
+    {
+        "text": "forms",
+        "count": 5,
+        "score": 0.00236157407010684
+    },
+    {
+        "text": "remarkable",
+        "count": 5,
+        "score": 0.002315102647852499
+    },
+    {
+        "text": "generates",
+        "count": 5,
+        "score": 0.0022882305409475216
+    },
+    {
+        "text": "innovative",
+        "count": 5,
+        "score": 0.0022880850580990746
+    },
+    {
+        "text": "testing",
+        "count": 5,
+        "score": 0.00227991475700428
+    },
+    {
+        "text": "depth",
+        "count": 5,
+        "score": 0.0022486601714390253
+    },
+    {
+        "text": "providing",
+        "count": 5,
+        "score": 0.0022485444338201407
+    },
+    {
+        "text": "source",
+        "count": 5,
+        "score": 0.002167514637296749
+    },
+    {
+        "text": "finally",
+        "count": 5,
+        "score": 0.0021543386041924057
+    },
+    {
+        "text": "devices",
+        "count": 5,
+        "score": 0.0021391433605317703
+    },
+    {
+        "text": "simon",
+        "count": 5,
+        "score": 0.0021349658741199764
+    },
+    {
+        "text": "robust",
+        "count": 5,
+        "score": 0.0021182111126968025
+    },
+    {
+        "text": "strategy",
+        "count": 5,
+        "score": 0.0021113647629452887
+    },
+    {
+        "text": "bring",
+        "count": 5,
+        "score": 0.0020600273356668423
+    },
+    {
+        "text": "discovery",
+        "count": 5,
+        "score": 0.0020583415895694557
+    },
+    {
+        "text": "colors",
+        "count": 5,
+        "score": 0.00203557954919375
+    },
+    {
+        "text": "improving",
+        "count": 5,
+        "score": 0.0020304473372379714
+    },
+    {
+        "text": "prevent",
+        "count": 5,
+        "score": 0.0020112407141857098
+    },
+    {
+        "text": "tracking",
+        "count": 5,
+        "score": 0.0019907418605916473
+    },
+    {
+        "text": "glowing",
+        "count": 5,
+        "score": 0.001974410571025139
+    },
+    {
+        "text": "health",
+        "count": 5,
+        "score": 0.0019633579124816564
+    },
+    {
+        "text": "andrew",
+        "count": 5,
+        "score": 0.0019067187719626403
+    },
+    {
+        "text": "detect",
+        "count": 5,
+        "score": 0.0018429525578282887
+    },
+    {
+        "text": "recognize",
+        "count": 5,
+        "score": 0.001817105602565169
+    },
+    {
+        "text": "healthcare",
+        "count": 5,
+        "score": 0.0018009497970270173
+    },
+    {
+        "text": "steps",
+        "count": 5,
+        "score": 0.0017592564203482777
+    },
+    {
+        "text": "final",
+        "count": 5,
+        "score": 0.0017400165983823784
+    },
+    {
+        "text": "internal",
+        "count": 5,
+        "score": 0.0017159962619114702
+    },
+    {
+        "text": "interaction",
+        "count": 5,
+        "score": 0.001715119302030348
+    },
+    {
+        "text": "nature",
+        "count": 5,
+        "score": 0.0017120015979898988
+    },
+    {
+        "text": "offer",
+        "count": 5,
+        "score": 0.0017027678100990026
+    },
+    {
+        "text": "driving",
+        "count": 5,
+        "score": 0.0016977243427332691
+    },
+    {
+        "text": "issue",
+        "count": 5,
+        "score": 0.0016968940624218247
+    },
+    {
+        "text": "analysis",
+        "count": 5,
+        "score": 0.00163084063509719
+    },
+    {
+        "text": "remains",
+        "count": 5,
+        "score": 0.0016277235293396656
+    },
+    {
+        "text": "journey",
+        "count": 5,
+        "score": 0.0016061366491367333
+    },
+    {
+        "text": "frank",
+        "count": 5,
+        "score": 0.0015905074242339315
+    },
+    {
+        "text": "safely",
+        "count": 5,
+        "score": 0.0015864036535840305
+    },
+    {
+        "text": "output",
+        "count": 5,
+        "score": 0.0015731952473726691
+    },
+    {
+        "text": "filters",
+        "count": 5,
+        "score": 0.0015636237193336307
+    },
+    {
+        "text": "detection",
+        "count": 5,
+        "score": 0.0014479373947874998
+    },
+    {
+        "text": "edge",
+        "count": 5,
+        "score": 0.0014411591573371574
+    },
+    {
+        "text": "eric",
+        "count": 5,
+        "score": 0.0014268070532145855
+    },
+    {
+        "text": "levels",
+        "count": 5,
+        "score": 0.0014135839145509347
+    },
+    {
+        "text": "focus",
+        "count": 5,
+        "score": 0.0014110518712195591
+    },
+    {
+        "text": "duration",
+        "count": 5,
+        "score": 0.001382066182070585
+    },
+    {
+        "text": "sharma",
+        "count": 5,
+        "score": 0.0013737739132239338
+    },
+    {
+        "text": "effects",
+        "count": 5,
+        "score": 0.0013574880009568635
+    },
+    {
+        "text": "dieleman",
+        "count": 5,
+        "score": 0.0013514460274425722
+    },
+    {
+        "text": "sander",
+        "count": 5,
+        "score": 0.0013514460274425722
+    },
+    {
+        "text": "setting",
+        "count": 5,
+        "score": 0.0013300302940936135
+    },
+    {
+        "text": "creators",
+        "count": 5,
+        "score": 0.0013211074092433592
+    },
+    {
+        "text": "extensive",
+        "count": 5,
+        "score": 0.0012693348078330643
+    },
+    {
+        "text": "air",
+        "count": 5,
+        "score": 0.0012586858420731407
+    },
+    {
+        "text": "black",
+        "count": 5,
+        "score": 0.0012420251631712407
+    },
+    {
+        "text": "simple",
+        "count": 5,
+        "score": 0.0012329132301936697
+    },
+    {
+        "text": "guidance",
+        "count": 5,
+        "score": 0.0012226807903021205
+    },
+    {
+        "text": "jonas",
+        "count": 5,
+        "score": 0.001200678207738057
+    },
+    {
+        "text": "precisely",
+        "count": 5,
+        "score": 0.001196462145313668
+    },
+    {
+        "text": "possibilities",
+        "count": 5,
+        "score": 0.0011945794677136784
+    },
+    {
+        "text": "produce",
+        "count": 5,
+        "score": 0.0011867904999828477
+    },
+    {
+        "text": "xu",
+        "count": 5,
+        "score": 0.0011634707060174789
+    },
+    {
+        "text": "characters",
+        "count": 5,
+        "score": 0.0011340820003517627
+    },
+    {
+        "text": "standing",
+        "count": 5,
+        "score": 0.0011303612702753408
+    },
+    {
+        "text": "kavukcuoglu",
+        "count": 5,
+        "score": 0.0011228764004051499
+    },
+    {
+        "text": "koray",
+        "count": 5,
+        "score": 0.0011228764004051499
+    },
+    {
+        "text": "weight",
+        "count": 5,
+        "score": 0.001083364039692074
+    },
+    {
+        "text": "main",
+        "count": 5,
+        "score": 0.0010712352033594233
+    },
+    {
+        "text": "enhanced",
+        "count": 5,
+        "score": 0.001054667750615419
+    },
+    {
+        "text": "processes",
+        "count": 5,
+        "score": 0.0010462209475762018
+    },
+    {
+        "text": "vikas",
+        "count": 5,
+        "score": 0.0010258244568777679
+    },
+    {
+        "text": "garcia",
+        "count": 5,
+        "score": 0.0010258244568777679
+    },
+    {
+        "text": "fruchter",
+        "count": 5,
+        "score": 0.0010258244568777679
+    },
+    {
+        "text": "collins",
+        "count": 5,
+        "score": 0.0009766608040748747
+    },
+    {
+        "text": "options",
+        "count": 5,
+        "score": 0.0007793586734014482
+    },
+    {
+        "text": "events",
+        "count": 4,
+        "score": 0.03453929399410461
+    },
+    {
+        "text": "2.5",
+        "count": 4,
+        "score": 0.02325460268548776
+    },
+    {
+        "text": "server",
+        "count": 4,
+        "score": 0.022053519447978745
+    },
+    {
+        "text": "stories",
+        "count": 4,
+        "score": 0.016301009503140312
+    },
+    {
+        "text": "chess",
+        "count": 4,
+        "score": 0.013339132224976454
+    },
+    {
+        "text": "alphazero",
+        "count": 4,
+        "score": 0.012784814017547264
+    },
+    {
+        "text": "veo",
+        "count": 4,
+        "score": 0.009869683800662383
+    },
+    {
+        "text": "activity",
+        "count": 4,
+        "score": 0.009645869885079178
+    },
+    {
+        "text": "intelligent",
+        "count": 4,
+        "score": 0.009430552480677553
+    },
+    {
+        "text": "agi",
+        "count": 4,
+        "score": 0.009416000481133073
+    },
+    {
+        "text": "principles",
+        "count": 4,
+        "score": 0.008345233232256975
+    },
+    {
+        "text": "2.0",
+        "count": 4,
+        "score": 0.008269848873724834
+    },
+    {
+        "text": "thinking",
+        "count": 4,
+        "score": 0.008202743219558266
+    },
+    {
+        "text": "atari",
+        "count": 4,
+        "score": 0.00805873799890429
+    },
+    {
+        "text": "underpin",
+        "count": 4,
+        "score": 0.007039982067562492
+    },
+    {
+        "text": "authors",
+        "count": 4,
+        "score": 0.0065263295920752005
+    },
+    {
+        "text": "broader",
+        "count": 4,
+        "score": 0.006368429328009585
+    },
+    {
+        "text": "websites",
+        "count": 4,
+        "score": 0.006278147036914163
+    },
+    {
+        "text": "receive",
+        "count": 4,
+        "score": 0.006165554837363994
+    },
+    {
+        "text": "account",
+        "count": 4,
+        "score": 0.005997825232314929
+    },
+    {
+        "text": "writing",
+        "count": 4,
+        "score": 0.005249599829712839
+    },
+    {
+        "text": "physical",
+        "count": 4,
+        "score": 0.0050310776202419655
+    },
+    {
+        "text": "outreach",
+        "count": 4,
+        "score": 0.004928128829788453
+    },
+    {
+        "text": "phones",
+        "count": 4,
+        "score": 0.004915872178415695
+    },
+    {
+        "text": "introducing",
+        "count": 4,
+        "score": 0.004792773196969381
+    },
+    {
+        "text": "interactive",
+        "count": 4,
+        "score": 0.004501341200343273
+    },
+    {
+        "text": "allowed",
+        "count": 4,
+        "score": 0.004473840152932009
+    },
+    {
+        "text": "allowing",
+        "count": 4,
+        "score": 0.004420256823625095
+    },
+    {
+        "text": "robot",
+        "count": 4,
+        "score": 0.004137183391263111
+    },
+    {
+        "text": "2016",
+        "count": 4,
+        "score": 0.004047135928659276
+    },
+    {
+        "text": "matthew",
+        "count": 4,
+        "score": 0.0040372711676002464
+    },
+    {
+        "text": "humanoid",
+        "count": 4,
+        "score": 0.004016698330454713
+    },
+    {
+        "text": "frontier",
+        "count": 4,
+        "score": 0.003973717245106141
+    },
+    {
+        "text": "decade",
+        "count": 4,
+        "score": 0.003960325675671547
+    },
+    {
+        "text": "breaking",
+        "count": 4,
+        "score": 0.0037583162686399213
+    },
+    {
+        "text": "projects",
+        "count": 4,
+        "score": 0.0036112675564230674
+    },
+    {
+        "text": "collaboration",
+        "count": 4,
+        "score": 0.0036053116608979166
+    },
+    {
+        "text": "objects",
+        "count": 4,
+        "score": 0.0035297963025409385
+    },
+    {
+        "text": "domains",
+        "count": 4,
+        "score": 0.003525487663594259
+    },
+    {
+        "text": "simulation",
+        "count": 4,
+        "score": 0.0034930751715507758
+    },
+    {
+        "text": "winning",
+        "count": 4,
+        "score": 0.0034234009003729126
+    },
+    {
+        "text": "article",
+        "count": 4,
+        "score": 0.0033952620469931737
+    },
+    {
+        "text": "22",
+        "count": 4,
+        "score": 0.0033637778268992826
+    },
+    {
+        "text": "extraordinary",
+        "count": 4,
+        "score": 0.0033619942116532493
+    },
+    {
+        "text": "prototype",
+        "count": 4,
+        "score": 0.003349246302419466
+    },
+    {
+        "text": "device",
+        "count": 4,
+        "score": 0.0032890347514487493
+    },
+    {
+        "text": "llm",
+        "count": 4,
+        "score": 0.0032286977729236994
+    },
+    {
+        "text": "generality",
+        "count": 4,
+        "score": 0.0032152691697520316
+    },
+    {
+        "text": "traditional",
+        "count": 4,
+        "score": 0.003170444389443505
+    },
+    {
+        "text": "multiple",
+        "count": 4,
+        "score": 0.003156819700300866
+    },
+    {
+        "text": "composition",
+        "count": 4,
+        "score": 0.00310790464445098
+    },
+    {
+        "text": "hundreds",
+        "count": 4,
+        "score": 0.003077482009220009
+    },
+    {
+        "text": "algorithm",
+        "count": 4,
+        "score": 0.0030599157270674634
+    },
+    {
+        "text": "additional",
+        "count": 4,
+        "score": 0.002982095107883734
+    },
+    {
+        "text": "increasingly",
+        "count": 4,
+        "score": 0.0029710084206386305
+    },
+    {
+        "text": "filter",
+        "count": 4,
+        "score": 0.0029679276393844126
+    },
+    {
+        "text": "reason",
+        "count": 4,
+        "score": 0.002961489020354989
+    },
+    {
+        "text": "fine",
+        "count": 4,
+        "score": 0.002917520144109305
+    },
+    {
+        "text": "suite",
+        "count": 4,
+        "score": 0.002914501865369664
+    },
+    {
+        "text": "hope",
+        "count": 4,
+        "score": 0.0028619591884642965
+    },
+    {
+        "text": "object",
+        "count": 4,
+        "score": 0.0028295415707175224
+    },
+    {
+        "text": "water",
+        "count": 4,
+        "score": 0.002792634328685984
+    },
+    {
+        "text": "improvements",
+        "count": 4,
+        "score": 0.0027575123753704324
+    },
+    {
+        "text": "brings",
+        "count": 4,
+        "score": 0.0027447454858495375
+    },
+    {
+        "text": "chat",
+        "count": 4,
+        "score": 0.002737433583243418
+    },
+    {
+        "text": "soft",
+        "count": 4,
+        "score": 0.002728750342647345
+    },
+    {
+        "text": "context",
+        "count": 4,
+        "score": 0.0026433878763076953
+    },
+    {
+        "text": "operations",
+        "count": 4,
+        "score": 0.002632133645405158
+    },
+    {
+        "text": "inspired",
+        "count": 4,
+        "score": 0.0026092465140472813
+    },
+    {
+        "text": "background",
+        "count": 4,
+        "score": 0.0025946462605304513
+    },
+    {
+        "text": "history",
+        "count": 4,
+        "score": 0.0025883771160718494
+    },
+    {
+        "text": "thousands",
+        "count": 4,
+        "score": 0.0025768955224642343
+    },
+    {
+        "text": "prioritize",
+        "count": 4,
+        "score": 0.0025653211433013788
+    },
+    {
+        "text": "picture",
+        "count": 4,
+        "score": 0.0025499919196386805
+    },
+    {
+        "text": "sound",
+        "count": 4,
+        "score": 0.0025413022406672783
+    },
+    {
+        "text": "managed",
+        "count": 4,
+        "score": 0.0025397287818474073
+    },
+    {
+        "text": "opportunities",
+        "count": 4,
+        "score": 0.002514875748246149
+    },
+    {
+        "text": "app",
+        "count": 4,
+        "score": 0.0025116693577749674
+    },
+    {
+        "text": "mission",
+        "count": 4,
+        "score": 0.0024688187668877553
+    },
+    {
+        "text": "comprehensive",
+        "count": 4,
+        "score": 0.0023841968190181544
+    },
+    {
+        "text": "vibrant",
+        "count": 4,
+        "score": 0.00232854971513557
+    },
+    {
+        "text": "machines",
+        "count": 4,
+        "score": 0.0023214759806281663
+    },
+    {
+        "text": "red",
+        "count": 4,
+        "score": 0.0022724982855569153
+    },
+    {
+        "text": "quantum",
+        "count": 4,
+        "score": 0.002264866536875664
+    },
+    {
+        "text": "decades",
+        "count": 4,
+        "score": 0.0022552884770350966
+    },
+    {
+        "text": "cinematic",
+        "count": 4,
+        "score": 0.002243704468880366
+    },
+    {
+        "text": "200",
+        "count": 4,
+        "score": 0.00220306880671736
+    },
+    {
+        "text": "paul",
+        "count": 4,
+        "score": 0.0021938286185201445
+    },
+    {
+        "text": "zhou",
+        "count": 4,
+        "score": 0.002193524861389401
+    },
+    {
+        "text": "hard",
+        "count": 4,
+        "score": 0.0021447578692055974
+    },
+    {
+        "text": "touch",
+        "count": 4,
+        "score": 0.002116504819555022
+    },
+    {
+        "text": "matches",
+        "count": 4,
+        "score": 0.002111622888979865
+    },
+    {
+        "text": "methods",
+        "count": 4,
+        "score": 0.00207680464520614
+    },
+    {
+        "text": "predict",
+        "count": 4,
+        "score": 0.0020640488922607243
+    },
+    {
+        "text": "multi",
+        "count": 4,
+        "score": 0.0020627730751680323
+    },
+    {
+        "text": "broad",
+        "count": 4,
+        "score": 0.002040126182356367
+    },
+    {
+        "text": "success",
+        "count": 4,
+        "score": 0.0020314944830070784
+    },
+    {
+        "text": "huang",
+        "count": 4,
+        "score": 0.0020207329130342675
+    },
+    {
+        "text": "rapidly",
+        "count": 4,
+        "score": 0.002015838100952013
+    },
+    {
+        "text": "save",
+        "count": 4,
+        "score": 0.0019972907208511428
+    },
+    {
+        "text": "founder",
+        "count": 4,
+        "score": 0.001986444154105576
+    },
+    {
+        "text": "inference",
+        "count": 4,
+        "score": 0.001983317256345061
+    },
+    {
+        "text": "chemistry",
+        "count": 4,
+        "score": 0.0019779224909646166
+    },
+    {
+        "text": "prompts",
+        "count": 4,
+        "score": 0.0019649740021013204
+    },
+    {
+        "text": "captures",
+        "count": 4,
+        "score": 0.0019339234249551997
+    },
+    {
+        "text": "reports",
+        "count": 4,
+        "score": 0.001929180127553234
+    },
+    {
+        "text": "consistent",
+        "count": 4,
+        "score": 0.001881484443358865
+    },
+    {
+        "text": "limited",
+        "count": 4,
+        "score": 0.001875058904215697
+    },
+    {
+        "text": "organization",
+        "count": 4,
+        "score": 0.0018466089165407786
+    },
+    {
+        "text": "adds",
+        "count": 4,
+        "score": 0.0018343800085740135
+    },
+    {
+        "text": "white",
+        "count": 4,
+        "score": 0.0018203476174391687
+    },
+    {
+        "text": "visually",
+        "count": 4,
+        "score": 0.0018196252711823512
+    },
+    {
+        "text": "global",
+        "count": 4,
+        "score": 0.0018125919937614218
+    },
+    {
+        "text": "harmful",
+        "count": 4,
+        "score": 0.0017689444690097036
+    },
+    {
+        "text": "started",
+        "count": 4,
+        "score": 0.0017668134639554104
+    },
+    {
+        "text": "seamlessly",
+        "count": 4,
+        "score": 0.001740470170504728
+    },
+    {
+        "text": "idea",
+        "count": 4,
+        "score": 0.0017400206078890348
+    },
+    {
+        "text": "plays",
+        "count": 4,
+        "score": 0.0017333707608587128
+    },
+    {
+        "text": "led",
+        "count": 4,
+        "score": 0.0017192154451219498
+    },
+    {
+        "text": "offers",
+        "count": 4,
+        "score": 0.0017188290355672757
+    },
+    {
+        "text": "launched",
+        "count": 4,
+        "score": 0.001710604731342878
+    },
+    {
+        "text": "shallow",
+        "count": 4,
+        "score": 0.0017102097784227612
+    },
+    {
+        "text": "canada",
+        "count": 4,
+        "score": 0.001706748729401161
+    },
+    {
+        "text": "consumer",
+        "count": 4,
+        "score": 0.0016848590124966451
+    },
+    {
+        "text": "organize",
+        "count": 4,
+        "score": 0.0016828512022850975
+    },
+    {
+        "text": "mitigate",
+        "count": 4,
+        "score": 0.0016793403471970605
+    },
+    {
+        "text": "performs",
+        "count": 4,
+        "score": 0.0016598377470425636
+    },
+    {
+        "text": "neon",
+        "count": 4,
+        "score": 0.0016381026520749153
+    },
+    {
+        "text": "strategies",
+        "count": 4,
+        "score": 0.001634204101254463
+    },
+    {
+        "text": "measures",
+        "count": 4,
+        "score": 0.0016286422134884873
+    },
+    {
+        "text": "talks",
+        "count": 4,
+        "score": 0.001610864942151092
+    },
+    {
+        "text": "platform",
+        "count": 4,
+        "score": 0.0016074610365885457
+    },
+    {
+        "text": "array",
+        "count": 4,
+        "score": 0.001600266216448884
+    },
+    {
+        "text": "purposes",
+        "count": 4,
+        "score": 0.0015993961521853887
+    },
+    {
+        "text": "review",
+        "count": 4,
+        "score": 0.0015889993636775204
+    },
+    {
+        "text": "blue",
+        "count": 4,
+        "score": 0.001585927716243862
+    },
+    {
+        "text": "maps",
+        "count": 4,
+        "score": 0.0015638182875052438
+    },
+    {
+        "text": "industries",
+        "count": 4,
+        "score": 0.0015609229022313727
+    },
+    {
+        "text": "safer",
+        "count": 4,
+        "score": 0.001559115758094721
+    },
+    {
+        "text": "warm",
+        "count": 4,
+        "score": 0.001545055119159747
+    },
+    {
+        "text": "cutting",
+        "count": 4,
+        "score": 0.0015272265547298849
+    },
+    {
+        "text": "perspectives",
+        "count": 4,
+        "score": 0.0015225518340168062
+    },
+    {
+        "text": "fall",
+        "count": 4,
+        "score": 0.0015126100929166077
+    },
+    {
+        "text": "error",
+        "count": 4,
+        "score": 0.0015097203228253493
+    },
+    {
+        "text": "photo",
+        "count": 4,
+        "score": 0.001493597875249389
+    },
+    {
+        "text": "lens",
+        "count": 4,
+        "score": 0.0014934762674127635
+    },
+    {
+        "text": "issues",
+        "count": 4,
+        "score": 0.0014764261018633655
+    },
+    {
+        "text": "josh",
+        "count": 4,
+        "score": 0.0014735555070733888
+    },
+    {
+        "text": "april",
+        "count": 4,
+        "score": 0.0014682257168697425
+    },
+    {
+        "text": "decision",
+        "count": 4,
+        "score": 0.0014639946892148225
+    },
+    {
+        "text": "movie",
+        "count": 4,
+        "score": 0.0014507296569184346
+    },
+    {
+        "text": "green",
+        "count": 4,
+        "score": 0.0014478960160899754
+    },
+    {
+        "text": "integrated",
+        "count": 4,
+        "score": 0.0014423431250416294
+    },
+    {
+        "text": "social",
+        "count": 4,
+        "score": 0.00143610643336171
+    },
+    {
+        "text": "medical",
+        "count": 4,
+        "score": 0.0014321838080111093
+    },
+    {
+        "text": "position",
+        "count": 4,
+        "score": 0.0014310132033971805
+    },
+    {
+        "text": "brown",
+        "count": 4,
+        "score": 0.0014305332893128592
+    },
+    {
+        "text": "precise",
+        "count": 4,
+        "score": 0.0014280283172628948
+    },
+    {
+        "text": "labs",
+        "count": 4,
+        "score": 0.0014235681421154002
+    },
+    {
+        "text": "bright",
+        "count": 4,
+        "score": 0.001414389005542477
+    },
+    {
+        "text": "committed",
+        "count": 4,
+        "score": 0.0014116848529168412
+    },
+    {
+        "text": "highlighting",
+        "count": 4,
+        "score": 0.001408598800572999
+    },
+    {
+        "text": "maintain",
+        "count": 4,
+        "score": 0.0014046984855287398
+    },
+    {
+        "text": "ancient",
+        "count": 4,
+        "score": 0.0014039481288218806
+    },
+    {
+        "text": "latinoam",
+        "count": 4,
+        "score": 0.0013939889576592736
+    },
+    {
+        "text": "rica",
+        "count": 4,
+        "score": 0.0013939889576592736
+    },
+    {
+        "text": "creates",
+        "count": 4,
+        "score": 0.001393654570010202
+    },
+    {
+        "text": "realistic",
+        "count": 4,
+        "score": 0.0013743741438228606
+    },
+    {
+        "text": "addressing",
+        "count": 4,
+        "score": 0.0013548123573567075
+    },
+    {
+        "text": "incredibly",
+        "count": 4,
+        "score": 0.0013528937230579562
+    },
+    {
+        "text": "capturing",
+        "count": 4,
+        "score": 0.0013486208351648308
+    },
+    {
+        "text": "rui",
+        "count": 4,
+        "score": 0.0013462655031006305
+    },
+    {
+        "text": "change",
+        "count": 4,
+        "score": 0.0013357532332713023
+    },
+    {
+        "text": "financial",
+        "count": 4,
+        "score": 0.0013349268637111696
+    },
+    {
+        "text": "zhu",
+        "count": 4,
+        "score": 0.0013283216081497492
+    },
+    {
+        "text": "left",
+        "count": 4,
+        "score": 0.0013223557073958584
+    },
+    {
+        "text": "ongoing",
+        "count": 4,
+        "score": 0.0013201827267451491
+    },
+    {
+        "text": "shared",
+        "count": 4,
+        "score": 0.001319059161165118
+    },
+    {
+        "text": "medium",
+        "count": 4,
+        "score": 0.001317136157767256
+    },
+    {
+        "text": "combination",
+        "count": 4,
+        "score": 0.0013099647055096505
+    },
+    {
+        "text": "body",
+        "count": 4,
+        "score": 0.0012842863977187318
+    },
+    {
+        "text": "presence",
+        "count": 4,
+        "score": 0.0012624708366554306
+    },
+    {
+        "text": "acknowledgements",
+        "count": 4,
+        "score": 0.0012606579570771932
+    },
+    {
+        "text": "ibrahim",
+        "count": 4,
+        "score": 0.0012480635021653232
+    },
+    {
+        "text": "sense",
+        "count": 4,
+        "score": 0.0012468510665076885
+    },
+    {
+        "text": "european",
+        "count": 4,
+        "score": 0.0012409547386653193
+    },
+    {
+        "text": "consistency",
+        "count": 4,
+        "score": 0.0012381426406024186
+    },
+    {
+        "text": "foundational",
+        "count": 4,
+        "score": 0.0012371962834232084
+    },
+    {
+        "text": "subject",
+        "count": 4,
+        "score": 0.0012274935453937194
+    },
+    {
+        "text": "india",
+        "count": 4,
+        "score": 0.0012160565900891057
+    },
+    {
+        "text": "engaging",
+        "count": 4,
+        "score": 0.0012150881459461799
+    },
+    {
+        "text": "xiao",
+        "count": 4,
+        "score": 0.0012086192539609195
+    },
+    {
+        "text": "walker",
+        "count": 4,
+        "score": 0.0012086192539609195
+    },
+    {
+        "text": "robert",
+        "count": 4,
+        "score": 0.0012086192539609195
+    },
+    {
+        "text": "liu",
+        "count": 4,
+        "score": 0.001203093406682147
+    },
+    {
+        "text": "short",
+        "count": 4,
+        "score": 0.0011973258336657549
+    },
+    {
+        "text": "austin",
+        "count": 4,
+        "score": 0.0011906753590100383
+    },
+    {
+        "text": "film",
+        "count": 4,
+        "score": 0.0011906753590100383
+    },
+    {
+        "text": "liang",
+        "count": 4,
+        "score": 0.0011731697976147537
+    },
+    {
+        "text": "2d",
+        "count": 4,
+        "score": 0.0011721454226389912
+    },
+    {
+        "text": "direction",
+        "count": 4,
+        "score": 0.0011703744182832722
+    },
+    {
+        "text": "ryan",
+        "count": 4,
+        "score": 0.0011637744631482227
+    },
+    {
+        "text": "automatically",
+        "count": 4,
+        "score": 0.0011540453166220435
+    },
+    {
+        "text": "detailed",
+        "count": 4,
+        "score": 0.001147705098586437
+    },
+    {
+        "text": "glow",
+        "count": 4,
+        "score": 0.0011450951076872502
+    },
+    {
+        "text": "wisdom",
+        "count": 4,
+        "score": 0.001124583220774851
+    },
+    {
+        "text": "yan",
+        "count": 4,
+        "score": 0.0011118918542704953
+    },
+    {
+        "text": "components",
+        "count": 4,
+        "score": 0.00110960493394391
+    },
+    {
+        "text": "extreme",
+        "count": 4,
+        "score": 0.0011004026467572583
+    },
+    {
+        "text": "dawn",
+        "count": 4,
+        "score": 0.0010889802998978587
+    },
+    {
+        "text": "incredible",
+        "count": 4,
+        "score": 0.001086738644571018
+    },
+    {
+        "text": "languages",
+        "count": 4,
+        "score": 0.001086389363146806
+    },
+    {
+        "text": "focuses",
+        "count": 4,
+        "score": 0.001061213089792538
+    },
+    {
+        "text": "highlighted",
+        "count": 4,
+        "score": 0.0010527313750146809
+    },
+    {
+        "text": "speed",
+        "count": 4,
+        "score": 0.0010381361593058175
+    },
+    {
+        "text": "mobile",
+        "count": 4,
+        "score": 0.0010370779092967988
+    },
+    {
+        "text": "signs",
+        "count": 4,
+        "score": 0.001033768351140932
+    },
+    {
+        "text": "bias",
+        "count": 4,
+        "score": 0.0010261242161118027
+    },
+    {
+        "text": "views",
+        "count": 4,
+        "score": 0.0010220925415375239
+    },
+    {
+        "text": "adding",
+        "count": 4,
+        "score": 0.0010216358407198333
+    },
+    {
+        "text": "measure",
+        "count": 4,
+        "score": 0.001009007095247179
+    },
+    {
+        "text": "list",
+        "count": 4,
+        "score": 0.0009840621137474624
+    },
+    {
+        "text": "beat",
+        "count": 4,
+        "score": 0.0009831355595013736
+    },
+    {
+        "text": "oliver",
+        "count": 4,
+        "score": 0.0009669617124775998
+    },
+    {
+        "text": "drive",
+        "count": 4,
+        "score": 0.0009427582311991892
+    },
+    {
+        "text": "gregory",
+        "count": 4,
+        "score": 0.0009397570594850404
+    },
+    {
+        "text": "ali",
+        "count": 4,
+        "score": 0.0009394533023542966
+    },
+    {
+        "text": "brasil",
+        "count": 4,
+        "score": 0.0009352733613289982
+    },
+    {
+        "text": "recommendations",
+        "count": 4,
+        "score": 0.0009191951691582393
+    },
+    {
+        "text": "adjust",
+        "count": 4,
+        "score": 0.0009076428721468358
+    },
+    {
+        "text": "required",
+        "count": 4,
+        "score": 0.0009071692616138992
+    },
+    {
+        "text": "check",
+        "count": 4,
+        "score": 0.0008989457848292432
+    },
+    {
+        "text": "rj",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "gratitude",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "contributions",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "yao",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "jeff",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "adams",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "contributed",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "individuals",
+        "count": 4,
+        "score": 0.0008881782077380569
+    },
+    {
+        "text": "den",
+        "count": 4,
+        "score": 0.0008878744506073132
+    },
+    {
+        "text": "oord",
+        "count": 4,
+        "score": 0.0008878744506073132
+    },
+    {
+        "text": "flare",
+        "count": 4,
+        "score": 0.0008878744506073132
+    },
+    {
+        "text": "ron",
+        "count": 4,
+        "score": 0.0008878744506073132
+    },
+    {
+        "text": "douglas",
+        "count": 4,
+        "score": 0.0008878744506073132
+    },
+    {
+        "text": "smart",
+        "count": 4,
+        "score": 0.0008751293515307365
+    },
+    {
+        "text": "rely",
+        "count": 4,
+        "score": 0.0008534689563705252
+    },
+    {
+        "text": "perfect",
+        "count": 4,
+        "score": 0.0008490764345332071
+    },
+    {
+        "text": "flowing",
+        "count": 4,
+        "score": 0.0008422941992845249
+    },
+    {
+        "text": "mitchell",
+        "count": 4,
+        "score": 0.0008390145549351637
+    },
+    {
+        "text": "decide",
+        "count": 4,
+        "score": 0.0008284898456833708
+    },
+    {
+        "text": "covered",
+        "count": 4,
+        "score": 0.0008241928179098318
+    },
+    {
+        "text": "automatic",
+        "count": 4,
+        "score": 0.0008233283140506617
+    },
+    {
+        "text": "fresh",
+        "count": 4,
+        "score": 0.0008201287517262928
+    },
+    {
+        "text": "intended",
+        "count": 4,
+        "score": 0.0008130966826529381
+    },
+    {
+        "text": "thomas",
+        "count": 4,
+        "score": 0.0008064039089652523
+    },
+    {
+        "text": "fei",
+        "count": 4,
+        "score": 0.0008021108103453294
+    },
+    {
+        "text": "botadra",
+        "count": 4,
+        "score": 0.0008021108103453294
+    },
+    {
+        "text": "pankil",
+        "count": 4,
+        "score": 0.0008021108103453294
+    },
+    {
+        "text": "du",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "evgeny",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "tall",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "luo",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "lights",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "razavi",
+        "count": 4,
+        "score": 0.0008018070532145856
+    },
+    {
+        "text": "partnership",
+        "count": 4,
+        "score": 0.000795331759236239
+    },
+    {
+        "text": "trees",
+        "count": 4,
+        "score": 0.0007907153475375415
+    },
+    {
+        "text": "invaluable",
+        "count": 4,
+        "score": 0.0007896724496720057
+    },
+    {
+        "text": "resolution",
+        "count": 4,
+        "score": 0.0007656504095749565
+    },
+    {
+        "text": "easy",
+        "count": 4,
+        "score": 0.0007148991112974804
+    },
+    {
+        "text": "balance",
+        "count": 4,
+        "score": 0.0007058073274995162
+    },
+    {
+        "text": "blok",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "wearing",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "yori",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "zwols",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "eli",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "pfaff",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "waters",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "zee",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "bauer",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "beautiful",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "gladchenko",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "aida",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "henna",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "lau",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "nematzadeh",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "frankie",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "rly",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "cobo",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "yukun",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "shlomi",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "miaosen",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "tuset",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "pont",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "hume",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "jordi",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "signe",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "tobias",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "jakob",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "shixin",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "irina",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "luis",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "nandwani",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "yuqing",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "yelin",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "andeep",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "eck",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "katie",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "yilin",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "toor",
+        "count": 4,
+        "score": 0.0006641608040748746
+    },
+    {
+        "text": "reveal",
+        "count": 4,
+        "score": 0.0006516447525840791
+    },
+    {
+        "text": "closed",
+        "count": 4,
+        "score": 0.0006487504444477654
+    },
+    {
+        "text": "creator",
+        "count": 4,
+        "score": 0.0006395645727738041
+    },
+    {
+        "text": "coffee",
+        "count": 4,
+        "score": 0.0006314446158446919
+    },
+    {
+        "text": "complete",
+        "count": 4,
+        "score": 0.0006268282041459944
+    },
+    {
+        "text": "limitations",
+        "count": 4,
+        "score": 0.0005970793988661085
+    },
+    {
+        "text": "completely",
+        "count": 4,
+        "score": 0.0005909379138267217
+    },
+    {
+        "text": "maintaining",
+        "count": 4,
+        "score": 0.000586341058076055
+    },
+    {
+        "text": "table",
+        "count": 4,
+        "score": 0.0005002736606833276
+    },
+    {
+        "text": "drawn",
+        "count": 4,
+        "score": 0.0005002736606833276
+    },
+    {
+        "text": "determined",
+        "count": 4,
+        "score": 0.0004903413323609858
+    },
+    {
+        "text": "delete",
+        "count": 3,
+        "score": 0.02638407048677609
+    },
+    {
+        "text": "company",
+        "count": 3,
+        "score": 0.02602253934155116
+    },
+    {
+        "text": "send",
+        "count": 3,
+        "score": 0.013369814702114825
+    },
+    {
+        "text": "proteins",
+        "count": 3,
+        "score": 0.013118279569892474
+    },
+    {
+        "text": "muzero",
+        "count": 3,
+        "score": 0.012506413134795051
+    },
+    {
+        "text": "synthid",
+        "count": 3,
+        "score": 0.012456392293080359
+    },
+    {
+        "text": "robots",
+        "count": 3,
+        "score": 0.01229194543773042
+    },
+    {
+        "text": "professor",
+        "count": 3,
+        "score": 0.007480323689169715
+    },
+    {
+        "text": "apr",
+        "count": 3,
+        "score": 0.006789292827520619
+    },
+    {
+        "text": "pro",
+        "count": 3,
+        "score": 0.00631118950153344
+    },
+    {
+        "text": "modern",
+        "count": 3,
+        "score": 0.005652122615186911
+    },
+    {
+        "text": "inbox",
+        "count": 3,
+        "score": 0.0054217021402458866
+    },
+    {
+        "text": "week",
+        "count": 3,
+        "score": 0.005033139338165537
+    },
+    {
+        "text": "specialists",
+        "count": 3,
+        "score": 0.004763199226772986
+    },
+    {
+        "text": "browse",
+        "count": 3,
+        "score": 0.004733688035035476
+    },
+    {
+        "text": "domain",
+        "count": 3,
+        "score": 0.004562119497579336
+    },
+    {
+        "text": "rights",
+        "count": 3,
+        "score": 0.004346958976149612
+    },
+    {
+        "text": "understands",
+        "count": 3,
+        "score": 0.004226640068102543
+    },
+    {
+        "text": "dqn",
+        "count": 3,
+        "score": 0.0041455100278629696
+    },
+    {
+        "text": "champion",
+        "count": 3,
+        "score": 0.00407309991473237
+    },
+    {
+        "text": "breakthrough",
+        "count": 3,
+        "score": 0.003935081422276828
+    },
+    {
+        "text": "watermarking",
+        "count": 3,
+        "score": 0.0038170834377887807
+    },
+    {
+        "text": "11",
+        "count": 3,
+        "score": 0.0036751604660592288
+    },
+    {
+        "text": "sedol",
+        "count": 3,
+        "score": 0.0036190428368412532
+    },
+    {
+        "text": "academic",
+        "count": 3,
+        "score": 0.0035312097238061123
+    },
+    {
+        "text": "embodied",
+        "count": 3,
+        "score": 0.0034665191452199467
+    },
+    {
+        "text": "freely",
+        "count": 3,
+        "score": 0.0033866449805728745
+    },
+    {
+        "text": "fields",
+        "count": 3,
+        "score": 0.0033218988486924035
+    },
+    {
+        "text": "harness",
+        "count": 3,
+        "score": 0.003310263292143319
+    },
+    {
+        "text": "south",
+        "count": 3,
+        "score": 0.003288977412151373
+    },
+    {
+        "text": "update",
+        "count": 3,
+        "score": 0.0032540267223840937
+    },
+    {
+        "text": "attacks",
+        "count": 3,
+        "score": 0.0031906976632179373
+    },
+    {
+        "text": "disease",
+        "count": 3,
+        "score": 0.0031154382319774823
+    },
+    {
+        "text": "weather",
+        "count": 3,
+        "score": 0.003064324694305789
+    },
+    {
+        "text": "ads",
+        "count": 3,
+        "score": 0.00305486193032997
+    },
+    {
+        "text": "probability",
+        "count": 3,
+        "score": 0.0029816095261950204
+    },
+    {
+        "text": "months",
+        "count": 3,
+        "score": 0.002954134811754389
+    },
+    {
+        "text": "motion",
+        "count": 3,
+        "score": 0.002862854424764238
+    },
+    {
+        "text": "pioneering",
+        "count": 3,
+        "score": 0.0028480049117052576
+    },
+    {
+        "text": "researcher",
+        "count": 3,
+        "score": 0.002836121622506699
+    },
+    {
+        "text": "student",
+        "count": 3,
+        "score": 0.002836121622506699
+    },
+    {
+        "text": "featured",
+        "count": 3,
+        "score": 0.0028252256933168803
+    },
+    {
+        "text": "players",
+        "count": 3,
+        "score": 0.002753483942540374
+    },
+    {
+        "text": "categories",
+        "count": 3,
+        "score": 0.0027008759723866475
+    },
+    {
+        "text": "motor",
+        "count": 3,
+        "score": 0.002691483996245973
+    },
+    {
+        "text": "responds",
+        "count": 3,
+        "score": 0.002680871558100058
+    },
+    {
+        "text": "board",
+        "count": 3,
+        "score": 0.0026464611554409437
+    },
+    {
+        "text": "law",
+        "count": 3,
+        "score": 0.0026245086682033913
+    },
+    {
+        "text": "mar",
+        "count": 3,
+        "score": 0.0026119499092380908
+    },
+    {
+        "text": "deployment",
+        "count": 3,
+        "score": 0.002577643820418346
+    },
+    {
+        "text": "commercial",
+        "count": 3,
+        "score": 0.002568492804910642
+    },
+    {
+        "text": "stay",
+        "count": 3,
+        "score": 0.0025467282554588987
+    },
+    {
+        "text": "study",
+        "count": 3,
+        "score": 0.0025368344737110938
+    },
+    {
+        "text": "accelerating",
+        "count": 3,
+        "score": 0.002484778156289523
+    },
+    {
+        "text": "fundamental",
+        "count": 3,
+        "score": 0.0024540428324028958
+    },
+    {
+        "text": "strongest",
+        "count": 3,
+        "score": 0.0024320992166632113
+    },
+    {
+        "text": "goals",
+        "count": 3,
+        "score": 0.002421574185906777
+    },
+    {
+        "text": "elements",
+        "count": 3,
+        "score": 0.0024148628619968344
+    },
+    {
+        "text": "publications",
+        "count": 3,
+        "score": 0.0024129700581531316
+    },
+    {
+        "text": "helped",
+        "count": 3,
+        "score": 0.0024019333290338663
+    },
+    {
+        "text": "partnering",
+        "count": 3,
+        "score": 0.0023887584917827278
+    },
+    {
+        "text": "path",
+        "count": 3,
+        "score": 0.002375123260061348
+    },
+    {
+        "text": "18",
+        "count": 3,
+        "score": 0.002372167709813896
+    },
+    {
+        "text": "middle",
+        "count": 3,
+        "score": 0.002312024213816357
+    },
+    {
+        "text": "evolving",
+        "count": 3,
+        "score": 0.002306411854418655
+    },
+    {
+        "text": "27",
+        "count": 3,
+        "score": 0.0022667647823858376
+    },
+    {
+        "text": "signed",
+        "count": 3,
+        "score": 0.002259179643624711
+    },
+    {
+        "text": "experiments",
+        "count": 3,
+        "score": 0.002231067688637118
+    },
+    {
+        "text": "golden",
+        "count": 3,
+        "score": 0.002229744197835484
+    },
+    {
+        "text": "attempts",
+        "count": 3,
+        "score": 0.0022261399572378023
+    },
+    {
+        "text": "ceo",
+        "count": 3,
+        "score": 0.0021894867255692
+    },
+    {
+        "text": "generalize",
+        "count": 3,
+        "score": 0.0021650145631259875
+    },
+    {
+        "text": "responses",
+        "count": 3,
+        "score": 0.002093963979412458
+    },
+    {
+        "text": "malware",
+        "count": 3,
+        "score": 0.0020859082251982702
+    },
+    {
+        "text": "alex",
+        "count": 3,
+        "score": 0.0020833070051631446
+    },
+    {
+        "text": "defeated",
+        "count": 3,
+        "score": 0.0020669379088572954
+    },
+    {
+        "text": "frameworks",
+        "count": 3,
+        "score": 0.002044546385308083
+    },
+    {
+        "text": "applied",
+        "count": 3,
+        "score": 0.0020318850132081063
+    },
+    {
+        "text": "deploying",
+        "count": 3,
+        "score": 0.0020310159978620033
+    },
+    {
+        "text": "abilities",
+        "count": 3,
+        "score": 0.0020257119353088407
+    },
+    {
+        "text": "mitigations",
+        "count": 3,
+        "score": 0.0019819424901383062
+    },
+    {
+        "text": "waitlist",
+        "count": 3,
+        "score": 0.0019815216692965895
+    },
+    {
+        "text": "titles",
+        "count": 3,
+        "score": 0.001975478212097001
+    },
+    {
+        "text": "creation",
+        "count": 3,
+        "score": 0.001962610942372391
+    },
+    {
+        "text": "location",
+        "count": 3,
+        "score": 0.0019538710565766585
+    },
+    {
+        "text": "existing",
+        "count": 3,
+        "score": 0.001879987425489451
+    },
+    {
+        "text": "director",
+        "count": 3,
+        "score": 0.0018721021042796548
+    },
+    {
+        "text": "requires",
+        "count": 3,
+        "score": 0.0018606579147035093
+    },
+    {
+        "text": "raw",
+        "count": 3,
+        "score": 0.0018498065402090171
+    },
+    {
+        "text": "phone",
+        "count": 3,
+        "score": 0.0018478423954893138
+    },
+    {
+        "text": "productivity",
+        "count": 3,
+        "score": 0.0018425465406462934
+    },
+    {
+        "text": "deploy",
+        "count": 3,
+        "score": 0.0018384590186247686
+    },
+    {
+        "text": "compute",
+        "count": 3,
+        "score": 0.0018335849077798535
+    },
+    {
+        "text": "master",
+        "count": 3,
+        "score": 0.0018246788430688176
+    },
+    {
+        "text": "defeat",
+        "count": 3,
+        "score": 0.0018105900458841636
+    },
+    {
+        "text": "application",
+        "count": 3,
+        "score": 0.0017958864652139572
+    },
+    {
+        "text": "pursue",
+        "count": 3,
+        "score": 0.001786291313888942
+    },
+    {
+        "text": "classic",
+        "count": 3,
+        "score": 0.0017829363654790601
+    },
+    {
+        "text": "min",
+        "count": 3,
+        "score": 0.0017646905509493206
+    },
+    {
+        "text": "harm",
+        "count": 3,
+        "score": 0.0017432976330730016
+    },
+    {
+        "text": "majority",
+        "count": 3,
+        "score": 0.0017376525641571304
+    },
+    {
+        "text": "chance",
+        "count": 3,
+        "score": 0.0017362245478190325
+    },
+    {
+        "text": "discovering",
+        "count": 3,
+        "score": 0.0017345995265061322
+    },
+    {
+        "text": "virtual",
+        "count": 3,
+        "score": 0.0017228420175811716
+    },
+    {
+        "text": "career",
+        "count": 3,
+        "score": 0.0017159347274309622
+    },
+    {
+        "text": "continuing",
+        "count": 3,
+        "score": 0.0016404529753061736
+    },
+    {
+        "text": "capacity",
+        "count": 3,
+        "score": 0.0016322167095491238
+    },
+    {
+        "text": "manipulation",
+        "count": 3,
+        "score": 0.0016258540429409138
+    },
+    {
+        "text": "2015",
+        "count": 3,
+        "score": 0.0016198963659253417
+    },
+    {
+        "text": "publicly",
+        "count": 3,
+        "score": 0.001616926428623414
+    },
+    {
+        "text": "january",
+        "count": 3,
+        "score": 0.0016163803628549802
+    },
+    {
+        "text": "match",
+        "count": 3,
+        "score": 0.0016103169042910852
+    },
+    {
+        "text": "enhance",
+        "count": 3,
+        "score": 0.0016055109116241426
+    },
+    {
+        "text": "determine",
+        "count": 3,
+        "score": 0.0016030897585337803
+    },
+    {
+        "text": "practices",
+        "count": 3,
+        "score": 0.0016026677885961867
+    },
+    {
+        "text": "council",
+        "count": 3,
+        "score": 0.0015919457427787435
+    },
+    {
+        "text": "playing",
+        "count": 3,
+        "score": 0.0015850623471464465
+    },
+    {
+        "text": "opportunity",
+        "count": 3,
+        "score": 0.0015825694051941385
+    },
+    {
+        "text": "transfer",
+        "count": 3,
+        "score": 0.0015782942312605767
+    },
+    {
+        "text": "anand",
+        "count": 3,
+        "score": 0.0015705866638945566
+    },
+    {
+        "text": "demonstrated",
+        "count": 3,
+        "score": 0.001564058964438471
+    },
+    {
+        "text": "represent",
+        "count": 3,
+        "score": 0.0015619901022010034
+    },
+    {
+        "text": "voice",
+        "count": 3,
+        "score": 0.0015285517462537439
+    },
+    {
+        "text": "song",
+        "count": 3,
+        "score": 0.0015214230110916632
+    },
+    {
+        "text": "require",
+        "count": 3,
+        "score": 0.001513926667028809
+    },
+    {
+        "text": "entails",
+        "count": 3,
+        "score": 0.0015099121723251255
+    },
+    {
+        "text": "safeguards",
+        "count": 3,
+        "score": 0.0015009910355237395
+    },
+    {
+        "text": "fast",
+        "count": 3,
+        "score": 0.0014878627661259046
+    },
+    {
+        "text": "sun",
+        "count": 3,
+        "score": 0.0014864961318903228
+    },
+    {
+        "text": "sustainability",
+        "count": 3,
+        "score": 0.001483876375408069
+    },
+    {
+        "text": "proactive",
+        "count": 3,
+        "score": 0.0014780241558243852
+    },
+    {
+        "text": "accurate",
+        "count": 3,
+        "score": 0.0014729760342536904
+    },
+    {
+        "text": "amateur",
+        "count": 3,
+        "score": 0.0014716609235722522
+    },
+    {
+        "text": "transport",
+        "count": 3,
+        "score": 0.001468981666420218
+    },
+    {
+        "text": "llms",
+        "count": 3,
+        "score": 0.0014598908182281367
+    },
+    {
+        "text": "yang",
+        "count": 3,
+        "score": 0.0014368099019426044
+    },
+    {
+        "text": "crystal",
+        "count": 3,
+        "score": 0.0014349172801433393
+    },
+    {
+        "text": "family",
+        "count": 3,
+        "score": 0.0014256148412207105
+    },
+    {
+        "text": "feature",
+        "count": 3,
+        "score": 0.001418491242868353
+    },
+    {
+        "text": "highly",
+        "count": 3,
+        "score": 0.001416049566078047
+    },
+    {
+        "text": "jump",
+        "count": 3,
+        "score": 0.0014095734253099315
+    },
+    {
+        "text": "empower",
+        "count": 3,
+        "score": 0.0014074599602894849
+    },
+    {
+        "text": "studio",
+        "count": 3,
+        "score": 0.0013975182305736298
+    },
+    {
+        "text": "customer",
+        "count": 3,
+        "score": 0.0013933020815960005
+    },
+    {
+        "text": "size",
+        "count": 3,
+        "score": 0.0013909297993253014
+    },
+    {
+        "text": "monitoring",
+        "count": 3,
+        "score": 0.001389355144020198
+    },
+    {
+        "text": "host",
+        "count": 3,
+        "score": 0.0013872452099933643
+    },
+    {
+        "text": "trial",
+        "count": 3,
+        "score": 0.0013820064020079804
+    },
+    {
+        "text": "actors",
+        "count": 3,
+        "score": 0.0013783933688539867
+    },
+    {
+        "text": "class",
+        "count": 3,
+        "score": 0.0013758356949815564
+    },
+    {
+        "text": "commands",
+        "count": 3,
+        "score": 0.0013682018141220034
+    },
+    {
+        "text": "protect",
+        "count": 3,
+        "score": 0.0013638401374480996
+    },
+    {
+        "text": "established",
+        "count": 3,
+        "score": 0.0013631084460332663
+    },
+    {
+        "text": "evolve",
+        "count": 3,
+        "score": 0.0013612763539555168
+    },
+    {
+        "text": "diffusion",
+        "count": 3,
+        "score": 0.0013572589533710822
+    },
+    {
+        "text": "achievement",
+        "count": 3,
+        "score": 0.0013457953091936359
+    },
+    {
+        "text": "communities",
+        "count": 3,
+        "score": 0.001341018392825708
+    },
+    {
+        "text": "current",
+        "count": 3,
+        "score": 0.0013375320603342174
+    },
+    {
+        "text": "vast",
+        "count": 3,
+        "score": 0.0013363060398857837
+    },
+    {
+        "text": "apollo",
+        "count": 3,
+        "score": 0.0013287878480419016
+    },
+    {
+        "text": "introduce",
+        "count": 3,
+        "score": 0.0013265126572884305
+    },
+    {
+        "text": "engineers",
+        "count": 3,
+        "score": 0.001322124068905185
+    },
+    {
+        "text": "color",
+        "count": 3,
+        "score": 0.0013213414726273086
+    },
+    {
+        "text": "economic",
+        "count": 3,
+        "score": 0.001315170824504694
+    },
+    {
+        "text": "37",
+        "count": 3,
+        "score": 0.001313250709392073
+    },
+    {
+        "text": "informed",
+        "count": 3,
+        "score": 0.0013099168087589927
+    },
+    {
+        "text": "behalf",
+        "count": 3,
+        "score": 0.0013050966377293302
+    },
+    {
+        "text": "choi",
+        "count": 3,
+        "score": 0.001297405607428481
+    },
+    {
+        "text": "shah",
+        "count": 3,
+        "score": 0.001297405607428481
+    },
+    {
+        "text": "stone",
+        "count": 3,
+        "score": 0.0012962053783696606
+    },
+    {
+        "text": "experiment",
+        "count": 3,
+        "score": 0.0012906253484386986
+    },
+    {
+        "text": "addresses",
+        "count": 3,
+        "score": 0.0012882699300362864
+    },
+    {
+        "text": "grand",
+        "count": 3,
+        "score": 0.0012879827785725923
+    },
+    {
+        "text": "wider",
+        "count": 3,
+        "score": 0.00128200453504404
+    },
+    {
+        "text": "explores",
+        "count": 3,
+        "score": 0.0012759801170887904
+    },
+    {
+        "text": "blocks",
+        "count": 3,
+        "score": 0.001268429535227054
+    },
+    {
+        "text": "unknown",
+        "count": 3,
+        "score": 0.0012566959799448557
+    },
+    {
+        "text": "piece",
+        "count": 3,
+        "score": 0.0012433663240564302
+    },
+    {
+        "text": "academia",
+        "count": 3,
+        "score": 0.0012402241998044565
+    },
+    {
+        "text": "civil",
+        "count": 3,
+        "score": 0.0012345648902402232
+    },
+    {
+        "text": "rendering",
+        "count": 3,
+        "score": 0.0012338771037261826
+    }
+]

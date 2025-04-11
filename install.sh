@@ -5,3 +5,4 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 20.18.1
 nvm use 20.18.1
 npm install
+sudo ufw allow 80/tcp

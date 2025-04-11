@@ -6,7 +6,7 @@ const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
 
-const cache = util.cache.createCache(20000);
+const cache = util.cache.createCache(1000);
 
 /**
  * Routes remote requests to get the data associated with each term and caches the data.
@@ -102,6 +102,40 @@ function lookupBatches(group, batches, callback) {
 }
 
 /**
+ * Computes the most frequent terms across each of the local stores.
+ */
+function calcMostFrequent(limit, callback) {
+  checkContext(this.gid, this.hash);
+  if (callback === undefined) {
+    return;
+  }
+
+  global.distribution.local.groups.get(this.gid, (error, group) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    const service = {service: "termLookup", method: "calcMostFrequent"};
+    remote.sendRequests(group, service, [limit], (errors, results) => {
+      if (Object.keys(errors).length > 0) {
+        callback(errors, null);
+        return;
+      }
+
+      const terms = Object.values(results).flat();
+      terms.sort((a, b) => {
+        if (a.count !== b.count) {
+          return b.count - a.count;
+        }
+        return b.score - a.score;
+      });
+      callback(null, terms.slice(0, limit));
+    });
+  });
+}
+
+/**
  * Checks if the current function context is valid.
  */
 function checkContext(groupId, hashFn) {
@@ -121,5 +155,8 @@ module.exports = (config) => {
   if (typeof context.hash !== "function") {
     context.hash = util.id.rendezvousHash;
   }
-  return {lookup: lookup.bind(context)};
+  return {
+    lookup: lookup.bind(context),
+    calcMostFrequent: calcMostFrequent.bind(context),
+  };
 };

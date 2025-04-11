@@ -1,17 +1,29 @@
 /* A service that coordinates crawling and indexing. */
 
 const log = require("../util/log.js");
+const params = require("../params.js");
+
+const GROUP = params.searchGroup;
 
 const counts = {
   crawled: 0,
   indexed: 0,
 };
 
+const crawlerStats = {
+  ignoredURLCount: 0,
+  irrelevantURLCount: 0,
+  ignoredURLs: [],
+  irrelevantURLs: [],
+  pageContentLengths: [],
+};
+
 /**
  * Starts the local crawler and indexer processing queues.
  */
-function start(reset, callback) {
+function start(node, reset, callback) {
   log("Starting crawl and index cycle");
+  global.distribution[GROUP].search._setOrchestrator(node);
   global.distribution.local.crawl._start(reset, (error, result) => {
     if (error) {
       callback(error, null);
@@ -67,6 +79,13 @@ function getCounts(callback) {
 }
 
 /**
+ * Returns the crawler-specific stats
+ */
+function getCrawlStats(callback) {
+  callback(null, crawlerStats);
+}
+
+/**
  * Adds the number of pages crawled and indexed to the orchestrator counts.
  */
 function updateCounts(crawled, indexed, callback) {
@@ -75,4 +94,25 @@ function updateCounts(crawled, indexed, callback) {
   callback(null, null);
 }
 
-module.exports = {start, stop, flushCache, getCounts, updateCounts};
+/**
+ * Updates crawler-specific stats
+ * @param {?string} ignoredURL
+ * @param {?string} irrelevantURL
+ * @param {?number} pageContentLength
+ */
+function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
+  if (ignoredURL !== null) {
+    crawlerStats.ignoredURLs.push(ignoredURL);
+    crawlerStats.ignoredURLCount++;
+  }
+  if (irrelevantURL !== null) {
+    crawlerStats.irrelevantURLs.push(irrelevantURL);
+    crawlerStats.irrelevantURLCount++;
+  }
+  if (pageContentLength !== null) {
+    crawlerStats.pageContentLengths.push(pageContentLength);
+  }
+  callback(null, null);
+}
+
+module.exports = {start, stop, flushCache, getCounts, getCrawlStats, updateCounts, updateCrawlerStats};

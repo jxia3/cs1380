@@ -12,6 +12,10 @@
 */
 
 const status = require("./status.js");
+const params = require("../params.js");
+
+USE_QUERY = params.enableQuery;
+
 module.exports = {
   comm: require("./comm.js"),
   gossip: require("./gossip.js"),
@@ -29,6 +33,6 @@ module.exports = {
   index: require("./index.js"),
   shardedStore: require("./sharded-store.js"),
   termLookup: require("./term-lookup.js"),
-  query: require("./query.js"),
+  query: USE_QUERY ? require("./query.js") : null,
   search: require("./search.js")
 };

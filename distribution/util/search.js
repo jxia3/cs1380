@@ -11,28 +11,19 @@ const {URL} = require("url");
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
 const REQUEST_TIMEOUT = 60000;
 const NGRAM_LEN = params.ngramLen;
-const DEBUG = false;
 
 const stopwords = new Set();
 
 // Load stopwords asynchronously on startup
-// fs.readFile(path.join(__dirname, "stopwords.txt"), (error, data) => {
-//   if (error) {
-//     throw error;
-//   }
-//   const words = data.toString().trim().split(/\s+/g);
-//   for (const word of words) {
-//     stopwords.add(word);
-//   }
-// });
-
-data = fs.readFileSync(path.join(__dirname, "stopwords.txt"));
-const words = data.toString().trim().split(/\s+/g);
-for (const word of words) {
-  stopwords.add(word);
-}
-
-// console.log(stopwords);
+fs.readFile(path.join(__dirname, "../../data/stopwords.txt"), (error, data) => {
+  if (error) {
+    throw error;
+  }
+  const words = data.toString().trim().split(/\s+/g);
+  for (const word of words) {
+    stopwords.add(word);
+  }
+});
 
 /**
  * Normalizes a URL string.
@@ -48,11 +39,19 @@ function normalizeUrl(url) {
 /**
  * Downloads the HTML content of a page at a URL.
  */
-function downloadPage(url, callback) {
+function downloadPage(url, callback, redirectCount = 0) {
   if (callback === undefined) {
     throw new Error("No callback provided");
   }
-  callback = global.distribution.util.sync.createGuardedCallback(callback);
+
+  const guardedCallback = global.distribution.util.sync.createGuardedCallback(callback);
+  if (ignoreURL(url)) {
+    return guardedCallback(null, null);
+  }
+  // Prevent infinite redirects
+  if (redirectCount > 10) {
+    return guardedCallback(new Error("Too many redirects"), null);
+  }
 
   const module = url.startsWith("https") ? https : http;
   const request = module.request(url, {
@@ -61,14 +60,32 @@ function downloadPage(url, callback) {
       "User-Agent": USER_AGENT,
     },
     timeout: REQUEST_TIMEOUT,
-  }, (response) => handleResponse(response, callback));
+  }, (response) => {
+    // Check for redirects
+    if (response.statusCode >= 301 && response.statusCode <= 308 && response.headers.location) {
+      // Clean up listeners on current request
+      request.removeAllListeners("timeout");
+      request.removeAllListeners("error");
+      request.destroy();
+
+      // Resolve redirect URL to base URL
+      const redirectUrl = response.headers.location;
+      const absoluteUrl = new URL(redirectUrl, url).toString();
+      downloadPage(absoluteUrl, guardedCallback, redirectCount + 1); // Recursively follow redirect
+    } else {
+      handleResponse(response, guardedCallback);
+    }
+  });
 
   request.on("timeout", () => {
     request.destroy(new Error("Request timed out"));
   });
 
   request.on("error", (error) => {
-    callback(error, null);
+    if (!request.destroyed) {
+      request.destroy();
+    }
+    guardedCallback(error, null);
   });
 
   request.end();
@@ -81,6 +98,49 @@ function handleResponse(response, callback) {
   let content = "";
   response.on("data", (chunk) => content += chunk);
   response.on("end", () => callback(null, content));
+}
+
+/**
+ * Checks if a URL should be ignored
+ */
+function ignoreURL(url) {
+  // Convert URL to lowercase for case-insensitive checks
+  const lowerUrl = url.toLowerCase();
+
+  // Check for bad file extensions
+  const badExtensions = [
+    ".pdf", ".csv", ".jpg", ".jpeg", ".png",
+    ".mp4", ".zip", ".webm", ".webp", ".tar.gz", ".gz",
+  ];
+  for (const extension of badExtensions) {
+    if (lowerUrl.endsWith(extension)) {
+      return true;
+    }
+  }
+
+  // Check for authentication-related domains
+  const authDomains = [
+    "accounts.google.com", "login", "auth", "signin", "sso", "idp", "identity",
+  ];
+  const urlHost = new URL(url).hostname.toLowerCase();
+  for (const domain of authDomains) {
+    if (urlHost.includes(domain)) {
+      return true;
+    }
+  }
+
+  // Check for authentication-related paths
+  const authPaths = [
+    "/auth", "/oauth", "/oauth2", "/login", "/signin", "/sso", "/account",
+  ];
+  const urlPath = new URL(url).pathname.toLowerCase();
+  for (const path of authPaths) {
+    if (urlPath.includes(path)) {
+      return true;
+    }
+  }
+  // If none of the above conditions match, the URL is relevant
+  return false;
 }
 
 /**
@@ -227,6 +287,13 @@ function createFullTermKey(term) {
 }
 
 /**
+ * Converts a full result term key to a term.
+ */
+function recoverFullTerm(key) {
+  return key.slice(1, -6);
+}
+
+/**
  * Returns the storage key for the top results for a term.
  */
 function createTopTermKey(term) {
@@ -234,12 +301,16 @@ function createTopTermKey(term) {
 }
 
 /**
+ * Converts a top result term key to a term.
+ */
+function recoverTopTerm(key) {
+  return key.slice(1, -5);
+}
+
+/**
  * Compresses a term entry for compact storage.
  */
 function compressEntry(entry) {
-  if (DEBUG) {
-    return entry;
-  }
   const contexts = [];
   for (const context of entry.context) {
     contexts.push([context.text, context.start, context.end]);
@@ -251,9 +322,6 @@ function compressEntry(entry) {
  * Decompresses a term entry from its storage representation.
  */
 function decompressEntry(entry) {
-  if (DEBUG) {
-    return entry;
-  }
   const contexts = [];
   for (const context of entry[2]) {
     contexts.push({
@@ -275,7 +343,9 @@ module.exports = {
   extractUrls,
   calcTerms,
   createFullTermKey,
+  recoverFullTerm,
   createTopTermKey,
+  recoverTopTerm,
   compressEntry,
   decompressEntry,
 };

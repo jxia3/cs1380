@@ -9,7 +9,10 @@ const SHARD_COUNT = 10000;
 const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
 const NOT_FOUND_MARK = params.notFoundMark;
 
-const store = createCachedStore(baseStore, Math.ceil(SHARD_COUNT / 5));
+let store = baseStore;
+if (!params.disableCache) {
+  store = createCachedStore(baseStore, 300);
+}
 
 /**
  * Finds the shard containing a key and returns the value corresponding to the key.
@@ -166,4 +169,12 @@ function _getSyncKey(config) {
   return store._getSyncKey(getShardConfig(config));
 }
 
-module.exports = {get, tryGet, put, del, _getSyncKey, _store: store};
+module.exports = {
+  get,
+  tryGet,
+  put,
+  del,
+  _getSyncKey,
+  _getShardKey: getShardKey,
+  _store: store,
+};

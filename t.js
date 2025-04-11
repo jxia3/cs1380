@@ -33,7 +33,8 @@ distribution.node.start(() => {
     //     }, 1000);
     //   });
     // });
-    distribution.local.query.dihQuery('lebron', () => {});
-
+    setTimeout(() => {
+      distribution.local.query.dihQuery('epic bsdlkfsdf', () => {});
+    }, 1000);
   });
 });
