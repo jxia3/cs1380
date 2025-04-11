@@ -22,7 +22,7 @@ if (require.main === module) {
   } else if (command === "idle") {
     idle();
   } else if (command === "download") {
-    download();
+    download(RESET);
   } else if (command === "calc") {
     calc();
   } else {
@@ -50,9 +50,9 @@ function idle() {
   });
 }
 
-function download() {
+function download(reset) {
   startGroup(() => {
-    distribution[GROUP].search.start(localNode, RESET, (error, result) => {
+    distribution[GROUP].search.start(localNode, reset, (error, result) => {
       if (Object.keys(error).length > 0) {
         throw error;
       }
@@ -140,4 +140,4 @@ function printStats() {
   distribution.local.search.getCrawlStats(console.log);
 }
 
-module.exports = {GROUP, distribution, startLocal};
+module.exports = {GROUP, distribution, startLocal, download};
