@@ -398,27 +398,20 @@ function createCharStream(text, index, increment) {
  */
 function updateIndex(url, terms, docLen, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  let termStrings = Object.keys(terms);
-  if (SHARD_LOCALITY) {
-    const termShards = [];
-    for (const term of termStrings) {
-      termShards.push([term, global.distribution.local.shardedStore._getShardKey(term)]);
-    }
-    termShards.sort((a, b) => {
-      if (a[1] < b[1]) {
-        return -1;
-      } else if (a[1] > b[1]) {
-        return 1;
-      }
-      return 0;
+  let termData = [];
+  for (const term in terms) {
+    termData.push({
+      text: term,
+      key: util.search.createFullTermKey(term),
     });
-    termStrings = termShards.map((t) => t[0]);
   }
-  let active = termStrings.length;
+  if (SHARD_LOCALITY) {
+    termData = localizeTerms(termData);
+  }
+  let active = termData.length;
   let updateError = null;
 
-  for (const term of termStrings) {
-    const key = util.search.createFullTermKey(term);
+  for (const {text: term, key} of termData) {
     const config = {gid: GROUP, key};
     global.distribution.local.atomicStore.getAndModify(config, {
       modify: (index) => {
@@ -454,6 +447,21 @@ function updateIndex(url, terms, docLen, callback) {
       },
     });
   }
+}
+
+/**
+ * Localizes an array of terms and keys by shard.
+ */
+function localizeTerms(terms) {
+  const shards = {};
+  for (const term of terms) {
+    const shard = global.distribution.local.shardedStore._getShardKey(term.key);
+    if (!(shard in shards)) {
+      shards[shard] = [];
+    }
+    shards[shard].push(term);
+  }
+  return Object.values(shards).flat();
 }
 
 module.exports = {
