@@ -7,23 +7,12 @@ const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
 const RESET = true;
 
-const offset = [3, 8];
-const nodes = [{
-  ip: "",
-  port: 80,
-}, {
-  ip: "",
-  port: 80,
-}, {
-  ip: "",
-  port: 80,
-}, {
-  ip: "",
-  port: 80,
-}, {
-  ip: "",
-  port: 80,
-}].slice(offset[0], offset[1]);
+const offset = [0, 5];
+const addresses = [
+  "18.222.156.5", "18.119.126.157", "18.217.142.153", "3.145.151.150", "3.149.8.85",
+  "3.22.249.243", "52.14.21.146", "3.137.214.157", "52.15.193.117", "3.148.236.156",
+];
+const nodes = addresses.slice(offset[0], offset[1]).map((n) => ({ip: n, port: 80}));
 
 const localNode = nodes[0];
 if (true) {
