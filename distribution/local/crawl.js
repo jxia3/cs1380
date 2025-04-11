@@ -12,6 +12,7 @@ const QUEUE_KEY = params.crawlQueue;
 const CRAWL_SETTING = params.crawlSetting;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = CRAWL_SETTING === "index-directly" ? 2 : 1;
+const MAX_LEN = 100_000;
 // How often we write visited URLs list to disk (ms)
 const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 500;
@@ -213,7 +214,7 @@ function crawlURL(url, callback) {
  * Checks if a page is relevant.
  */
 function checkPageRelevant(url, title, content) {
-  if (content.length < 10) {
+  if (content.length < 10 || content.length > MAX_LEN) {
     return false;
   }
   return true;

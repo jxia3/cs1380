@@ -294,20 +294,6 @@ function recoverFullTerm(key) {
 }
 
 /**
- * Returns the storage key for the top results for a term.
- */
-function createTopTermKey(term) {
-  return `[${term}]-top`;
-}
-
-/**
- * Converts a top result term key to a term.
- */
-function recoverTopTerm(key) {
-  return key.slice(1, -5);
-}
-
-/**
  * Compresses a term entry for compact storage.
  */
 function compressEntry(entry) {
@@ -344,8 +330,6 @@ module.exports = {
   calcTerms,
   createFullTermKey,
   recoverFullTerm,
-  createTopTermKey,
-  recoverTopTerm,
   compressEntry,
   decompressEntry,
 };
