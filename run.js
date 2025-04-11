@@ -22,7 +22,7 @@ if (require.main === module) {
   } else if (command === "idle") {
     idle();
   } else if (command === "download") {
-    download(RESET);
+    download(nodes.length, RESET);
   } else if (command === "calc") {
     calc();
   } else {
@@ -31,7 +31,7 @@ if (require.main === module) {
 }
 
 function clear() {
-  startLocal(() => {
+  startLocal(nodes.length, () => {
     for (const node of nodes) {
       const remote = {node, service: "store", method: "clear"};
       distribution.local.comm.send([GROUP], remote, (error, result) => {
@@ -45,13 +45,13 @@ function clear() {
 }
 
 function idle() {
-  startLocal(() => {
+  startLocal(nodes.length, () => {
     console.log("Idling");
   });
 }
 
-function download(reset) {
-  startGroup(() => {
+function download(nodeCount, reset) {
+  startGroup(nodeCount, () => {
     distribution[GROUP].search.start(localNode, reset, (error, result) => {
       if (Object.keys(error).length > 0) {
         throw error;
@@ -70,7 +70,7 @@ function download(reset) {
 }
 
 function calc() {
-  startLocal(() => {
+  startLocal(nodes.length, () => {
     distribution[GROUP].termLookup.calcMostFrequent(FREQUENT_COUNT, (error, result) => {
       if (error) {
         throw error;
@@ -81,9 +81,9 @@ function calc() {
   });
 }
 
-function startLocal(callback) {
+function startLocal(nodeCount, callback) {
   distribution.node.start(() => {
-    distribution.local.groups.put(GROUP, nodes, (error, result) => {
+    distribution.local.groups.put(GROUP, nodes.slice(0, nodeCount), (error, result) => {
       if (error) {
         throw error;
       }
@@ -92,9 +92,9 @@ function startLocal(callback) {
   });
 }
 
-function startGroup(callback) {
-  startLocal(() => {
-    distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
+function startGroup(nodeCount, callback) {
+  startLocal(nodeCount, () => {
+    distribution[GROUP].groups.put(GROUP, nodes.slice(0, nodeCount), (error, result) => {
       if (Object.keys(error).length > 0) {
         throw error;
       }
