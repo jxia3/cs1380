@@ -23,7 +23,13 @@ const nodes = [{
   ip: "3.145.145.84",
   port: 80,
 }];
+
 const localNode = nodes[0];
+if (true) {
+  global.nodeConfig.ip = "0.0.0.0";
+  global.nodeConfig.port = 80;
+}
+
 const urls = [
   "https://deepmind.google",
   "https://openai.com",
