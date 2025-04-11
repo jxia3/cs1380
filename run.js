@@ -36,7 +36,7 @@ if (true) {
 const urls = [
   "https://deepmind.google",
   "https://openai.com",
-  "https://stackoverflow.com/questions",
+  "https://stackexchange.com",
   "https://github.com",
   "https://apnews.com",
   "https://www.nba.com",
