@@ -7,10 +7,6 @@ const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
 const RESET = true;
 
-const localNode = {
-  ip: distribution.node.config.ip,
-  port: distribution.node.config.port,
-};
 const nodes = [{
   ip: "3.137.170.209",
   port: 80,
@@ -27,6 +23,7 @@ const nodes = [{
   ip: "3.145.145.84",
   port: 80,
 }];
+const localNode = nodes[0];
 const urls = [
   "https://deepmind.google",
   "https://openai.com",
