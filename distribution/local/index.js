@@ -8,6 +8,7 @@ const GROUP = params.searchGroup;
 const NGRAM_LEN = params.ngramLen;
 const QUEUE_KEY = params.indexQueue;
 const CRAWL_SETTING = params.crawlSetting;
+const SHARD_LOCALITY = params.shardLocality;
 const ACTIVE_LIMIT = 3;
 const CONTEXT_COUNT = 2;
 const CONTEXT_WORDS = 5;
@@ -397,10 +398,26 @@ function createCharStream(text, index, increment) {
  */
 function updateIndex(url, terms, docLen, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
-  let active = Object.keys(terms).length;
+  let termStrings = Object.keys(terms);
+  if (SHARD_LOCALITY) {
+    const termShards = [];
+    for (const term of termStrings) {
+      termShards.push([term, global.distribution.local.shardedStore._getShardKey(term)]);
+    }
+    termShards.sort((a, b) => {
+      if (a[1] < b[1]) {
+        return -1;
+      } else if (a[1] > b[1]) {
+        return 1;
+      }
+      return 0;
+    });
+    termStrings = termShards.map((t) => t[0]);
+  }
+  let active = termStrings.length;
   let updateError = null;
 
-  for (const term in terms) {
+  for (const term of termStrings) {
     const key = util.search.createFullTermKey(term);
     const config = {gid: GROUP, key};
     global.distribution.local.atomicStore.getAndModify(config, {
