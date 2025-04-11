@@ -51,6 +51,8 @@ function idle() {
 }
 
 function download(nodeCount, reset) {
+  nodeCount = Math.min(nodeCount, nodes.length);
+  console.log("Downloading with", nodeCount, reset);
   startGroup(nodeCount, () => {
     distribution[GROUP].search.start(localNode, reset, (error, result) => {
       if (Object.keys(error).length > 0) {

@@ -3,7 +3,13 @@ const distribution = run.distribution;
 
 const fs = require("fs");
 
-const name = process.argv[2];
+const nodeCount = +process.argv[2];
+if (isNaN(nodeCount) || nodeCount <= 0 || Math.floor(nodeCount) !== nodeCount) {
+  console.error("Invalid node count");
+  process.exit(1);
+}
+
+const name = process.argv[3];
 if (name === undefined || name === "") {
   console.error("No name provided");
   process.exit(1);
@@ -18,7 +24,7 @@ if (fs.existsSync(`data/${name}.json`)) {
 }
 
 const data = [];
-run.download(true);
+run.download(nodeCount, true);
 const interval = setInterval(() => {
   distribution.local.search.getCounts((error, counts) => {
     if (error) {
