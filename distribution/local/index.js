@@ -238,7 +238,7 @@ function extractText(content) {
       title = "<unknown>";
     }
   }
-  title = title.replaceAll(/s+/g, " ").trim();
+  title = title.replaceAll(/\s+/g, " ").trim();
 
   return {title, content};
 }
