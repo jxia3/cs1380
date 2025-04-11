@@ -296,7 +296,7 @@ function extractTerms(title, text) {
           context: [],
         };
       }
-      termIndex[term.text].score += wordCount > 2 ? 1 : 0.5;
+      termIndex[term.text].score += wordCount > 2 ? 3 : 1;
       if (termIndex[term.text].context.length < CONTEXT_COUNT) {
         termIndex[term.text].context.push(extractContext(text, textIndex + term.start, textIndex + term.end));
       }
