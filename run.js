@@ -12,13 +12,19 @@ const localNode = {
   port: distribution.node.config.port,
 };
 const nodes = [{
-  ip: "172.31.15.127",
+  ip: "3.137.170.209",
   port: 80,
 }, {
-  ip: "172.31.11.205",
+  ip: "3.135.186.201",
   port: 80,
 }, {
-  ip: "172.31.9.38",
+  ip: "3.17.157.78",
+  port: 80,
+}, {
+  ip: "18.216.21.233",
+  port: 80,
+}, {
+  ip: "3.145.145.84",
   port: 80,
 }];
 const urls = [
