@@ -250,7 +250,7 @@ function extractText(content) {
  */
 function extractTerms(title, text) {
   // Extract terms from title
-  const termIndex = {};
+  const termIndex = Object.create(null);
   const docLen = new Array(NGRAM_LEN + 1).fill(0);
   const {terms: titleTerms, wordCount: titleCount} = util.search.calcTerms(title);
   for (let n = 1; n <= NGRAM_LEN; n += 1) {

@@ -11,7 +11,7 @@ const NOT_FOUND_MARK = params.notFoundMark;
 
 let store = baseStore;
 if (!params.disableCache) {
-  store = createCachedStore(baseStore, 1000);
+  store = createCachedStore(baseStore, 500);
 }
 
 /**
