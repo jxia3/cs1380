@@ -158,7 +158,7 @@ function crawlURL(url, callback) {
       });
 
       // TODO: if not relevant, should we not do anything, or still crawl the urls on the page?
-      if (params.pageRelevant(pageContent)) {
+      if (checkPageRelevant(url, pageTitle, pageContent)) {
         const pageURLs = util.search.extractUrls(htmlContent, url);
         if (stopped) {
           log(`Aborted crawling ${url}`, "crawl");
@@ -207,6 +207,16 @@ function crawlURL(url, callback) {
       }
     }
   });
+}
+
+/**
+ * Checks if a page is relevant.
+ */
+function checkPageRelevant(url, title, content) {
+  if (content.length < 10) {
+    return false;
+  }
+  return true;
 }
 
 /**

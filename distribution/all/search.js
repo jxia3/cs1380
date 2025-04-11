@@ -64,7 +64,7 @@ function updateCounts(crawled, indexed, callback) {
 function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
-  if (DEBUG) {
+  if (!DEBUG) {
     callback(null, null);
     return;
   }
