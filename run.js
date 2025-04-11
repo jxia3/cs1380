@@ -12,7 +12,17 @@ const localNode = {
   port: distribution.node.config.port,
 };
 const nodes = [localNode];
-const urls = ["https://deepmind.google"];
+const urls = [
+  "https://deepmind.google",
+  "https://openai.com",
+  "https://stackoverflow.com/questions",
+  "https://github.com",
+  "https://apnews.com",
+  "https://finance.yahoo.com",
+  "https://www.nba.com",
+  "https://en.wikipedia.org/wiki/Main_Page",
+  "https://www.reddit.com",
+];
 let startTime;
 
 if (require.main === module) {
