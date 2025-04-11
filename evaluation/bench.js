@@ -1,4 +1,4 @@
-const run = require("./run.js");
+const run = require("../run.js");
 const distribution = run.distribution;
 
 const fs = require("fs");
