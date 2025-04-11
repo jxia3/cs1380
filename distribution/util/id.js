@@ -6,6 +6,17 @@
 
 const crypto = require("crypto");
 
+const TRANSLATE_IPS = true;
+
+const originalIps = [
+  "3.140.196.193", "18.226.17.254", "3.133.137.100", "3.148.254.121", "18.188.59.180",
+  "3.15.219.196", "18.119.130.94", "18.226.159.103", "3.148.186.71", "18.219.70.89",
+];
+const currentIps = [
+  "3.139.81.183", "3.149.2.194", "18.217.66.8", "3.15.220.99", "3.147.63.105",
+  "18.226.159.174", "18.117.185.42", "18.223.196.60", "3.139.108.222", "3.16.66.233",
+];
+
 /* Generates unique identifiers for objects using a SHA256 hash. Note that the objects
    cannot be cyclic since they are serialized as default JSON. */
 
@@ -94,13 +105,25 @@ function getObjectConfig(config, defaultGroup) {
 function applyHash(key, group, hashFn) {
   const keyId = getID(key);
   const groupKeys = Object.keys(group);
-  const nodeIds = groupKeys.map((key) => getNID(group[key]));
+  const nodeIds = groupKeys.map((key) => {
+    let ip = group[key].ip;
+    if (TRANSLATE_IPS) {
+      for (let i = 0; i < currentIps.length; i += 1) {
+        if (currentIps[i] === group[key].ip) {
+          ip = originalIps[i];
+        }
+      }
+    }
+    return getNID({...group[key], ip});
+  });
+
   const nodeId = hashFn(keyId, nodeIds);
   for (let n = 0; n < groupKeys.length; n += 1) {
     if (nodeIds[n] === nodeId) {
       return groupKeys[n];
     }
   }
+
   throw new Error("Node not found");
 }
 
