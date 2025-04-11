@@ -11,7 +11,16 @@ const localNode = {
   ip: distribution.node.config.ip,
   port: distribution.node.config.port,
 };
-const nodes = [localNode];
+const nodes = [{
+  ip: "172.31.15.127",
+  port: 80,
+}, {
+  ip: "172.31.11.205",
+  port: 80,
+}, {
+  ip: "172.31.9.38",
+  port: 80,
+}];
 const urls = [
   "https://deepmind.google",
   "https://openai.com",
