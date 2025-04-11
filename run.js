@@ -22,6 +22,9 @@ const nodes = [{
 }, {
   ip: "3.145.145.84",
   port: 80,
+}, {
+  ip: "3.149.12.161",
+  port: 80,
 }];
 
 const localNode = nodes[0];
