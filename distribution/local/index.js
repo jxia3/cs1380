@@ -305,7 +305,8 @@ function extractTerms(title, text) {
   }
 
   // Weight scores by the document length
-  const factor = Math.max(0.2, Math.min(docLen[0] / 50, 1));
+  const len = title.split(" ").length + docLen[0];
+  const factor = Math.max(0.2, Math.min(len / 50, 1));
   for (const term in termIndex) {
     termIndex[term].score *= factor;
   }
