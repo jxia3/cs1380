@@ -11,6 +11,7 @@ module.exports = {
     return pageContent.toLowerCase().includes("google");
   },
   shardLocality: true,
+  fifoCache: true,
   disableCache: false,
   debug: true,
 };
