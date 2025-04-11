@@ -23,7 +23,7 @@ function start(node, reset, callback) {
   }
   this.orchestrator = node;
   const service = {service: "search", method: "start"};
-  global.distribution[this.gid].comm.send([reset], service, callback);
+  global.distribution[this.gid].comm.send([node, reset], service, callback);
 }
 
 /**
@@ -102,5 +102,6 @@ module.exports = (config) => {
     flushCache: flushCache.bind(context),
     updateCounts: updateCounts.bind(context),
     updateCrawlerStats: updateCrawlerStats.bind(context),
+    _setOrchestrator: (node) => context.orchestrator = node,
   };
 };

@@ -1,6 +1,9 @@
 /* A service that coordinates crawling and indexing. */
 
 const log = require("../util/log.js");
+const params = require("../params.js");
+
+const GROUP = params.searchGroup;
 
 const counts = {
   crawled: 0,
@@ -18,8 +21,9 @@ const crawlerStats = {
 /**
  * Starts the local crawler and indexer processing queues.
  */
-function start(reset, callback) {
+function start(node, reset, callback) {
   log("Starting crawl and index cycle");
+  global.distribution[GROUP]._setOrchestrator(node);
   global.distribution.local.crawl._start(reset, (error, result) => {
     if (error) {
       callback(error, null);
