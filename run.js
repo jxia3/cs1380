@@ -18,7 +18,6 @@ const urls = [
   "https://stackoverflow.com/questions",
   "https://github.com",
   "https://apnews.com",
-  "https://finance.yahoo.com",
   "https://www.nba.com",
   "https://en.wikipedia.org/wiki/Main_Page",
   "https://www.reddit.com",
