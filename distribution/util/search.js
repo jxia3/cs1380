@@ -106,6 +106,9 @@ function handleResponse(response, callback) {
 function ignoreURL(url) {
   // Convert URL to lowercase for case-insensitive checks
   const lowerUrl = url.toLowerCase();
+  if (!lowerUrl.startsWith("https") && !lowerUrl.startsWith("http")) {
+    return true;
+  }
 
   // Check for bad file extensions
   const badExtensions = [
