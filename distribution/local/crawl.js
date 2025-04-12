@@ -269,7 +269,7 @@ function updateQueue(queue, urls) {
       continue;
     }
     const domain = getDomain(url);
-    if (queue.urls.length < MAX_QUEUE_LEN || !(domain in queue.domains)) {
+    if (queue.urls.length < MAX_QUEUE_LEN || (!(domain in queue.domains) && queue.urls.length < MAX_QUEUE_LEN * 2)) {
       if (queue.urls.length > MAX_QUEUE_LEN * 0.95 && (domain in queue.domains) && queue.domains[domain] > 5) {
         continue;
       }
