@@ -15,7 +15,7 @@ const MAX_PAGE_LEN = params.maxPageLen;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = CRAWL_SETTING === "index-directly" ? 2 : 1;
 // How often we write visited URLs list to disk (ms)
-const SAVE_INTERVAL = 5000;
+const SAVE_INTERVAL = 60000;
 const CRAWL_INTERVAL = 500;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
