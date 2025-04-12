@@ -70,8 +70,13 @@ function downloadPage(url, callback, redirectCount = 0) {
       request.destroy();
 
       // Resolve redirect URL to base URL
-      const redirectUrl = response.headers.location;
-      const absoluteUrl = new URL(redirectUrl, url).toString();
+      let absoluteUrl = null;
+      try {
+        const redirectUrl = response.headers.location;
+        absoluteUrl = new URL(redirectUrl, url).toString();
+      } catch {
+        return guardedCallback(null, null);
+      }
       downloadPage(absoluteUrl, guardedCallback, redirectCount + 1); // Recursively follow redirect
     } else {
       handleResponse(response, guardedCallback);
