@@ -66,6 +66,7 @@ function downloadPage(url, callback, redirectCount = 0) {
       // Clean up listeners on current request
       request.removeAllListeners("timeout");
       request.removeAllListeners("error");
+      request.on("error", () => {});
       request.destroy();
 
       // Resolve redirect URL to base URL
