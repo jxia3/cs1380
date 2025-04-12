@@ -9,7 +9,7 @@ module.exports = {
   shardLocality: false,
   fifoCache: false,
   disableTermCache: false,
-  disableShardCache: true,
+  disableShardCache: false,
 
   debug: false,
   notFoundMark: "_not_found_97189983cb4254d7",
