@@ -234,26 +234,25 @@ function queueURLs(URLs, callback) {
   // Normalize URLs just in case
   const normalizedURLs = URLs.map((url) => util.search.normalizeUrl(url));
   // Filter out URLs that are already crawled or in the queue
-  const newURLs = normalizedURLs.filter((url) => {
-    if (!SEEN_URLS.has(url)) {
-      SEEN_URLS.add(url);
-      return true;
-    }
-    return false;
-  });
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
-      if (queue.length > MAX_QUEUE_LEN) {
-        return {value: queue};
+      for (const url of normalizedURLs) {
+        if (queue.length < MAX_QUEUE_LEN && !SEEN_URLS.has(url)) {
+          queue.push(url);
+          SEEN_URLS.add(url);
+        }
       }
-      return {
-        value: queue.concat(newURLs),
-      };
+      return {value: queue};
     },
     default: () => {
-      return {
-        value: newURLs,
-      };
+      const queue = [];
+      for (const url of normalizedURLs) {
+        if (queue.length < MAX_QUEUE_LEN && !SEEN_URLS.has(url)) {
+          queue.push(url);
+          SEEN_URLS.add(url);
+        }
+      }
+      return {value: queue};
     },
     callback: (error, result) => {
       callback(error, null);
