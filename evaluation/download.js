@@ -25,5 +25,12 @@ for (let t = WINDOW; t < data.length; t += 1) {
   });
 }
 
-console.log(crawlThroughput);
-console.log(indexThroughput);
+if (false) {
+  console.log(crawlThroughput.filter((v, i) => i % 10 === 0));
+  console.log(indexThroughput.filter((v, i) => i % 10 === 0));
+}
+
+const start = data[0];
+const end = data.find((d) => d.counts.indexed >= 2000);
+console.log("Crawl throughput:", (end.counts.crawled - start.counts.crawled) * 1000 / (end.time - start.time));
+console.log("Index throughput:", (end.counts.indexed - start.counts.indexed) * 1000 / (end.time - start.time));
