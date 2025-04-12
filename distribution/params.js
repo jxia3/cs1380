@@ -6,7 +6,7 @@ module.exports = {
   crawlSetting: "index-directly", // "isolate", "index-queue", "index-directly" (TODO: maybe add enum)
 
   ngramLen: 2,
-  maxQueueLen: 1000,
+  maxQueueLen: 5000,
   maxPageLen: 100_000,
   shardLocality: false,
   fifoCache: false,
