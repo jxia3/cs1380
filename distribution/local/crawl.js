@@ -18,7 +18,7 @@ const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 500;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
-const SEEN_URLS = new Set();
+let SEEN_URLS = new Set();
 
 let stopped = false;
 
