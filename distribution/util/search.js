@@ -283,14 +283,14 @@ function checkStopword(word) {
  * Returns the storage key for the full results for a term.
  */
 function createFullTermKey(term) {
-  return `[${term}]-full`;
+  return term;
 }
 
 /**
  * Converts a full result term key to a term.
  */
 function recoverFullTerm(key) {
-  return key.slice(1, -6);
+  return key;
 }
 
 /**
