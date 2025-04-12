@@ -326,6 +326,7 @@ function decompressEntry(entry) {
 module.exports = {
   normalizeUrl,
   downloadPage,
+  ignoreURL,
   extractUrls,
   calcTerms,
   createFullTermKey,
