@@ -1,6 +1,7 @@
 const fs = require("fs");
 
 const WINDOW = 30;
+const COUNT = 2000;
 
 const name = process.argv[2];
 if (!fs.existsSync(`data/${name}.json`)) {
@@ -31,6 +32,6 @@ if (false) {
 }
 
 const start = data[0];
-const end = data.find((d) => d.counts.indexed >= 2000);
+const end = data.find((d) => d.counts.indexed >= COUNT);
 console.log("Crawl throughput:", (end.counts.crawled - start.counts.crawled) * 1000 / (end.time - start.time));
 console.log("Index throughput:", (end.counts.indexed - start.counts.indexed) * 1000 / (end.time - start.time));
