@@ -101,8 +101,13 @@ function downloadPage(url, callback, redirectCount = 0) {
  * Saves the HTML content from an HTTP response.
  */
 function handleResponse(response, callback) {
+  const MAX_LEN = 2 ** 29 - 24;
   let content = "";
-  response.on("data", (chunk) => content += chunk);
+  response.on("data", (chunk) => {
+    if (content.length + chunk.length <= MAX_LEN) {
+      content += chunk;
+    }
+  });
   response.on("end", () => callback(null, content));
 }
 
