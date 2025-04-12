@@ -6,6 +6,7 @@
 
 const crypto = require("crypto");
 
+const FIX_OVERFLOW = true;
 const TRANSLATE_IPS = false;
 
 const originalIps = [
@@ -67,6 +68,9 @@ function getMID(message) {
  */
 function idToNum(hash) {
   try {
+    if (FIX_OVERFLOW) {
+      return parseInt(hash.slice(0, 13), 16);
+    }
     return parseInt(hash, 16);
   } catch (error) {
     throw new Error(`Integer conversion failed with '${error.message}'`);
@@ -169,6 +173,7 @@ function rendezvousHash(keyId, nodeIds) {
   for (const id of nodeIds) {
     const combinedKey = global.distribution.util.id.getID(`${keyId}${id}`);
     const hashNum = global.distribution.util.id.idToNum(combinedKey);
+    console.log(id, combinedKey, hashNum)
     if (hashNum > maxHash) {
       maxHash = hashNum;
       nodeId = id;
