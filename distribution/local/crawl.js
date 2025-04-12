@@ -10,9 +10,10 @@ const GROUP = params.searchGroup;
 const SEEN_KEY = params.crawlSeen;
 const QUEUE_KEY = params.crawlQueue;
 const CRAWL_SETTING = params.crawlSetting;
+const MAX_QUEUE_LEN = params.maxQueueLen;
+const MAX_PAGE_LEN = params.maxPageLen;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = CRAWL_SETTING === "index-directly" ? 2 : 1;
-const MAX_LEN = 100_000;
 // How often we write visited URLs list to disk (ms)
 const SAVE_INTERVAL = 5000;
 const CRAWL_INTERVAL = 500;
@@ -214,7 +215,7 @@ function crawlURL(url, callback) {
  * Checks if a page is relevant.
  */
 function checkPageRelevant(url, title, content) {
-  if (content.length < 10 || content.length > MAX_LEN) {
+  if (content.length < 10 || content.length > MAX_PAGE_LEN) {
     return false;
   }
   return true;
@@ -242,6 +243,9 @@ function queueURLs(URLs, callback) {
   });
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
+      if (queue.length > MAX_QUEUE_LEN) {
+        return {value: queue};
+      }
       return {
         value: queue.concat(newURLs),
       };
