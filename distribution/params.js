@@ -8,7 +8,8 @@ module.exports = {
   ngramLen: 2,
   shardLocality: false,
   fifoCache: false,
-  disableCache: false,
+  disableTermCache: false,
+  disableShardCache: true,
 
   debug: false,
   notFoundMark: "_not_found_97189983cb4254d7",

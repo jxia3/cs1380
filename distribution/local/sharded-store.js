@@ -10,7 +10,7 @@ const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
 const NOT_FOUND_MARK = params.notFoundMark;
 
 let store = baseStore;
-if (!params.disableCache) {
+if (!params.disableShardCache) {
   store = createCachedStore(baseStore, 200);
 }
 

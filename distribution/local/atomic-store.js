@@ -7,7 +7,7 @@ const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
 let store = shardedStore;
-if (!params.disableCache) {
+if (!params.disableTermCache) {
   store = createCachedStore(shardedStore, 1000);
 }
 const locks = {};
