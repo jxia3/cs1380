@@ -6,11 +6,12 @@ const util = require("./distribution/util/util.js");
 
 const args = require("yargs").argv;
 
+const DEPLOYMENT = params.deployment;
+
 // Default configuration
-const deployment = true;
 global.nodeConfig = global.nodeConfig || {
-  ip: deployment ? "0.0.0.0" : "127.0.0.1",
-  port: deployment ? 80 : 1234,
+  ip: DEPLOYMENT ? "0.0.0.0" : "127.0.0.1",
+  port: DEPLOYMENT ? 80 : 1234,
   heartbeat: false,
   onStart: () => {},
 };

@@ -1,7 +1,9 @@
 const distribution = require("./distribution.js");
+const params = require("./distribution/params.js");
 
 const fs = require("fs");
 
+const DEPLOYMENT = params.DEPLOYMENT;
 const GROUP = distribution.searchParams.searchGroup;
 const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
@@ -14,10 +16,13 @@ const addresses = [
 ];
 const nodes = addresses.slice(offset[0], offset[1]).map((n) => ({ip: n, port: 80}));
 
-const localNode = nodes[0];
-if (true) {
+const localNode = DEPLOYMENT ? nodes[0] : global.nodeConfig;
+if (DEPLOYMENT) {
   global.nodeConfig.ip = "0.0.0.0";
   global.nodeConfig.port = 80;
+} else {
+  nodes.length = 0;
+  nodes.push(global.nodeConfig);
 }
 
 const urls = [
