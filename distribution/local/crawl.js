@@ -265,8 +265,11 @@ function queueURLs(URLs, callback) {
  */
 function updateQueue(queue, urls) {
   for (const url of urls) {
-    if (queue.urls.length < MAX_QUEUE_LEN && !SEEN_URLS.has(url)) {
-      const domain = getDomain(url);
+    if (SEEN_URLS.has(url)) {
+      continue;
+    }
+    const domain = getDomain(url);
+    if (queue.urls.length < MAX_QUEUE_LEN || !(domain in queue.domains)) {
       if (queue.urls.length > MAX_QUEUE_LEN * 0.95 && (domain in queue.domains) && queue.domains[domain] > 5) {
         continue;
       }
