@@ -8,6 +8,7 @@ module.exports = {
   ngramLen: 2,
   maxQueueLen: 5000,
   maxPageLen: 100_000,
+  shardCount: 20_000,
   shardLocality: false,
   fifoCache: false,
   disableTermCache: false,
