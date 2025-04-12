@@ -173,7 +173,6 @@ function rendezvousHash(keyId, nodeIds) {
   for (const id of nodeIds) {
     const combinedKey = global.distribution.util.id.getID(`${keyId}${id}`);
     const hashNum = global.distribution.util.id.idToNum(combinedKey);
-    console.log(id, combinedKey, hashNum)
     if (hashNum > maxHash) {
       maxHash = hashNum;
       nodeId = id;
