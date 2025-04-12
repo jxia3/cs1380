@@ -3,12 +3,15 @@ const search = require("../util/search.js");
 const params = require("../params.js");
 const fs = require("fs");
 const path = require('path');
+const { check } = require("yargs");
+const { listenerCount } = require("events");
 
 const GROUP = params.searchGroup;
 const MAX_SEARCH_RESULTS = 10;
 const NUM_DOCUMENTS = 1000;
 const USE_DOMAIN_AUTHORITY = false;
 const USE_SPELLCHECK = true;
+
 
 const commonWordsSet = new Set();
 
@@ -27,12 +30,22 @@ for (const frequentWord of frequentWords) {
 
 const commonWords = [...commonWordsSet];
 
+function checkResults(results) {
+  const emptyResults = []
+  for (const result in results) {
+    if (Object.keys(results[result]).length == 0) {
+      emptyResults.push(result);
+    }
+  }
+
+  return emptyResults;
+}
+
 function processResults(results) {
   const urls = {};
   const seenTitles = new Set();
 
   for (const result in results) {
-    urls[result] = {};
     const numUrls = Object.keys(results[result]).length;
     const idf = Math.log((1 + NUM_DOCUMENTS) / (1 + numUrls));
     for (const url in results[result]) {
@@ -62,7 +75,7 @@ function processResults(results) {
     urls[url].context = mergedContext;
   }
 
-  console.log('urls: ', urls);
+  // console.log('urls: ', urls);
   return urls;
 }
 
@@ -171,11 +184,14 @@ function keyboardLevenshtein(a, b) {
 }
 
 function spellcheck(query, words) {
-  // console.log('qurry: ', query);
-  const distances = words.map(word => ({
-    word,
-    distance: keyboardLevenshtein(query, word)
-  }));
+  const distances = words.map((word, index) => {
+    let distance = keyboardLevenshtein(query, word);
+
+    if (index < 5) {
+      distance -= 0.25;
+    }
+    return { word, distance };
+  });
 
   // Sort by distance
   distances.sort((a, b) => a.distance - b.distance);
@@ -185,42 +201,71 @@ function spellcheck(query, words) {
   return distances[0];
 }
 
+/**
+ * Wait for enter key to be pressed.
+ */
+function waitForEnter(callback) {
+  process.stdin.pause();
+  process.stdin.resume();
+  process.stdin.once("data", () => {
+    callback();
+  });
+}
+
 function dihQuery(query, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
 
+  // enterPressed = false;
   const words = search.calcTerms(query).terms;
-  // let words = search.calcTerms(query).terms;
-  // let newQuery = words;
-
-  // if (USE_SPELLCHECK) {
-  //   const originalWords = query.trim().split(/\s+/);
-  //   const freshWords = [];
-  //   for (const word of originalWords) {
-  //     const distance = spellcheck(word, commonWords);
-  //     // console.log('disntace: ', distance);
-  //     if (distance.distance > 0 && distance.distance < 0.5) {
-  //       freshWords.push(distance.word);
-  //       //console.log(`Did you mean: "${distance.word}"??`);
-  //     } else {
-  //       freshWords.push(word);
-  //     }
-  //   }
-  //   newQuery = freshWords.join(" ");
-  //   words = search.calcTerms(newQuery).terms;
-  //   console.log(`Searching results for: "${newQuery}"`);
-  // }
 
   global.distribution[GROUP].query.superDih(words, (errors, results) => {
-    const processedResults = processResults(results);
+    const emptyResults = checkResults(results);
+    let newQuery;
 
-    const sortedUrls = Object.entries(processedResults)
-                    .sort((a, b) => b[1].score - a[1].score)
-                    .map(([url, data]) => ({ url, ...data }));
-    const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
-    const numUrls = topUrls.length;
+    if (USE_SPELLCHECK) {
+      console.log('empty: ', emptyResults);
 
-    if (numUrls > 0) {
-        // console.log(`Dihsplaying top ${numUrls} result(s) for query "${query}":`);
+      const originalWords = query.trim().split(/\s+/);
+      const freshWords = [];
+
+      // Spellcheck metrics
+      for (const word of originalWords) {
+        const distance = spellcheck(word, commonWords);
+        console.log('disntace: ', distance);
+        if (distance.distance > 0 && distance.distance < 0.5 && emptyResults.includes(word)) {
+          freshWords.push(distance.word);
+        } else if (distance.distance > 0.5 && emptyResults.includes(word)) {
+          freshWords.push(`(${word})`);
+        } else {
+          freshWords.push(word);
+        }
+      }
+      newQuery = freshWords.join(" ");
+      // console.log(newQuery);
+
+      if (emptyResults.length === Object.keys(results).length) {
+        console.log(`😔 No search results found for query "${query}".`);
+        // console.log(newQuery);
+        if (newQuery != query) {
+          console.log(`\nDid you mean "${newQuery}"? Press Enter to continue...`);
+          waitForEnter(() => {
+            dihQuery(newQuery, callback);
+          });
+        } else {
+          console.log("Would you like to search for new query? Press Enter to continue...");
+          // console.log("isPaused:", process.stdin.isPaused()); 
+          waitForEnter(runSearch);
+        }
+      } 
+      else {
+        const processedResults = processResults(results);
+
+        const sortedUrls = Object.entries(processedResults)
+                        .sort((a, b) => b[1].score - a[1].score)
+                        .map(([url, data]) => ({ url, ...data }));
+        const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
+        const numUrls = topUrls.length;
+
         console.log(`\n👑 Yes, king! Your royal search for "${query}" has delivered 👑`);
         console.log(`💅💅💅 Here are your top ${numUrls} result(s): 😋😋😋\n`);
         for (const url of topUrls) {
@@ -230,27 +275,36 @@ function dihQuery(query, callback) {
             console.log("Context:  " + "..." + url.context + "...");
             console.log("—".repeat(40));
         }
-    } else {
-        console.log(`😔 No search results found for query "${query}".`);
-        if (USE_SPELLCHECK) {
-          const originalWords = query.trim().split(/\s+/);
-          const freshWords = [];
-          for (const word of originalWords) {
-            const distance = spellcheck(word, commonWords);
-            // console.log('disntace: ', distance);
-            if (distance.distance > 0 && distance.distance < 0.5) {
-              freshWords.push(distance.word);
-              //console.log(`Did you mean: "${distance.word}"??`);
-            } else {
-              freshWords.push(word);
-            }
-          }
-          const newQuery = freshWords.join(" ");
-          console.log(`Did you mean "${newQuery}"??`);
+
+        if (emptyResults.length > 0 && newQuery != query) {
+          console.log(`\nDid you mean "${newQuery}"? Press Enter to continue...`);
+          waitForEnter(() => {
+            dihQuery(newQuery, callback);
+          });
         }
+        else {
+          console.log("Would you like to search for new query? Press Enter to continue...");
+          waitForEnter(runSearch);
+        }
+      }
     }
   });
 }
 
+function runSearch() {
+  console.log("🔍 Enter your search query:");
+  process.stdout.write("> ");
 
-module.exports = {dihQuery};
+  process.stdin.setEncoding("utf8");
+
+  process.stdin.once("data", (input) => {
+    const query = input.trim();
+    dihQuery(query, () => {});
+    // process.stdin.pause();
+  });
+
+  // process.stdin.resume();
+}
+
+
+module.exports = {dihQuery, runSearch};

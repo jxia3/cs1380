@@ -66,11 +66,17 @@ function downloadPage(url, callback, redirectCount = 0) {
       // Clean up listeners on current request
       request.removeAllListeners("timeout");
       request.removeAllListeners("error");
+      request.on("error", () => {});
       request.destroy();
 
       // Resolve redirect URL to base URL
-      const redirectUrl = response.headers.location;
-      const absoluteUrl = new URL(redirectUrl, url).toString();
+      let absoluteUrl = null;
+      try {
+        const redirectUrl = response.headers.location;
+        absoluteUrl = new URL(redirectUrl, url).toString();
+      } catch {
+        return guardedCallback(null, null);
+      }
       downloadPage(absoluteUrl, guardedCallback, redirectCount + 1); // Recursively follow redirect
     } else {
       handleResponse(response, guardedCallback);
@@ -95,8 +101,13 @@ function downloadPage(url, callback, redirectCount = 0) {
  * Saves the HTML content from an HTTP response.
  */
 function handleResponse(response, callback) {
+  const MAX_LEN = 2 ** 29 - 24;
   let content = "";
-  response.on("data", (chunk) => content += chunk);
+  response.on("data", (chunk) => {
+    if (content.length + chunk.length <= MAX_LEN) {
+      content += chunk;
+    }
+  });
   response.on("end", () => callback(null, content));
 }
 
@@ -106,6 +117,9 @@ function handleResponse(response, callback) {
 function ignoreURL(url) {
   // Convert URL to lowercase for case-insensitive checks
   const lowerUrl = url.toLowerCase();
+  if (!lowerUrl.startsWith("https") && !lowerUrl.startsWith("http")) {
+    return true;
+  }
 
   // Check for bad file extensions
   const badExtensions = [
@@ -283,28 +297,14 @@ function checkStopword(word) {
  * Returns the storage key for the full results for a term.
  */
 function createFullTermKey(term) {
-  return `[${term}]-full`;
+  return term;
 }
 
 /**
  * Converts a full result term key to a term.
  */
 function recoverFullTerm(key) {
-  return key.slice(1, -6);
-}
-
-/**
- * Returns the storage key for the top results for a term.
- */
-function createTopTermKey(term) {
-  return `[${term}]-top`;
-}
-
-/**
- * Converts a top result term key to a term.
- */
-function recoverTopTerm(key) {
-  return key.slice(1, -5);
+  return key;
 }
 
 /**
@@ -340,12 +340,11 @@ function decompressEntry(entry) {
 module.exports = {
   normalizeUrl,
   downloadPage,
+  ignoreURL,
   extractUrls,
   calcTerms,
   createFullTermKey,
   recoverFullTerm,
-  createTopTermKey,
-  recoverTopTerm,
   compressEntry,
   decompressEntry,
 };

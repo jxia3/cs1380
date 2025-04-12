@@ -21,11 +21,11 @@ if (true) {
 }
 
 const urls = [
-  // "https://deepmind.google",
-  // "https://openai.com",
-  // "https://stackexchange.com",
-  // "https://github.com",
-  // "https://apnews.com",
+  "https://deepmind.google",
+  "https://stackexchange.com",
+  "https://github.com/sindresorhus/awesome",
+  "https://github.com/StanForever/awesome-websites",
+  "https://apnews.com",
   "https://www.nba.com",
 ];
 let startTime;

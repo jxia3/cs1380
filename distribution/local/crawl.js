@@ -10,14 +10,16 @@ const GROUP = params.searchGroup;
 const SEEN_KEY = params.crawlSeen;
 const QUEUE_KEY = params.crawlQueue;
 const CRAWL_SETTING = params.crawlSetting;
+const MAX_QUEUE_LEN = params.maxQueueLen;
+const MAX_PAGE_LEN = params.maxPageLen;
 // How many pages a single node can crawl at once
 const ACTIVE_LIMIT = CRAWL_SETTING === "index-directly" ? 2 : 1;
 // How often we write visited URLs list to disk (ms)
-const SAVE_INTERVAL = 5000;
+const SAVE_INTERVAL = 60000;
 const CRAWL_INTERVAL = 500;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
-const SEEN_URLS = new Set();
+let SEEN_URLS = new Set();
 
 let stopped = false;
 
@@ -40,7 +42,7 @@ function _start(resetCrawler, callback) {
     log("Resetting crawl queue and seen URLs list", "crawl");
     // TODO: could technically cause issues if start crawling too quickly (before these resets are done)
     global.distribution.local.store.put([], SEEN_KEY, (error, result) => {
-      global.distribution.local.store.put([], QUEUE_KEY, callback);
+      global.distribution.local.store.put({urls: [], domains: {}}, QUEUE_KEY, callback);
     });
   } else {
     // Sync up local SEEN_URLS with stored SEEN_URLS
@@ -64,17 +66,24 @@ function _start(resetCrawler, callback) {
     global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
       modify: (queue) => {
         // Extract the first element from the queue
-        if (queue.length === 0) {
+        if (queue.urls.length === 0) {
           return null;
         }
-        const url = queue.shift();
+        const url = queue.urls.shift();
+        const domain = getDomain(url);
+        if (domain in queue.domains) {
+          queue.domains[domain] -= 1;
+          if (queue.domains[domain] === 0) {
+            delete queue.domains[domain];
+          }
+        }
         return {
           value: queue,
           carry: url,
         };
       },
       default: () => ({
-        value: [],
+        value: {urls: [], domains: {}},
         carry: null,
       }),
       callback: (error, url) => {
@@ -158,7 +167,7 @@ function crawlURL(url, callback) {
       });
 
       // TODO: if not relevant, should we not do anything, or still crawl the urls on the page?
-      if (params.pageRelevant(pageContent)) {
+      if (checkPageRelevant(url, pageTitle, pageContent)) {
         const pageURLs = util.search.extractUrls(htmlContent, url);
         if (stopped) {
           log(`Aborted crawling ${url}`, "crawl");
@@ -210,6 +219,16 @@ function crawlURL(url, callback) {
 }
 
 /**
+ * Checks if a page is relevant.
+ */
+function checkPageRelevant(url, title, content) {
+  if (content.length < 10 || content.length > MAX_PAGE_LEN) {
+    return false;
+  }
+  return true;
+}
+
+/**
  * Given a list of URLs, add them to this node's crawl queue
  * @param {string[]} URLs
  * @param {Callback} callback
@@ -222,28 +241,57 @@ function queueURLs(URLs, callback) {
   // Normalize URLs just in case
   const normalizedURLs = URLs.map((url) => util.search.normalizeUrl(url));
   // Filter out URLs that are already crawled or in the queue
-  const newURLs = normalizedURLs.filter((url) => {
-    if (!SEEN_URLS.has(url)) {
-      SEEN_URLS.add(url);
-      return true;
-    }
-    return false;
-  });
   global.distribution.local.atomicStore.getAndModify(QUEUE_KEY, {
     modify: (queue) => {
-      return {
-        value: queue.concat(newURLs),
-      };
+      updateQueue(queue, normalizedURLs);
+      return {value: queue};
     },
     default: () => {
-      return {
-        value: newURLs,
+      const queue = {
+        urls: [],
+        domains: {},
       };
+      updateQueue(queue, normalizedURLs);
+      return {value: queue};
     },
     callback: (error, result) => {
       callback(error, null);
     },
   });
+}
+
+/**
+ * Adds URLs to the queue and seen list.
+ */
+function updateQueue(queue, urls) {
+  for (const url of urls) {
+    if (SEEN_URLS.has(url)) {
+      continue;
+    }
+    const domain = getDomain(url);
+    if (queue.urls.length < MAX_QUEUE_LEN || (!(domain in queue.domains) && queue.urls.length < MAX_QUEUE_LEN * 2)) {
+      if (queue.urls.length > MAX_QUEUE_LEN * 0.95 && (domain in queue.domains) && queue.domains[domain] > 5) {
+        continue;
+      }
+      queue.urls.push(url);
+      if (!(domain in queue.domains)) {
+        queue.domains[domain] = 0;
+      }
+      queue.domains[domain] += 1;
+      SEEN_URLS.add(url);
+    }
+  }
+}
+
+/**
+ * Returns the base domain of a URL.
+ */
+function getDomain(url) {
+  try {
+    return new URL(url).host.split(".").slice(-2).join(".");
+  } catch {
+    return "";
+  }
 }
 
 module.exports = {queueURLs, _start, _stop};

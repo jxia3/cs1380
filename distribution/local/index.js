@@ -10,7 +10,7 @@ const QUEUE_KEY = params.indexQueue;
 const CRAWL_SETTING = params.crawlSetting;
 const SHARD_LOCALITY = params.shardLocality;
 const ACTIVE_LIMIT = 2;
-const CONTEXT_COUNT = 2;
+const CONTEXT_COUNT = 1;
 const CONTEXT_WORDS = 5;
 const MAX_CONTEXT_LEN = 50;
 

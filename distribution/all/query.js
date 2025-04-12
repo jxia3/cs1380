@@ -16,6 +16,11 @@ function superDih(terms, callback) {
       return;
     }
     const batches = calcBatches.call(this, group, terms);
+    
+    if (Object.keys(batches).length === 0) {
+      callback(null, {});
+      return;
+    }
     getTerms(group, batches, callback);
   });
 }
@@ -26,7 +31,8 @@ function superDih(terms, callback) {
 function calcBatches(group, terms) {
   const batches = {};
   for (const term of terms) {
-    const node = util.id.applyHash(term, group, this.hash);
+    const text = util.search.createFullTermKey(term.text);
+    const node = util.id.applyHash(text, group, this.hash);
     if (!(node in batches)) {
       batches[node] = [];
     }
@@ -40,48 +46,45 @@ function calcBatches(group, terms) {
  * Gets term information across batches. The callback must be valid.
  */
 function getTerms(group, batches, callback) {
-  const errors = {};
+  // const errors = {};
   const results = {};
-  let batchKeys = Object.keys(batches);
-  let active = 0
-
-  if (batchKeys.length === 0) {
-    callback(errors, results);
+  let active = Object.keys(batches).length;
+  if (active === 0) {
+    throw new Error("Cannot lookup an empty batch");
   }
-
   for (const node in batches) {
+    const terms = []
+    
+    // create term list
     for (const term of batches[node]) {
-      // console.log('term: ', term);
-
-      // use create function thing
-      const key = `[${term.text}]-full`;
-      // console.log('key:', key);
-      const remote = {node: group[node], service: "shardedStore", method: "get"};
-      active++;
-      global.distribution.local.comm.send([{gid: GROUP, key}], remote, (error, result) => {
-        // console.log('result: ', result);
-        if (error) {
-          if (!(node in errors)) {
-            errors[node] = [];
-            results[term.text] = {};
-          }
-          errors[node].push(error);
-        }
-        else {
-          results[term.text] = result;
-        }
-        active--;
-        if (active == 0) {
-          for (const result in results) {
-            for (const url in results[result]) {
-              results[result][url] = util.search.decompressEntry(results[result][url]);
-            }
-          }
-          console.log("results: ", results);
-          callback(errors, results);
-        }  
-      });
+      terms.push(`[${term.text}]-full`);
     }
+    const remote = {node: group[node], service: "termLookup", method: "lookup"};
+    global.distribution.local.comm.send([terms], remote, (error, result) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      // Decompress results
+      for (let r = 0; r < result.length; r += 1) {
+        const term = util.search.recoverFullTerm(terms[r]);
+        results[term] = {}
+
+        if (result[r] === null) {
+          continue;
+        }
+        
+        for (const url in result[r]) {
+          results[term][url] = util.search.decompressEntry(result[r][url]);
+        }
+      }
+      // Return to callback
+      active -= 1;
+      if (active === 0) {
+        callback(null, results);
+      }
+    });
   }
 }
 
