@@ -7,7 +7,7 @@ const localNode = {
   port: distribution.node.config.port,
 };
 // const nodes = [localNode];
-const query = "google ai model";
+const query = "google";
 
 const offset = [0, 10];
 const addresses = [
@@ -27,7 +27,12 @@ distribution.node.start(() => {
       }*/
     setTimeout(() => {
       const terms = distribution.util.search.calcTerms(query).terms;
+      // for (const ip of addresses) {
+      //  distribution.local.comm.send([{key: "[google]-full", gid: "search"}], {node: {ip, port: 80}, service: "shardedStore", method: "get"}, (error, result) => {
+      //    console.log(ip, result !== null ? "r" : result)
+      //  })
       distribution[GROUP].termLookup.lookup(terms, console.log);
+      // }
     }, 100);
     // });
   });

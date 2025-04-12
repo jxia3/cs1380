@@ -6,11 +6,11 @@
 
 const crypto = require("crypto");
 
-const TRANSLATE_IPS = true;
+const TRANSLATE_IPS = false;
 
 const originalIps = [
-  "3.140.196.193", "18.226.17.254", "3.133.137.100", "3.148.254.121", "18.188.59.180",
-  "3.15.219.196", "18.119.130.94", "18.226.159.103", "3.148.186.71", "18.219.70.89",
+  "3.139.81.183", "3.149.2.194", "18.217.66.8", "3.15.220.99", "3.147.63.105",
+  "18.226.159.174", "18.117.185.42", "18.223.196.60", "3.139.108.222", "3.16.66.233",
 ];
 const currentIps = [
   "3.139.81.183", "3.149.2.194", "18.217.66.8", "3.15.220.99", "3.147.63.105",
@@ -106,13 +106,18 @@ function applyHash(key, group, hashFn) {
   const keyId = getID(key);
   const groupKeys = Object.keys(group);
   const nodeIds = groupKeys.map((key) => {
-    let ip = group[key].ip;
+    let ip = null;
     if (TRANSLATE_IPS) {
       for (let i = 0; i < currentIps.length; i += 1) {
         if (currentIps[i] === group[key].ip) {
           ip = originalIps[i];
         }
       }
+    } else {
+      ip = group[key].ip;
+    }
+    if (ip === null) {
+      throw new Error("Could not find IP");
     }
     return getNID({...group[key], ip});
   });
