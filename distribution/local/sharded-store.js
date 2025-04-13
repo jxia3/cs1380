@@ -5,13 +5,14 @@ const params = require("../params.js");
 const baseStore = require("./store.js");
 const util = require("../util/util.js");
 
+const DISABLE_CACHE = params.disableShardCache;
 const SHARD_COUNT = params.shardCount;
 const EXCLUDE_LIST = [params.crawlQueue, params.crawlSeen, params.indexQueue];
 const NOT_FOUND_MARK = params.notFoundMark;
 
 let store = baseStore;
-if (!params.disableShardCache) {
-  store = createCachedStore(baseStore, 200);
+if (!DISABLE_CACHE) {
+  store = createCachedStore(baseStore, 500);
 }
 
 /**
@@ -138,6 +139,20 @@ function del(config, callback) {
 }
 
 /**
+ * Refreshes the shard corresponding to a key if it exists.
+ */
+function refresh(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  config = util.id.getObjectConfig(config);
+  if (DISABLE_CACHE || EXCLUDE_LIST.includes(config.key)) {
+    callback(null, null);
+    return;
+  }
+  const shardConfig = getShardConfig(config);
+  store.refresh(shardConfig, callback);
+}
+
+/**
  * Converts a key configuration to a sharded configuration.
  */
 function getShardConfig(config) {
@@ -174,6 +189,7 @@ module.exports = {
   tryGet,
   put,
   del,
+  refresh,
   _getSyncKey,
   _getShardKey: getShardKey,
   _store: store,

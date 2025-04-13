@@ -16,7 +16,7 @@ const MAX_PAGE_LEN = params.maxPageLen;
 const ACTIVE_LIMIT = CRAWL_SETTING === "index-directly" ? 2 : 1;
 // How often we write visited URLs list to disk (ms)
 const SAVE_INTERVAL = 60000;
-const CRAWL_INTERVAL = 500;
+const CRAWL_INTERVAL = 200;
 
 // IMPORTANT: we consider a URL as seen if crawled OR if it's currently in the queue
 let SEEN_URLS = new Set();

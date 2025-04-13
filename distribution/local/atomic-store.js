@@ -6,9 +6,12 @@ const params = require("../params.js");
 const shardedStore = require("./sharded-store.js");
 const util = require("../util/util.js");
 
+const DISABLE_CACHE = params.disableTermCache;
+const REFRESH_HIT = true;
+
 let store = shardedStore;
-if (!params.disableTermCache) {
-  store = createCachedStore(shardedStore, 1000);
+if (!DISABLE_CACHE) {
+  store = createCachedStore(shardedStore, 2000);
 }
 const locks = {};
 
@@ -62,6 +65,9 @@ function getAndModify(config, operations) {
         lock.unlockWrite();
         operations.callback(error, null);
         return;
+      }
+      if (REFRESH_HIT) {
+        shardedStore.refresh(config);
       }
 
       // Compute updated or default value

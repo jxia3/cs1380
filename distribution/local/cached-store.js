@@ -197,6 +197,22 @@ function cacheItem(keys, object, dirty, callback) {
 }
 
 /**
+ * Refreshes a key in the cache if it exists.
+ */
+function refresh(config, callback) {
+  callback = callback === undefined ? (error, result) => {} : callback;
+  const keys = serializeKey.call(this, config);
+  if (keys instanceof Error) {
+    callback(keys, null);
+    return;
+  }
+  if (this.cache.has(keys.cacheKey)) {
+    this.cache.refresh(keys.cacheKey);
+  }
+  callback(null, null);
+}
+
+/**
  * Flushes all the items in the cache to storage.
  */
 function flush(callback) {
@@ -292,6 +308,7 @@ module.exports = (store, capacity) => {
     tryGet: tryGet.bind(context),
     put: put.bind(context),
     del: del.bind(context),
+    refresh: refresh.bind(context),
     flush: flush.bind(context),
     _getSyncKey: _getSyncKey.bind(context),
   };
