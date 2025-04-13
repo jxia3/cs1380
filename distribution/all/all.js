@@ -9,6 +9,8 @@
   status    Information about the current group    get, stop, spawn
   store     A persistent store                     get, put, del, reconf
 */
+const params = require("../params.js");
+USE_QUERY = params.enableQuery;
 
 module.exports = {
   comm: require("./comm.js"),
@@ -24,4 +26,5 @@ module.exports = {
   index: require("./index.js"),
   search: require("./search.js"),
   termLookup: require("./term-lookup.js"),
+  query: USE_QUERY ? require("./query.js") : null
 };

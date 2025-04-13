@@ -17,7 +17,7 @@ const addresses = [
 const nodes = addresses.slice(offset[0], offset[1]).map((n) => ({ip: n, port: 80}));
 
 distribution.node.start(() => {
-  distribution.local.groups.put(GROUP, nodes, (error, result) => {
+  distribution.local.groups.put(GROUP, [distribution.node.config], (error, result) => {
     if (error) {
       throw error;
     }
@@ -26,12 +26,13 @@ distribution.node.start(() => {
         throw error;
       }*/
     setTimeout(() => {
-      const terms = distribution.util.search.calcTerms(query).terms;
+      // const terms = distribution.util.search.calcTerms(query).terms;
       // for (const ip of addresses) {
       //  distribution.local.comm.send([{key: "[google]-full", gid: "search"}], {node: {ip, port: 80}, service: "shardedStore", method: "get"}, (error, result) => {
       //    console.log(ip, result !== null ? "r" : result)
       //  })
-      distribution[GROUP].termLookup.lookup(terms, console.log);
+      // distribution[GROUP].termLookup.lookup(terms, console.log);
+      distribution.local.query.runSearch();
       // }
     }, 100);
     // });

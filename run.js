@@ -3,7 +3,7 @@ const params = require("./distribution/params.js");
 
 const fs = require("fs");
 
-const DEPLOYMENT = params.DEPLOYMENT;
+const DEPLOYMENT = params.deployment;
 const GROUP = distribution.searchParams.searchGroup;
 const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
@@ -26,11 +26,11 @@ if (DEPLOYMENT) {
 }
 
 const urls = [
-  "https://deepmind.google",
-  "https://stackexchange.com",
-  "https://github.com/sindresorhus/awesome",
-  "https://github.com/StanForever/awesome-websites",
-  "https://apnews.com",
+  // "https://deepmind.google",
+  // "https://stackexchange.com",
+  // "https://github.com/sindresorhus/awesome",
+  // "https://github.com/StanForever/awesome-websites",
+  // "https://apnews.com",
   "https://www.nba.com",
 ];
 let startTime;
