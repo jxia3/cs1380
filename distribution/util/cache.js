@@ -21,6 +21,7 @@ function createCache(capacity) {
     get: (key) => get(cache, key),
     put: (key, value) => put(cache, key, value),
     del: (key) => del(cache, key),
+    refresh: (key) => refresh(cache, key),
     getKeys: () => Object.keys(cache.keys),
     getOrderedKeys: () => getOrderedKeys(cache),
   };

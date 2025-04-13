@@ -75,7 +75,6 @@ function processResults(results) {
     urls[url].context = mergedContext;
   }
 
-  // console.log('urls: ', urls);
   return urls;
 }
 
@@ -223,7 +222,7 @@ function dihQuery(query, callback) {
     let newQuery;
 
     if (USE_SPELLCHECK) {
-      console.log('empty: ', emptyResults);
+      // console.log('empty: ', emptyResults);
 
       const originalWords = query.trim().split(/\s+/);
       const freshWords = [];
@@ -231,7 +230,7 @@ function dihQuery(query, callback) {
       // Spellcheck metrics
       for (const word of originalWords) {
         const distance = spellcheck(word, commonWords);
-        console.log('disntace: ', distance);
+        // console.log('disntace: ', distance);
         if (distance.distance > 0 && distance.distance < 0.5 && emptyResults.includes(word)) {
           freshWords.push(distance.word);
         } else if (distance.distance > 0.5 && emptyResults.includes(word)) {
@@ -241,7 +240,6 @@ function dihQuery(query, callback) {
         }
       }
       newQuery = freshWords.join(" ");
-      // console.log(newQuery);
 
       if (emptyResults.length === Object.keys(results).length) {
         console.log(`😔 No search results found for query "${query}".`);

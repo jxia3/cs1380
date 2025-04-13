@@ -1,0 +1,1052 @@
+[
+    {
+        "time": 1744501199933,
+        "counts": {
+            "crawled": 5,
+            "indexed": 4
+        }
+    },
+    {
+        "time": 1744501201934,
+        "counts": {
+            "crawled": 22,
+            "indexed": 7
+        }
+    },
+    {
+        "time": 1744501203934,
+        "counts": {
+            "crawled": 25,
+            "indexed": 10
+        }
+    },
+    {
+        "time": 1744501205934,
+        "counts": {
+            "crawled": 27,
+            "indexed": 12
+        }
+    },
+    {
+        "time": 1744501207938,
+        "counts": {
+            "crawled": 27,
+            "indexed": 13
+        }
+    },
+    {
+        "time": 1744501209940,
+        "counts": {
+            "crawled": 27,
+            "indexed": 13
+        }
+    },
+    {
+        "time": 1744501211940,
+        "counts": {
+            "crawled": 27,
+            "indexed": 14
+        }
+    },
+    {
+        "time": 1744501213954,
+        "counts": {
+            "crawled": 27,
+            "indexed": 15
+        }
+    },
+    {
+        "time": 1744501215953,
+        "counts": {
+            "crawled": 27,
+            "indexed": 16
+        }
+    },
+    {
+        "time": 1744501217953,
+        "counts": {
+            "crawled": 30,
+            "indexed": 21
+        }
+    },
+    {
+        "time": 1744501219953,
+        "counts": {
+            "crawled": 32,
+            "indexed": 27
+        }
+    },
+    {
+        "time": 1744501221965,
+        "counts": {
+            "crawled": 39,
+            "indexed": 28
+        }
+    },
+    {
+        "time": 1744501223965,
+        "counts": {
+            "crawled": 42,
+            "indexed": 31
+        }
+    },
+    {
+        "time": 1744501225965,
+        "counts": {
+            "crawled": 45,
+            "indexed": 33
+        }
+    },
+    {
+        "time": 1744501227965,
+        "counts": {
+            "crawled": 45,
+            "indexed": 33
+        }
+    },
+    {
+        "time": 1744501229965,
+        "counts": {
+            "crawled": 45,
+            "indexed": 36
+        }
+    },
+    {
+        "time": 1744501231965,
+        "counts": {
+            "crawled": 50,
+            "indexed": 40
+        }
+    },
+    {
+        "time": 1744501233968,
+        "counts": {
+            "crawled": 53,
+            "indexed": 43
+        }
+    },
+    {
+        "time": 1744501235971,
+        "counts": {
+            "crawled": 54,
+            "indexed": 43
+        }
+    },
+    {
+        "time": 1744501237971,
+        "counts": {
+            "crawled": 57,
+            "indexed": 45
+        }
+    },
+    {
+        "time": 1744501239971,
+        "counts": {
+            "crawled": 58,
+            "indexed": 45
+        }
+    },
+    {
+        "time": 1744501241972,
+        "counts": {
+            "crawled": 58,
+            "indexed": 45
+        }
+    },
+    {
+        "time": 1744501243986,
+        "counts": {
+            "crawled": 58,
+            "indexed": 45
+        }
+    },
+    {
+        "time": 1744501245986,
+        "counts": {
+            "crawled": 60,
+            "indexed": 48
+        }
+    },
+    {
+        "time": 1744501247993,
+        "counts": {
+            "crawled": 61,
+            "indexed": 48
+        }
+    },
+    {
+        "time": 1744501249998,
+        "counts": {
+            "crawled": 63,
+            "indexed": 51
+        }
+    },
+    {
+        "time": 1744501252006,
+        "counts": {
+            "crawled": 64,
+            "indexed": 51
+        }
+    },
+    {
+        "time": 1744501254020,
+        "counts": {
+            "crawled": 64,
+            "indexed": 51
+        }
+    },
+    {
+        "time": 1744501256025,
+        "counts": {
+            "crawled": 65,
+            "indexed": 52
+        }
+    },
+    {
+        "time": 1744501258037,
+        "counts": {
+            "crawled": 66,
+            "indexed": 52
+        }
+    },
+    {
+        "time": 1744501260043,
+        "counts": {
+            "crawled": 67,
+            "indexed": 55
+        }
+    },
+    {
+        "time": 1744501262057,
+        "counts": {
+            "crawled": 69,
+            "indexed": 58
+        }
+    },
+    {
+        "time": 1744501264063,
+        "counts": {
+            "crawled": 72,
+            "indexed": 61
+        }
+    },
+    {
+        "time": 1744501266063,
+        "counts": {
+            "crawled": 73,
+            "indexed": 62
+        }
+    },
+    {
+        "time": 1744501268063,
+        "counts": {
+            "crawled": 73,
+            "indexed": 63
+        }
+    },
+    {
+        "time": 1744501270063,
+        "counts": {
+            "crawled": 76,
+            "indexed": 66
+        }
+    },
+    {
+        "time": 1744501272065,
+        "counts": {
+            "crawled": 80,
+            "indexed": 68
+        }
+    },
+    {
+        "time": 1744501274070,
+        "counts": {
+            "crawled": 83,
+            "indexed": 71
+        }
+    },
+    {
+        "time": 1744501276081,
+        "counts": {
+            "crawled": 85,
+            "indexed": 73
+        }
+    },
+    {
+        "time": 1744501278087,
+        "counts": {
+            "crawled": 88,
+            "indexed": 76
+        }
+    },
+    {
+        "time": 1744501280090,
+        "counts": {
+            "crawled": 89,
+            "indexed": 78
+        }
+    },
+    {
+        "time": 1744501282091,
+        "counts": {
+            "crawled": 91,
+            "indexed": 81
+        }
+    },
+    {
+        "time": 1744501284097,
+        "counts": {
+            "crawled": 94,
+            "indexed": 83
+        }
+    },
+    {
+        "time": 1744501286096,
+        "counts": {
+            "crawled": 96,
+            "indexed": 86
+        }
+    },
+    {
+        "time": 1744501288125,
+        "counts": {
+            "crawled": 99,
+            "indexed": 89
+        }
+    },
+    {
+        "time": 1744501290136,
+        "counts": {
+            "crawled": 102,
+            "indexed": 90
+        }
+    },
+    {
+        "time": 1744501292139,
+        "counts": {
+            "crawled": 103,
+            "indexed": 92
+        }
+    },
+    {
+        "time": 1744501294150,
+        "counts": {
+            "crawled": 107,
+            "indexed": 94
+        }
+    },
+    {
+        "time": 1744501296150,
+        "counts": {
+            "crawled": 107,
+            "indexed": 94
+        }
+    },
+    {
+        "time": 1744501298152,
+        "counts": {
+            "crawled": 108,
+            "indexed": 94
+        }
+    },
+    {
+        "time": 1744501300154,
+        "counts": {
+            "crawled": 108,
+            "indexed": 95
+        }
+    },
+    {
+        "time": 1744501302173,
+        "counts": {
+            "crawled": 109,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501304172,
+        "counts": {
+            "crawled": 110,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501306180,
+        "counts": {
+            "crawled": 110,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501308190,
+        "counts": {
+            "crawled": 110,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501310190,
+        "counts": {
+            "crawled": 110,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501312193,
+        "counts": {
+            "crawled": 110,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501314200,
+        "counts": {
+            "crawled": 111,
+            "indexed": 99
+        }
+    },
+    {
+        "time": 1744501316200,
+        "counts": {
+            "crawled": 111,
+            "indexed": 103
+        }
+    },
+    {
+        "time": 1744501318207,
+        "counts": {
+            "crawled": 117,
+            "indexed": 108
+        }
+    },
+    {
+        "time": 1744501320212,
+        "counts": {
+            "crawled": 124,
+            "indexed": 112
+        }
+    },
+    {
+        "time": 1744501322227,
+        "counts": {
+            "crawled": 128,
+            "indexed": 116
+        }
+    },
+    {
+        "time": 1744501324231,
+        "counts": {
+            "crawled": 131,
+            "indexed": 122
+        }
+    },
+    {
+        "time": 1744501326230,
+        "counts": {
+            "crawled": 133,
+            "indexed": 125
+        }
+    },
+    {
+        "time": 1744501328230,
+        "counts": {
+            "crawled": 135,
+            "indexed": 128
+        }
+    },
+    {
+        "time": 1744501330235,
+        "counts": {
+            "crawled": 144,
+            "indexed": 134
+        }
+    },
+    {
+        "time": 1744501332235,
+        "counts": {
+            "crawled": 149,
+            "indexed": 138
+        }
+    },
+    {
+        "time": 1744501334238,
+        "counts": {
+            "crawled": 154,
+            "indexed": 145
+        }
+    },
+    {
+        "time": 1744501336237,
+        "counts": {
+            "crawled": 158,
+            "indexed": 148
+        }
+    },
+    {
+        "time": 1744501338243,
+        "counts": {
+            "crawled": 161,
+            "indexed": 151
+        }
+    },
+    {
+        "time": 1744501340313,
+        "counts": {
+            "crawled": 163,
+            "indexed": 153
+        }
+    },
+    {
+        "time": 1744501342325,
+        "counts": {
+            "crawled": 164,
+            "indexed": 153
+        }
+    },
+    {
+        "time": 1744501344325,
+        "counts": {
+            "crawled": 164,
+            "indexed": 153
+        }
+    },
+    {
+        "time": 1744501346325,
+        "counts": {
+            "crawled": 165,
+            "indexed": 154
+        }
+    },
+    {
+        "time": 1744501348337,
+        "counts": {
+            "crawled": 167,
+            "indexed": 160
+        }
+    },
+    {
+        "time": 1744501350341,
+        "counts": {
+            "crawled": 171,
+            "indexed": 165
+        }
+    },
+    {
+        "time": 1744501352342,
+        "counts": {
+            "crawled": 181,
+            "indexed": 170
+        }
+    },
+    {
+        "time": 1744501354344,
+        "counts": {
+            "crawled": 186,
+            "indexed": 175
+        }
+    },
+    {
+        "time": 1744501356354,
+        "counts": {
+            "crawled": 190,
+            "indexed": 180
+        }
+    },
+    {
+        "time": 1744501358354,
+        "counts": {
+            "crawled": 194,
+            "indexed": 184
+        }
+    },
+    {
+        "time": 1744501360354,
+        "counts": {
+            "crawled": 196,
+            "indexed": 189
+        }
+    },
+    {
+        "time": 1744501362361,
+        "counts": {
+            "crawled": 201,
+            "indexed": 191
+        }
+    },
+    {
+        "time": 1744501364364,
+        "counts": {
+            "crawled": 203,
+            "indexed": 191
+        }
+    },
+    {
+        "time": 1744501366363,
+        "counts": {
+            "crawled": 206,
+            "indexed": 196
+        }
+    },
+    {
+        "time": 1744501368376,
+        "counts": {
+            "crawled": 208,
+            "indexed": 196
+        }
+    },
+    {
+        "time": 1744501370383,
+        "counts": {
+            "crawled": 209,
+            "indexed": 198
+        }
+    },
+    {
+        "time": 1744501372408,
+        "counts": {
+            "crawled": 214,
+            "indexed": 207
+        }
+    },
+    {
+        "time": 1744501374545,
+        "counts": {
+            "crawled": 214,
+            "indexed": 208
+        }
+    },
+    {
+        "time": 1744501376559,
+        "counts": {
+            "crawled": 215,
+            "indexed": 211
+        }
+    },
+    {
+        "time": 1744501378619,
+        "counts": {
+            "crawled": 221,
+            "indexed": 215
+        }
+    },
+    {
+        "time": 1744501380619,
+        "counts": {
+            "crawled": 230,
+            "indexed": 218
+        }
+    },
+    {
+        "time": 1744501382715,
+        "counts": {
+            "crawled": 232,
+            "indexed": 219
+        }
+    },
+    {
+        "time": 1744501384734,
+        "counts": {
+            "crawled": 235,
+            "indexed": 223
+        }
+    },
+    {
+        "time": 1744501386742,
+        "counts": {
+            "crawled": 236,
+            "indexed": 223
+        }
+    },
+    {
+        "time": 1744501388754,
+        "counts": {
+            "crawled": 237,
+            "indexed": 223
+        }
+    },
+    {
+        "time": 1744501390754,
+        "counts": {
+            "crawled": 238,
+            "indexed": 228
+        }
+    },
+    {
+        "time": 1744501392754,
+        "counts": {
+            "crawled": 238,
+            "indexed": 232
+        }
+    },
+    {
+        "time": 1744501394757,
+        "counts": {
+            "crawled": 238,
+            "indexed": 233
+        }
+    },
+    {
+        "time": 1744501396822,
+        "counts": {
+            "crawled": 239,
+            "indexed": 233
+        }
+    },
+    {
+        "time": 1744501398824,
+        "counts": {
+            "crawled": 243,
+            "indexed": 240
+        }
+    },
+    {
+        "time": 1744501400824,
+        "counts": {
+            "crawled": 254,
+            "indexed": 244
+        }
+    },
+    {
+        "time": 1744501402879,
+        "counts": {
+            "crawled": 254,
+            "indexed": 244
+        }
+    },
+    {
+        "time": 1744501405009,
+        "counts": {
+            "crawled": 255,
+            "indexed": 247
+        }
+    },
+    {
+        "time": 1744501407320,
+        "counts": {
+            "crawled": 260,
+            "indexed": 249
+        }
+    },
+    {
+        "time": 1744501409379,
+        "counts": {
+            "crawled": 263,
+            "indexed": 256
+        }
+    },
+    {
+        "time": 1744501411391,
+        "counts": {
+            "crawled": 273,
+            "indexed": 266
+        }
+    },
+    {
+        "time": 1744501413391,
+        "counts": {
+            "crawled": 276,
+            "indexed": 268
+        }
+    },
+    {
+        "time": 1744501415400,
+        "counts": {
+            "crawled": 280,
+            "indexed": 273
+        }
+    },
+    {
+        "time": 1744501417431,
+        "counts": {
+            "crawled": 283,
+            "indexed": 275
+        }
+    },
+    {
+        "time": 1744501419431,
+        "counts": {
+            "crawled": 285,
+            "indexed": 277
+        }
+    },
+    {
+        "time": 1744501421431,
+        "counts": {
+            "crawled": 287,
+            "indexed": 281
+        }
+    },
+    {
+        "time": 1744501423447,
+        "counts": {
+            "crawled": 291,
+            "indexed": 286
+        }
+    },
+    {
+        "time": 1744501425451,
+        "counts": {
+            "crawled": 304,
+            "indexed": 290
+        }
+    },
+    {
+        "time": 1744501427468,
+        "counts": {
+            "crawled": 308,
+            "indexed": 294
+        }
+    },
+    {
+        "time": 1744501429472,
+        "counts": {
+            "crawled": 308,
+            "indexed": 297
+        }
+    },
+    {
+        "time": 1744501431475,
+        "counts": {
+            "crawled": 309,
+            "indexed": 300
+        }
+    },
+    {
+        "time": 1744501433475,
+        "counts": {
+            "crawled": 310,
+            "indexed": 300
+        }
+    },
+    {
+        "time": 1744501435478,
+        "counts": {
+            "crawled": 312,
+            "indexed": 306
+        }
+    },
+    {
+        "time": 1744501437484,
+        "counts": {
+            "crawled": 320,
+            "indexed": 310
+        }
+    },
+    {
+        "time": 1744501439489,
+        "counts": {
+            "crawled": 323,
+            "indexed": 312
+        }
+    },
+    {
+        "time": 1744501441490,
+        "counts": {
+            "crawled": 327,
+            "indexed": 317
+        }
+    },
+    {
+        "time": 1744501443489,
+        "counts": {
+            "crawled": 327,
+            "indexed": 320
+        }
+    },
+    {
+        "time": 1744501445489,
+        "counts": {
+            "crawled": 330,
+            "indexed": 325
+        }
+    },
+    {
+        "time": 1744501447490,
+        "counts": {
+            "crawled": 335,
+            "indexed": 329
+        }
+    },
+    {
+        "time": 1744501449503,
+        "counts": {
+            "crawled": 336,
+            "indexed": 333
+        }
+    },
+    {
+        "time": 1744501451513,
+        "counts": {
+            "crawled": 338,
+            "indexed": 338
+        }
+    },
+    {
+        "time": 1744501453532,
+        "counts": {
+            "crawled": 342,
+            "indexed": 338
+        }
+    },
+    {
+        "time": 1744501455531,
+        "counts": {
+            "crawled": 344,
+            "indexed": 339
+        }
+    },
+    {
+        "time": 1744501457542,
+        "counts": {
+            "crawled": 352,
+            "indexed": 343
+        }
+    },
+    {
+        "time": 1744501459546,
+        "counts": {
+            "crawled": 355,
+            "indexed": 350
+        }
+    },
+    {
+        "time": 1744501461554,
+        "counts": {
+            "crawled": 360,
+            "indexed": 356
+        }
+    },
+    {
+        "time": 1744501463595,
+        "counts": {
+            "crawled": 368,
+            "indexed": 359
+        }
+    },
+    {
+        "time": 1744501465606,
+        "counts": {
+            "crawled": 371,
+            "indexed": 360
+        }
+    },
+    {
+        "time": 1744501467608,
+        "counts": {
+            "crawled": 373,
+            "indexed": 361
+        }
+    },
+    {
+        "time": 1744501469622,
+        "counts": {
+            "crawled": 374,
+            "indexed": 365
+        }
+    },
+    {
+        "time": 1744501471630,
+        "counts": {
+            "crawled": 376,
+            "indexed": 367
+        }
+    },
+    {
+        "time": 1744501473629,
+        "counts": {
+            "crawled": 376,
+            "indexed": 367
+        }
+    },
+    {
+        "time": 1744501475629,
+        "counts": {
+            "crawled": 376,
+            "indexed": 367
+        }
+    },
+    {
+        "time": 1744501477629,
+        "counts": {
+            "crawled": 377,
+            "indexed": 371
+        }
+    },
+    {
+        "time": 1744501479642,
+        "counts": {
+            "crawled": 383,
+            "indexed": 376
+        }
+    },
+    {
+        "time": 1744501481642,
+        "counts": {
+            "crawled": 389,
+            "indexed": 378
+        }
+    },
+    {
+        "time": 1744501483642,
+        "counts": {
+            "crawled": 389,
+            "indexed": 378
+        }
+    },
+    {
+        "time": 1744501485674,
+        "counts": {
+            "crawled": 396,
+            "indexed": 386
+        }
+    },
+    {
+        "time": 1744501487701,
+        "counts": {
+            "crawled": 397,
+            "indexed": 390
+        }
+    },
+    {
+        "time": 1744501489700,
+        "counts": {
+            "crawled": 397,
+            "indexed": 391
+        }
+    },
+    {
+        "time": 1744501491707,
+        "counts": {
+            "crawled": 398,
+            "indexed": 394
+        }
+    },
+    {
+        "time": 1744501493707,
+        "counts": {
+            "crawled": 410,
+            "indexed": 397
+        }
+    },
+    {
+        "time": 1744501495709,
+        "counts": {
+            "crawled": 412,
+            "indexed": 397
+        }
+    },
+    {
+        "time": 1744501497715,
+        "counts": {
+            "crawled": 412,
+            "indexed": 397
+        }
+    },
+    {
+        "time": 1744501499723,
+        "counts": {
+            "crawled": 414,
+            "indexed": 402
+        }
+    }
+]

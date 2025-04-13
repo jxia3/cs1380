@@ -13,8 +13,9 @@ module.exports = {
   fifoCache: false,
   disableTermCache: false,
   enableQuery: true,
-  disableShardCache: true,
+  disableShardCache: false,
 
+  deployment: false,
   debug: false,
   notFoundMark: "_not_found_97189983cb4254d7",
 };

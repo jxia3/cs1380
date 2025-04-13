@@ -1,7 +1,9 @@
 const distribution = require("./distribution.js");
+const params = require("./distribution/params.js");
 
 const fs = require("fs");
 
+const DEPLOYMENT = params.deployment;
 const GROUP = distribution.searchParams.searchGroup;
 const FREQUENT_COUNT = 1000;
 const FREQUENT_FILE = "data/frequent.json";
@@ -14,18 +16,21 @@ const addresses = [
 ];
 const nodes = addresses.slice(offset[0], offset[1]).map((n) => ({ip: n, port: 80}));
 
-const localNode = nodes[0];
-if (true) {
+const localNode = DEPLOYMENT ? nodes[0] : global.nodeConfig;
+if (DEPLOYMENT) {
   global.nodeConfig.ip = "0.0.0.0";
   global.nodeConfig.port = 80;
+} else {
+  nodes.length = 0;
+  nodes.push(global.nodeConfig);
 }
 
 const urls = [
-  "https://deepmind.google",
-  "https://stackexchange.com",
-  "https://github.com/sindresorhus/awesome",
-  "https://github.com/StanForever/awesome-websites",
-  "https://apnews.com",
+  // "https://deepmind.google",
+  // "https://stackexchange.com",
+  // "https://github.com/sindresorhus/awesome",
+  // "https://github.com/StanForever/awesome-websites",
+  // "https://apnews.com",
   "https://www.nba.com",
 ];
 let startTime;

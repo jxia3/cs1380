@@ -1,0 +1,338 @@
+[
+    {
+        "time": 1744502577623,
+        "counts": {
+            "crawled": 10,
+            "indexed": 10
+        }
+    },
+    {
+        "time": 1744502579627,
+        "counts": {
+            "crawled": 44,
+            "indexed": 44
+        }
+    },
+    {
+        "time": 1744502581634,
+        "counts": {
+            "crawled": 83,
+            "indexed": 83
+        }
+    },
+    {
+        "time": 1744502583636,
+        "counts": {
+            "crawled": 118,
+            "indexed": 118
+        }
+    },
+    {
+        "time": 1744502585645,
+        "counts": {
+            "crawled": 152,
+            "indexed": 152
+        }
+    },
+    {
+        "time": 1744502587653,
+        "counts": {
+            "crawled": 185,
+            "indexed": 185
+        }
+    },
+    {
+        "time": 1744502589654,
+        "counts": {
+            "crawled": 198,
+            "indexed": 190
+        }
+    },
+    {
+        "time": 1744502591657,
+        "counts": {
+            "crawled": 199,
+            "indexed": 191
+        }
+    },
+    {
+        "time": 1744502593657,
+        "counts": {
+            "crawled": 211,
+            "indexed": 191
+        }
+    },
+    {
+        "time": 1744502595659,
+        "counts": {
+            "crawled": 221,
+            "indexed": 211
+        }
+    },
+    {
+        "time": 1744502597662,
+        "counts": {
+            "crawled": 242,
+            "indexed": 222
+        }
+    },
+    {
+        "time": 1744502599696,
+        "counts": {
+            "crawled": 257,
+            "indexed": 238
+        }
+    },
+    {
+        "time": 1744502601695,
+        "counts": {
+            "crawled": 261,
+            "indexed": 241
+        }
+    },
+    {
+        "time": 1744502603779,
+        "counts": {
+            "crawled": 268,
+            "indexed": 250
+        }
+    },
+    {
+        "time": 1744502605783,
+        "counts": {
+            "crawled": 279,
+            "indexed": 259
+        }
+    },
+    {
+        "time": 1744502607783,
+        "counts": {
+            "crawled": 281,
+            "indexed": 261
+        }
+    },
+    {
+        "time": 1744502609789,
+        "counts": {
+            "crawled": 285,
+            "indexed": 265
+        }
+    },
+    {
+        "time": 1744502611791,
+        "counts": {
+            "crawled": 287,
+            "indexed": 267
+        }
+    },
+    {
+        "time": 1744502613804,
+        "counts": {
+            "crawled": 300,
+            "indexed": 280
+        }
+    },
+    {
+        "time": 1744502615869,
+        "counts": {
+            "crawled": 307,
+            "indexed": 291
+        }
+    },
+    {
+        "time": 1744502617870,
+        "counts": {
+            "crawled": 317,
+            "indexed": 297
+        }
+    },
+    {
+        "time": 1744502619893,
+        "counts": {
+            "crawled": 325,
+            "indexed": 305
+        }
+    },
+    {
+        "time": 1744502621899,
+        "counts": {
+            "crawled": 332,
+            "indexed": 314
+        }
+    },
+    {
+        "time": 1744502623904,
+        "counts": {
+            "crawled": 332,
+            "indexed": 316
+        }
+    },
+    {
+        "time": 1744502625914,
+        "counts": {
+            "crawled": 339,
+            "indexed": 319
+        }
+    },
+    {
+        "time": 1744502627917,
+        "counts": {
+            "crawled": 344,
+            "indexed": 328
+        }
+    },
+    {
+        "time": 1744502629916,
+        "counts": {
+            "crawled": 349,
+            "indexed": 330
+        }
+    },
+    {
+        "time": 1744502631921,
+        "counts": {
+            "crawled": 352,
+            "indexed": 333
+        }
+    },
+    {
+        "time": 1744502633921,
+        "counts": {
+            "crawled": 354,
+            "indexed": 335
+        }
+    },
+    {
+        "time": 1744502635926,
+        "counts": {
+            "crawled": 357,
+            "indexed": 338
+        }
+    },
+    {
+        "time": 1744502637926,
+        "counts": {
+            "crawled": 358,
+            "indexed": 338
+        }
+    },
+    {
+        "time": 1744502639929,
+        "counts": {
+            "crawled": 359,
+            "indexed": 339
+        }
+    },
+    {
+        "time": 1744502641954,
+        "counts": {
+            "crawled": 361,
+            "indexed": 341
+        }
+    },
+    {
+        "time": 1744502643954,
+        "counts": {
+            "crawled": 361,
+            "indexed": 341
+        }
+    },
+    {
+        "time": 1744502645964,
+        "counts": {
+            "crawled": 376,
+            "indexed": 363
+        }
+    },
+    {
+        "time": 1744502647971,
+        "counts": {
+            "crawled": 385,
+            "indexed": 364
+        }
+    },
+    {
+        "time": 1744502649974,
+        "counts": {
+            "crawled": 386,
+            "indexed": 365
+        }
+    },
+    {
+        "time": 1744502651978,
+        "counts": {
+            "crawled": 386,
+            "indexed": 365
+        }
+    },
+    {
+        "time": 1744502653978,
+        "counts": {
+            "crawled": 386,
+            "indexed": 365
+        }
+    },
+    {
+        "time": 1744502655978,
+        "counts": {
+            "crawled": 386,
+            "indexed": 365
+        }
+    },
+    {
+        "time": 1744502657980,
+        "counts": {
+            "crawled": 388,
+            "indexed": 368
+        }
+    },
+    {
+        "time": 1744502660086,
+        "counts": {
+            "crawled": 395,
+            "indexed": 374
+        }
+    },
+    {
+        "time": 1744502662086,
+        "counts": {
+            "crawled": 403,
+            "indexed": 382
+        }
+    },
+    {
+        "time": 1744502664121,
+        "counts": {
+            "crawled": 410,
+            "indexed": 389
+        }
+    },
+    {
+        "time": 1744502666123,
+        "counts": {
+            "crawled": 410,
+            "indexed": 389
+        }
+    },
+    {
+        "time": 1744502668123,
+        "counts": {
+            "crawled": 411,
+            "indexed": 390
+        }
+    },
+    {
+        "time": 1744502670123,
+        "counts": {
+            "crawled": 415,
+            "indexed": 394
+        }
+    },
+    {
+        "time": 1744502672123,
+        "counts": {
+            "crawled": 425,
+            "indexed": 404
+        }
+    }
+]

@@ -17,7 +17,7 @@ const addresses = [
 const nodes = addresses.slice(offset[0], offset[1]).map((n) => ({ip: n, port: 80}));
 
 distribution.node.start(() => {
-  distribution.local.groups.put(GROUP, nodes, (error, result) => {
+  distribution.local.groups.put(GROUP, [distribution.node.config], (error, result) => {
     if (error) {
       throw error;
     }

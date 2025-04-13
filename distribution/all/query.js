@@ -1,6 +1,7 @@
 const util = require("../util/util.js");
 const remote = require("./remote-service.js");
 const params = require("../params.js");
+const { createFullTermKey } = require("../util/search.js");
 
 const GROUP = params.searchGroup;
 
@@ -57,7 +58,7 @@ function getTerms(group, batches, callback) {
     
     // create term list
     for (const term of batches[node]) {
-      terms.push(`[${term.text}]-full`);
+      terms.push(createFullTermKey(term.text));
     }
     const remote = {node: group[node], service: "termLookup", method: "lookup"};
     global.distribution.local.comm.send([terms], remote, (error, result) => {
@@ -82,6 +83,7 @@ function getTerms(group, batches, callback) {
       // Return to callback
       active -= 1;
       if (active === 0) {
+        // console.log('resu: ', results);
         callback(null, results);
       }
     });
