@@ -12,6 +12,7 @@ module.exports = {
   shardLocality: false,
   fifoCache: false,
   disableTermCache: false,
+  enableQuery: true,
   disableShardCache: false,
 
   deployment: false,
