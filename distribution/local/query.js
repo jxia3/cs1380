@@ -136,7 +136,7 @@ const keyboardProximity = {
 
 function getKeyboardCost(a, b) {
   if (a === b) return 0;
-  if (keyboardProximity[a]?.includes(b)) return 0.5;
+  if (keyboardProximity[a]?.includes(b)) return 0.6;
   return 1;
 }
 
@@ -170,7 +170,7 @@ function keyboardLevenshtein(a, b) {
       ) {
         dp[i][j] = Math.min(
           dp[i][j],
-          dp[i - 2][j - 2] + 1    // transposition cost is always 1
+          dp[i - 2][j - 2] + 0.5    // transposition cost is always 0.5
         );
       }
     }
@@ -187,7 +187,7 @@ function spellcheck(query, words) {
     let distance = keyboardLevenshtein(query, word);
 
     if (index < 5) {
-      distance -= 0.25;
+      distance *= 0.5;
     }
     return { word, distance };
   });
@@ -210,6 +210,49 @@ function waitForEnter(callback) {
     callback();
   });
 }
+
+function waitForInput(callback) {
+  process.stdin.setRawMode(true);
+  // process.stdin.pause();
+  process.stdin.resume();
+  process.stdin.setEncoding("utf8");
+
+  process.stdin.once("data", (key) => {
+    process.stdin.setRawMode(false);
+    process.stdin.pause();
+
+    // Check key press
+    if (key === '\r') {
+      callback('enter');
+    } else if (key === '\u001B') { // ESC
+      callback('esc');
+    } else if (key.toLowerCase() === 'y') {
+      callback('y');
+    } else if (key.toLowerCase() === 'n') {
+      callback('n');
+    } else {
+      callback('other', key); // fallback for any other key
+    }
+  });
+}
+
+function askNewSearch() {
+  console.log("Would you like to search for a new query? (y/n)");
+
+  waitForInput((key) => {
+    if (process.stdin.isPaused()) {
+      process.stdin.resume();
+    }
+
+    if (key === 'y') {
+      // Resume your own logic to prompt for input
+      runSearch();
+    } else if (key === 'n' || key === 'esc') {
+      process.exit();
+    }
+  });
+}
+
 
 function dihQuery(query, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
@@ -242,17 +285,25 @@ function dihQuery(query, callback) {
       newQuery = freshWords.join(" ");
 
       if (emptyResults.length === Object.keys(results).length) {
-        console.log(`😔 No search results found for query "${query}".`);
         // console.log(newQuery);
         if (newQuery != query) {
-          console.log(`\nDid you mean "${newQuery}"? Press Enter to continue...`);
-          waitForEnter(() => {
-            dihQuery(newQuery, callback);
+          console.log(`😔 No search results found for query "${query}". Did you mean "${newQuery}"? (y/n)`);
+          // waitForEnter(() => {
+          //   dihQuery(newQuery, callback);
+          // });
+          waitForInput((key) => {
+            if (key === 'y') {
+              dihQuery(newQuery, callback);
+            } else if (key === 'n') {
+              // console.log("Would you like to search for new query? (y/n)");
+              askNewSearch();
+            } else if (key === 'esc') {
+              process.exit();
+            }
           });
         } else {
-          console.log("Would you like to search for new query? Press Enter to continue...");
-          // console.log("isPaused:", process.stdin.isPaused()); 
-          waitForEnter(runSearch);
+          console.log(`😔 No search results found for query "${query}".`);
+          askNewSearch();
         }
       } 
       else {
@@ -275,21 +326,47 @@ function dihQuery(query, callback) {
         }
 
         if (emptyResults.length > 0 && newQuery != query) {
-          console.log(`\nDid you mean "${newQuery}"? Press Enter to continue...`);
-          waitForEnter(() => {
-            dihQuery(newQuery, callback);
+          console.log(`\nDid you mean "${newQuery}"? (y/n)`);
+          waitForInput((key) => {
+            if (key === 'y') {
+              dihQuery(newQuery, callback);
+            } else if (key === 'n') {
+              askNewSearch();
+            } else if (key === 'esc') {
+              process.exit();
+            }
           });
         }
         else {
-          console.log("Would you like to search for new query? Press Enter to continue...");
-          waitForEnter(runSearch);
+          askNewSearch();
         }
+      }
+    }
+
+    else {
+      const processedResults = processResults(results);
+
+      const sortedUrls = Object.entries(processedResults)
+                      .sort((a, b) => b[1].score - a[1].score)
+                      .map(([url, data]) => ({ url, ...data }));
+      const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
+      const numUrls = topUrls.length;
+
+      console.log(`\n👑 Yes, king! Your royal search for "${query}" has delivered 👑`);
+      console.log(`💅💅💅 Here are your top ${numUrls} result(s): 😋😋😋\n`);
+      for (const url of topUrls) {
+          console.log("URL:      " + url.url);
+          console.log("Score:    " + url.score);
+          console.log("Title:    " + url.title);
+          console.log("Context:  " + "..." + url.context + "...");
+          console.log("—".repeat(40));
       }
     }
   });
 }
 
 function runSearch() {
+  // console.log(process.stdin.isPaused())
   console.log("🔍 Enter your search query:");
   process.stdout.write("> ");
 
@@ -298,11 +375,8 @@ function runSearch() {
   process.stdin.once("data", (input) => {
     const query = input.trim();
     dihQuery(query, () => {});
-    // process.stdin.pause();
   });
-
-  // process.stdin.resume();
 }
 
 
-module.exports = {dihQuery, runSearch};
+module.exports = {runSearch};
