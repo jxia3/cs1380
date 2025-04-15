@@ -115,4 +115,8 @@ function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callba
   callback(null, null);
 }
 
-module.exports = {start, stop, flushCache, getCounts, getCrawlStats, updateCounts, updateCrawlerStats};
+module.exports = {
+  start, stop, flushCache, 
+  getCounts, getCrawlStats, 
+  updateCounts, updateCrawlerStats
+};

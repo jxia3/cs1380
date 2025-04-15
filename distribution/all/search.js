@@ -61,6 +61,24 @@ function updateCounts(crawled, indexed, callback) {
 /**
  * Updates crawler-specific stats on orchestrator node.
  */
+function updateQueryStats(queries, time, callback) {
+  checkContext(this.gid, this.hash);
+  callback = callback === undefined ? (error, result) => {} : callback;
+  if (!DEBUG) {
+    callback(null, null);
+    return;
+  }
+  if (this.orchestrator === undefined) {
+    callback(new Error("Group is not initialized"), null);
+    return;
+  }
+  const remote = {node: this.orchestrator, service: "search", method: "updateCrawlerStats"};
+  global.distribution.local.comm.send([queries, time], remote, callback);
+}
+
+/**
+ * Updates crawler-specific stats on orchestrator node.
+ */
 function updateCrawlerStats(ignoredURL, irrelevantURL, pageContentLength, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
@@ -101,6 +119,7 @@ module.exports = (config) => {
     stop: stop.bind(context),
     flushCache: flushCache.bind(context),
     updateCounts: updateCounts.bind(context),
+    updateQueryStats: updateQueryStats.bind(context),
     updateCrawlerStats: updateCrawlerStats.bind(context),
     _setOrchestrator: (node) => context.orchestrator = node,
   };

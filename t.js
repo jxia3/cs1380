@@ -21,20 +21,8 @@ distribution.node.start(() => {
     if (error) {
       throw error;
     }
-    /* distribution[GROUP].groups.put(GROUP, nodes, (error, result) => {
-      if (Object.keys(error).length > 0) {
-        throw error;
-      }*/
     setTimeout(() => {
-      // const terms = distribution.util.search.calcTerms(query).terms;
-      // for (const ip of addresses) {
-      //  distribution.local.comm.send([{key: "[google]-full", gid: "search"}], {node: {ip, port: 80}, service: "shardedStore", method: "get"}, (error, result) => {
-      //    console.log(ip, result !== null ? "r" : result)
-      //  })
-      // distribution[GROUP].termLookup.lookup(terms, console.log);
-      distribution.local.query.runSearch();
-      // }
+      distribution.local.queryPerf.query("lebron", console.log);
     }, 100);
-    // });
   });
 });

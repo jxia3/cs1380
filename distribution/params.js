@@ -15,7 +15,7 @@ module.exports = {
   enableQuery: true,
   disableShardCache: false,
 
-  deployment: false,
+  deployment: true,
   debug: false,
   notFoundMark: "_not_found_97189983cb4254d7",
 };

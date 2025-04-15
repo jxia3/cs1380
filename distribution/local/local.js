@@ -34,5 +34,6 @@ module.exports = {
   shardedStore: require("./sharded-store.js"),
   termLookup: require("./term-lookup.js"),
   query: USE_QUERY ? require("./query.js") : null,
+  queryPerf: require("./query-perf.js"),
   search: require("./search.js")
 };
