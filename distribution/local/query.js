@@ -239,18 +239,20 @@ function waitForInput(callback) {
 function askNewSearch() {
   console.log("Would you like to search for a new query? (y/n)");
 
-  waitForInput((key) => {
+  function handleResponse(key) {
     if (process.stdin.isPaused()) {
       process.stdin.resume();
     }
 
     if (key === 'y') {
-      // Resume your own logic to prompt for input
       runSearch();
     } else if (key === 'n' || key === 'esc') {
       process.exit();
+    } else {
+      waitForInput(handleResponse); // wait again
     }
-  });
+  }
+  waitForInput(handleResponse);
 }
 
 
