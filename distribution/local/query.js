@@ -205,8 +205,7 @@ function spellcheck(query, words) {
   return distances[0];
 }
 
-
-
+// KEYBOARD INPUT FUNCTIONS
 function waitForInput(callback) {
   process.stdin.setRawMode(true);
   process.stdin.resume();
@@ -272,7 +271,6 @@ function otherSearch(newQuery) {
 function lookupQuery(query, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
 
-  // enterPressed = false;
   const words = search.calcTerms(query).terms;
 
   global.distribution[GROUP].query.batchTerms(words, (errors, results) => {
@@ -311,7 +309,7 @@ function lookupQuery(query, callback) {
       const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
       const numUrls = topUrls.length;
 
-      console.log(`\nHere are the top ${numUrls} result(s) for "${query}":\n`);
+      console.log(`\nDisplaying top ${numUrls} result(s) for "${query}":\n`);
       for (const url of topUrls) {
           console.log("URL:      " + url.url);
           // console.log("Score:    " + url.score);
