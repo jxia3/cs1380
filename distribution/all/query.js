@@ -8,7 +8,7 @@ const GROUP = params.searchGroup;
 /**
  * Distributes get term requests across the node group.
  */
-function superDih(terms, callback) {
+function batchTerms(terms, callback) {
   checkContext(this.gid, this.hash);
   callback = callback === undefined ? (error, result) => {} : callback;
   global.distribution.local.groups.get(this.gid, (error, group) => {
@@ -83,7 +83,6 @@ function getTerms(group, batches, callback) {
       // Return to callback
       active -= 1;
       if (active === 0) {
-        // console.log('resu: ', results);
         callback(null, results);
       }
     });
@@ -107,5 +106,5 @@ module.exports = (config) => {
   if (typeof context.hash !== "function") {
     context.hash = util.id.rendezvousHash;
   }
-  return {superDih: superDih.bind(context)};
+  return {batchTerms: batchTerms.bind(context)};
 };
