@@ -293,10 +293,10 @@ function lookupQuery(query, callback) {
 
     if (emptyResults.length === Object.keys(results).length) {
       if (newQuery != query) {
-        console.log(`No search results found for query "${query}". Did you mean "${newQuery}"? (y/n)`);
+        console.log(`No search results found for "${query}". Did you mean "${newQuery}"? (y/n)`);
         otherSearch(newQuery);
       } else {
-        console.log(`No search results found for query "${query}".`);
+        console.log(`No search results found for "${query}".`);
         askNewSearch();
       }
     } 
