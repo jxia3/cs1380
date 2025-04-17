@@ -14,8 +14,11 @@ module.exports = {
   disableTermCache: false,
   enableQuery: true,
   disableShardCache: false,
+  disableTermLookupCache: false,
 
   deployment: true,
   debug: false,
   notFoundMark: "_not_found_97189983cb4254d7",
+
+  queryPerfQueries: 20000
 };

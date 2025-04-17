@@ -163,7 +163,11 @@ function cacheItem(keys, object, dirty, callback) {
 
   // Insert the object into the cache
   const evicted = this.cache.put(keys.cacheKey, {data: object, dirty});
-  if (evicted === null || !evicted.value.dirty) {
+  // if (evicted === null || !evicted.value.dirty) {
+  //   callback(null, object);
+  //   return;
+  // }
+  if (evicted === null || true) {
     callback(null, object);
     return;
   }

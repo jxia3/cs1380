@@ -13,3 +13,5 @@ nodes
 
 dist
 stencil
+data/
+store-zips

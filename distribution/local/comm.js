@@ -66,7 +66,7 @@ function send(message, remote, callback) {
     const url = `http://${remote.node.ip}:${remote.node.port}/${groupId}/${remote.service}/${remote.method}`;
     const timeout = remote?.timeout === undefined ? REQUEST_TIMEOUT : remote?.timeout;
     if (!DISABLE_LOGS.includes(remote.service)) {
-      log(`Sending service call to ${url}`);
+      // log(`Sending service call to ${url}`);
     }
     callService(url, util.serialize(message), timeout, callback);
   } catch (error) {

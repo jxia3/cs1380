@@ -202,19 +202,35 @@ function spellcheck(query, words) {
   return distances[0];
 }
 
-
+// Take in an array of queries
 function query(query, callback) {
   callback = callback === undefined ? (error, result) => {} : callback;
 
-  // enterPressed = false;
-  const words = search.calcTerms(query).terms;
+  // Instead of calculating terms, directly use input
+  const words = query.map(word => ({ text: word }));
 
   global.distribution[GROUP].query.superDih(words, (errors, results) => {
     const emptyResults = checkResults(results);
     let newQuery;
 
+    if (emptyResults.length === Object.keys(results).length) {
+      // CHANGE: don't handle this case, just callback (assume negligable time to output results)
+      return callback(null, results);
+    } 
+    else {
+      const processedResults = processResults(results);
+      const sortedUrls = Object.entries(processedResults)
+                      .sort((a, b) => b[1].score - a[1].score)
+                      .map(([url, data]) => ({ url, ...data }));
+      const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
+      const numUrls = topUrls.length;
+
+      // CHANGE: don't handle this case, just callback (assume negligable time to output results)
+      return callback(null, results);
+    }
+
     if (USE_SPELLCHECK) {
-      const originalWords = query.trim().split(/\s+/);
+      const originalWords = query;
       const freshWords = [];
 
       // Spellcheck metrics
@@ -233,7 +249,7 @@ function query(query, callback) {
 
       if (emptyResults.length === Object.keys(results).length) {
         // CHANGE: don't handle this case, just callback (assume negligable time to output results)
-        return callback(null, results);
+        return callback(null, true);
       } 
       else {
         const processedResults = processResults(results);
@@ -244,7 +260,7 @@ function query(query, callback) {
         const numUrls = topUrls.length;
 
         // CHANGE: don't handle this case, just callback (assume negligable time to output results)
-        return callback(null, results);
+        return callback(null, false);
       }
     }
   });

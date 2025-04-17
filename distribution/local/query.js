@@ -264,8 +264,8 @@ function dihQuery(query, callback) {
         const topUrls = sortedUrls.slice(0, MAX_SEARCH_RESULTS);
         const numUrls = topUrls.length;
 
-        console.log(`\n👑 Yes, king! Your royal search for "${query}" has delivered 👑`);
-        console.log(`💅💅💅 Here are your top ${numUrls} result(s): 😋😋😋\n`);
+        console.log(`\n✅ Your search for "${query}" has delivered!`);
+        console.log(`📃 Here are your top ${numUrls} result(s): \n`);
         for (const url of topUrls) {
             console.log("URL:      " + url.url);
             console.log("Score:    " + url.score);

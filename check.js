@@ -6,8 +6,8 @@ global.distribution = { util }
 
 const nodes = {}
 const ips = [
-    "3.139.81.183", "3.149.2.194", "18.217.66.8", "3.15.220.99", "3.147.63.105",
-    "18.226.159.174", "18.117.185.42", "18.223.196.60", "3.139.108.222", "3.16.66.233",
+  "3.148.206.79", "52.14.50.72", "3.147.45.181", "3.135.210.183", "3.148.226.105",
+  "13.58.71.61", "18.116.14.107", "3.148.248.72", "3.128.172.56", "3.137.198.123",
 ]
 for (let i = 0; i < ips.length; i += 1) {
     const node = { ip: ips[i], port: 80, index: i + 1 }
@@ -15,14 +15,22 @@ for (let i = 0; i < ips.length; i += 1) {
     nodes[nodeId] = node
 }
 
+// const terms = ["scare"]
+// for (const term of terms) {
+//   const node = util.id.applyHash(term, nodes, util.id.rendezvousHash);
+//   console.log(nodes);
+//   console.log("node with the term:", node);
+//   console.log(nodes[node].index)
+// }
+
 const term = "lebron"
 const [shard, path] = findShard(term)
 console.log(shard, path)
-for (let n = 1; n <= 10; n += 1) {
-    const data = readShard(`nodes/store-${n}/9dd21/search/${btoa(shard)}.dat`)
-    console.log(n, term in data)
+for (let n = 1; n <= 2; n += 1) {
+    const data = readShard(`nodes/store-${n}/9dd21/search/${btoa('shard-19999')}.dat`)
+    console.log(Object.keys(data).length);
     if (term in data) {
-        console.log(Object.keys(data[term]))
+        console.log(Object.keys(data[term]));
     }
 }
 

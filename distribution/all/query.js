@@ -39,7 +39,6 @@ function calcBatches(group, terms) {
     }
     batches[node].push(term);
   }
-  // console.log('bathces: ', batches);
   return batches;
 }
 

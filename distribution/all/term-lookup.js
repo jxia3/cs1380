@@ -5,17 +5,22 @@ const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 const GROUP = params.searchGroup;
+const DISABLE_CACHE = params.disableTermLookupCache;
 
-const cache = util.cache.createCache(1000);
+let cache;
+if (!DISABLE_CACHE) {
+  cache = util.cache.createCache(1000);
+}
 
 /**
  * Routes remote requests to get the data associated with each term and caches the data.
- */
+*/
 function lookup(terms, callback) {
   checkContext(this.gid, this.hash);
   if (callback === undefined) {
     return;
   }
+  const start = performance.now();
 
   global.distribution.local.groups.get(this.gid, (error, group) => {
     if (error) {
@@ -26,9 +31,11 @@ function lookup(terms, callback) {
 
     // Compute request batches
     const batches = {};
+    let inCache = 0;
     for (const term of terms) {
-      if (cache.has(term.text)) {
+      if (!DISABLE_CACHE && cache.has(term.text)) {
         results[term.text] = cache.get(term.text);
+        inCache++;
         continue;
       }
       const termKey = util.search.createFullTermKey(term.text);
@@ -45,16 +52,24 @@ function lookup(terms, callback) {
 
     // Send requests
     if (Object.keys(batches).length === 0) {
+      const totalTime = performance.now() - start;
+      console.log("No cache misses, skipping lookupBatches");
+      console.log('Throughput:', (totalTime));
       callback(null, results);
       return;
     }
+    
+    console.log(`cache hit rate: ${inCache / terms.length}`);
+
     lookupBatches(group, batches, (error, batchResults) => {
       if (error) {
         callback(error, null);
         return;
       }
       for (const term in batchResults) {
-        cache.put(term, batchResults[term]);
+        if (!DISABLE_CACHE) {
+          cache.put(term, batchResults[term]);
+        }
         results[term] = batchResults[term];
       }
       callback(null, results);
@@ -72,13 +87,18 @@ function lookupBatches(group, batches, callback) {
     throw new Error("Cannot lookup an empty batch");
   }
 
+  const startTime = performance.now(); // For throughput
+  let totalLatency = 0; // For latency
   for (const node in batches) {
+    const start = performance.now(); // For latency
     const remote = {node: group[node], service: "termLookup", method: "lookup"};
     global.distribution.local.comm.send([batches[node].keys], remote, (error, result) => {
       if (error) {
         console.error(error);
         return;
       }
+
+      totalLatency += (performance.now() - start); // for latency
 
       // Decompress results
       for (let r = 0; r < result.length; r += 1) {
@@ -95,6 +115,9 @@ function lookupBatches(group, batches, callback) {
       // Return to callback
       active -= 1;
       if (active === 0) {
+        const totalTime = performance.now() - startTime;
+        console.log('Throughput:', (params.queryPerfQueries / totalTime));
+        console.log('Latency:', (totalLatency / params.queryPerfQueries));
         callback(null, results);
       }
     });
