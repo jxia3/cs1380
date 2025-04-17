@@ -1,3 +1,10 @@
+# A Distributed Search Engine
+
+To run the project:
+1. Clone the repository
+2. Run `npm install`
+3. To start crawling, run `node run.js download`
+
 # M5: Distributed Execution Engine
 
 ## Summary
