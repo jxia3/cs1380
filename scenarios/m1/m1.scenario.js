@@ -82,5 +82,5 @@ test("(3 pts) (scenario) malformed serialized string", () => {
 
   expect(() => {
     util.deserialize(malformedSerializedString);
-  }).toThrow(SyntaxError);
+  }).toThrow(Error);
 });

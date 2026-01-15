@@ -18,7 +18,7 @@ const EXCLUDED_GLOBAL = ["sys", "wasi"];
 const ENABLE_NATIVE = false;
 const EXCLUDED_NATIVE = ["sys", "wasi", "_stream_wrap"];
 // Enable optimized type flags
-const OPTIMIZE_FLAGS = true;
+const OPTIMIZE_FLAGS = false;
 
 // Marker flags that indicate structure
 const Marker = {
