@@ -15,7 +15,7 @@
 const ENABLE_GLOBAL = true;
 const EXCLUDED_GLOBAL = ["sys", "wasi"];
 // Enable native object discovery
-const ENABLE_NATIVE = false;
+const ENABLE_NATIVE = true;
 const EXCLUDED_NATIVE = ["sys", "wasi", "_stream_wrap"];
 // Enable optimized type flags
 const OPTIMIZE_FLAGS = false;
