@@ -1,4 +1,4 @@
-const distribution = require("../../config.js");
+const distribution = require("../../distribution.js");
 const util = distribution.util;
 
 test("(3 pts) (scenario) 40 bytes object", () => {
