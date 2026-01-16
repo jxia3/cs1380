@@ -19,7 +19,7 @@ function start(callback) {
   server.listen(global.nodeConfig.port, global.nodeConfig.ip, () => {
     log(`Server running at http://${global.nodeConfig.ip}:${global.nodeConfig.port}`);
     if (callback !== undefined) {
-      callback(server);
+      callback(null);
     }
   });
 
