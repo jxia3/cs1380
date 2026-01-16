@@ -49,6 +49,7 @@ const distribution = function(config) {
   if (config) {
     global.nodeConfig = config;
     this.nodeConfig = config;
+    global.distribution.node.config = config;
   }
   return global.distribution;
 };
