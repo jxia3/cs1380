@@ -167,7 +167,7 @@ let localServer = null;
 
 function startAllNodes(callback) {
   distribution.node.start((server) => {
-    localServer = server;
+    localServer = global.distribution.node.server;
 
     function startStep(step) {
       if (step >= allNodes.length) {

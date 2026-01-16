@@ -77,7 +77,7 @@ let localServer = null;
 
 beforeAll((done) => {
   distribution.node.start((server) => {
-    localServer = server;
+    localServer = global.distribution.node.server;
     done();
   });
 });

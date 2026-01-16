@@ -77,7 +77,7 @@ beforeAll((done) => {
   fs.mkdirSync(path.join(__dirname, "../../store"));
   stopNodes(() => {
     distribution.node.start((server) => {
-      localServer = server;
+      localServer = global.distribution.node.server;
       distribution.local.status.spawn(nodes[0], (error, result) => {
         distribution.local.status.spawn(nodes[1], (error, result) => {
           distribution.local.status.spawn(nodes[2], (error, result) => {

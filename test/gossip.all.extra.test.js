@@ -82,7 +82,7 @@ beforeAll((done) => {
 
   // Now, start the base listening node
   distribution.node.start((server) => {
-    localServer = server;
+    localServer = global.distribution.node.server;
 
     const groupInstantiation = (e, v) => {
       const mygroupConfig = {gid: "mygroup"};

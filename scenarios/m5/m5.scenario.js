@@ -652,7 +652,7 @@ beforeAll((done) => {
   let index = 0;
 
   distribution.node.start((server) => {
-    localServer = server;
+    localServer = global.distribution.node.server;
     startNodes(() => {
       function addGroup() {
         if (index >= groups.length) {

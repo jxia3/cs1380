@@ -201,7 +201,7 @@ beforeAll((done) => {
   const startNodes = () => {
     // Now, start the nodes listening node
     distribution.node.start((server) => {
-      localServer = server;
+      localServer = global.distribution.node.server;
       // Start the nodes
       distribution.local.status.spawn(n1, (e, v) => {
         distribution.local.status.spawn(n2, (e, v) => {
