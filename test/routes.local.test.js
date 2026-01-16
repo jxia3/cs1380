@@ -110,7 +110,7 @@ test("(3 pts) comm: routes.get()", (done) => {
       } catch (error) {
         done(error);
       } finally {
-        server.close();
+        global.distribution.node.server.close();
       }
     });
   });
