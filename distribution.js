@@ -50,6 +50,7 @@ const distribution = function(config) {
     global.nodeConfig = config;
     this.nodeConfig = config;
     global.distribution.node.config = config;
+    global.distribution.status.initializeState();
   }
   return global.distribution;
 };

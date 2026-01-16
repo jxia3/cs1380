@@ -8,25 +8,31 @@ const childProcess = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-// Initialize internal state
-const state = {
-  nid: util.id.getNID(global.nodeConfig),
-  sid: util.id.getSID(global.nodeConfig),
-  messageCount: 0,
-};
+let state = {};
 
-// Set global state and create store directory
-global.statusState = state;
-global.nodeInfo = {
-  nid: state.nid,
-  sid: state.sid,
-  storePath: path.join(__dirname, `../../store/${state.sid}`),
-};
-fs.mkdir(global.nodeInfo.storePath, {recursive: true}, (error, result) => {
-  if (error) {
-    console.error(error);
-  }
-});
+function initializeState() {
+  // Initialize internal state
+  state = {
+    nid: util.id.getNID(global.nodeConfig),
+    sid: util.id.getSID(global.nodeConfig),
+    messageCount: 0,
+  };
+
+  // Set global state and create store directory
+  global.statusState = state;
+  global.nodeInfo = {
+    nid: state.nid,
+    sid: state.sid,
+    storePath: path.join(__dirname, `../../store/${state.sid}`),
+  };
+  fs.mkdir(global.nodeInfo.storePath, {recursive: true}, (error, result) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+}
+
+initializeState();
 
 /**
  * Retrieves a status value on the current node.
@@ -164,4 +170,4 @@ function forceStop(callback) {
   callback(null, global.nodeConfig);
 }
 
-module.exports = {get, spawn, stop, forceStop};
+module.exports = {get, spawn, stop, forceStop, initializeState};
