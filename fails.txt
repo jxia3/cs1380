@@ -1,0 +1,416 @@
+Summary of all failing tests                                                                                                                                                              
+ FAIL  test/m3.groups.all.test.js (30.316 s)
+  ● (0 pts) spawned node in all group
+
+    TypeError: Cannot read properties of undefined (reading 'ip')
+
+      316 |       try {
+      317 |         expect(e).toBeNull();
+    > 318 |         expect(g[id.getSID(n7)].ip).toEqual(n7.ip);
+          |                                 ^
+      319 |         expect(g[id.getSID(n7)].port).toEqual(n7.port);
+      320 |         cleanup(done);
+      321 |       } catch (error) {
+
+      at callback (test/m3.groups.all.test.js:318:33)
+      at Object.get (distribution/local/groups.js:20:5)
+      at callback (test/m3.groups.all.test.js:315:31)
+      at Object.<anonymous> (distribution/local/status.js:79:5)
+      at method (distribution/local/rpc.js:28:15)
+      at IncomingMessage.<anonymous> (distribution/local/node.js:109:7)
+
+ FAIL  test/m1.serialization.util.test.js
+  ● (0 pts) serializeBigInt
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 9007199254740993n
+    Received: {}
+
+      23 |   const serialized = util.serialize(value);
+      24 |   const deserialized = util.deserialize(serialized);
+    > 25 |   expect(deserialized).toEqual(value);
+         |                        ^
+      26 | });
+      27 |
+      28 | test('(0 pts) serializeBigIntHex', () => {
+
+      at Object.<anonymous> (test/m1.serialization.util.test.js:25:24)
+
+  ● (0 pts) serializeBigIntHex
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 9007199254740991n
+    Received: {}
+
+      30 |   const serialized = util.serialize(value);
+      31 |   const deserialized = util.deserialize(serialized);
+    > 32 |   expect(deserialized).toEqual(value);
+         |                        ^
+      33 | });
+      34 |
+      35 | test('(1 pts) serializeNaN', () => {
+
+      at Object.<anonymous> (test/m1.serialization.util.test.js:32:24)
+
+  ● (0 pts) serializeBigIntInObject
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "a": 123456789012345678n,
+    +   "a": Object {},
+      }
+
+      65 |   const serialized = util.serialize(object);
+      66 |   const deserialized = util.deserialize(serialized);
+    > 67 |   expect(deserialized).toEqual(object);
+         |                        ^
+      68 | });
+      69 |
+      70 | test('(2 pts) serializeNestedObject', () => {
+
+      at Object.<anonymous> (test/m1.serialization.util.test.js:67:24)
+
+  ● (0 pts) serialize native function uses native mapping
+
+    SyntaxError: Unexpected token 'a', "native_modu"... is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      272 |   const nativeFn = require('path').join;
+      273 |   const serialized = util.serialize(nativeFn);
+    > 274 |   const parsed = JSON.parse(serialized);
+          |                       ^
+      275 |   const deserialized = util.deserialize(serialized);
+      276 |   expect(parsed.type).toEqual('native');
+      277 |   expect(deserialized).toBe(nativeFn);
+
+      at Object.<anonymous> (test/m1.serialization.util.test.js:274:23)
+
+ FAIL  test/m2.comm.local.test.js (5.782 s)
+  ● (10 pts) local.comm(status.get(nid))
+
+    expect(received).toBeFalsy()
+
+    Received: [Error: connect ECONNREFUSED 127.0.0.1:1234]
+
+      14 |   local.comm.send(message, remote, (e, v) => {
+      15 |     try {
+    > 16 |       expect(e).toBeFalsy();
+         |                 ^
+      17 |       expect(v).toEqual(id.getNID(node));
+      18 |       done();
+      19 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:16:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (10 pts) comm: status.get()
+
+    expect(received).toBeFalsy()
+
+    Received: [Error: connect ECONNREFUSED 127.0.0.1:1234]
+
+      32 |   local.comm.send(message, remote, (e, v) => {
+      33 |     try {
+    > 34 |       expect(e).toBeFalsy();
+         |                 ^
+      35 |       expect(v).toEqual(id.getSID(node));
+      36 |       done();
+      37 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:34:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (10 pts) comm: status.get() with nonexistent key
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Error
+
+      49 |     try {
+      50 |       expect(e).toBeTruthy();
+    > 51 |       expect(e).toBeInstanceOf(Error);
+         |                 ^
+      52 |       expect(v).toBeFalsy();
+      53 |       done();
+      54 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:51:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (10 pts) comm: status.get() with invalid service
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Error
+
+      66 |     try {
+      67 |       expect(e).toBeTruthy();
+    > 68 |       expect(e).toBeInstanceOf(Error);
+         |                 ^
+      69 |       expect(v).toBeFalsy();
+      70 |       done();
+      71 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:68:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (0 pts) comm: send rejects empty service string
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Error
+
+      159 |   local.comm.send([], remote, (e, v) => {
+      160 |     try {
+    > 161 |       expect(e).toBeInstanceOf(Error);
+          |                 ^
+      162 |       expect(v).toBeFalsy();
+      163 |       done();
+      164 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:161:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (0 pts) comm: send rejects empty method string
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Error
+
+      174 |   local.comm.send([], remote, (e, v) => {
+      175 |     try {
+    > 176 |       expect(e).toBeInstanceOf(Error);
+          |                 ^
+      177 |       expect(v).toBeFalsy();
+      178 |       done();
+      179 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:176:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (0 pts) comm: send with invalid remote address returns error from service
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Error
+
+      255 |   local.comm.send([], remote, (e, v) => {
+      256 |     try {
+    > 257 |       expect(e).toBeInstanceOf(Error);
+          |                 ^
+      258 |       expect(v).toBeFalsy();
+      259 |       done();
+      260 |     } catch (error) {
+
+      at callback (test/m2.comm.local.test.js:257:17)
+      at callback (distribution/local/comm.js:68:7)
+      at ClientRequest.<anonymous> (distribution/local/comm.js:92:5)
+
+  ● (0 pts) node responds with serialized error on non-PUT
+
+    connect ECONNREFUSED 127.0.0.1:1234
+
+
+
+  ● (0 pts) node responds with [err, value] for success
+
+    connect ECONNREFUSED 127.0.0.1:1234
+
+
+
+  ● (0 pts) node responds with [err, null] for missing method
+
+    connect ECONNREFUSED 127.0.0.1:1234
+
+
+
+ FAIL  test/m3.groups.local.test.js
+  ● (0 pts) local.groups.get(all) includes local node
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"heartbeat": false, "ip": "127.0.0.1", "onStart": [Function onStart], "port": 1234}
+    Received: undefined
+
+      38 |     try {
+      39 |       expect(e).toBeFalsy();
+    > 40 |       expect(v[localSid]).toEqual(localNode);
+         |                           ^
+      41 |       done();
+      42 |     } catch (error) {
+      43 |       done(error);
+
+      at callback (test/m3.groups.local.test.js:40:27)
+      at Object.get (distribution/local/groups.js:20:5)
+      at Object.<anonymous> (test/m3.groups.local.test.js:37:29)
+
+  ● (0 pts) local.groups.del removes group from distribution
+
+    expect(received).toBeUndefined()
+
+    Received: {"_isGroup": true, "_state": {"hash": [Function naiveHash]}, "comm": {"send": [Function bound send]}, "gossip": {"at": [Function bound at], "del": [Function bound del], "send": [Function bound send], "sendPayload": [Function bound sendPayload]}, "groups": {"add": [Function bound remoteMethod], "del": [Function bound remoteMethod], "get": [Function bound remoteMethod], "put": [Function bound remoteMethod], "rem": [Function bound remoteMethod]}, "mem": {"del": [Function bound del], "get": [Function bound get], "put": [Function bound put], "reconf": [Function bound reconf]}, "mr": {"exec": [Function bound exec]}, "routes": {"put": [Function bound remoteMethod], "rem": [Function bound remoteMethod]}, "status": {"get": [Function bound get], "spawn": [Function bound spawn], "stop": [Function bound stop]}, "store": {"del": [Function bound del], "get": [Function bound get], "put": [Function bound put], "reconf": [Function bound reconf]}}
+
+      109 |       try {
+      110 |         expect(e).toBeFalsy();
+    > 111 |         expect(globalThis.distribution.tempdel).toBeUndefined();
+          |                                                 ^
+      112 |         done();
+      113 |       } catch (error) {
+      114 |         done(error);
+
+      at callback (test/m3.groups.local.test.js:111:49)
+      at Object.del (distribution/local/groups.js:89:5)
+      at callback (test/m3.groups.local.test.js:108:31)
+      at Object.apply (distribution/local/groups.js:75:3)
+      at Object.put (test/helpers/sync-guard.js:93:34)
+      at Object.<anonymous> (test/m3.groups.local.test.js:107:29)
+
+ FAIL  test/m3.comm.all.test.js (11.462 s)
+  ● (0 pts) all.comm.send fails for empty group
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: Error
+    Received constructor: Object
+
+      93 |       distribution.local.groups.del('empty', () => {
+      94 |         try {
+    > 95 |           expect(err).toBeInstanceOf(Error);
+         |                       ^
+      96 |           expect(val).toBeFalsy();
+      97 |           done();
+      98 |         } catch (error) {
+
+      at callback (test/m3.comm.all.test.js:95:23)
+      at Object.del (distribution/local/groups.js:89:5)
+      at callback (test/m3.comm.all.test.js:93:33)
+      at Object.sendRequests (distribution/all/remote-service.js:65:5)
+      at callback (distribution/all/comm.js:32:14)
+      at Object.get (distribution/local/groups.js:20:5)
+      at Object.send (distribution/all/comm.js:28:36)
+      at callback (test/m3.comm.all.test.js:92:29)
+      at Object.apply (distribution/local/groups.js:75:3)
+      at Object.wrappedPut [as put] (test/helpers/sync-guard.js:93:34)
+
+  ● (0 pts) all.comm.send rejects missing service
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 5
+    Received: 0
+
+      110 |     try {
+      111 |       const sids = Object.keys(mygroupGroup);
+    > 112 |       expect(Object.keys(e).length).toEqual(sids.length);
+          |                                     ^
+      113 |       sids.forEach((sid) => {
+      114 |         expect(e[sid]).toBeInstanceOf(Error);
+      115 |       });
+
+      at callback (test/m3.comm.all.test.js:112:37)
+      at Object.apply (distribution/all/comm.js:24:5)
+      at Object.send (test/helpers/sync-guard.js:15:17)
+      at Object.<anonymous> (test/m3.comm.all.test.js:109:29)
+
+  ● (0 pts) all.comm.send rejects missing method
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 5
+    Received: 0
+
+      128 |     try {
+      129 |       const sids = Object.keys(mygroupGroup);
+    > 130 |       expect(Object.keys(e).length).toEqual(sids.length);
+          |                                     ^
+      131 |       sids.forEach((sid) => {
+      132 |         expect(e[sid]).toBeInstanceOf(Error);
+      133 |       });
+
+      at callback (test/m3.comm.all.test.js:130:37)
+      at Object.apply (distribution/all/comm.js:24:5)
+      at Object.send (test/helpers/sync-guard.js:15:17)
+      at Object.<anonymous> (test/m3.comm.all.test.js:127:29)
+
+ FAIL  test/m4.mem.local.test.js
+  ● (0 pts) local.mem.put append aggregates values
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: [1, 2]
+    Received: 2
+
+      254 |         try {
+      255 |           expect(e).toBeFalsy();
+    > 256 |           expect(v).toEqual([1, 2]);
+          |                     ^
+      257 |           done();
+      258 |         } catch (error) {
+      259 |           done(error);
+
+      at callback (test/m4.mem.local.test.js:256:21)
+      at Object.get (distribution/local/mem.js:21:5)
+      at callback (test/m4.mem.local.test.js:253:30)
+      at Object.put (distribution/local/mem.js:60:3)
+      at callback (test/m4.mem.local.test.js:252:28)
+      at Object.put (distribution/local/mem.js:60:3)
+      at Object.<anonymous> (test/m4.mem.local.test.js:251:26)
+
+ FAIL  test/m2.routes.local.test.js
+  ● (0 pts) routes.get: handle null routes
+
+    TypeError: Cannot read properties of null (reading 'service')
+
+      21 |     config = {service: config, gid: "local"};
+      22 |   }
+    > 23 |   if (config.service === undefined) {
+         |              ^
+      24 |     callback(new Error("Service not specified"), null);
+      25 |     return;
+      26 |   }
+
+      at Object.get (distribution/local/routes.js:23:14)
+      at Object.<anonymous> (test/m2.routes.local.test.js:164:16)
+
+ FAIL  test/m2.status.local.test.js
+  ● (2 pts) local.status.get(port)
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 1234
+    Received: 1246
+
+      47 |     try {
+      48 |       expect(e).toBeFalsy();
+    > 49 |       expect(v).toEqual(config.port);
+         |                 ^
+      50 |       done();
+      51 |     } catch (error) {
+      52 |       done(error);
+
+      at callback (test/m2.status.local.test.js:49:17)
+      at Object.get (distribution/local/status.js:45:5)
+      at Object.<anonymous> (test/m2.status.local.test.js:46:16)
+
+
+Test Suites: 8 failed, 32 passed, 40 total
+Tests:       23 failed, 373 passed, 396 total
+Snapshots:   0 total
+Time:        246.543 s
