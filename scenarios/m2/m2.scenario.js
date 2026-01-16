@@ -1,4 +1,4 @@
-const distribution = require("../../config.js");
+const distribution = require("../../distribution.js");
 
 test("(2 pts) (scenario) simple callback practice", () => {
   /* Collect the result of 3 callback services in list  */

@@ -1,4 +1,4 @@
-const distribution = require("../../config.js");
+const distribution = require("../../distribution.js");
 const id = distribution.util.id;
 
 const ncdcGroup = {};
