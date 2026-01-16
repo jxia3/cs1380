@@ -52,6 +52,6 @@ test("(10 pts) local.status.spawn/stop using local.comm", (done) => {
   };
 
   distribution.node.start((server) => {
-    spawnNode(server);
+    spawnNode(globalThis.distribution.node.server);
   });
 });

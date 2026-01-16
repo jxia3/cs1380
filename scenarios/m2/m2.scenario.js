@@ -104,7 +104,7 @@ test("(5 pts) (scenario) use rpc", (done) => {
 
   distribution.node.start((server) => {
     function cleanup(callback) {
-      server.close();
+      globalThis.distribution.node.server.close();
       distribution.local.comm.send([],
           {node: node, service: "status", method: "stop"},
           callback);
