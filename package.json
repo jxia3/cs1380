@@ -22,8 +22,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "yargs": "^17.7.2",
-    "@brown-ds/distribution": "latest"
+    "@brown-ds/distribution": "^0.2.28",
+    "yargs": "^18.0.0"
   },
   "jest": {
     "testTimeout": 30000,
@@ -38,13 +38,77 @@
       "hours": 8,
       "loc": 750,
       "throughput": {
-        "dev": [["primitive", 4.55, 6.45], ["simple", 0.368, 0.202], ["complex", 0.00165, 0.00085]],
-        "aws": [["primitive", 2.10, 1.68], ["simple", 0.155, 0.078], ["complex", 0.00075, 0.00027]],
+        "dev": [
+          [
+            "primitive",
+            4.55,
+            6.45
+          ],
+          [
+            "simple",
+            0.368,
+            0.202
+          ],
+          [
+            "complex",
+            0.00165,
+            0.00085
+          ]
+        ],
+        "aws": [
+          [
+            "primitive",
+            2.1,
+            1.68
+          ],
+          [
+            "simple",
+            0.155,
+            0.078
+          ],
+          [
+            "complex",
+            0.00075,
+            0.00027
+          ]
+        ],
         "unit": "items/microsecond"
       },
       "latency": {
-        "dev": [["primitive", 0.220, 0.155], ["simple", 2.72, 4.95], ["complex", 605, 1170]],
-        "aws": [["primitive", 0.476, 0.596], ["simple", 6.45, 12.8], ["complex", 1340, 3670]],
+        "dev": [
+          [
+            "primitive",
+            0.22,
+            0.155
+          ],
+          [
+            "simple",
+            2.72,
+            4.95
+          ],
+          [
+            "complex",
+            605,
+            1170
+          ]
+        ],
+        "aws": [
+          [
+            "primitive",
+            0.476,
+            0.596
+          ],
+          [
+            "simple",
+            6.45,
+            12.8
+          ],
+          [
+            "complex",
+            1340,
+            3670
+          ]
+        ],
         "unit": "microseconds/item"
       }
     },
@@ -52,13 +116,49 @@
       "hours": 8,
       "loc": 400,
       "throughput": {
-        "dev": [["comm", 2.26], ["rpc", 2.22]],
-        "aws": [["comm", 1.02], ["rpc", 1.07]],
+        "dev": [
+          [
+            "comm",
+            2.26
+          ],
+          [
+            "rpc",
+            2.22
+          ]
+        ],
+        "aws": [
+          [
+            "comm",
+            1.02
+          ],
+          [
+            "rpc",
+            1.07
+          ]
+        ],
         "unit": "items/millisecond"
       },
       "latency": {
-        "dev": [["comm", 0.441], ["rpc", 0.450]],
-        "aws": [["comm", 0.979], ["rpc", 0.918]],
+        "dev": [
+          [
+            "comm",
+            0.441
+          ],
+          [
+            "rpc",
+            0.45
+          ]
+        ],
+        "aws": [
+          [
+            "comm",
+            0.979
+          ],
+          [
+            "rpc",
+            0.918
+          ]
+        ],
         "unit": "milliseconds/item"
       }
     },
@@ -66,31 +166,133 @@
       "hours": 10,
       "loc": 600,
       "throughput": {
-        "dev": [["spawn", 17.5]],
-        "aws": [["spawn", 6.77]],
+        "dev": [
+          [
+            "spawn",
+            17.5
+          ]
+        ],
+        "aws": [
+          [
+            "spawn",
+            6.77
+          ]
+        ],
         "unit": "nodes/second"
       },
       "latency": {
-        "dev": [["spawn", 0.840]],
-        "aws": [["spawn", 2.67]],
+        "dev": [
+          [
+            "spawn",
+            0.84
+          ]
+        ],
+        "aws": [
+          [
+            "spawn",
+            2.67
+          ]
+        ],
         "unit": "seconds/node"
       },
       "gossip": {
-        "nodes": [1, 2, 3, 4, 5, 6],
-        "count": [16, 81, 93, 98, 99, 100]
+        "nodes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "count": [
+          16,
+          81,
+          93,
+          98,
+          99,
+          100
+        ]
       }
     },
     "m4": {
       "hours": 14,
       "loc": 800,
       "throughput": {
-        "dev": [["mem-put", 1.99], ["mem-get", 3.80], ["store-put", 0.561], ["store-get", 1.02]],
-        "aws": [["mem-put", 1.14], ["mem-get", 1.58], ["store-put", 1.05], ["store-get", 1.59]],
+        "dev": [
+          [
+            "mem-put",
+            1.99
+          ],
+          [
+            "mem-get",
+            3.8
+          ],
+          [
+            "store-put",
+            0.561
+          ],
+          [
+            "store-get",
+            1.02
+          ]
+        ],
+        "aws": [
+          [
+            "mem-put",
+            1.14
+          ],
+          [
+            "mem-get",
+            1.58
+          ],
+          [
+            "store-put",
+            1.05
+          ],
+          [
+            "store-get",
+            1.59
+          ]
+        ],
         "unit": "items/millisecond"
       },
       "latency": {
-        "dev": [["mem-put", 334], ["mem-get", 133], ["store-put", 1480], ["store-get", 803]],
-        "aws": [["mem-put", 567], ["mem-get", 363], ["store-put", 644], ["store-get", 370]],
+        "dev": [
+          [
+            "mem-put",
+            334
+          ],
+          [
+            "mem-get",
+            133
+          ],
+          [
+            "store-put",
+            1480
+          ],
+          [
+            "store-get",
+            803
+          ]
+        ],
+        "aws": [
+          [
+            "mem-put",
+            567
+          ],
+          [
+            "mem-get",
+            363
+          ],
+          [
+            "store-put",
+            644
+          ],
+          [
+            "store-get",
+            370
+          ]
+        ],
         "unit": "milliseconds/item"
       }
     },
@@ -98,13 +300,49 @@
       "hours": 10,
       "loc": 1000,
       "throughput": {
-        "dev": [["mr-store", 0.824], ["mr-mem", 1.10]],
-        "aws": [["mr-store", 0.244], ["mr-mem", 0.263]],
+        "dev": [
+          [
+            "mr-store",
+            0.824
+          ],
+          [
+            "mr-mem",
+            1.1
+          ]
+        ],
+        "aws": [
+          [
+            "mr-store",
+            0.244
+          ],
+          [
+            "mr-mem",
+            0.263
+          ]
+        ],
         "unit": "keys/millisecond"
       },
       "latency": {
-        "dev": [["mr-store", 1.21], ["mr-mem", 0.908]],
-        "aws": [["mr-store", 4.11], ["mr-mem", 3.80]],
+        "dev": [
+          [
+            "mr-store",
+            1.21
+          ],
+          [
+            "mr-mem",
+            0.908
+          ]
+        ],
+        "aws": [
+          [
+            "mr-store",
+            4.11
+          ],
+          [
+            "mr-mem",
+            3.8
+          ]
+        ],
         "unit": "milliseconds/key"
       }
     },
