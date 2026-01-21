@@ -11,11 +11,20 @@ const DISABLE_LOGS = ["gossip", "heartbeat"];
  */
 function start(callback) {
   if (global.distribution.node?.server !== undefined) {
-    throw new Error("Server already started");
+    if (callback !== undefined) {
+      callback(new Error("Server already started"));
+    }
+    return;
   }
   const server = http.createServer(handleRequest);
   global.distribution.node.server = server;
 
+  if (global.nodeConfig.port === 0) {
+    if (callback !== undefined) {
+      callback(new Error("Invalid port"));
+    }
+    return;
+  }
   server.listen(global.nodeConfig.port, global.nodeConfig.ip, () => {
     log(`Server running at http://${global.nodeConfig.ip}:${global.nodeConfig.port}`);
     if (callback !== undefined) {
