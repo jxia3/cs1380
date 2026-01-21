@@ -313,8 +313,6 @@ test('(0 pts) spawned node in all group', (done) => {
 
   distribution.local.status.spawn(n7, (e, v) => {
     distribution.local.groups.get('all', (e, g) => {
-      console.log("GOT GROUP:", e, g)
-      console.log(n7, id.getSID(n7))
       try {
         expect(e).toBeNull();
         expect(g[id.getSID(n7)].ip).toEqual(n7.ip);

@@ -5,7 +5,7 @@ beforeAll(() => {
 
   let lib;
   try {
-    lib = require('@brown-ds/distribution');
+    lib = require('@brown-ds/distribution')();
   } catch (error) {
     return;
   }

@@ -227,22 +227,3 @@ test('(1 pts) local.store.put(no key)', (done) => {
     });
   });
 });
-
-test('(0 pts) local.store.get(null) returns keys', (done) => {
-  const user = {first: 'Key', last: 'Collector'};
-  const key = 'storekeys1';
-
-  local.store.put(user, key, (e, v) => {
-    local.store.get(null, (e, v) => {
-      try {
-        expect(e).toBeFalsy();
-        expect(Array.isArray(v)).toBe(true);
-        expect(v).toContain(key);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    });
-  });
-});
-

@@ -26,6 +26,32 @@ test('(1 pts) naiveHash()', (done) => {
   }
 });
 
+test('(0 pts) hashers do not mutate NID list', () => {
+  const key = 'jcarb';
+  const nodes = [
+    {ip: '127.0.0.1', port: 10002},
+    {ip: '127.0.0.1', port: 10000},
+    {ip: '127.0.0.1', port: 10001},
+  ];
+  const kid = id.getID(key);
+  const buildNids = () => nodes.map((node) => id.getNID(node));
+
+  const nids1 = buildNids();
+  const original1 = [...nids1];
+  id.naiveHash(kid, nids1);
+  expect(nids1).toEqual(original1);
+
+  const nids2 = buildNids();
+  const original2 = [...nids2];
+  id.consistentHash(kid, nids2);
+  expect(nids2).toEqual(original2);
+
+  const nids3 = buildNids();
+  const original3 = [...nids3];
+  id.rendezvousHash(kid, nids3);
+  expect(nids3).toEqual(original3);
+});
+
 test('(1 pts) consistentHash()', (done) => {
   const key = 'jcarb';
   const nodes = [
@@ -71,4 +97,3 @@ test('(1 pts) rendezvousHash()', (done) => {
     done(error);
   }
 });
-

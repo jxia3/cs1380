@@ -1,6 +1,7 @@
 require('../distribution.js')({ip: '127.0.0.1', port: 1246});
 require('./helpers/sync-guard');
 const http = require('node:http');
+const proc = require('node:child_process');
 const distribution = globalThis.distribution;
 const local = distribution.local;
 const id = distribution.util.id;
@@ -33,6 +34,22 @@ test('(10 pts) comm: status.get()', (done) => {
     try {
       expect(e).toBeFalsy();
       expect(v).toEqual(id.getSID(node));
+      done();
+    } catch (error) {
+      done(error);
+    }
+  });
+});
+
+test('(0 pts) comm defaults gid to local', (done) => {
+  const node = distribution.node.config;
+  const remote = {node: node, service: 'status', method: 'get'};
+  const message = ['nid'];
+
+  local.comm.send(message, remote, (e, v) => {
+    try {
+      expect(e).toBeFalsy();
+      expect(v).toEqual(id.getNID(node));
       done();
     } catch (error) {
       done(error);
@@ -260,6 +277,66 @@ test('(0 pts) comm: send with invalid remote address returns error from service'
     } catch (error) {
       done(error);
     }
+  });
+});
+
+test('(0 pts) node starts when called without configuration', (done) => {
+  const child = proc.spawn('./distribution.js');
+
+  setTimeout(() => {
+    child.kill();
+  }, 1000);
+
+  child.on('exit', (code, signal) => {
+    expect(signal).toBe('SIGTERM');
+    done();
+  });
+});
+
+test('(0 pts) node starts when called with serialized configuration', (done) => {
+  const config = {ip: '127.0.0.1', port: 3000};
+  const child = proc.spawn('./distribution.js', [
+    '--config',
+    globalThis.distribution.util.serialize(config),
+  ]);
+
+  setTimeout(() => {
+    child.kill();
+  }, 1000);
+
+  child.on('exit', (code, signal) => {
+    expect(signal).toBe('SIGTERM');
+    done();
+  });
+});
+
+test('(0 pts) node starts when called with JSON configuration', (done) => {
+  const config = {ip: '127.0.0.1', port: 3000};
+  const child = proc.spawn('./distribution.js', [
+    '--config',
+    JSON.stringify(config),
+  ]);
+
+  setTimeout(() => {
+    child.kill();
+  }, 1000);
+
+  child.on('exit', (code, signal) => {
+    expect(signal).toBe('SIGTERM');
+    done();
+  });
+});
+
+test('(0 pts) node exits when called with invalid configuration', (done) => {
+  const child = proc.spawn('./distribution.js', ['--config', 'invalid']);
+
+  setTimeout(() => {
+    child.kill();
+  }, 500);
+
+  child.on('exit', (code, signal) => {
+    expect(code).toBe(1);
+    done();
   });
 });
 

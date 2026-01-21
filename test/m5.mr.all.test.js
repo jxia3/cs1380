@@ -8,7 +8,7 @@ const avgwrdlGroup = {};
 const cfreqGroup = {};
 
 /*
-    The local node will be the orchestrator.
+  The local node will be the orchestrator.
 */
 
 const n1 = {ip: '127.0.0.1', port: 7110};

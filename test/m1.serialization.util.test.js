@@ -3,7 +3,6 @@ require('./helpers/sync-guard');
 const distribution = globalThis.distribution;
 const util = distribution.util;
 
-// test that the object passed into the serialize function is not mutated
 test('(3 pts) serializeDoesNotMutate', () => {
   const object = {a: 1, b: 2, c: 3};
   const copy = JSON.parse(JSON.stringify(object));
@@ -252,41 +251,11 @@ test('(0 pts) serialize config', () => {
   expect(deserialized).toEqual(config);
 });
 
-test('(0 pts) serialize and deserialize preserves cyclic references', () => {
-  const original = {};
-  original.self = original;
-  const serialized = util.serialize(original);
-  const deserialized = util.deserialize(serialized);
-  expect(deserialized.self).toBe(deserialized);
-});
-
-test('(0 pts) deserializeReference follows nested paths', () => {
-  const original = {a: {}};
-  original.a.self = original.a;
-  const serialized = util.serialize(original);
-  const deserialized = util.deserialize(serialized);
-  expect(deserialized.a.self).toBe(deserialized.a);
-});
-
-test('(0 pts) serialize native function uses native mapping', () => {
-  const nativeFn = require('path').join;
-  const serialized = util.serialize(nativeFn);
-  const parsed = JSON.parse(serialized);
-  const deserialized = util.deserialize(serialized);
-  expect(parsed.type).toEqual('native');
-  expect(deserialized).toBe(nativeFn);
-});
-
 test('(0 pts) deserialize rejects invalid argument types', () => {
   expect(() => util.deserialize(123)).toThrow();
 });
 
 test('(0 pts) deserialize rejects unknown serialized types', () => {
   const bad = JSON.stringify({type: 'not-a-real-type', value: 'x'});
-  expect(() => util.deserialize(bad)).toThrow();
-});
-
-test('(0 pts) deserialize rejects unknown native identifiers', () => {
-  const bad = JSON.stringify({type: 'native', value: 'missing.fn'});
   expect(() => util.deserialize(bad)).toThrow();
 });

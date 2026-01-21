@@ -52,7 +52,6 @@ test('(10 pts) local.status.spawn/stop using local.comm', (done) => {
     ip: node.ip,
     port: node.port,
     onStart: () => {
-      console.log('Node is started!');
     },
   };
 

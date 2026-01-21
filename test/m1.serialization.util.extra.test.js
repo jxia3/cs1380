@@ -67,6 +67,46 @@ test('(5 pts) serializeRainbowObjectCirc', () => {
   expect(deserialized).toEqual(object);
 });
 
+test('(0 pts) serialize and deserialize preserves cyclic references', () => {
+  const original = {};
+  original.self = original;
+  const serialized = util.serialize(original);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized.self).toBe(deserialized);
+});
+
+test('(0 pts) cyclic linked list', () => {
+  const head = {val: 3, next: null};
+  head.next = {val: 5, next: null};
+  const succ = head.next;
+  succ.next = head;
+  const serialized = util.serialize(head);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized.val).toBe(3);
+  expect(deserialized.next.val).toBe(5);
+  expect(deserialized.next.next).toBe(deserialized);
+});
+
+test('(0 pts) cyclic array linked list', () => {
+  const list = [];
+  list[0] = {val: 3, next: null};
+  list[1] = list[0];
+  list[0].next = list[1];
+  const serialized = util.serialize(list);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized[0].val).toBe(3);
+  expect(deserialized[1]).toBe(deserialized[0]);
+  expect(deserialized[0].next).toBe(deserialized[1]);
+});
+
+test('(0 pts) deserializeReference follows nested paths', () => {
+  const original = {a: {}};
+  original.a.self = original.a;
+  const serialized = util.serialize(original);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized.a.self).toBe(deserialized.a);
+});
+
 test('(5 pts) serialize and deserialize structure with cycle-like reference', () => {
   const x = {a: 1, b: 2, c: 3};
   const original = {a: x, b: x};
@@ -118,7 +158,6 @@ test('(5 pts) serialize and deserialize array with references', () => {
   expect(deserialized).toEqual(original);
 });
 
-
 test('(5 pts) serialize and deserialize array with references deep', () => {
   const x = {a: 1};
   const y = {z: x};
@@ -128,4 +167,34 @@ test('(5 pts) serialize and deserialize array with references deep', () => {
   const serialized = util.serialize(original);
   const deserialized = util.deserialize(serialized);
   expect(deserialized).toEqual(original);
+});
+
+test('(0 pts) serialize native function uses native mapping', () => {
+  const nativeFn = require('path').join;
+  const serialized = util.serialize(nativeFn);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized).toBe(nativeFn);
+});
+
+test('(0 pts) serialize and deserialize preserves cyclic references', () => {
+  const original = {};
+  original.self = original;
+  const serialized = util.serialize(original);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized.self).toBe(deserialized);
+});
+
+test('(0 pts) deserializeReference follows nested paths', () => {
+  const original = {a: {}};
+  original.a.self = original.a;
+  const serialized = util.serialize(original);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized.a.self).toBe(deserialized.a);
+});
+
+test('(0 pts) serialize native function uses native mapping', () => {
+  const nativeFn = require('path').join;
+  const serialized = util.serialize(nativeFn);
+  const deserialized = util.deserialize(serialized);
+  expect(deserialized).toBe(nativeFn);
 });

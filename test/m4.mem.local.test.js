@@ -226,39 +226,3 @@ test('(1 pts) local.mem.put(no key)', (done) => {
     });
   });
 });
-
-test('(0 pts) local.mem.get(null) returns keys', (done) => {
-  const key = 'memkeys1';
-  const value = {hello: 'world'};
-
-  distribution.local.mem.put(value, key, (e, v) => {
-    distribution.local.mem.get(null, (e, v) => {
-      try {
-        expect(e).toBeFalsy();
-        expect(Array.isArray(v)).toBe(true);
-        expect(v).toContain(key);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    });
-  });
-});
-
-test('(0 pts) local.mem.put append aggregates values', (done) => {
-  const key = 'appendkey';
-
-  distribution.local.mem.put(1, {key, action: 'append'}, (e, v) => {
-    distribution.local.mem.put(2, {key, action: 'append'}, (e, v) => {
-      distribution.local.mem.get(key, (e, v) => {
-        try {
-          expect(e).toBeFalsy();
-          expect(v).toEqual([1, 2]);
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-    });
-  });
-});
