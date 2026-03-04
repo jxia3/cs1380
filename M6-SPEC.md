@@ -109,6 +109,19 @@ Results need not meet specific thresholds; the goal is to provide a reproducible
 - A performance script (e.g., `p6.js`) that measures and reports latency for the operations above.
 - A brief report summarizing your design, challenges, and any extra features.
 
+## Optional Extensions (if you finish early)
+
+If you complete the core requirements with time to spare, consider one or more of these extensions:
+
+- **fullOuterJoin** – Return all keys from both datasets; combine logic from left and right outer joins.
+- **Cross-group join** – Join datasets from two different groups/stores (`join(groupA, keysA, groupB, keysB)`).
+- **cogroup** – Group values from two or more datasets by key; generalizes join and supports multi-way aggregation.
+- **Distributed flatMap in pipeline** – Run flatMap on workers (not just orchestrator) so `.flatMap().map().collect()` uses a distributed flatMap stage.
+- **persist / cache** – Materialize an RDD to the store for reuse across multiple actions; requires output groups and lifecycle management.
+- **Range partitioner** – Allow a user-specified partitioner for shuffle; enables better control for sortByKey, join, and groupByKey.
+- **takeOrdered(n)** – Return the first n elements in sorted order without collecting the full dataset.
+- **sample** – Probabilistic sampling (with or without replacement) for approximate analytics.
+
 ## Notes
 
 - Lazy evaluation and pipeline fusion are expected for the fluent API; lineage and fault tolerance are not.
