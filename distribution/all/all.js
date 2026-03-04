@@ -6,6 +6,7 @@
   mem       An ephemeral (in-memory) store         get, put, del, reconf
   mr        A map-reduce implementation            exec
   routes    A mapping from names to functions      put
+  spark     Spark-inspired transformations         filter, distinct, count, collect, etc.
   status    Information about the current group    get, stop, spawn
   store     A persistent store                     get, put, del, reconf
 */
@@ -17,6 +18,7 @@ module.exports = {
   mem: require("./mem.js"),
   mr: require("./mr.js"),
   routes: require("./routes.js"),
+  spark: require("./spark.js"),
   status: require("./status.js"),
   store: require("./store.js"),
 };

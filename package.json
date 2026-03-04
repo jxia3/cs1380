@@ -108,6 +108,11 @@
         "unit": "milliseconds/key"
       }
     },
+    "m6": {
+      "hours": 8,
+      "loc": 450,
+      "operations": ["map", "flatMap", "filter", "distinct", "reduceByKey", "groupByKey", "union", "intersection", "subtract", "sortByKey", "join", "leftOuterJoin", "rightOuterJoin", "collect", "count", "first", "take", "reduce", "foreach"]
+    },
     "dev": {
       "cpu-no": 20,
       "mem-gb": 15,
