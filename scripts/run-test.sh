@@ -10,7 +10,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TEST_SCRIPT="${1:-t6.js}"
-TIMEOUT_SEC=45
+TIMEOUT_SEC="${TIMEOUT:-45}"
 
 cd "$ROOT_DIR"
 

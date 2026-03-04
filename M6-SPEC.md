@@ -90,10 +90,23 @@ Key properties: transformations return a chainable object; no execution until an
 - Apache Spark RDD Programming Guide: https://spark.apache.org/docs/latest/rdd-programming-guide.html
 - Your M5 implementation: `distribution/all/mr.js`, `distribution/local/store.js`, `distribution/local/mem.js`
 
+## Performance Evaluation
+
+Implementations should be amenable to performance measurement. A performance script (e.g., `p6.js`) should:
+
+- **Measure latency** – End-to-end time (ms) for key operations: collect, count, map+collect, filter+collect, flatMap+collect, sortByKey, join.
+- **Vary dataset size** – Run benchmarks at multiple scales (e.g., 100, 500, 1000, 2000, 5000 elements) to observe scaling behavior.
+- **Vary worker count** – Run benchmarks with 1, 2, and 3 workers to demonstrate the benefit of horizontal scaling.
+- **Report results** – Output a table of mean latency (ms) per operation, dataset size, and worker count.
+- **Visualize** – Generate an HTML report (e.g., `p6-results.html`) with line charts showing latency vs dataset size (one line per worker count) and a summary chart.
+
+Results need not meet specific thresholds; the goal is to provide a reproducible baseline for comparing implementations and understanding where time is spent (narrow vs wide transformations, shuffle-heavy ops).
+
 ## Deliverables
 
 - A working implementation of the operations above (or a substantial subset).
 - Tests that demonstrate correctness (use a manual test script; Jest may be slow).
+- A performance script (e.g., `p6.js`) that measures and reports latency for the operations above.
 - A brief report summarizing your design, challenges, and any extra features.
 
 ## Notes

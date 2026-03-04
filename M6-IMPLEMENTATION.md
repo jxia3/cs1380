@@ -66,6 +66,7 @@ distribution.all.spark
 | `distribution/all/all.js` | Register spark service |
 | `distribution.js` | Wire spark into groups (via all.js) |
 | `t6.js` | Manual test script (distinct byPair, fluent flatMap+map+collect) |
+| `p6.js` | Performance benchmark script (latency by operation and dataset size) |
 
 ## Data Model
 
@@ -82,3 +83,12 @@ Use `t6.js` (like `t.js`) to:
 4. Log results, verify manually
 
 Avoid Jest for M6 tests due to slowness; use manual script for iteration.
+
+## Performance Benchmarking (p6.js)
+
+- **Setup**: Spawn workers incrementally (1, then 2, then 3) to vary worker count. Generate synthetic data: keys `k00`..`kN`, values `v0`..`vN`.
+- **Dataset sizes**: 100, 500, 1000, 2000, 5000 (configurable via `SIZES` env).
+- **Worker counts**: 1, 2, 3 (configurable via `NODES` env).
+- **Operations**: collect, count, map+collect, filter+collect, flatMap+collect, sortByKey, join.
+- **Method**: Run each operation 2 times per (size, workers); report mean latency (ms). Use `distribution.disableLogs()` to reduce log noise.
+- **Output**: `p6-results.html` with line charts (latency vs size, one line per worker count) and raw data table. Run with `TIMEOUT=180 ./scripts/run-test.sh p6.js` for full benchmark.
