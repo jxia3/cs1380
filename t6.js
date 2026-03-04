@@ -22,29 +22,40 @@ const dataset = [
   {"c": "cherry"},
   {"d": "date"},
   {"e": "elderberry"},
-  {"a2": "apple"},  // duplicate value
+  {"a2": "apple"},
   {"b2": "banana"},
 ];
 
-distribution.node.start(() => {
-  distribution.local.status.spawn(nodes[0], () => {
-    distribution.local.status.spawn(nodes[1], () => {
-      distribution.local.status.spawn(nodes[2], () => {
-        runTests();
-      });
-    });
+function getKeys() {
+  return dataset.map((o) => Object.keys(o)[0]);
+}
+
+function runNext(tests, index, spark, keys, state, finish) {
+  if (index >= tests.length) {
+    finish();
+    return;
+  }
+  const test = tests[index];
+  test.run(spark, keys, (err, pass) => {
+    state.passed += pass ? 1 : 0;
+    console.log(pass ? "PASS" : "FAIL", test.name);
+    if (err) {
+      if (err && err.message) console.error(err.message);
+      return finish();
+    }
+    runNext(tests, index + 1, spark, keys, state, finish);
   });
-});
+}
 
 function runTests() {
   const groupConfig = {gid: "test", hash: distribution.util.id.consistentHash};
-  distribution.local.groups.put(groupConfig, [global.nodeConfig, ...nodes], (err) => {
+  const nodeList = [global.nodeConfig, ...nodes];
+
+  distribution.local.groups.put(groupConfig, nodeList, (err) => {
     if (err) return console.error("local groups put:", err);
-    distribution.test.groups.put(groupConfig, [global.nodeConfig, ...nodes], (errors) => {
+    distribution.test.groups.put(groupConfig, nodeList, (errors) => {
       if (errors && Object.keys(errors).length > 0) return console.error("test groups put:", errors);
-      loadData(() => {
-        runSparkTests();
-      });
+      loadData(runSparkTests);
     });
   });
 }
@@ -62,168 +73,173 @@ function loadData(done) {
 }
 
 function runSparkTests() {
-  const ourKeys = dataset.map((o) => Object.keys(o)[0]);
+  const ourKeys = getKeys();
   distribution.test.store.get(null, (errors, keys) => {
     if (errors && Object.keys(errors).length > 0) return console.error("get keys:", errors);
     keys = keys.filter((k) => ourKeys.includes(k));
     if (keys.length === 0) return console.error("No keys found");
+
     console.log("Testing with", keys.length, "keys:", keys.sort().join(", "));
     console.log("---");
 
-    const state = { passed: 0 };
-    const ok = (name, cond) => {
-      if (cond) {
-        console.log("PASS", name);
-        state.passed++;
-      } else {
-        console.log("FAIL", name);
-      }
-    };
-    const totalTests = 19;
+    const spark = distribution.test.spark;
+    const keysA = ["a", "b", "c"];
+    const keysB = ["b", "c", "d"];
+    const state = {passed: 0};
+
+    const tests = [
+      {
+        name: "count",
+        run: (s, k, cb) => s.count(k, (err, n) => cb(err, !err && n === k.length)),
+      },
+      {
+        name: "collect",
+        run: (s, k, cb) => s.collect(k, (err, r) => cb(err, !err && r.length === k.length)),
+      },
+      {
+        name: "map",
+        run: (s, k, cb) => s.map(k, (key, v) => ({[key]: v.toUpperCase()}), (err, r) => {
+          const apple = r && r.find((x) => "a" in x);
+          cb(err, !err && apple && apple.a === "APPLE");
+        }),
+      },
+      {
+        name: "flatMap",
+        run: (s, k, cb) => s.flatMap(k, (key, v) => v.split("").map((c) => ({[c]: 1})), (err, r) => {
+          const aCount = r ? r.filter((x) => "a" in x).reduce((s, x) => s + (x.a || 0), 0) : 0;
+          cb(err, !err && r && r.length > k.length && aCount >= 2);
+        }),
+      },
+      {
+        name: "filter",
+        run: (s, k, cb) => s.filter(k, (key) => key.startsWith("a") || key.startsWith("b"), (err, r) => {
+          const ok = r && r.every((x) => {
+            const key = Object.keys(x)[0];
+            return key.startsWith("a") || key.startsWith("b");
+          });
+          cb(err, !err && r && r.length === 4 && ok);
+        }),
+      },
+      {
+        name: "distinct",
+        run: (s, k, cb) => s.distinct(k, (err, r) => cb(err, !err && r.length === k.length)),
+      },
+      {
+        name: "first",
+        run: (s, k, cb) => s.first(k, (err, r) => cb(err, !err && r && typeof r === "object")),
+      },
+      {
+        name: "take(2)",
+        run: (s, k, cb) => s.take(k, 2, (err, r) => cb(err, !err && r.length === 2)),
+      },
+      {
+        name: "groupByKey",
+        run: (s, k, cb) => s.groupByKey(k, (err, r) => {
+          const apple = r && r.find((x) => "a" in x);
+          cb(err, !err && r && r.length === k.length && apple && Array.isArray(apple.a));
+        }),
+      },
+      {
+        name: "reduceByKey",
+        run: (s, k, cb) => s.reduceByKey({
+          keys: k,
+          map: (key, value) => [{[value]: 1}],
+          reduce: (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)}),
+        }, (err, r) => {
+          const apple = r && r.find((x) => "apple" in x);
+          cb(err, !err && apple && apple.apple === 2);
+        }),
+      },
+      {
+        name: "reduce",
+        run: (s, k, cb) => s.reduce(k, (acc, item) => {
+          const v = Object.values(item)[0];
+          return (acc || "") + (acc ? "," : "") + v;
+        }, null, (err, r) => cb(err, !err && r && r.includes("apple"))),
+      },
+      {
+        name: "union",
+        run: (s, _, cb) => s.union(keysA, keysB, (err, r) => cb(err, !err && r.length === 6)),
+      },
+      {
+        name: "intersection",
+        run: (s, _, cb) => s.intersection(keysA, keysB, (err, r) => cb(err, !err && r.length === 2)),
+      },
+      {
+        name: "subtract",
+        run: (s, _, cb) => s.subtract(keysA, keysB, (err, r) => cb(err, !err && r.length === 1 && Object.keys(r[0])[0] === "a")),
+      },
+      {
+        name: "sortByKey",
+        run: (s, k, cb) => s.sortByKey(k, (err, r) => {
+          const sorted = r && r.map((x) => Object.keys(x)[0]);
+          cb(err, !err && sorted && sorted[0] <= sorted[sorted.length - 1]);
+        }),
+      },
+      {
+        name: "join",
+        run: (s, _, cb) => s.join(keysA, keysB, (err, r) => cb(err, !err && r.length === 2)),
+      },
+      {
+        name: "leftOuterJoin",
+        run: (s, _, cb) => s.leftOuterJoin(keysA, keysB, (err, r) => {
+          const hasNull = r && r.some((x) => Object.values(x)[0][1] === null);
+          cb(err, !err && r && r.length === 3 && hasNull);
+        }),
+      },
+      {
+        name: "rightOuterJoin",
+        run: (s, _, cb) => s.rightOuterJoin(keysA, keysB, (err, r) => {
+          const hasNull = r && r.some((x) => Object.values(x)[0][0] === null);
+          cb(err, !err && r && r.length === 3 && hasNull);
+        }),
+      },
+      {
+        name: "foreach",
+        run: (s, k, cb) => s.foreach(k, () => {}, (err) => cb(err, !err)),
+      },
+      {
+        name: "fluent map+filter+collect",
+        run: (s, k, cb) => s.fromKeys(k)
+          .map((key, v) => ({[key]: v.toUpperCase()}))
+          .filter((key) => key.startsWith("a") || key.startsWith("b"))
+          .collect((err, r) => {
+            const ok = r && r.every((x) => {
+              const key = Object.keys(x)[0];
+              return (key.startsWith("a") || key.startsWith("b")) && x[key] === x[key].toUpperCase();
+            });
+            cb(err, !err && r && r.length === 4 && ok);
+          }),
+      },
+      {
+        name: "fluent count",
+        run: (s, k, cb) => s.fromKeys(k).count((err, n) => cb(err, !err && n === k.length)),
+      },
+      {
+        name: "fluent reduce",
+        run: (s, k, cb) => s.fromKeys(k)
+          .map((key, v) => ({[key]: v}))
+          .reduce((acc, item) => {
+            const v = Object.values(item)[0];
+            return (acc || "") + (acc ? "," : "") + v;
+          }, null, (err, r) => cb(err, !err && r && r.includes("apple"))),
+      },
+    ];
+
     const finish = () => {
       console.log("---");
-      console.log(state.passed + "/" + totalTests + " tests passed");
-      process.exit(state.passed === totalTests ? 0 : 1);
+      console.log(state.passed + "/" + tests.length + " tests passed");
+      process.exit(state.passed === tests.length ? 0 : 1);
     };
 
-    // Test 1: count
-    distribution.test.spark.count(keys, (err, n) => {
-      ok("count", !err && n === keys.length);
-      if (err) return finish();
-
-      // Test 2: collect
-      distribution.test.spark.collect(keys, (err, results) => {
-        ok("collect", !err && results.length === keys.length);
-        if (err) return finish();
-
-        // Test 3: map (uppercase values)
-        distribution.test.spark.map(keys, (k, v) => ({[k]: v.toUpperCase()}), (err, mapped) => {
-          const apple = mapped && mapped.find((r) => "a" in r);
-          const pass = !err && apple && apple.a === "APPLE";
-          if (!pass) console.log("map debug:", {err, mapped: mapped?.slice(0, 2), apple});
-          ok("map", pass);
-          if (err) return finish();
-
-          // Test 4: flatMap (split value into chars)
-          distribution.test.spark.flatMap(keys, (k, v) => v.split("").map((c) => ({[c]: 1})), (err, flat) => {
-            const aCount = flat.filter((r) => "a" in r).reduce((s, r) => s + (r.a || 0), 0);
-            ok("flatMap", !err && flat.length > keys.length && aCount >= 2);
-            if (err) return finish();
-
-            // Test 5: filter
-            distribution.test.spark.filter(keys, (k) => k.startsWith("a") || k.startsWith("b"), (err, filtered) => {
-              ok("filter", !err && filtered.length === 4 && filtered.every((r) => {
-                const k = Object.keys(r)[0];
-                return k.startsWith("a") || k.startsWith("b");
-              }));
-              if (err) return finish();
-
-              // Test 6: distinct (by key)
-              distribution.test.spark.distinct(keys, (err, distinctResults) => {
-                ok("distinct", !err && distinctResults.length === keys.length);
-                if (err) return finish();
-
-                // Test 7: first
-                distribution.test.spark.first(keys, (err, firstItem) => {
-                  ok("first", !err && firstItem && typeof firstItem === "object");
-                  if (err) return finish();
-
-                  // Test 8: take(2)
-                  distribution.test.spark.take(keys, 2, (err, taken) => {
-                    ok("take(2)", !err && taken.length === 2);
-                    if (err) return finish();
-
-                    // Test 9: groupByKey
-                    distribution.test.spark.groupByKey(keys, (err, grouped) => {
-                      const appleGroup = grouped.find((r) => "a" in r);
-                      ok("groupByKey", !err && grouped.length === keys.length && appleGroup && Array.isArray(appleGroup.a));
-                      if (err) return finish();
-
-                      // Test 10: reduceByKey (word count by value)
-                      const mapFn = (key, value) => [{[value]: 1}];
-                      const reduceFn = (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)});
-                      distribution.test.spark.reduceByKey({keys, map: mapFn, reduce: reduceFn}, (err, reduced) => {
-                        const appleCount = reduced.find((r) => "apple" in r);
-                        ok("reduceByKey", !err && appleCount && appleCount.apple === 2);
-                        if (err) return finish();
-
-                        // Test 11: reduce (concat all values)
-                        distribution.test.spark.reduce(keys, (acc, item) => {
-                          const v = Object.values(item)[0];
-                          return (acc || "") + (acc ? "," : "") + v;
-                        }, null, (err, reducedAll) => {
-                          ok("reduce", !err && reducedAll && reducedAll.includes("apple"));
-                          if (err) return finish();
-
-                          const keysA = ["a", "b", "c"];
-                          const keysB = ["b", "c", "d"];
-
-                          // Test 12: union
-                          distribution.test.spark.union(keysA, keysB, (err, u) => {
-                            ok("union", !err && u.length === 6);
-                            if (err) return finish();
-
-                            // Test 13: intersection
-                            distribution.test.spark.intersection(keysA, keysB, (err, i) => {
-                              ok("intersection", !err && i.length === 2);
-                              if (err) return finish();
-
-                              // Test 14: subtract
-                              distribution.test.spark.subtract(keysA, keysB, (err, s) => {
-                                ok("subtract", !err && s.length === 1 && Object.keys(s[0])[0] === "a");
-                                if (err) return finish();
-
-                                // Test 15: sortByKey
-                                distribution.test.spark.sortByKey(keys, (err, sorted) => {
-                                  const sortedKeys = sorted && sorted.map((r) => Object.keys(r)[0]);
-                                  ok("sortByKey", !err && sortedKeys && sortedKeys[0] <= sortedKeys[sortedKeys.length - 1]);
-                                  if (err) return finish();
-
-                                  // Test 16: join
-                                  distribution.test.spark.join(keysA, keysB, (err, j) => {
-                                    ok("join", !err && j.length === 2);
-                                    if (err) return finish();
-
-                                    // Test 17: leftOuterJoin
-                                    distribution.test.spark.leftOuterJoin(keysA, keysB, (err, loj) => {
-                                      const hasNull = loj && loj.some((r) => {
-                                        const [v1, v2] = Object.values(r)[0];
-                                        return v2 === null;
-                                      });
-                                      ok("leftOuterJoin", !err && loj.length === 3 && hasNull);
-                                      if (err) return finish();
-
-                                      // Test 18: rightOuterJoin
-                                      distribution.test.spark.rightOuterJoin(keysA, keysB, (err, roj) => {
-                                        const hasNull = roj && roj.some((r) => {
-                                          const [v1, v2] = Object.values(r)[0];
-                                          return v1 === null;
-                                        });
-                                        ok("rightOuterJoin", !err && roj.length === 3 && hasNull);
-                                        if (err) return finish();
-
-                                        // Test 19: foreach (side-effect runs on workers; we verify no error)
-                                        distribution.test.spark.foreach(keys, () => {}, (err) => {
-                                          ok("foreach", !err);
-                                          finish();
-                                        });
-                                      });
-                                    });
-                                  });
-                                });
-                              });
-                            });
-                          });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+    runNext(tests, 0, spark, keys, state, finish);
   });
 }
+
+distribution.node.start(() => {
+  distribution.local.status.spawn(nodes[0], () => {
+    distribution.local.status.spawn(nodes[1], () => {
+      distribution.local.status.spawn(nodes[2], () => runTests());
+    });
+  });
+});

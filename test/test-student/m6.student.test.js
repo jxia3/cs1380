@@ -393,6 +393,64 @@ test("(1 pts) student test", (done) => {
   });
 });
 
+test("(1 pts) student test", (done) => {
+  createDataset(() => {
+    const keys = getKeys();
+    distribution.m6.spark.fromKeys(keys)
+      .map((k, v) => ({[k]: v.toUpperCase()}))
+      .filter((k) => k.startsWith("a") || k.startsWith("b"))
+      .collect((error, results) => {
+        try {
+          expect(error).toBeFalsy();
+          expect(results.length).toBe(4);
+          expect(results.every((r) => {
+            const k = Object.keys(r)[0];
+            return (k.startsWith("a") || k.startsWith("b")) && r[k] === r[k].toUpperCase();
+          })).toBe(true);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+});
+
+test("(1 pts) student test", (done) => {
+  createDataset(() => {
+    const keys = getKeys();
+    distribution.m6.spark.fromKeys(keys).count((error, n) => {
+      try {
+        expect(error).toBeFalsy();
+        expect(n).toBe(keys.length);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+});
+
+test("(1 pts) student test", (done) => {
+  createDataset(() => {
+    const keys = getKeys();
+    distribution.m6.spark.fromKeys(keys)
+      .map((k, v) => ({[k]: v}))
+      .reduce((acc, item) => {
+        const v = Object.values(item)[0];
+        return (acc || "") + (acc ? "," : "") + v;
+      }, null, (error, reduced) => {
+        try {
+          expect(error).toBeFalsy();
+          expect(reduced).toBeDefined();
+          expect(reduced.includes("apple")).toBe(true);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
+});
+
 beforeAll((done) => {
   fs.rmSync(path.join(__dirname, "../../store"), {recursive: true, force: true});
   fs.mkdirSync(path.join(__dirname, "../../store"));

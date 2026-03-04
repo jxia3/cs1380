@@ -13,6 +13,14 @@ Implement a set of transformations and actions that operate on distributed key-v
 - How to handle partitioning and shuffling
 - The exact API shape (callbacks, config objects, method names)
 
+### Substantial Requirements
+
+To qualify as a substantial improvement over M5, your implementation must:
+
+1. **Provide a fluent, chainable API** – A way to compose operations (e.g., map then filter then collect) without deeply nested callbacks. The exact method names and structure are up to you.
+2. **Support lazy evaluation** – Transformations should build a pipeline; execution occurs only when an action is triggered. Where possible, consecutive narrow transformations (map, filter) should be fused into a single MapReduce job.
+3. **Ensure function serialization** – User-provided functions must execute correctly on remote workers. You may use `util.compile`, string serialization, or another approach.
+
 ## Operations to Implement
 
 ### Core Transformations
@@ -48,10 +56,28 @@ Implement a set of transformations and actions that operate on distributed key-v
 - **reduce**: Aggregate the entire dataset using a binary function.
 - **foreach**: Apply a function to each element (e.g., for side effects).
 
+## Fluent API Guidance
+
+Your fluent API should support at least:
+
+- An entry point (e.g., from a key set or dataset reference)
+- Transformations: map, filter, and optionally flatMap
+- Actions: collect, count, and reduce
+
+Example of the intended *style* (adapt to your design):
+
+```
+entryPoint(keys).map(...).filter(...).collect(callback)
+entryPoint(keys).map(...).count(callback)
+entryPoint(keys).map(...).reduce(fn, zero, callback)
+```
+
+Key properties: transformations return a chainable object; no execution until an action is called; consecutive map/filter can be fused into one MapReduce job.
+
 ## Constraints
 
 - Operations must run across a node group (use `groups`, `store`, `mem`, `comm`).
-- User-provided functions (map, filter, reduce, etc.) must be serializable for execution on remote nodes.
+- User-provided functions must be serializable for execution on remote nodes.
 - Integrate with the existing store and mem services for data placement and retrieval.
 - The M5 MapReduce implementation is a valid building block; you may extend or wrap it.
 
@@ -68,6 +94,6 @@ Implement a set of transformations and actions that operate on distributed key-v
 
 ## Notes
 
-- You are not required to implement lazy evaluation, lineage, or fault tolerance.
+- Lazy evaluation and pipeline fusion are expected for the fluent API; lineage and fault tolerance are not.
 - Prioritize operations that map naturally to M5's map-shuffle-reduce pipeline.
 - Multi-dataset operations (join, union, intersection, subtract) require coordinating two input sources.

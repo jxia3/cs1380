@@ -6,12 +6,21 @@ Extend M5 by adding a new `spark` service that provides Spark-like operations. T
 
 ```
 distribution.all.spark
-  ├── filter(keys, predicate, callback)
-  ├── distinct(keys, callback)
-  ├── count(keys, callback)
-  ├── mapOnly(keys, mapFn, callback)     // map/flatMap without reduce
-  └── (reduceByKey, groupByKey via mr.exec with different configs)
+  ├── fromKeys(keys) → RDD (fluent entry point)
+  ├── map, flatMap, filter, distinct, count, collect, ...
+  └── RDD: .map(), .filter(), .flatMap(), .collect(), .count(), .reduce()
 ```
+
+### Fluent RDD API
+
+- **`spark.fromKeys(keys)`** – Returns an RDD object with lazy pipeline.
+- **Transformations** (`.map(fn)`, `.filter(fn)`, `.flatMap(fn)`) – Append to pipeline, return new RDD. No execution.
+- **Actions** (`.collect(cb)`, `.count(cb)`, `.reduce(fn, zero, cb)`) – Execute pipeline, invoke callback.
+- **Pipeline fusion** – Consecutive map/filter ops are fused into a single MapReduce job.
+
+### Function Serialization
+
+- Use `util.compile` with `eval("__PLACEHOLDER__")` to inline user functions for map, filter, flatMap, foreach, and **reduceByKey** (map + reduce).
 
 ## Implementation Phases
 
@@ -24,7 +33,7 @@ distribution.all.spark
 ### Phase 2: Wide Transformations (distinct, reduceByKey, groupByKey)
 
 - **distinct**: Map `(k, v) => [{[k]: k}]` (keep key only). Reduce `(k, vals) => ({[k]: vals[0]})`. Dedupes by key.
-- **reduceByKey**: Direct use of `mr.exec` with user map and reduce.
+- **reduceByKey**: Use `util.compile` to inline user map and reduce so they serialize correctly on workers.
 - **groupByKey**: Map `(k, v) => [{[k]: v}]`, Reduce `(k, vals) => ({[k]: vals})` (identity collect).
 
 ### Phase 3: Actions (count, collect, first, take)

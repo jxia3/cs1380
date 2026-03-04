@@ -2,10 +2,171 @@
 
 /* Spark-inspired operations that extend the MapReduce framework.
    Provides filter, distinct, count, collect, and other transformations.
-   User functions are inlined via util.compile so they serialize correctly. */
+   User functions are inlined via util.compile so they serialize correctly.
+   Fluent RDD-like API: fromKeys(keys).map().filter().collect() with lazy eval and fusion. */
 
 const remote = require("./remote-service.js");
 const util = require("../util/util.js");
+
+/**
+ * RDD-like object for fluent chaining. Holds keys and a pipeline of ops.
+ * Execution is lazy; actions (collect, count, reduce) trigger a fused MR job.
+ */
+function RDD(gid, keys, ops = []) {
+  this._gid = gid;
+  this._keys = keys;
+  this._ops = ops;
+}
+
+RDD.prototype.map = function(mapFn) {
+  if (typeof mapFn !== "function") throw new Error("Invalid mapFn");
+  return new RDD(this._gid, this._keys, [...this._ops, {type: "map", fn: mapFn}]);
+};
+
+RDD.prototype.filter = function(predicate) {
+  if (typeof predicate !== "function") throw new Error("Invalid predicate");
+  return new RDD(this._gid, this._keys, [...this._ops, {type: "filter", fn: predicate}]);
+};
+
+RDD.prototype.flatMap = function(flatMapFn) {
+  if (typeof flatMapFn !== "function") throw new Error("Invalid flatMapFn");
+  return new RDD(this._gid, this._keys, [...this._ops, {type: "flatMap", fn: flatMapFn}]);
+};
+
+RDD.prototype._runFused = function(mode, callback) {
+  const gid = this._gid;
+  const keys = this._keys;
+  const ops = this._ops;
+
+  if (!(keys instanceof Array)) {
+    callback(new Error("Invalid keys"), null);
+    return;
+  }
+
+  const narrowOps = ["map", "filter"];
+  const canFuse = ops.every((o) => narrowOps.includes(o.type));
+
+  if (ops.some((o) => o.type === "flatMap")) {
+    this._runWithFlatMap(mode, callback);
+    return;
+  }
+
+  if (ops.length === 0) {
+    if (mode === "count") {
+      global.distribution[gid].spark.count(keys, callback);
+    } else {
+      global.distribution[gid].spark.collect(keys, callback);
+    }
+    return;
+  }
+
+  const compileValues = Object.fromEntries(ops.map((o, i) => [`__OP${i}__`, o.fn]));
+  const bodyParts = ops.map((op, i) => {
+    if (op.type === "map") {
+      return `const fn${i}=(0,eval)("__OP${i}__");const out${i}=fn${i}(k,v);obj=out${i}&&typeof out${i}==="object"?out${i}:{[k]:out${i}};const ent${i}=Object.entries(obj);if(ent${i}.length===0)return [];[k,v]=ent${i}[0];`;
+    } else {
+      return `const fn${i}=(0,eval)("__OP${i}__");if(!fn${i}(k,v))return [];`;
+    }
+  }).join("");
+  const returnExpr = mode === "count" ? '[{"__count__":1}]' : "[obj]";
+  const fnStr = `(key,value)=>{let obj={[key]:value};let k=key,v=value;${bodyParts}return ${returnExpr};}`;
+  const mapFn = util.compile(
+    (new Function(`return ${fnStr}`))(),
+    compileValues
+  );
+
+  const reduce = mode === "count"
+    ? (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)})
+    : (key, values) => ({[key]: values[0]});
+
+  const mrConfig = {
+    keys,
+    map: mapFn,
+    reduce,
+    memory: true,
+  };
+  if (mode === "count") {
+    mrConfig.compact = (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)});
+  }
+
+  global.distribution[gid].mr.exec(mrConfig, (error, results) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    if (mode === "count") {
+      const total = results
+        .filter((r) => "__count__" in r)
+        .reduce((sum, r) => sum + r["__count__"], 0);
+      callback(null, total);
+    } else {
+      callback(null, results);
+    }
+  });
+};
+
+RDD.prototype._runWithFlatMap = function(mode, callback) {
+  const gid = this._gid;
+  const keys = this._keys;
+  const ops = this._ops;
+  const flatMapIdx = ops.findIndex((o) => o.type === "flatMap");
+  const beforeFlatMap = ops.slice(0, flatMapIdx);
+  const flatMapOp = ops[flatMapIdx];
+  const afterFlatMap = ops.slice(flatMapIdx + 1);
+
+  if (afterFlatMap.length > 0) {
+    callback(new Error("flatMap followed by more ops not yet supported"), null);
+    return;
+  }
+
+  const runFirst = (cb) => {
+    if (beforeFlatMap.length === 0) {
+      global.distribution[gid].spark.collect(keys, cb);
+      return;
+    }
+    const rdd = new RDD(gid, keys, beforeFlatMap);
+    rdd._runFused(null, cb);
+  };
+
+  runFirst((err, results) => {
+    if (err) return callback(err, null);
+    const flatMapFn = flatMapOp.fn;
+    const flat = results.flatMap((r) => {
+      const k = Object.keys(r)[0];
+      const v = r[k];
+      const arr = flatMapFn(k, v);
+      return Array.isArray(arr) ? arr : [];
+    });
+    if (mode === "count") {
+      callback(null, flat.length);
+    } else {
+      callback(null, flat);
+    }
+  });
+};
+
+RDD.prototype.collect = function(callback) {
+  callback = callback || (() => {});
+  this._runFused(null, callback);
+};
+
+RDD.prototype.count = function(callback) {
+  callback = callback || (() => {});
+  this._runFused("count", callback);
+};
+
+RDD.prototype.reduce = function(reduceFn, zeroValue, callback) {
+  if (typeof callback !== "function") {
+    callback = zeroValue;
+    zeroValue = undefined;
+  }
+  callback = callback || (() => {});
+  this.collect((err, results) => {
+    if (err) return callback(err, null);
+    const acc = results.reduce((a, item) => reduceFn(a, item), zeroValue);
+    callback(null, acc);
+  });
+};
 
 /**
  * Apply a function to each (key, value) pair; produce one output per input.
@@ -244,7 +405,7 @@ function take(keys, n, callback) {
 
 /**
  * Run a full map-reduce with user-provided map and reduce.
- * Wraps mr.exec for convenience.
+ * User functions are inlined via util.compile so they serialize correctly.
  * @param {Object} config
  * @param {string[]} config.keys
  * @param {function} config.map
@@ -266,10 +427,25 @@ function reduceByKey(config, callback) {
     return;
   }
 
+  const map = util.compile(
+    (key, value) => {
+      const fn = (0, eval)("__MAPFN__");
+      return fn(key, value);
+    },
+    {"__MAPFN__": config.map}
+  );
+  const reduce = util.compile(
+    (key, values) => {
+      const fn = (0, eval)("__REDUCEFN__");
+      return fn(key, values);
+    },
+    {"__REDUCEFN__": config.reduce}
+  );
+
   const mrConfig = {
     keys: config.keys,
-    map: config.map,
-    reduce: config.reduce,
+    map,
+    reduce,
     compact: config.compact,
     memory: config.memory !== false,
     out: config.out,
@@ -567,7 +743,21 @@ function foreach(keys, fn, callback) {
   }, (error) => callback(error, null));
 }
 
+/**
+ * Create an RDD from keys for fluent chaining.
+ * @param {string[]} keys
+ * @returns {RDD}
+ */
+function fromKeys(keys) {
+  remote.checkGroup(this.gid);
+  if (!(keys instanceof Array)) {
+    throw new Error("Invalid keys");
+  }
+  return new RDD(this.gid, keys, []);
+}
+
 module.exports = remote.createConstructor({
+  fromKeys,
   map,
   flatMap,
   filter,
