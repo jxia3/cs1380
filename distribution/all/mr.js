@@ -198,22 +198,20 @@ function workerMap(keys, callback) {
     global.distribution[groupId].store.get(key, (error, value) => {
       try {
         if (!error) {
-          // Run map function on value
           const result = config.map(key, value);
           for (const item of (result instanceof Array ? result : [result])) {
-            for (const key in item) {
-              if (!(key in values)) {
-                values[key] = [];
-              }
-              values[key].push(item[key]);
+            for (const k in item) {
+              if (!(k in values)) values[k] = [];
+              values[k].push(item[k]);
             }
           }
         }
-      } catch {}
-      active -= 1;
-      if (active === 0) {
-        endMap(values);
+      } catch (err) {
+        if (!("__mr_error__" in values)) values["__mr_error__"] = [];
+        values["__mr_error__"].push(err instanceof Error ? err.message : String(err));
       }
+      active -= 1;
+      if (active === 0) endMap(values);
     });
   }
 
@@ -322,16 +320,15 @@ function workerReduce(callback) {
       global.distribution.local.mem.del({key: itemKey, gid: groupId}, (error, items) => {
         try {
           if (!error && items.length > 0) {
-            // Run reduce function on values
             const key = items[0].key;
             const values = items.map((i) => i.values).flat();
             results.push(config.reduce(key, values));
           }
-        } catch {}
-        reduceActive -= 1;
-        if (reduceActive === 0) {
-          endReduce(results);
+        } catch (err) {
+          results.push({__mr_error__: err instanceof Error ? err.message : String(err)});
         }
+        reduceActive -= 1;
+        if (reduceActive === 0) endReduce(results);
       });
     }
   });
@@ -392,7 +389,13 @@ function runOperation(config, group, callback) {
           return;
         }
         global.distribution[this.gid].routes.rem(config.workerId);
-        callback(null, Object.values(results).flat());
+        const flat = Object.values(results).flat();
+        const errItem = flat.find((r) => r && "__mr_error__" in r);
+        if (errItem) {
+          callback(new Error(errItem.__mr_error__), null);
+          return;
+        }
+        callback(null, flat.filter((r) => !r || !("__mr_error__" in r)));
       });
     });
   });

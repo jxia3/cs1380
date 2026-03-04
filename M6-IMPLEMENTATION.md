@@ -2,7 +2,7 @@
 
 ## Architecture
 
-Extend M5 by adding a new `spark` service that provides Spark-like operations. The spark service composes or wraps `mr.exec` with appropriate map/reduce/compact configurations. No changes to the core `mr` module are required.
+Extend M5 by adding a new `spark` service that provides Spark-like operations. The spark service composes or wraps `mr.exec` with appropriate map/reduce/compact configurations. The `mr` module is extended to propagate worker errors to the caller.
 
 ```
 distribution.all.spark
@@ -32,7 +32,7 @@ distribution.all.spark
 
 ### Phase 2: Wide Transformations (distinct, reduceByKey, groupByKey)
 
-- **distinct**: Map `(k, v) => [{[k]: k}]` (keep key only). Reduce `(k, vals) => ({[k]: vals[0]})`. Dedupes by key.
+- **distinct**: Map `(k, v) => [{[k]: k}]` (keep key only). Reduce `(k, vals) => ({[k]: vals[0]})`. Dedupes by key. For `opts.byPair`, emit composite key `__pair_${hash(key,value)}` with `{key, value}`; reduce keeps one per composite key; post-process to `{[key]: value}`. Hash logic must be inlined in map (no external function refs) for worker serialization.
 - **reduceByKey**: Use `util.compile` to inline user map and reduce so they serialize correctly on workers.
 - **groupByKey**: Map `(k, v) => [{[k]: v}]`, Reduce `(k, vals) => ({[k]: vals})` (identity collect).
 
@@ -50,16 +50,22 @@ distribution.all.spark
 ### Phase 5: Joins and sortByKey (stretch)
 
 - **join**: Co-group by key. Requires loading both datasets, shuffling by key, then cross-product of value lists.
-- **sortByKey**: Shuffle with order-preserving partitioner; merge-sort across partitions.
+- **sortByKey**: When `keys.length < distributedSortThreshold` (default 8), collect then sort on orchestrator. Otherwise: range partitioning by key boundaries, map emits `(partitionId, {key, value})`, reduce sorts each partition locally, merge in partition order. Options: `distributedSortThreshold`, `ascending`. Use `util.compile` to inline `__BOUNDARIES__` into map.
+
+### Phase 6: Error Propagation and Extended Fluent API
+
+- **Error propagation (mr.js)**: In `workerMap` and `workerReduce`, catch thrown errors and store under `__mr_error__` instead of swallowing. In `runOperation` callback, if any result has `__mr_error__`, call callback with `new Error(errItem.__mr_error__)` instead of passing partial results.
+- **Fluent flatMap + more ops**: Support `flatMap` followed by `map`, `filter`, or `flatMap` before an action. Use `_runWithFlatMap` with `afterFlatMap` pipeline; apply subsequent ops to flat results on orchestrator (or extend to distributed if needed).
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `distribution/all/spark.js` | New spark service |
+| `distribution/all/spark.js` | Spark service (distinct byPair, distributed sortByKey, fluent flatMap+ops) |
+| `distribution/all/mr.js` | MapReduce with error propagation |
 | `distribution/all/all.js` | Register spark service |
 | `distribution.js` | Wire spark into groups (via all.js) |
-| `t6.js` | Manual test script |
+| `t6.js` | Manual test script (distinct byPair, fluent flatMap+map+collect) |
 
 ## Data Model
 

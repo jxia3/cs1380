@@ -224,6 +224,18 @@ function runSparkTests() {
             return (acc || "") + (acc ? "," : "") + v;
           }, null, (err, r) => cb(err, !err && r && r.includes("apple"))),
       },
+      {
+        name: "distinct byPair",
+        run: (s, k, cb) => s.distinct(k, {byPair: true}, (err, r) =>
+          cb(err, !err && r && r.length === k.length)),
+      },
+      {
+        name: "fluent flatMap+map+collect",
+        run: (s, k, cb) => s.fromKeys(k)
+          .flatMap((key, v) => v.split("").map((c) => ({[c]: 1})))
+          .map((key, v) => ({[key]: v * 2}))
+          .collect((err, r) => cb(err, !err && r && r.length > k.length)),
+      },
     ];
 
     const finish = () => {

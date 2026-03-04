@@ -114,11 +114,6 @@ RDD.prototype._runWithFlatMap = function(mode, callback) {
   const flatMapOp = ops[flatMapIdx];
   const afterFlatMap = ops.slice(flatMapIdx + 1);
 
-  if (afterFlatMap.length > 0) {
-    callback(new Error("flatMap followed by more ops not yet supported"), null);
-    return;
-  }
-
   const runFirst = (cb) => {
     if (beforeFlatMap.length === 0) {
       global.distribution[gid].spark.collect(keys, cb);
@@ -131,12 +126,36 @@ RDD.prototype._runWithFlatMap = function(mode, callback) {
   runFirst((err, results) => {
     if (err) return callback(err, null);
     const flatMapFn = flatMapOp.fn;
-    const flat = results.flatMap((r) => {
+    let flat = results.flatMap((r) => {
       const k = Object.keys(r)[0];
       const v = r[k];
       const arr = flatMapFn(k, v);
       return Array.isArray(arr) ? arr : [];
     });
+    for (const op of afterFlatMap) {
+      if (op.type === "map") {
+        flat = flat.map((item) => {
+          const ent = Object.entries(item)[0];
+          if (!ent) return item;
+          const [k, v] = ent;
+          const out = op.fn(k, v);
+          return out && typeof out === "object" ? out : {[k]: out};
+        });
+      } else if (op.type === "filter") {
+        flat = flat.filter((item) => {
+          const ent = Object.entries(item)[0];
+          if (!ent) return false;
+          return op.fn(ent[0], ent[1]);
+        });
+      } else if (op.type === "flatMap") {
+        flat = flat.flatMap((item) => {
+          const ent = Object.entries(item)[0];
+          if (!ent) return [];
+          const arr = op.fn(ent[0], ent[1]);
+          return Array.isArray(arr) ? arr : [];
+        });
+      }
+    }
     if (mode === "count") {
       callback(null, flat.length);
     } else {
@@ -287,21 +306,60 @@ function filter(keys, predicate, callback) {
 }
 
 /**
- * Remove duplicate keys from the dataset.
+ * Remove duplicates. By default deduplicates by key; use opts.byPair for (key, value).
  * @param {string[]} keys
- * @param {Callback} callback
+ * @param {{byPair?: boolean} | Callback} [opts]
+ * @param {Callback} [callback]
  */
-function distinct(keys, callback) {
+function distinct(keys, opts, callback) {
+  if (typeof opts === "function") {
+    callback = opts;
+    opts = {};
+  } else {
+    callback = callback === undefined ? () => {} : callback;
+  }
   remote.checkGroup(this.gid);
-  callback = callback === undefined ? () => {} : callback;
   if (!(keys instanceof Array)) {
     callback(new Error("Invalid keys"), null);
     return;
   }
 
+  if (opts?.byPair) {
+    const map = (key, value) => {
+      const s = JSON.stringify([key, value]);
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i) | 0;
+      const hash = Math.abs(h).toString(36);
+      return [{[`__pair_${hash}`]: {key, value}}];
+    };
+    const reduce = (partKey, values) => {
+      const item = values[0];
+      return item && item.key !== undefined ? {[partKey]: item} : {};
+    };
+    global.distribution[this.gid].mr.exec({
+      keys,
+      map,
+      reduce,
+      memory: true,
+    }, (error, results) => {
+      if (error) return callback(error, null);
+      const out = results
+        .filter((r) => r && Object.keys(r).some((k) => k.startsWith("__pair_")))
+        .flatMap((r) => {
+          for (const k of Object.keys(r)) {
+            if (k.startsWith("__pair_") && r[k]?.key !== undefined) {
+              return [{[r[k].key]: r[k].value}];
+            }
+          }
+          return [];
+        });
+      callback(null, out);
+    });
+    return;
+  }
+
   const map = (key) => [{[key]: key}];
   const reduce = (key, values) => ({[key]: values[0]});
-
   global.distribution[this.gid].mr.exec({
     keys,
     map,
@@ -585,9 +643,10 @@ function subtract(keysA, keysB, callback) {
 }
 
 /**
- * Sort key-value pairs by key.
+ * Sort key-value pairs by key. Uses distributed range partitioning when
+ * keys.length exceeds distributedSortThreshold (default 8).
  * @param {string[]} keys
- * @param {{ascending?: boolean}} [opts] - default ascending: true
+ * @param {{ascending?: boolean, distributedSortThreshold?: number}} [opts]
  * @param {Callback} callback
  */
 function sortByKey(keys, opts, callback) {
@@ -603,18 +662,66 @@ function sortByKey(keys, opts, callback) {
     return;
   }
   const ascending = opts?.ascending !== false;
-  collect.call(this, keys, (error, results) => {
-    if (error) {
-      callback(error, null);
-      return;
-    }
-    results.sort((a, b) => {
-      const ka = Object.keys(a)[0];
-      const kb = Object.keys(b)[0];
-      const cmp = ka < kb ? -1 : ka > kb ? 1 : 0;
+  const threshold = opts?.distributedSortThreshold ?? 8;
+
+  if (keys.length < threshold) {
+    collect.call(this, keys, (error, results) => {
+      if (error) return callback(error, null);
+      results.sort((a, b) => {
+        const ka = Object.keys(a)[0];
+        const kb = Object.keys(b)[0];
+        const cmp = ka < kb ? -1 : ka > kb ? 1 : 0;
+        return ascending ? cmp : -cmp;
+      });
+      callback(null, results);
+    });
+    return;
+  }
+
+  const sortedKeys = [...keys].sort();
+  const numPartitions = Math.min(keys.length, 16);
+  const boundaries = [];
+  for (let i = 1; i < numPartitions; i++) {
+    boundaries.push(sortedKeys[Math.floor((sortedKeys.length * i) / numPartitions)]);
+  }
+
+  const map = util.compile(
+    (key, value) => {
+      const b = __BOUNDARIES__;
+      let pid = b.findIndex((x) => key < x);
+      if (pid < 0) pid = b.length;
+      return [{[`__sort_${pid}`]: {key, value}}];
+    },
+    {"__BOUNDARIES__": boundaries}
+  );
+  const reduce = (partKey, values) => {
+    const items = values.map((v) => (v && typeof v === "object" && "key" in v) ? v : {key: partKey, value: v});
+    items.sort((a, b) => {
+      const cmp = a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
       return ascending ? cmp : -cmp;
     });
-    callback(null, results);
+    const pid = partKey.replace("__sort_", "");
+    return {[`__sort_${pid}`]: items};
+  };
+
+  global.distribution[this.gid].mr.exec({
+    keys,
+    map,
+    reduce,
+    memory: true,
+  }, (error, results) => {
+    if (error) return callback(error, null);
+    const byPart = {};
+    for (const r of results) {
+      for (const k in r) {
+        if (k.startsWith("__sort_")) byPart[k] = r[k];
+      }
+    }
+    const partIds = Object.keys(byPart).sort((a, b) =>
+      parseInt(a.replace("__sort_", ""), 10) - parseInt(b.replace("__sort_", ""), 10));
+    const flat = partIds.flatMap((p) => byPart[p] || []);
+    const out = flat.map((item) => ({[item.key]: item.value}));
+    callback(null, out);
   });
 }
 

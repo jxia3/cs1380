@@ -28,7 +28,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 - **map**: Apply a function to each (key, value) pair; produce one output per input.
 - **flatMap**: Apply a function; each input may yield zero or more outputs.
 - **filter**: Keep only elements for which a predicate returns true.
-- **distinct**: Remove duplicate keys (or key-value pairs) from the dataset.
+- **distinct**: Remove duplicate keys (or key-value pairs) from the dataset. Support `opts.byPair` to deduplicate by (key, value) instead of key alone.
 - **reduceByKey**: For each key, aggregate all associated values using a binary function.
 - **groupByKey**: For each key, collect all associated values into a single collection.
 
@@ -40,7 +40,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 
 ### Ordering
 
-- **sortByKey**: Sort key-value pairs by key (ascending or descending).
+- **sortByKey**: Sort key-value pairs by key (ascending or descending). When the key count exceeds a configurable threshold, use distributed sort (range partitioning by key boundaries, map-shuffle-reduce, local sort per partition, merge in order) instead of collect-then-sort. Options: `distributedSortThreshold`, `ascending`.
 
 ### Joins
 
@@ -61,7 +61,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 Your fluent API should support at least:
 
 - An entry point (e.g., from a key set or dataset reference)
-- Transformations: map, filter, and optionally flatMap
+- Transformations: map, filter, flatMap (flatMap may be followed by map, filter, or flatMap before an action)
 - Actions: collect, count, and reduce
 
 Example of the intended *style* (adapt to your design):
@@ -73,6 +73,10 @@ entryPoint(keys).map(...).reduce(fn, zero, callback)
 ```
 
 Key properties: transformations return a chainable object; no execution until an action is called; consecutive map/filter can be fused into one MapReduce job.
+
+## Error Handling
+
+- MapReduce worker errors (in map or reduce phases) must propagate to the caller. If any worker throws or returns an error, the operation callback should receive an error rather than partial or empty results.
 
 ## Constraints
 
