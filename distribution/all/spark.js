@@ -9,6 +9,45 @@ const remote = require("./remote-service.js");
 const util = require("../util/util.js");
 
 /**
+ * Unique keys from two lists (stable: first seen order from keysA then keysB).
+ * @param {string[]} keysA
+ * @param {string[]} keysB
+ * @returns {string[]}
+ */
+function unionUniqueKeys(keysA, keysB) {
+  const seen = new Set();
+  const out = [];
+  for (const k of keysA) {
+    if (!seen.has(k)) {
+      seen.add(k);
+      out.push(k);
+    }
+  }
+  for (const k of keysB) {
+    if (!seen.has(k)) {
+      seen.add(k);
+      out.push(k);
+    }
+  }
+  return out;
+}
+
+/**
+ * Build key -> value map from collect-style MR results (last key wins).
+ * @param {object[]} results
+ * @returns {Record<string, any>}
+ */
+function indexResultsByKey(results) {
+  const byKey = {};
+  for (const r of results) {
+    if (!r) continue;
+    const k = Object.keys(r)[0];
+    byKey[k] = r[k];
+  }
+  return byKey;
+}
+
+/**
  * RDD-like object for fluent chaining. Holds keys and a pipeline of ops.
  * Execution is lazy; actions (collect, count, reduce) trigger a fused MR job.
  */
@@ -42,9 +81,6 @@ RDD.prototype._runFused = function(mode, callback) {
     callback(new Error("Invalid keys"), null);
     return;
   }
-
-  const narrowOps = ["map", "filter"];
-  const canFuse = ops.every((o) => narrowOps.includes(o.type));
 
   if (ops.some((o) => o.type === "flatMap")) {
     this._runWithFlatMap(mode, callback);
@@ -114,53 +150,79 @@ RDD.prototype._runWithFlatMap = function(mode, callback) {
   const flatMapOp = ops[flatMapIdx];
   const afterFlatMap = ops.slice(flatMapIdx + 1);
 
-  const runFirst = (cb) => {
-    if (beforeFlatMap.length === 0) {
-      global.distribution[gid].spark.collect(keys, cb);
+  const compileValues = {"__FM__": flatMapOp.fn};
+  let beforeParts = beforeFlatMap.map((op, i) => {
+    compileValues[`__BOP${i}__`] = op.fn;
+    if (op.type === "map") {
+      return `const fnB${i}=(0,eval)("__BOP${i}__");const outB${i}=fnB${i}(k,v);obj=outB${i}&&typeof outB${i}==="object"?outB${i}:{[k]:outB${i}};const entB${i}=Object.entries(obj);if(entB${i}.length===0)return [];[k,v]=entB${i}[0];`;
+    }
+    return `const fnB${i}=(0,eval)("__BOP${i}__");if(!fnB${i}(k,v))return [];`;
+  }).join("");
+  if (beforeParts === "") {
+    beforeParts = "let obj={[key]:value};let k=key,v=value;";
+  } else {
+    beforeParts = "let obj={[key]:value};let k=key,v=value;" + beforeParts;
+  }
+
+  let suffixCode = "";
+  for (let i = 0; i < afterFlatMap.length; i++) {
+    const op = afterFlatMap[i];
+    compileValues[`__SUF${i}__`] = op.fn;
+    if (op.type === "map") {
+      suffixCode += `batch=batch.map(function(item){const ent=Object.entries(item)[0];if(!ent)return item;let k2=ent[0],v2=ent[1];const fn=(0,eval)("__SUF${i}__");const out=fn(k2,v2);return out&&typeof out==="object"?out:{[k2]:out};});`;
+    } else if (op.type === "filter") {
+      suffixCode += `batch=batch.filter(function(item){const ent=Object.entries(item)[0];if(!ent)return false;const fn=(0,eval)("__SUF${i}__");return fn(ent[0],ent[1]);});`;
+    } else {
+      suffixCode += `batch=batch.flatMap(function(item){const ent=Object.entries(item)[0];if(!ent)return[];const fn=(0,eval)("__SUF${i}__");const arr=fn(ent[0],ent[1]);return Array.isArray(arr)?arr:[];});`;
+    }
+  }
+
+  const returnExpr = mode === "count"
+    ? "batch.map(function(){return {\"__count__\":1};})"
+    : "batch";
+
+  const fnStr =
+    `(key,value)=>{${beforeParts}` +
+    `const fm=(0,eval)("__FM__");let arr=fm(k,v);if(!Array.isArray(arr))arr=[];` +
+    `let batch=arr;${suffixCode}return ${returnExpr};}`;
+
+  const mapFn = util.compile(
+    (new Function(`return ${fnStr}`))(),
+    compileValues
+  );
+
+  const reduce = mode === "count"
+    ? (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)})
+    : (key, values) => ({[key]: values});
+
+  const mrConfig = {
+    keys,
+    map: mapFn,
+    reduce,
+    memory: true,
+  };
+  if (mode === "count") {
+    mrConfig.compact = (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)});
+  }
+
+  global.distribution[gid].mr.exec(mrConfig, (error, results) => {
+    if (error) {
+      callback(error, null);
       return;
     }
-    const rdd = new RDD(gid, keys, beforeFlatMap);
-    rdd._runFused(null, cb);
-  };
-
-  runFirst((err, results) => {
-    if (err) return callback(err, null);
-    const flatMapFn = flatMapOp.fn;
-    let flat = results.flatMap((r) => {
-      const k = Object.keys(r)[0];
-      const v = r[k];
-      const arr = flatMapFn(k, v);
-      return Array.isArray(arr) ? arr : [];
-    });
-    for (const op of afterFlatMap) {
-      if (op.type === "map") {
-        flat = flat.map((item) => {
-          const ent = Object.entries(item)[0];
-          if (!ent) return item;
-          const [k, v] = ent;
-          const out = op.fn(k, v);
-          return out && typeof out === "object" ? out : {[k]: out};
-        });
-      } else if (op.type === "filter") {
-        flat = flat.filter((item) => {
-          const ent = Object.entries(item)[0];
-          if (!ent) return false;
-          return op.fn(ent[0], ent[1]);
-        });
-      } else if (op.type === "flatMap") {
-        flat = flat.flatMap((item) => {
-          const ent = Object.entries(item)[0];
-          if (!ent) return [];
-          const arr = op.fn(ent[0], ent[1]);
-          return Array.isArray(arr) ? arr : [];
-        });
-      }
-    }
     if (mode === "count") {
-      callback(null, flat.length);
-    } else {
-      callback(null, flat);
+      const total = results
+        .filter((r) => "__count__" in r)
+        .reduce((sum, r) => sum + r["__count__"], 0);
+      callback(null, total);
+      return;
     }
+    const flat = results.flatMap((r) =>
+      Object.entries(r).flatMap(([k, vals]) =>
+        [].concat(vals).map((v) => ({[k]: v}))
+      )
+    );
+    callback(null, flat);
   });
 };
 
@@ -643,8 +705,8 @@ function subtract(keysA, keysB, callback) {
 }
 
 /**
- * Sort key-value pairs by key. Uses distributed range partitioning when
- * keys.length exceeds distributedSortThreshold (default 8).
+ * Sort key-value pairs by key using distributed range partitioning, local sort
+ * per partition, and ordered merge. `distributedSortThreshold` in opts is ignored (API compatibility).
  * @param {string[]} keys
  * @param {{ascending?: boolean, distributedSortThreshold?: number}} [opts]
  * @param {Callback} callback
@@ -662,21 +724,6 @@ function sortByKey(keys, opts, callback) {
     return;
   }
   const ascending = opts?.ascending !== false;
-  const threshold = opts?.distributedSortThreshold ?? 8;
-
-  if (keys.length < threshold) {
-    collect.call(this, keys, (error, results) => {
-      if (error) return callback(error, null);
-      results.sort((a, b) => {
-        const ka = Object.keys(a)[0];
-        const kb = Object.keys(b)[0];
-        const cmp = ka < kb ? -1 : ka > kb ? 1 : 0;
-        return ascending ? cmp : -cmp;
-      });
-      callback(null, results);
-    });
-    return;
-  }
 
   const sortedKeys = [...keys].sort();
   const numPartitions = Math.min(keys.length, 16);
@@ -694,15 +741,19 @@ function sortByKey(keys, opts, callback) {
     },
     {"__BOUNDARIES__": boundaries}
   );
-  const reduce = (partKey, values) => {
-    const items = values.map((v) => (v && typeof v === "object" && "key" in v) ? v : {key: partKey, value: v});
-    items.sort((a, b) => {
-      const cmp = a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
-      return ascending ? cmp : -cmp;
-    });
-    const pid = partKey.replace("__sort_", "");
-    return {[`__sort_${pid}`]: items};
-  };
+  const reduce = util.compile(
+    (partKey, values) => {
+      const items = values.map((v) => (v && typeof v === "object" && "key" in v) ? v : {key: partKey, value: v});
+      const asc = "__ASCENDING__";
+      items.sort((a, b) => {
+        const cmp = a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
+        return asc ? cmp : -cmp;
+      });
+      const pid = partKey.replace("__sort_", "");
+      return {[`__sort_${pid}`]: items};
+    },
+    {"__ASCENDING__": ascending}
+  );
 
   global.distribution[this.gid].mr.exec({
     keys,
@@ -727,6 +778,7 @@ function sortByKey(keys, opts, callback) {
 
 /**
  * Inner join: for matching keys, produce (key, [value1, value2]).
+ * One MapReduce (collect) over the union of keys; same store value used for both sides.
  * @param {string[]} keysA
  * @param {string[]} keysB
  * @param {Callback} callback
@@ -738,33 +790,21 @@ function join(keysA, keysB, callback) {
     callback(new Error("Invalid keys"), null);
     return;
   }
-  collect.call(this, keysA, (errA, resultsA) => {
-    if (errA) return callback(errA, null);
-    collect.call(this, keysB, (errB, resultsB) => {
-      if (errB) return callback(errB, null);
-      const byKeyA = Object.fromEntries(
-        resultsA.map((r) => {
-          const k = Object.keys(r)[0];
-          return [k, r[k]];
-        })
-      );
-      const byKeyB = Object.fromEntries(
-        resultsB.map((r) => {
-          const k = Object.keys(r)[0];
-          return [k, r[k]];
-        })
-      );
-      const setB = new Set(keysB);
-      const out = keysA
-        .filter((k) => setB.has(k))
-        .map((k) => ({[k]: [byKeyA[k], byKeyB[k]]}));
-      callback(null, out);
-    });
+  const keysUnion = unionUniqueKeys(keysA, keysB);
+  collect.call(this, keysUnion, (err, results) => {
+    if (err) return callback(err, null);
+    const byKey = indexResultsByKey(results);
+    const setB = new Set(keysB);
+    const out = keysA
+      .filter((k) => setB.has(k))
+      .map((k) => ({[k]: [byKey[k], byKey[k]]}));
+    callback(null, out);
   });
 }
 
 /**
  * Left outer join: all keys from A; B values null when missing.
+ * One collect over union keys (single MR), then align rows to keysA order.
  * @param {string[]} keysA
  * @param {string[]} keysB
  * @param {Callback} callback
@@ -776,22 +816,16 @@ function leftOuterJoin(keysA, keysB, callback) {
     callback(new Error("Invalid keys"), null);
     return;
   }
-  collect.call(this, keysA, (errA, resultsA) => {
-    if (errA) return callback(errA, null);
-    collect.call(this, keysB, (errB, resultsB) => {
-      if (errB) return callback(errB, null);
-      const byKeyB = {};
-      for (const r of resultsB) {
-        const k = Object.keys(r)[0];
-        byKeyB[k] = r[k];
-      }
-      const out = resultsA.map((r) => {
-        const k = Object.keys(r)[0];
-        const v2 = k in byKeyB ? byKeyB[k] : null;
-        return {[k]: [r[k], v2]};
-      });
-      callback(null, out);
+  const keysUnion = unionUniqueKeys(keysA, keysB);
+  collect.call(this, keysUnion, (err, results) => {
+    if (err) return callback(err, null);
+    const byKey = indexResultsByKey(results);
+    const setB = new Set(keysB);
+    const out = keysA.map((k) => {
+      const v2 = setB.has(k) && k in byKey ? byKey[k] : null;
+      return {[k]: [byKey[k], v2]};
     });
+    callback(null, out);
   });
 }
 

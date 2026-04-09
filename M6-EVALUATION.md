@@ -2,29 +2,32 @@
 
 ## 1. How Substantial Is the Assignment?
 
-### Current State
+### Assessment
 
 | Dimension | Assessment | Notes |
 |-----------|------------|-------|
-| **Scope** | Substantial | 19 operations across transformations, actions, set ops, joins |
-| **Technical depth** | Moderate | Most ops map directly to `mr.exec`; serialization and fusion add complexity |
-| **Design freedom** | Good | Spec allows flexibility in API shape, partitioning, lazy vs eager |
-| **M5 improvement** | Clear | Higher-level abstractions, fluent API, multi-dataset ops |
+| **Scope** | Substantial | Many operations across transformations, actions, set ops, joins |
+| **Technical depth** | Moderate–strong | Serialization, fusion, distributed sort, join coordination, error paths |
+| **Design freedom** | Good | Spec allows API shape, partitioning, lazy vs eager |
+| **M5 improvement** | Clear | Fluent layer over MapReduce + store |
 
-### Substantiality Score: **7/10**
+### Substantiality Score: **7–8/10**
 
 **What makes it substantial:**
-- Fluent API with lazy evaluation and pipeline fusion requires non-trivial design
-- Function serialization (`util.compile` + `eval`) is a real distributed-systems challenge
-- Multi-dataset operations (union, intersection, join) require coordinating two key sets
-- 19 operations is a large surface area
 
-**What keeps it from being harder:**
-- Many operations are thin wrappers over `mr.exec` (distinct, groupByKey, collect)
-- Set operations and joins use orchestrator-side logic (filter keys, then collect both)
-- `sortByKey` is collect-then-sort, not distributed
-- Single-store assumption simplifies join/set ops
-- No partitioning strategy choices; students use whatever M5 provides
+- Fluent API with lazy evaluation and **fusion** for narrow chains
+- **Function serialization** (`util.compile` + `eval`) for remote execution
+- **Multi-dataset** coordination (union, intersection, joins)
+- **Distributed `sortByKey`** (range partitions + per-partition sort + merge) and **single-pass union-key strategy** for joins reduce redundant work versus naive double-collect
+- **Distributed fluent flatMap** (full pipeline in one MR when flatMap is present)
+- **Error propagation** in `mr.js` for map/reduce and **store.get** failures
+
+**What still limits difficulty:**
+
+- **`mr.exec`** still returns full result vectors to the orchestrator per job (`collect` is O(output) on the driver)
+- Dataset-wide **`reduce`** remains collect-then-fold for arbitrary binary ops
+- **Set ops** still use orchestrator-side `Set` membership for key lists (same asymptotic as before; intersection/subtract are not multi-round shuffle joins)
+- Single-group / single-store assumption for joins unless extended
 
 ---
 
@@ -33,96 +36,71 @@
 ### Strengths
 
 - **Clear scope** – Operations are well-defined without over-specifying implementation
-- **Design freedom** – "You have freedom over" API shape, lazy vs eager, partitioning
-- **Substantial requirements** – Fluent API, lazy eval, fusion, serialization are outcome-focused
-- **Fluent API guidance** – Shows intended style without prescribing exact code
-- **References** – Spark RDD guide and M5 files give good context
+- **Design freedom** – API shape, lazy vs eager, partitioning
+- **Substantial requirements** – Fluent API, lazy eval, fusion, serialization
+- **Fluent API guidance** – Intended style without prescribing exact code
+- **References** – Spark RDD guide and M5 files
 
 ### Weaknesses
 
-- **Single-store implicit** – Join/union/intersection/subtract assume same store; cross-group case is not mentioned
-- **sortByKey underspecified** – No indication that distributed sort is desirable
-- **distinct ambiguity** – "Duplicate keys (or key-value pairs)" leaves semantics open
-- **No difficulty gradient** – All operations presented as equal; no "stretch" or "extra credit" tier
+- **Single-store implicit** – Join/union/intersection/subtract assume one store; cross-group case is optional elsewhere
+- **distinct ambiguity** – Duplicate key vs pair semantics left open (implementation supports both via `byPair`)
+- **No difficulty gradient** in the core spec – stretch items listed separately in spec notes
 
 ---
 
-## 3. Implementation Evaluation
+## 3. Implementation Evaluation (current)
 
 ### Strengths
 
-- **Complete** – All 19 operations implemented
-- **Fluent API** – Lazy RDD with map/filter/flatMap, fusion for consecutive map/filter
-- **Serialization** – `util.compile` used for map, filter, flatMap, foreach, reduceByKey
-- **Composition** – intersection → distinct, reduce → collect, rightOuterJoin → leftOuterJoin
-- **Modular** – Spark is a separate service; no changes to `mr.js`
+- **Complete surface** – Operations from the spec (transformations, actions, sets, joins, `sortByKey`, `foreach`, `reduceByKey`, fluent API).
+- **Fluent API** – Lazy RDD; **map/filter fused**; **flatMap + suffix** compiled into **one** `mr.exec` where applicable.
+- **Serialization** – `util.compile` for narrow ops, flatMap chains, `reduceByKey`, **`sortByKey` reduce** (fixes closure loss on workers for sort order).
+- **Joins** – **Single MR read** over deduped union of keys (`unionUniqueKeys`) instead of two full collects; semantics aligned with one value per store key.
+- **`sortByKey`** – **Always distributed** (range buckets + local sort + merge); `distributedSortThreshold` kept only for API compatibility.
+- **Errors** – `workerMap` / `workerReduce` surface user failures; **`store.get` errors** no longer silently drop keys.
+- **Benchmark (`p6.js`)** – Quiet by default; **`_disableLogs`** on spawned nodes; **`P6_OP_TIMEOUT_MS`**; **`P6_VERBOSE`**; HTML charts with **markers** so sparse series render; **`scripts/kill-ports.sh`** covers more ports.
 
-### Weaknesses
+### Remaining tradeoffs
 
-- **Orchestrator bottleneck** – reduce, join, leftOuterJoin, rightOuterJoin, sortByKey all pull full data to orchestrator
-- **flatMap fusion** – flatMap runs on orchestrator after prior ops; no distributed flatMap in pipeline
-- **flatMap + more ops** – "flatMap followed by more ops not yet supported"
-- **Error handling** – Worker errors in `mr.js` are swallowed; users can get empty results
-- **distinct** – By key only; no distinct by (key, value)
+- **Orchestrator** still aggregates full MR outputs; **collect** and large results remain driver-sized.
+- **Left outer row order** follows **`keysA`** order, not necessarily legacy `collect(keysA)` iteration order (tests check counts and nulls, not order).
+- **Optional extensions** (fullOuterJoin, cogroup, cross-group join, persist) not implemented unless added later.
 
 ---
 
 ## 4. Improvements to Make the Assignment More Difficult
 
-### Tier 1: Moderate Increase in Difficulty
+### Tier 1: Moderate increase
 
-| Improvement | Description | Why it's harder |
-|-------------|-------------|-----------------|
-| **Distributed sortByKey** | Range partitioner + merge-sort across partitions | Requires partitioning strategy, ordering guarantees, multi-phase MR |
-| **Error propagation** | Surface worker errors to the user | Requires changing `mr.js` or adding error aggregation in spark |
-| **distinct by (key, value)** | Support both distinct-by-key and distinct-by-pair | Requires hashing or serializing (key, value) for deduplication |
+| Improvement | Status in this codebase |
+|-------------|-------------------------|
+| **Distributed sortByKey** | **Implemented** (always-on distributed path + compiled reduce) |
+| **Error propagation** | **Implemented** (map/reduce + store.get) |
+| **distinct by (key, value)** | **Implemented** (`opts.byPair`) |
 
-### Tier 2: Significant Increase in Difficulty
+### Tier 2: Significant increase
 
-| Improvement | Description | Why it's harder |
-|-------------|-------------|-----------------|
-| **Cross-group join** | `join(groupA, keysA, groupB, keysB)` with different stores | Multi-group coordination, cross-node data movement, key alignment |
-| **Distributed flatMap in pipeline** | Fuse flatMap with prior map/filter; run on workers | flatMap emits multiple items per input; need to handle in reduce or second MR |
-| **flatMap followed by more ops** | Support `.flatMap().map().filter().collect()` | Requires materializing flatMap output (temp store/mem) for next stage |
-| **cogroup** | Group values from 2+ datasets by key | Foundation for join; more general than join |
+| Improvement | Notes |
+|-------------|--------|
+| **Cross-group join** | Not implemented; requires multi-group wiring |
+| **Persist / cache** | Not implemented |
+| **Streaming collect / paged mr.exec** | Not implemented |
 
-### Tier 3: Stretch / Extra Credit
+### Tier 3: Stretch / extra credit
 
-| Improvement | Description | Why it's harder |
-|-------------|-------------|-----------------|
-| **fullOuterJoin** | All keys from both datasets | Combines left and right outer join logic |
-| **persist / cache** | Materialize RDD to store for reuse | Requires output groups, lifecycle management |
-| **Range partitioner** | User-specified partitioner for shuffle | Plugs into mr; affects sortByKey, join, groupByKey |
-| **Performance benchmark** | Report throughput/latency for key operations | Adds testing and measurement requirements |
+| Improvement | Notes |
+|-------------|--------|
+| **fullOuterJoin**, **cogroup**, **range partitioner API** | Optional spec items |
+| **Performance script** | **p6.js** + `p6-results.html` satisfies measurement/reporting |
 
 ---
 
-## 5. Recommended Spec Changes to Increase Difficulty
+## 5. Recommended Spec Changes (optional course tweaks)
 
-### Option A: Add a "Stretch" Section
-
-Add to the spec:
-
-```
-## Stretch Goals (Optional)
-
-- **Distributed sortByKey**: Sort across partitions using a range partitioner; merge results.
-- **Cross-group join**: Join datasets from two different groups/stores.
-- **flatMap in fluent pipeline**: Support `.flatMap().map().collect()` with flatMap running on workers.
-```
-
-### Option B: Elevate One Requirement
-
-Promote **distributed sortByKey** from "nice to have" to required:
-
-- Current: sortByKey can be collect + local sort
-- New: "sortByKey must use a distributed algorithm (e.g., range partitioner + merge-sort) when the dataset exceeds a threshold"
-
-### Option C: Add a "Correctness" Requirement
-
-Require **error propagation**:
-
-- "Worker failures or exceptions in user functions must be reported to the caller rather than producing empty or partial results."
+- Add an explicit **“driver memory”** note: `collect` and MR result size scale with data returned.
+- List **error propagation** as a core correctness requirement (this implementation aligns with that).
+- Keep **stretch** section for cross-group ops and advanced caching.
 
 ---
 
@@ -130,18 +108,11 @@ Require **error propagation**:
 
 | Aspect | Rating | Notes |
 |--------|--------|-------|
-| **Substantiality** | 7/10 | Solid scope; fusion and serialization add depth; many ops are thin wrappers |
-| **Spec quality** | Strong | Clear, flexible; could add stretch goals and clarify distinct/sortByKey |
-| **Implementation** | Complete | All ops, fluent API, fusion; orchestrator bottleneck and flatMap limits remain |
-| **Difficulty ceiling** | Moderate | Room to grow via distributed sort, cross-group ops, full pipeline fusion |
+| **Substantiality** | 7–8/10 | Broad API; distributed sort, fused flatMap, join and error improvements add depth |
+| **Spec quality** | Strong | Flexible; could spell out driver O(n) for collect |
+| **Implementation** | Strong | Full op set, fusion, distributed sort + flatMap pipeline, union-key joins, MR errors + store errors, benchmark hardening |
+| **Difficulty ceiling** | Moderate–high for a course milestone | Room remains for streaming, cross-store joins, persistence |
 
 ### Verdict
 
-The assignment is **substantial enough** for a typical course milestone: it requires design (fluent API, lazy eval), implementation (serialization, fusion), and integration (19 ops over M5). To make it **more difficult**, the most impactful additions would be:
-
-1. **Distributed sortByKey** – Teaches partitioning and ordering
-2. **Cross-group join** – Teaches multi-group coordination
-3. **Error propagation** – Teaches robustness and debugging
-4. **flatMap in pipeline** – Completes the fluent API story
-
-Consider adding 1–2 of these as stretch goals or optional requirements rather than mandating all of them.
+The milestone remains **substantial** for typical coursework: design (fluent API, lazy eval), implementation (serialization, fusion, distributed algorithms), and integration (Spark service over M5). The **current implementation** closes several gaps called out in earlier drafts: **distributed `sortByKey`**, **error propagation including store reads**, **distributed fluent flatMap + suffix**, **more efficient joins**, and a **robust `p6.js`** workflow. Further difficulty would come from **cross-group data**, **streaming APIs**, and **fault tolerance**—beyond the original spec’s non-goals.

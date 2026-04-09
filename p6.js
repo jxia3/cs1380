@@ -8,11 +8,19 @@
  * Or: node p6.js (ports 1234, 2000-2002 must be free)
  *
  * Env: SIZES="100,500,1000" NODES="1,2,3" RUNS=2 node p6.js
+ *      P6_VERBOSE=1  log progress lines; default is quiet (only final path + errors)
+ *      P6_OP_TIMEOUT_MS=180000  max time per op per run (default 3m; avoids infinite hang)
  */
 
 const fs = require("fs");
 const path = require("path");
+const log = require("./distribution/util/log.js");
+log.disable();
 const distribution = require("./distribution.js");
+
+const VERBOSE = process.env.P6_VERBOSE === "1";
+/** Max ms for one benchmark invocation (each RUNS repeat gets its own deadline). */
+const OP_TIMEOUT_MS = Math.max(1000, parseInt(process.env.P6_OP_TIMEOUT_MS || "180000", 10) || 180000);
 
 const basePort = 2000;
 const maxWorkers = 3;
@@ -50,16 +58,42 @@ function loadData(keys, done) {
 function timeOp(fn, cb) {
   const times = [];
   let run = 0;
+  let lastErr = null;
+  let aborted = false;
+
+  function finish(err, mean) {
+    if (aborted) return;
+    aborted = true;
+    cb(err, mean);
+  }
 
   function doRun() {
+    if (aborted) return;
     const start = Date.now();
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      lastErr = new Error(`Benchmark operation exceeded ${OP_TIMEOUT_MS}ms (set P6_OP_TIMEOUT_MS)`);
+      finish(lastErr, null);
+    }, OP_TIMEOUT_MS);
+
     fn((err) => {
-      if (!err) times.push(Date.now() - start);
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (aborted) return;
+      if (err) lastErr = err;
+      else times.push(Date.now() - start);
       run++;
       if (run < RUNS) doRun();
       else {
+        if (lastErr) {
+          finish(lastErr, null);
+          return;
+        }
         const mean = times.length > 0 ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : null;
-        cb(err, mean);
+        finish(null, mean);
       }
     });
   }
@@ -75,7 +109,7 @@ function runBenchmarksForConfig(spark, keys, n, ops, cb) {
     { name: "map+collect", run: (d) => spark.fromKeys(keys).map((k, v) => ({[k]: v.toUpperCase()})).collect((e) => d(e)) },
     { name: "filter+collect", run: (d) => spark.fromKeys(keys).filter((k) => k.startsWith("k0") || k.startsWith("k1")).collect((e) => d(e)) },
     { name: "flatMap+collect", run: (d) => spark.fromKeys(keys).flatMap((k, v) => v.split("").map((c) => ({[c]: 1}))).collect((e) => d(e)) },
-    { name: "sortByKey", run: (d) => spark.sortByKey(keys, {distributedSortThreshold: 10000}, (e) => d(e)) },
+    { name: "sortByKey", run: (d) => spark.sortByKey(keys, (e) => d(e)) },
     { name: "join", run: (d) => spark.join(keysA, keysB, (e) => d(e)) },
   ].filter((o) => !ops || ops.includes(o.name));
 
@@ -85,7 +119,8 @@ function runBenchmarksForConfig(spark, keys, n, ops, cb) {
     if (idx >= opList.length) return cb(null, out);
     const op = opList[idx];
     timeOp(op.run, (err, mean) => {
-      if (!err) out[op.name] = mean;
+      if (err) return cb(err);
+      out[op.name] = mean;
       idx++;
       next();
     });
@@ -98,7 +133,11 @@ let spawnedWorkers = 0;
 function runPhase(workerCount, allResults, cb) {
   const nodes = [];
   for (let i = 0; i < workerCount; i++) {
-    nodes.push({ip: "127.0.0.1", port: basePort + i});
+    nodes.push({
+      ip: "127.0.0.1",
+      port: basePort + i,
+      _disableLogs: true,
+    });
   }
 
   function spawnNext(i, done) {
@@ -125,15 +164,15 @@ function runPhase(workerCount, allResults, cb) {
           if (sizeIdx >= SIZES.length) return cb();
           const n = SIZES[sizeIdx];
           const keys = generateKeys(n);
-          process.stdout.write(`  n=${n} (${workerCount}w)... `);
+          if (VERBOSE) process.stdout.write(`  n=${n} (${workerCount}w)... `);
           loadData(keys, () => {
             runBenchmarksForConfig(distribution.test.spark, keys, n, null, (err, opResults) => {
               if (err) {
                 console.error(err);
-              } else {
-                allResults[workerCount][n] = opResults;
-                console.log(Object.values(opResults).join("/") + " ms");
+                return cb(err);
               }
+              allResults[workerCount][n] = opResults;
+              if (VERBOSE) console.log(Object.values(opResults).join("/") + " ms");
               sizeIdx++;
               runNextSize();
             });
@@ -185,6 +224,12 @@ function generateHTML(results) {
       if (pts.length > 1) {
         svg += `<polyline points="${pts.join(" ")}" fill="none" stroke="${nodeColors[nc]}" stroke-width="2"/>`;
       }
+      if (pts.length >= 1) {
+        pts.forEach((pt) => {
+          const [cx, cy] = pt.split(",");
+          svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${nodeColors[nc]}" stroke="#fff" stroke-width="1"/>`;
+        });
+      }
     });
 
     sizes.forEach((s) => {
@@ -225,6 +270,12 @@ function generateHTML(results) {
       }).filter(Boolean);
       if (pts.length > 1) {
         svg += `<polyline points="${pts.join(" ")}" fill="none" stroke="${nodeColors[nc]}" stroke-width="2"/>`;
+      }
+      if (pts.length >= 1) {
+        pts.forEach((pt) => {
+          const [cx, cy] = pt.split(",");
+          svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${nodeColors[nc]}" stroke="#fff" stroke-width="1"/>`;
+        });
       }
     });
 
@@ -326,7 +377,7 @@ function main() {
       return;
     }
     const wc = NODE_COUNTS[phaseIdx];
-    console.log(`\n--- ${wc} worker(s) ---`);
+    if (VERBOSE) console.log(`\n--- ${wc} worker(s) ---`);
     runPhase(wc, allResults, (err) => {
       if (err) {
         console.error(err);
@@ -340,7 +391,7 @@ function main() {
   runNextPhase();
 }
 
-distribution.disableLogs();
+global.nodeConfig._disableLogs = true;
 
 distribution.node.start(() => {
   main();

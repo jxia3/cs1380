@@ -2,93 +2,101 @@
 
 ## Architecture
 
-Extend M5 by adding a new `spark` service that provides Spark-like operations. The spark service composes or wraps `mr.exec` with appropriate map/reduce/compact configurations. The `mr` module is extended to propagate worker errors to the caller.
+Extend M5 by adding a new `spark` service that provides Spark-like operations. The spark service composes or wraps `mr.exec` with appropriate map/reduce/compact configurations. The `mr` module propagates worker map/reduce errors and store read failures to the caller via `__mr_error__` aggregation in `runOperation`.
 
 ```
 distribution.all.spark
   ├── fromKeys(keys) → RDD (fluent entry point)
-  ├── map, flatMap, filter, distinct, count, collect, ...
+  ├── map, flatMap, filter, distinct, count, collect, join, sortByKey, ...
   └── RDD: .map(), .filter(), .flatMap(), .collect(), .count(), .reduce()
 ```
 
 ### Fluent RDD API
 
 - **`spark.fromKeys(keys)`** – Returns an RDD object with lazy pipeline.
-- **Transformations** (`.map(fn)`, `.filter(fn)`, `.flatMap(fn)`) – Append to pipeline, return new RDD. No execution.
+- **Transformations** (`.map(fn)`, `.filter(fn)`, `.flatMap(fn)`) – Append to pipeline, return new RDD. No execution until an action.
 - **Actions** (`.collect(cb)`, `.count(cb)`, `.reduce(fn, zero, cb)`) – Execute pipeline, invoke callback.
-- **Pipeline fusion** – Consecutive map/filter ops are fused into a single MapReduce job.
+- **Pipeline fusion** – Consecutive **map/filter** ops are fused into a **single** `mr.exec` job (compiled mapper).
+- **Fluent pipelines with `flatMap`** – The first `flatMap` and any **suffix** map/filter/flatMap run in **one distributed MR job**: the mapper is generated to apply prefix narrow ops (if any), then `flatMap`, then suffix ops on workers. Results are reduced and flattened the same way as imperative `flatMap`. No orchestrator-side `results.flatMap` for the expansion step.
 
 ### Function Serialization
 
-- Use `util.compile` with `eval("__PLACEHOLDER__")` to inline user functions for map, filter, flatMap, foreach, and **reduceByKey** (map + reduce).
+- Use `util.compile` with `eval("__PLACEHOLDER__")` to inline user functions for map, filter, fused pipelines, flatMap chains, foreach, **reduceByKey**, **sortByKey** (map + reduce with `__BOUNDARIES__` / `__ASCENDING__`).
 
-## Implementation Phases
+## Implementation Phases (as built)
 
-### Phase 1: Narrow Transformations (map, flatMap, filter)
+### Phase 1: Narrow transformations (map, flatMap, filter)
 
-- **map** / **flatMap**: Already supported by `mr.exec`—mapper returns array of `{key: value}`.
-- **filter**: Map returns `[]` or `[{[key]: value}]` based on predicate. Use compact to drop empty. Or: map returns `[]` for filtered-out, `[{[key]: value}]` for kept; compact filters out keys with empty value arrays.
-- **mapOnly**: For operations that don't need reduce (e.g., map then collect), use reduce that passes through: `(k, vals) => ({[k]: vals[0]})` for single value, or concatenate for flatMap.
+- **map** / **imperative flatMap**: `mr.exec` with mapper returning arrays of `{key: value}`; reduce collapses per key as needed.
+- **filter**: Map emits `[]` or `[{[key]: value}]`; reduce keeps first value.
 
-### Phase 2: Wide Transformations (distinct, reduceByKey, groupByKey)
+### Phase 2: Wide transformations (distinct, reduceByKey, groupByKey)
 
-- **distinct**: Map `(k, v) => [{[k]: k}]` (keep key only). Reduce `(k, vals) => ({[k]: vals[0]})`. Dedupes by key. For `opts.byPair`, emit composite key `__pair_${hash(key,value)}` with `{key, value}`; reduce keeps one per composite key; post-process to `{[key]: value}`. Hash logic must be inlined in map (no external function refs) for worker serialization.
-- **reduceByKey**: Use `util.compile` to inline user map and reduce so they serialize correctly on workers.
-- **groupByKey**: Map `(k, v) => [{[k]: v}]`, Reduce `(k, vals) => ({[k]: vals})` (identity collect).
+- **distinct**: By key: map/reduce dedupe. **`opts.byPair`**: hash `(key,value)` to `__pair_*` partition keys; reduce keeps one row per pair.
+- **reduceByKey**: `util.compile` on user map and reduce.
+- **groupByKey**: Map `(k, v) => [{[k]: v}]`, reduce `(k, vals) => ({[k]: vals})`.
 
 ### Phase 3: Actions (count, collect, first, take)
 
-- **collect**: Use `mr.exec` without `out`; callback receives results.
-- **count**: Map `(k, v) => [{"__count__": 1}]`, Reduce `(k, vals) => ({"__count__": vals.reduce((a,b)=>a+b, 0)})`. Then sum all `__count__` values in callback. Simpler: map each to count key, single reduce.
-- **first** / **take(n)**: Run full mr, then slice results on orchestrator.
+- **collect** / **count**: Identity or `__count__` pattern via `mr.exec`.
+- **first** / **take(n)**: `collect` then orchestrator slice (same ordering assumptions as MR merge order).
+- **Dataset-wide reduce**: `collect` then fold on orchestrator (non-associative `fn` in general).
 
-### Phase 4: Set Operations (union, intersection, subtract)
+### Phase 4: Set operations (union, intersection, subtract)
 
-- **union**: Get keys from both groups, concatenate. Run mr with combined keys. Handle duplicate keys (union keeps both or merges—spec says duplicates may appear).
-- **intersection** / **subtract**: Require two key sets. Shuffle both to same partitioner, then compute set logic. May need two mr rounds or custom worker.
+- **union**: Single MR over `keysA.concat(keysB)`; reduce gathers values per key; callback flattens to one `{k:v}` per list element.
+- **intersection**: `keysA.filter` with `Set(keysB)`, then `distinct` on filtered keys.
+- **subtract**: `keysA.filter` against `Set(keysB)`, then `collect`.
 
-### Phase 5: Joins and sortByKey (stretch)
+### Phase 5: Joins and sortByKey
 
-- **join**: Co-group by key. Requires loading both datasets, shuffling by key, then cross-product of value lists.
-- **sortByKey**: When `keys.length < distributedSortThreshold` (default 8), collect then sort on orchestrator. Otherwise: range partitioning by key boundaries, map emits `(partitionId, {key, value})`, reduce sorts each partition locally, merge in partition order. Options: `distributedSortThreshold`, `ascending`. Use `util.compile` to inline `__BOUNDARIES__` into map.
+- **join** / **leftOuterJoin**: **One** `collect` over **`unionUniqueKeys(keysA, keysB)`** (deduped union), building a key→value map from results. Inner join: `keysA.filter(k => keysB has k)`. Left outer: one row per `keysA` entry; right-hand value is `null` when the key is not in B’s membership **or** missing from store (`k in byKey` check). **Right outer join** delegates to swapped left outer + column swap. Same single-store value for both sides when the key appears in both lists.
+- **sortByKey**: **Always** uses the distributed path: sorted key array → range-style partition boundaries → map assigns `__sort_{pid}` → **reduce** sorts each partition with **`util.compile`**’d ascending flag (workers do not rely on broken closures). Merge by partition id on orchestrator. The `distributedSortThreshold` option remains in the API for compatibility but is **ignored** (always distributed).
 
-### Phase 6: Error Propagation and Extended Fluent API
+### Phase 6: Error propagation and MR
 
-- **Error propagation (mr.js)**: In `workerMap` and `workerReduce`, catch thrown errors and store under `__mr_error__` instead of swallowing. In `runOperation` callback, if any result has `__mr_error__`, call callback with `new Error(errItem.__mr_error__)` instead of passing partial results.
-- **Fluent flatMap + more ops**: Support `flatMap` followed by `map`, `filter`, or `flatMap` before an action. Use `_runWithFlatMap` with `afterFlatMap` pipeline; apply subsequent ops to flat results on orchestrator (or extend to distributed if needed).
+- **`mr.js` `workerMap`**: Thrown errors in user map → `__mr_error__`. **`store.get` error** → pushed to `__mr_error__` (no silent skip).
+- **`workerReduce`**: Thrown errors in reduce → `{ __mr_error__: message }`.
+- **`runOperation`**: If any flattened result contains `__mr_error__`, callback receives `new Error(...)`; no silent partial success for those paths.
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `distribution/all/spark.js` | Spark service (distinct byPair, distributed sortByKey, fluent flatMap+ops) |
-| `distribution/all/mr.js` | MapReduce with error propagation |
-| `distribution/all/all.js` | Register spark service |
-| `distribution.js` | Wire spark into groups (via all.js) |
-| `t6.js` | Manual test script (distinct byPair, fluent flatMap+map+collect) |
-| `p6.js` | Performance benchmark script (latency by operation and dataset size) |
+| `distribution/all/spark.js` | Spark service: fusion, distributed fluent flatMap, union-key joins, distributed sortByKey, helpers `unionUniqueKeys` / `indexResultsByKey` |
+| `distribution/all/mr.js` | MapReduce `exec`; error propagation for map/reduce/store |
+| `distribution/all/all.js` | Registers `spark` service |
+| `distribution.js` | Loads distribution; `disableLogs` / `_disableLogs` on node config |
+| `t6.js` | Manual integration tests for spark ops |
+| `test/test-student/m6.student.test.js` | Jest coverage for spark |
+| `p6.js` | Performance benchmark → `p6-results.html` |
+| `scripts/kill-ports.sh` | Frees test ports (including Jest/MR ranges) before manual scripts |
 
 ## Data Model
 
 - Store keys are strings. Values are arbitrary (serializable).
-- Spark uses (K, V) tuples; we use `{[key]: value}` objects. Map between as needed.
-- For multi-dataset ops, use two groups or two key arrays; spark methods accept `keys` and optionally `keysB` or `groupB`.
+- We use `{[key]: value}` objects; multi-dataset ops use two key arrays against the **same** group store unless extended.
 
 ## Testing Strategy
 
-Use `t6.js` (like `t.js`) to:
-1. Start node + spawn workers
-2. Create group, put test data
-3. Call spark operations
-4. Log results, verify manually
+- **`t6.js`**: Spawn workers, load data, sequential checks (`./scripts/run-test.sh t6.js`).
+- **`m6.student.test.js`**: Jest suite against configured groups.
+- Prefer freeing ports via `scripts/kill-ports.sh` before long runs.
 
-Avoid Jest for M6 tests due to slowness; use manual script for iteration.
+## Performance Benchmarking (`p6.js`)
 
-## Performance Benchmarking (p6.js)
-
-- **Setup**: Spawn workers incrementally (1, then 2, then 3) to vary worker count. Generate synthetic data: keys `k00`..`kN`, values `v0`..`vN`.
-- **Dataset sizes**: 100, 500, 1000, 2000, 5000 (configurable via `SIZES` env).
-- **Worker counts**: 1, 2, 3 (configurable via `NODES` env).
+- **Setup**: Phases for worker counts 1, 2, 3 (`NODES` env). Synthetic keys `k00`…, values `v…`.
+- **Dataset sizes**: Default 100, 500, 1000, 2000, 5000 (`SIZES` env).
+- **Runs per op**: Default 2 (`RUNS` env).
 - **Operations**: collect, count, map+collect, filter+collect, flatMap+collect, sortByKey, join.
-- **Method**: Run each operation 2 times per (size, workers); report mean latency (ms). Use `distribution.disableLogs()` to reduce log noise.
-- **Output**: `p6-results.html` with line charts (latency vs size, one line per worker count) and raw data table. Run with `TIMEOUT=180 ./scripts/run-test.sh p6.js` for full benchmark.
+- **Logging**: `require("./distribution/util/log.js"); log.disable()` **before** `require("./distribution.js")`. Spawned workers pass **`_disableLogs: true`** in node config so child processes do not flood inherited stdio (avoids backpressure hangs). **`global.nodeConfig._disableLogs = true`** on orchestrator. Optional **`P6_VERBOSE=1`** for progress lines.
+- **Timeouts**: **`P6_OP_TIMEOUT_MS`** (default 180000) per benchmark invocation prevents infinite hang if MR stalls. Shell wrapper: use adequate **`TIMEOUT`** with `./scripts/run-test.sh p6.js` (e.g. 600–900s for full default grid).
+- **Correctness**: `timeOp` propagates errors; benchmark failure stops the phase with `cb(err)`.
+- **Output**: `p6-results.html` — line charts (with point markers for single-size series), scaling chart for collect, raw data table.
+- **Charts**: Line charts draw polylines when ≥2 points; **circles** mark each point so single-size runs are visible.
+
+## Non-goals (unchanged)
+
+- Streaming `collect` or paging `mr.exec` results.
+- Cross-group / two-store joins without API extension.
+- `mr.exec` still returns full result arrays to the orchestrator per job (driver memory scales with output size).

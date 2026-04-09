@@ -4,7 +4,8 @@
 #
 # Usage: ./scripts/kill-ports.sh
 
-PORTS="1234 2000 2001 2002"
+# Main node (1234), t6/p6 workers (2000–2002), Jest/mr/m6 and other suite ports
+PORTS="1234 2000 2001 2002 2345 7110 7111 7112 7200 7201 7202 7203 8000 8001 8002 8003 8004 8005 8006 8007 8008 9001 9002 9003 9004 9005 9006 9090"
 KILLED=0
 
 for port in $PORTS; do

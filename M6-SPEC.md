@@ -2,69 +2,107 @@
 
 ## Overview
 
-Extend the distributed execution engine (M5) with a richer set of data processing operations inspired by Apache Spark's RDD API. Your implementation should build on the existing MapReduce, store, and mem services. The goal is to provide Spark-like transformations and actions that run across a node group.
+Extend the distributed execution engine (M5) with a richer set of data processing operations inspired by Apache Spark's RDD API. Build on the existing MapReduce, store, and mem services so that work runs on workers in a node group wherever the operation allows. The handout expects implementations you can test for correctness and reason about without moving every intermediate through the orchestrator by default.
 
 ## Scope
 
-Implement a set of transformations and actions that operate on distributed key-value data. You have freedom over:
+Implement transformations and actions over distributed key-value data. You may choose:
 
-- How to expose these operations (new service, extended `mr`, fluent API, etc.)
-- Whether to support lazy evaluation or eager execution
+- How to expose operations (new service, extended `mr`, fluent API, or similar)
 - How to handle partitioning and shuffling
-- The exact API shape (callbacks, config objects, method names)
+- The exact API shape: callbacks, configuration objects, method names
+
+Lazy evaluation is not optional; see Substantial Requirements.
 
 ### Substantial Requirements
 
 To qualify as a substantial improvement over M5, your implementation must:
 
-1. **Provide a fluent, chainable API** – A way to compose operations (e.g., map then filter then collect) without deeply nested callbacks. The exact method names and structure are up to you.
-2. **Support lazy evaluation** – Transformations should build a pipeline; execution occurs only when an action is triggered. Where possible, consecutive narrow transformations (map, filter) should be fused into a single MapReduce job.
-3. **Ensure function serialization** – User-provided functions must execute correctly on remote workers. You may use `util.compile`, string serialization, or another approach.
+1. Provide a fluent, chainable API so users can compose operations (for example map then filter then collect) without deeply nested callbacks. Exact names and structure are yours; see API Guidance.
+
+2. Use lazy evaluation for transformations. Building a pipeline must not run MapReduce jobs or pull large results to the orchestrator until an action runs. Calling `map`, `filter`, `flatMap`, `distinct`, `reduceByKey`, `groupByKey`, set ops, `sortByKey`, or joins on a pipeline object should only record work. Execution starts when the user invokes an action such as `collect`, `count`, `first`, `take`, `reduce`, or `foreach`. Document any narrow exception (for example a helper that materializes for debugging) so it does not substitute for the required lazy pipeline.
+
+3. Fuse consecutive narrow steps where reasonable so that multiple transformations do not each trigger a full round trip when a single distributed stage would match the semantics. Typical candidates are consecutive map and filter; include flatMap in fusion when your design allows.
+
+4. Ensure user-provided functions execute correctly on remote workers. Pick a serialization strategy your engine can support and document it. Do not rely on a specific helper from starter code unless the course hands it to you explicitly.
+
+5. Prefer distributed work on workers for large data. The orchestrator should not be the default place to expand, sort, or join entire datasets when the same semantics can be obtained with worker-side stages. See Distributed execution expectations.
+
+### Distributed execution expectations
+
+Unless the operation inherently needs the full dataset on the orchestrator, structure the implementation so transformations and wide operations run as distributed stages where applicable: map and filter, flatMap output expansion, per-key aggregation, partitioning for sort, join preparation, and set logic expressible in a MapReduce-style job on workers.
+
+Avoid running a distributed stage and then scanning the full result again on the orchestrator when another distributed stage could preserve semantics. Use the orchestrator to merge ordered partitions, merge small summaries, build small key lists for the next stage when unavoidable, and to invoke callbacks.
+
+Orchestrator materialization is acceptable when necessary for:
+
+- Actions that return data to the caller: `collect`, and bounded reads such as `first` and `take(n)` according to your design.
+- A global `reduce` with an arbitrary user binary operator that is not known to be associative or commutative; you may combine on workers then finish on the orchestrator, or document a restriction.
+- Small control data: sorted key boundaries, configuration, aggregated errors.
+
+The spec does not prescribe one algorithm for every edge case. Solutions that keep large intermediate results off the orchestrator except in the cases above are consistent with the intent of the assignment.
 
 ## Operations to Implement
 
-### Core Transformations
+### Core transformations
 
-- **map**: Apply a function to each (key, value) pair; produce one output per input.
-- **flatMap**: Apply a function; each input may yield zero or more outputs.
-- **filter**: Keep only elements for which a predicate returns true.
-- **distinct**: Remove duplicate keys (or key-value pairs) from the dataset. Support `opts.byPair` to deduplicate by (key, value) instead of key alone.
-- **reduceByKey**: For each key, aggregate all associated values using a binary function.
-- **groupByKey**: For each key, collect all associated values into a single collection.
+- map: apply a function to each (key, value) pair; one output per input.
+- flatMap: each input may yield zero or more outputs. When chained with other transformations before an action, flatMap should run as part of distributed execution, not only as an orchestrator step after a full collect.
+- filter: keep elements for which the predicate is true.
+- distinct: remove duplicate keys or duplicate (key, value) pairs; support `opts.byPair` for pair-based deduplication.
+- reduceByKey: per key, aggregate values with a binary function (often associative for worker-side combining).
+- groupByKey: per key, collect all values into one collection.
 
-### Set Operations
+### Set operations
 
-- **union**: Combine two datasets; duplicates may appear.
-- **intersection**: Elements present in both datasets.
-- **subtract**: Elements in the first dataset but not the second.
+- union: combine two datasets; duplicates may appear as defined by your semantics.
+- intersection: elements in both datasets.
+- subtract: elements in the first dataset but not the second.
 
 ### Ordering
 
-- **sortByKey**: Sort key-value pairs by key (ascending or descending). When the key count exceeds a configurable threshold, use distributed sort (range partitioning by key boundaries, map-shuffle-reduce, local sort per partition, merge in order) instead of collect-then-sort. Options: `distributedSortThreshold`, `ascending`.
+- sortByKey: sort by key (ascending or descending). For large inputs, use a distributed sort (for example range partitioning, shuffle, local sort per partition, merge in order). Collecting everything and sorting only on the orchestrator is not sufficient at scale. You may expose `distributedSortThreshold` and `ascending`; if you use a threshold, document behavior above and below it.
 
 ### Joins
 
-- **join**: Inner join—for matching keys, produce (key, (value1, value2)).
-- **leftOuterJoin**, **rightOuterJoin**: Outer join variants; missing values represented as null or equivalent.
+- join: inner join; for matching keys, produce (key, (value1, value2)).
+- leftOuterJoin, rightOuterJoin: missing sides as null or equivalent.
+
+Joins should not depend on two independent full collects of both sides when a single coordinated distributed read over the keys you need can implement the semantics. The exact plan is up to you.
 
 ### Actions
 
-- **collect**: Return all elements to the caller.
-- **count**: Return the total number of elements.
-- **first**: Return the first element.
-- **take(n)**: Return the first n elements.
-- **reduce**: Aggregate the entire dataset using a binary function.
-- **foreach**: Apply a function to each element (e.g., for side effects).
+- collect: return all elements to the caller.
+- count: total number of elements.
+- first: first element.
+- take(n): first n elements.
+- reduce: fold the whole dataset with a binary function; state whether associativity is required for a tree reduce on workers.
+- foreach: apply a function for side effects.
 
-## Fluent API Guidance
+## API Guidance
 
-Your fluent API should support at least:
+You may use a fluent chain, a builder, or another clear pattern. The handout expects practical usability, not a single prescribed class name.
 
-- An entry point (e.g., from a key set or dataset reference)
-- Transformations: map, filter, flatMap (flatMap may be followed by map, filter, or flatMap before an action)
-- Actions: collect, count, and reduce
+Entry and chaining:
 
-Example of the intended *style* (adapt to your design):
+- Expose a clear entry point (key list, group name, dataset handle, or equivalent).
+- Transformations return a new object or descriptor for the extended pipeline; they must not run the pipeline eagerly.
+- Actions accept a callback (or use Promises if your environment allows) and trigger execution.
+- Support map, filter, and flatMap, including flatMap followed by further map, filter, or flatMap before an action, without forcing the user to flatten manually on the client for the common case.
+
+Actions:
+
+- Support at least collect, count, and reduce (with identity or zero as your API requires).
+
+Fusion:
+
+- Combine consecutive map and filter (and flatMap when your design allows) into as few distributed jobs as is reasonable.
+
+Naming:
+
+- Keep verbs and parameter order consistent. Document whether keys are strings, how the group is chosen, and how two-input operations name the second key list or dataset.
+
+Illustrative style only:
 
 ```
 entryPoint(keys).map(...).filter(...).collect(callback)
@@ -72,58 +110,62 @@ entryPoint(keys).map(...).count(callback)
 entryPoint(keys).map(...).reduce(fn, zero, callback)
 ```
 
-Key properties: transformations return a chainable object; no execution until an action is called; consecutive map/filter can be fused into one MapReduce job.
+## Error handling
 
-## Error Handling
+Worker errors in map or reduce must reach the caller: the action callback should receive an error, not a silent empty success. If workers read from the store, surface read failures rather than dropping keys without notice.
 
-- MapReduce worker errors (in map or reduce phases) must propagate to the caller. If any worker throws or returns an error, the operation callback should receive an error rather than partial or empty results.
+## Correctness verification
+
+Correctness matters as much as feature coverage. You should plan a testing strategy, run it as you develop, and document enough for someone else to reproduce your checks. General approaches include exercising edge cases (empty or tiny inputs, duplicates, multi-key partitions), multi-dataset operations, ordering-sensitive operations, and failure paths so errors surface instead of disappearing. Regression checks when fixing bugs are good practice. How you automate (scripts, test frameworks, ad hoc runs) is up to you and your course.
+
+Part of this milestone is learning to use coding agents effectively: use them to help design tests and interpret failures, but you remain responsible for validating that behavior matches the spec and that your tests actually prove what you claim. Blindly accepting generated tests without understanding them does not meet the intent of this section.
 
 ## Constraints
 
-- Operations must run across a node group (use `groups`, `store`, `mem`, `comm`).
-- User-provided functions must be serializable for execution on remote nodes.
-- Integrate with the existing store and mem services for data placement and retrieval.
-- The M5 MapReduce implementation is a valid building block; you may extend or wrap it.
+- Use the platform’s groups, store, mem, and comm abstractions so work runs across a node group.
+- User functions must be serializable for remote execution; document limitations such as closures and captured globals.
+- Integrate with the existing store and mem services.
+- You may extend or wrap M5’s MapReduce implementation.
+- Default to a single group and single store for multi-dataset operations unless you implement an optional cross-group extension; state the assumption in your report.
+- Be explicit about memory: `collect` and similar actions necessarily bound output by orchestrator capacity. Do not describe the pipeline as distributed if every transformation eagerly pulls all values to the orchestrator unless that matches the exceptions in this document.
 
 ## References
 
 - Apache Spark RDD Programming Guide: https://spark.apache.org/docs/latest/rdd-programming-guide.html
-- Your M5 implementation: `distribution/all/mr.js`, `distribution/local/store.js`, `distribution/local/mem.js`
+- M5: `distribution/all/mr.js`, `distribution/local/store.js`, `distribution/local/mem.js`
 
-## Performance Evaluation
+## Performance evaluation
 
-Implementations should be amenable to performance measurement. A performance script (e.g., `p6.js`) should:
+Provide a script that measures your implementation under controlled conditions and summarizes results in a report. Evaluate the following:
 
-- **Measure latency** – End-to-end time (ms) for key operations: collect, count, map+collect, filter+collect, flatMap+collect, sortByKey, join.
-- **Vary dataset size** – Run benchmarks at multiple scales (e.g., 100, 500, 1000, 2000, 5000 elements) to observe scaling behavior.
-- **Vary worker count** – Run benchmarks with 1, 2, and 3 workers to demonstrate the benefit of horizontal scaling.
-- **Report results** – Output a table of mean latency (ms) per operation, dataset size, and worker count.
-- **Visualize** – Generate an HTML report (e.g., `p6-results.html`) with line charts showing latency vs dataset size (one line per worker count) and a summary chart.
+- Workloads: run the operations listed earlier end-to-end (for example collect, count, map then collect, filter then collect, flatMap then collect, sortByKey, join) so narrow transformations, wide or shuffle-heavy steps, and joins are all represented.
+- Latency: report elapsed time per run (typically in milliseconds), aggregated in a sensible way (for example mean over repeated runs) so noise is visible but the table stays readable.
+- Scaling with data size: repeat measurements at several dataset sizes (for example from hundreds to thousands of keys) to see how cost grows with input.
+- Scaling with parallelism: repeat measurements with different worker counts (for example one, two, and three workers) on the same sizes so you can relate wall-clock time to parallelism.
+- Output: a table of results (operation, size, workers, and reported latency) plus an HTML report with charts (for example latency versus dataset size with one series per worker count, and a compact summary view). Briefly relate what you see to where work runs (workers versus orchestrator) and to your correctness story.
 
-Results need not meet specific thresholds; the goal is to provide a reproducible baseline for comparing implementations and understanding where time is spent (narrow vs wide transformations, shuffle-heavy ops).
+Numbers need not meet a fixed threshold; they should be reproducible enough to compare runs and support discussion in your report.
 
 ## Deliverables
 
-- A working implementation of the operations above (or a substantial subset).
-- Tests that demonstrate correctness (use a manual test script; Jest may be slow).
-- A performance script (e.g., `p6.js`) that measures and reports latency for the operations above.
-- A brief report summarizing your design, challenges, and any extra features.
+- Implementation of the listed operations or a subset your instructor approves.
+- Tests and enough description that someone can understand how you validated correctness.
+- The performance script and generated report as above.
+- A short report: design, how you verified correctness, difficulties, optional features.
 
-## Optional Extensions (if you finish early)
+## Optional extensions
 
-If you complete the core requirements with time to spare, consider one or more of these extensions:
+If core requirements are complete, prefer depth over adding many new operators. Examples:
 
-- **fullOuterJoin** – Return all keys from both datasets; combine logic from left and right outer joins.
-- **Cross-group join** – Join datasets from two different groups/stores (`join(groupA, keysA, groupB, keysB)`).
-- **cogroup** – Group values from two or more datasets by key; generalizes join and supports multi-way aggregation.
-- **Distributed flatMap in pipeline** – Run flatMap on workers (not just orchestrator) so `.flatMap().map().collect()` uses a distributed flatMap stage.
-- **persist / cache** – Materialize an RDD to the store for reuse across multiple actions; requires output groups and lifecycle management.
-- **Range partitioner** – Allow a user-specified partitioner for shuffle; enables better control for sortByKey, join, and groupByKey.
-- **takeOrdered(n)** – Return the first n elements in sorted order without collecting the full dataset.
-- **sample** – Probabilistic sampling (with or without replacement) for approximate analytics.
+- Persist and cache: write intermediate results to the store (or a dedicated area) so later actions reuse them without recomputing from scratch; specify unpersist or lifecycle rules.
+- Range partitioner: user- or data-driven boundaries for shuffles used by sort, join, or groupByKey; explain how boundaries are chosen.
+- Sample: random sampling with or without replacement and configurable fraction or count, with distributed semantics for large inputs rather than collect-then-sample on the client.
+- Lineage: record the transformation graph (stages and dependencies) to support debugging, replay, or explaining what will execute; optional hooks into tests or logging.
+
+Other directions (streaming or cross-group execution, fault-tolerant replay from lineage) are appropriate only if you can define correctness and evaluation clearly.
 
 ## Notes
 
-- Lazy evaluation and pipeline fusion are expected for the fluent API; lineage and fault tolerance are not.
-- Prioritize operations that map naturally to M5's map-shuffle-reduce pipeline.
-- Multi-dataset operations (join, union, intersection, subtract) require coordinating two input sources.
+- Lazy evaluation and fusion apply to the core API; fault tolerance is out of scope unless you take an extension that defines it.
+- Multi-dataset operations need clear tests for both inputs.
+- Favor mapping operations to M5’s map-shuffle-reduce model while respecting the distributed expectations section.

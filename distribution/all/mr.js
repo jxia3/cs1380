@@ -197,7 +197,10 @@ function workerMap(keys, callback) {
   for (const key of keys) {
     global.distribution[groupId].store.get(key, (error, value) => {
       try {
-        if (!error) {
+        if (error) {
+          if (!("__mr_error__" in values)) values["__mr_error__"] = [];
+          values["__mr_error__"].push(error instanceof Error ? error.message : String(error));
+        } else {
           const result = config.map(key, value);
           for (const item of (result instanceof Array ? result : [result])) {
             for (const k in item) {
