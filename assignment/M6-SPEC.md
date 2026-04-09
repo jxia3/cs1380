@@ -6,13 +6,13 @@ Extend the distributed execution engine (M5) with a richer set of data processin
 
 ## Scope
 
-Implement transformations and actions over distributed key-value data. You may choose:
+The milestone includes: implementing the operations below with a usable API; verifying correctness; running a performance study with structured configurations; completing the capstone check (dataset and operation sequence in the capstone folder for this assignment); and submitting a short report. Details appear in the corresponding sections.
+
+For the core implementation, you may choose:
 
 - How to expose operations (new service, extended `mr`, fluent API, or similar)
 - How to handle partitioning and shuffling
 - The exact API shape: callbacks, configuration objects, method names
-
-Lazy evaluation is not optional; see Substantial Requirements.
 
 ### Substantial Requirements
 
@@ -20,7 +20,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 
 1. Provide a fluent, chainable API so users can compose operations (for example map then filter then collect) without deeply nested callbacks. Exact names and structure are yours; see API Guidance.
 
-2. Use lazy evaluation for transformations. Building a pipeline must not run MapReduce jobs or pull large results to the orchestrator until an action runs. Calling `map`, `filter`, `flatMap`, `distinct`, `reduceByKey`, `groupByKey`, set ops, `sortByKey`, or joins on a pipeline object should only record work. Execution starts when the user invokes an action such as `collect`, `count`, `first`, `take`, `reduce`, or `foreach`. Document any narrow exception (for example a helper that materializes for debugging) so it does not substitute for the required lazy pipeline.
+2. Use lazy evaluation for transformations: do not run MapReduce jobs or pull large results to the orchestrator until an action runs (`collect`, `count`, `first`, `take`, `reduce`, `foreach`, …). Calls such as `map`, `filter`, `flatMap`, `distinct`, `reduceByKey`, `groupByKey`, set ops, `sortByKey`, or joins on the pipeline should only record work until then. Document any narrow exception (for example a helper that materializes for debugging) so it does not substitute for the required lazy pipeline.
 
 3. Fuse consecutive narrow steps where reasonable so that multiple transformations do not each trigger a full round trip when a single distributed stage would match the semantics. Typical candidates are consecutive map and filter; include flatMap in fusion when your design allows.
 
@@ -30,9 +30,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 
 ### Distributed execution expectations
 
-Unless the operation inherently needs the full dataset on the orchestrator, structure the implementation so transformations and wide operations run as distributed stages where applicable: map and filter, flatMap output expansion, per-key aggregation, partitioning for sort, join preparation, and set logic expressible in a MapReduce-style job on workers.
-
-Avoid running a distributed stage and then scanning the full result again on the orchestrator when another distributed stage could preserve semantics. Use the orchestrator to merge ordered partitions, merge small summaries, build small key lists for the next stage when unavoidable, and to invoke callbacks.
+Unless the operation inherently needs the full dataset on the orchestrator, run transformations and wide operations as distributed stages where applicable (map, filter, flatMap expansion, per-key aggregation, sort partitioning, join prep, set logic in MapReduce-style work). Avoid a second full scan on the orchestrator after a distributed stage when another stage could preserve semantics. Use the orchestrator to merge partitions or summaries, build small key lists when needed, and invoke callbacks.
 
 Orchestrator materialization is acceptable when necessary for:
 
@@ -83,26 +81,26 @@ Joins should not depend on two independent full collects of both sides when a si
 
 You may use a fluent chain, a builder, or another clear pattern. The handout expects practical usability, not a single prescribed class name.
 
-Entry and chaining:
+### Entry and chaining
 
 - Expose a clear entry point (key list, group name, dataset handle, or equivalent).
 - Transformations return a new object or descriptor for the extended pipeline; they must not run the pipeline eagerly.
 - Actions accept a callback (or use Promises if your environment allows) and trigger execution.
 - Support map, filter, and flatMap, including flatMap followed by further map, filter, or flatMap before an action, without forcing the user to flatten manually on the client for the common case.
 
-Actions:
+### Actions
 
 - Support at least collect, count, and reduce (with identity or zero as your API requires).
 
-Fusion:
+### Fusion
 
 - Combine consecutive map and filter (and flatMap when your design allows) into as few distributed jobs as is reasonable.
 
-Naming:
+### Naming
 
 - Keep verbs and parameter order consistent. Document whether keys are strings, how the group is chosen, and how two-input operations name the second key list or dataset.
 
-Illustrative style only:
+### Illustrative style
 
 ```
 entryPoint(keys).map(...).filter(...).collect(callback)
@@ -116,9 +114,9 @@ Worker errors in map or reduce must reach the caller: the action callback should
 
 ## Correctness verification
 
-Correctness matters as much as feature coverage. You should plan a testing strategy, run it as you develop, and document enough for someone else to reproduce your checks. General approaches include exercising edge cases (empty or tiny inputs, duplicates, multi-key partitions), multi-dataset operations, ordering-sensitive operations, and failure paths so errors surface instead of disappearing. Regression checks when fixing bugs are good practice. How you automate (scripts, test frameworks, ad hoc runs) is up to you and your course.
+Correctness matters as much as feature coverage. Plan a testing strategy, run it as you develop, and document how to reproduce your checks. Cover edge cases (empty or tiny inputs, duplicates, multi-key partitions), multi-dataset and ordering-sensitive cases, and failure paths. Add regressions when fixing bugs. Automation style (scripts, frameworks, ad hoc runs) is up to your course.
 
-Part of this milestone is learning to use coding agents effectively: use them to help design tests and interpret failures, but you remain responsible for validating that behavior matches the spec and that your tests actually prove what you claim. Blindly accepting generated tests without understanding them does not meet the intent of this section.
+Use coding agents to help design tests and interpret failures; you remain responsible that behavior matches this spec and that tests actually show it. Accepting generated tests you do not understand is not sufficient.
 
 ## Constraints
 
@@ -138,13 +136,20 @@ Part of this milestone is learning to use coding agents effectively: use them to
 
 Provide a script that measures your implementation and summarizes results in a report.
 
-- Latency (ms), end-to-end, mixing narrow and heavier work: include collect, count, and fluent chains such as map+collect, filter+collect, flatMap+collect; also include several non-trivial operations—for example `reduceByKey`, `groupByKey`, `distinct`, `sortByKey`, a join (`join` plus `leftOuterJoin` or `rightOuterJoin`), and a set operation (`union`, `intersection`, or `subtract`)—so aggregations, shuffles, and multi-dataset paths are represented.
-- Dataset sizes: at least 100, 500, 1000, 2000, and 5000 keys (or similar spread).
-- Worker counts: 1, 2, and 3 workers for the same sizes.
-- Report mean latency (or another clear aggregate) per operation, size, and worker count; optional repeated runs per cell.
-- HTML report: line charts of latency versus dataset size (one series per worker count) plus a short summary. Say where the report is written in your submission (path or filename).
+### Configurations to measure
 
-Results need not hit a target; aim for a reproducible baseline. Relate timing briefly to your correctness tests.
+Use at least these settings so results are comparable:
+
+- Dataset sizes (number of keys): 100, 500, 1000, 2000, and 5000 (or a similar spread if you document it).
+- Worker counts: 1, 2, and 3 workers, repeating the same sizes at each count.
+- Metrics: end-to-end latency in milliseconds; report mean latency per operation, dataset size, and worker count (or another clearly stated aggregate). Optional: multiple runs per configuration to show variance.
+- Output: an HTML report with line charts of latency versus dataset size (one series per worker count) and a short summary chart or table; state in your submission where the report is written (path or filename).
+
+Results need not hit a fixed target; aim for a reproducible baseline. Relate timing briefly to your correctness tests.
+
+### Operations to include
+
+Beyond simple reads, exercise a mix of narrow and heavier work so aggregations, shuffles, and multi-dataset paths show up—for example: `collect`, `count`, and fluent chains such as map+collect, filter+collect, and flatMap+collect; plus non-trivial operations such as `reduceByKey`, `groupByKey`, `distinct`, `sortByKey`, inner join and an outer join (`leftOuterJoin` or `rightOuterJoin`), and a set operation (`union`, `intersection`, or `subtract`).
 
 ## Deliverables
 
