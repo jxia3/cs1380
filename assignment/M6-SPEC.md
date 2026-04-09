@@ -79,34 +79,25 @@ Joins should not depend on two independent full collects of both sides when a si
 
 ## API Guidance
 
-You may use a fluent chain, a builder, or another clear pattern. The handout expects practical usability, not a single prescribed class name.
-
-### Entry and chaining
+- You may use a fluent chain, a builder, or another clear pattern. The handout expects practical usability, not a single prescribed class name.
 
 - Expose a clear entry point (key list, group name, dataset handle, or equivalent).
+
 - Transformations return a new object or descriptor for the extended pipeline; they must not run the pipeline eagerly.
+
 - Actions accept a callback (or use Promises if your environment allows) and trigger execution.
-- Support map, filter, and flatMap, including flatMap followed by further map, filter, or flatMap before an action, without forcing the user to flatten manually on the client for the common case.
 
-### Actions
+- **Fusion** is an optional optimization: where semantics allow, combine consecutive transformations into fewer distributed jobs instead of one job per step. Narrow pipelines (map, filter, flatMap and similar) are common candidates; you may fuse other adjacent stages when your design can preserve semantics.
 
-- Support at least collect, count, and reduce (with identity or zero as your API requires).
+- Keep naming and verbs consistent; document whether keys are strings, how the group is chosen, and how two-input operations name the second key list or dataset.
 
-### Fusion
+- Illustrative style only:
 
-- Combine consecutive map and filter (and flatMap when your design allows) into as few distributed jobs as is reasonable.
-
-### Naming
-
-- Keep verbs and parameter order consistent. Document whether keys are strings, how the group is chosen, and how two-input operations name the second key list or dataset.
-
-### Illustrative style
-
-```
-entryPoint(keys).map(...).filter(...).collect(callback)
-entryPoint(keys).map(...).count(callback)
-entryPoint(keys).map(...).reduce(fn, zero, callback)
-```
+  ```
+  entryPoint(keys).map(...).filter(...).collect(callback)
+  entryPoint(keys).map(...).count(callback)
+  entryPoint(keys).map(...).reduce(fn, zero, callback)
+  ```
 
 ## Error handling
 
@@ -136,20 +127,30 @@ Use coding agents to help design tests and interpret failures; you remain respon
 
 Provide a script that measures your implementation and summarizes results in a report.
 
+### Workloads
+
+Report latency for each of these workloads (name them clearly in your tables and charts):
+
+- `collect` over the dataset keys
+- `count` over the dataset keys
+- map then collect (fluent pipeline or your API’s equivalent)
+- filter then collect
+- flatMap then collect
+- `sortByKey`
+- `join` (inner join on two key lists derived from the dataset)
+
+Also measure **at least two additional workloads** that use more complex operations from this spec—for example `reduceByKey`, `groupByKey`, `distinct`, an outer join (`leftOuterJoin` or `rightOuterJoin`), a set operation (`union`, `intersection`, or `subtract`), or a longer fluent chain. Describe what each additional workload does.
+
 ### Configurations to measure
 
 Use at least these settings so results are comparable:
 
 - Dataset sizes (number of keys): 100, 500, 1000, 2000, and 5000 (or a similar spread if you document it).
 - Worker counts: 1, 2, and 3 workers, repeating the same sizes at each count.
-- Metrics: end-to-end latency in milliseconds; report mean latency per operation, dataset size, and worker count (or another clearly stated aggregate). Optional: multiple runs per configuration to show variance.
+- Metrics: end-to-end latency in milliseconds; report mean latency per workload, dataset size, and worker count (or another clearly stated aggregate). Optional: multiple runs per configuration to show variance.
 - Output: an HTML report with line charts of latency versus dataset size (one series per worker count) and a short summary chart or table; state in your submission where the report is written (path or filename).
 
 Results need not hit a fixed target; aim for a reproducible baseline. Relate timing briefly to your correctness tests.
-
-### Operations to include
-
-Beyond simple reads, exercise a mix of narrow and heavier work so aggregations, shuffles, and multi-dataset paths show up—for example: `collect`, `count`, and fluent chains such as map+collect, filter+collect, and flatMap+collect; plus non-trivial operations such as `reduceByKey`, `groupByKey`, `distinct`, `sortByKey`, inner join and an outer join (`leftOuterJoin` or `rightOuterJoin`), and a set operation (`union`, `intersection`, or `subtract`).
 
 ## Deliverables
 
