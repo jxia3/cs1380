@@ -22,11 +22,9 @@ To qualify as a substantial improvement over M5, your implementation must:
 
 2. Use lazy evaluation for transformations: do not run MapReduce jobs or pull large results to the orchestrator until an action runs (`collect`, `count`, `first`, `take`, `reduce`, `foreach`, …). Calls such as `map`, `filter`, `flatMap`, `distinct`, `reduceByKey`, `groupByKey`, set ops, `sortByKey`, or joins on the pipeline should only record work until then. Document any narrow exception (for example a helper that materializes for debugging) so it does not substitute for the required lazy pipeline.
 
-3. Fuse consecutive narrow steps where reasonable so that multiple transformations do not each trigger a full round trip when a single distributed stage would match the semantics. Typical candidates are consecutive map and filter; include flatMap in fusion when your design allows.
+3. Ensure user-provided functions execute correctly on remote workers. Pick a serialization strategy your engine can support and document it. Do not rely on a specific helper from starter code unless the course hands it to you explicitly.
 
-4. Ensure user-provided functions execute correctly on remote workers. Pick a serialization strategy your engine can support and document it. Do not rely on a specific helper from starter code unless the course hands it to you explicitly.
-
-5. Prefer distributed work on workers for large data. The orchestrator should not be the default place to expand, sort, or join entire datasets when the same semantics can be obtained with worker-side stages. See Distributed execution expectations.
+4. Prefer distributed work on workers for large data. The orchestrator should not be the default place to expand, sort, or join entire datasets when the same semantics can be obtained with worker-side stages. See Distributed execution expectations.
 
 ### Distributed execution expectations
 
@@ -80,17 +78,11 @@ Joins should not depend on two independent full collects of both sides when a si
 ## API Guidance
 
 - You may use a fluent chain, a builder, or another clear pattern. The handout expects practical usability, not a single prescribed class name.
-
 - Expose a clear entry point (key list, group name, dataset handle, or equivalent).
-
 - Transformations return a new object or descriptor for the extended pipeline; they must not run the pipeline eagerly.
-
 - Actions accept a callback (or use Promises if your environment allows) and trigger execution.
-
 - **Fusion** is an optional optimization: where semantics allow, combine consecutive transformations into fewer distributed jobs instead of one job per step. Narrow pipelines (map, filter, flatMap and similar) are common candidates; you may fuse other adjacent stages when your design can preserve semantics.
-
 - Keep naming and verbs consistent; document whether keys are strings, how the group is chosen, and how two-input operations name the second key list or dataset.
-
 - Illustrative style only:
 
   ```
@@ -101,7 +93,11 @@ Joins should not depend on two independent full collects of both sides when a si
 
 ## Error handling
 
-Worker errors in map or reduce must reach the caller: the action callback should receive an error, not a silent empty success. If workers read from the store, surface read failures rather than dropping keys without notice.
+Failures must reach the caller through a single, predictable path: **actions** should pass an error to the callback or reject the Promise (whichever matches your API). A failed run must not look like success with empty or partial results unless the operation’s semantics truly allow that (for example an empty output from a filter is not a failure).
+
+User code that throws or rejects on workers, failures reading or writing through the store and mem services, and errors during orchestrator-side merges or final steps must propagate the same way—do not drop keys, substitute empty datasets, or skip partitions silently. If a function or value cannot be serialized or executed remotely, fail when the pipeline runs (or at first execution) with a clear message rather than undefined behavior on workers.
+
+Worker crashes, lost messages, timeouts, or other distributed failures should fail the affected action with an identifiable error, not a silent success; avoid hanging without a documented limit. If several stages or partitions fail, you may surface the first error or a short summary; say which in your documentation. Logging may help debugging but does not replace reporting errors through the action API.
 
 ## Correctness verification
 
