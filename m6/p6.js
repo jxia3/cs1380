@@ -2,21 +2,22 @@
  * M6 Performance Benchmark
  *
  * Measures end-to-end latency for Spark operations across dataset sizes and worker counts.
- * Generates p6-results.html with charts.
+ * Includes narrow chains plus reduceByKey, groupByKey, distinct, sortByKey, join, leftOuterJoin, union.
+ * Writes p6-results.html at the repository root (next to package.json).
  *
- * Run: TIMEOUT=180 ./scripts/run-test.sh p6.js
- * Or: node p6.js (ports 1234, 2000-2002 must be free)
+ * Run: TIMEOUT=180 ./scripts/run-test.sh m6/p6.js
+ * Or: node m6/p6.js (ports 1234, 2000-2002 must be free)
  *
- * Env: SIZES="100,500,1000" NODES="1,2,3" RUNS=2 node p6.js
+ * Env: SIZES="100,500,1000" NODES="1,2,3" RUNS=2 node m6/p6.js
  *      P6_VERBOSE=1  log progress lines; default is quiet (only final path + errors)
  *      P6_OP_TIMEOUT_MS=180000  max time per op per run (default 3m; avoids infinite hang)
  */
 
 const fs = require("fs");
 const path = require("path");
-const log = require("./distribution/util/log.js");
+const log = require("../distribution/util/log.js");
 log.disable();
-const distribution = require("./distribution.js");
+const distribution = require("../distribution.js");
 
 const VERBOSE = process.env.P6_VERBOSE === "1";
 /** Max ms for one benchmark invocation (each RUNS repeat gets its own deadline). */
@@ -109,8 +110,20 @@ function runBenchmarksForConfig(spark, keys, n, ops, cb) {
     { name: "map+collect", run: (d) => spark.fromKeys(keys).map((k, v) => ({[k]: v.toUpperCase()})).collect((e) => d(e)) },
     { name: "filter+collect", run: (d) => spark.fromKeys(keys).filter((k) => k.startsWith("k0") || k.startsWith("k1")).collect((e) => d(e)) },
     { name: "flatMap+collect", run: (d) => spark.fromKeys(keys).flatMap((k, v) => v.split("").map((c) => ({[c]: 1}))).collect((e) => d(e)) },
+    {
+      name: "reduceByKey",
+      run: (d) => spark.reduceByKey({
+        keys,
+        map: (key, value) => [{[String(value)]: 1}],
+        reduce: (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)}),
+      }, (e) => d(e)),
+    },
+    { name: "groupByKey", run: (d) => spark.groupByKey(keys, (e) => d(e)) },
+    { name: "distinct", run: (d) => spark.distinct(keys, (e) => d(e)) },
     { name: "sortByKey", run: (d) => spark.sortByKey(keys, (e) => d(e)) },
     { name: "join", run: (d) => spark.join(keysA, keysB, (e) => d(e)) },
+    { name: "leftOuterJoin", run: (d) => spark.leftOuterJoin(keysA, keysB, (e) => d(e)) },
+    { name: "union", run: (d) => spark.union(keysA, keysB, (e) => d(e)) },
   ].filter((o) => !ops || ops.includes(o.name));
 
   let idx = 0;
@@ -185,7 +198,10 @@ function runPhase(workerCount, allResults, cb) {
 }
 
 function generateHTML(results) {
-  const ops = ["collect", "count", "map+collect", "filter+collect", "flatMap+collect", "sortByKey", "join"];
+  const ops = [
+    "collect", "count", "map+collect", "filter+collect", "flatMap+collect",
+    "reduceByKey", "groupByKey", "distinct", "sortByKey", "join", "leftOuterJoin", "union",
+  ];
   const colors = ["#2563eb", "#16a34a", "#dc2626", "#9333ea"];
   const nodeColors = NODE_COUNTS.reduce((a, n, i) => ({...a, [n]: colors[i % colors.length]}), {});
 
@@ -370,7 +386,7 @@ function main() {
 
   function runNextPhase() {
     if (phaseIdx >= NODE_COUNTS.length) {
-      const outPath = path.join(__dirname, "p6-results.html");
+      const outPath = path.join(__dirname, "..", "p6-results.html");
       fs.writeFileSync(outPath, generateHTML(allResults), "utf8");
       console.log("\nResults written to", outPath);
       process.exit(0);

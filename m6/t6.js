@@ -1,13 +1,13 @@
 /**
  * Manual test script for M6 Spark-inspired operations.
  *
- * Run with: ./scripts/run-test.sh t6.js
+ * Run with: ./scripts/run-test.sh m6/t6.js
  * (Kills ports first, runs with 45s timeout, cleans up after)
  *
- * Or: node t6.js (ensure ports 1234, 2000-2002 are free first)
+ * Or: node m6/t6.js (ensure ports 1234, 2000-2002 are free first)
  */
 
-const distribution = require("./distribution.js");
+const distribution = require("../distribution.js");
 
 const basePort = 2000;
 const nodes = [

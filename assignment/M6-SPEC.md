@@ -136,15 +136,15 @@ Part of this milestone is learning to use coding agents effectively: use them to
 
 ## Performance evaluation
 
-Provide a script that measures your implementation under controlled conditions and summarizes results in a report. Evaluate the following:
+Provide a script that measures your implementation and summarizes results in a report.
 
-- Workloads: run the operations listed earlier end-to-end (for example collect, count, map then collect, filter then collect, flatMap then collect, sortByKey, join) so narrow transformations, wide or shuffle-heavy steps, and joins are all represented.
-- Latency: report elapsed time per run (typically in milliseconds), aggregated in a sensible way (for example mean over repeated runs) so noise is visible but the table stays readable.
-- Scaling with data size: repeat measurements at several dataset sizes (for example from hundreds to thousands of keys) to see how cost grows with input.
-- Scaling with parallelism: repeat measurements with different worker counts (for example one, two, and three workers) on the same sizes so you can relate wall-clock time to parallelism.
-- Output: a table of results (operation, size, workers, and reported latency) plus an HTML report with charts (for example latency versus dataset size with one series per worker count, and a compact summary view). Briefly relate what you see to where work runs (workers versus orchestrator) and to your correctness story.
+- Latency (ms), end-to-end, mixing narrow and heavier work: include collect, count, and fluent chains such as map+collect, filter+collect, flatMap+collect; also include several non-trivial operations—for example `reduceByKey`, `groupByKey`, `distinct`, `sortByKey`, a join (`join` plus `leftOuterJoin` or `rightOuterJoin`), and a set operation (`union`, `intersection`, or `subtract`)—so aggregations, shuffles, and multi-dataset paths are represented.
+- Dataset sizes: at least 100, 500, 1000, 2000, and 5000 keys (or similar spread).
+- Worker counts: 1, 2, and 3 workers for the same sizes.
+- Report mean latency (or another clear aggregate) per operation, size, and worker count; optional repeated runs per cell.
+- HTML report: line charts of latency versus dataset size (one series per worker count) plus a short summary. Say where the report is written in your submission (path or filename).
 
-Numbers need not meet a fixed threshold; they should be reproducible enough to compare runs and support discussion in your report.
+Results need not hit a target; aim for a reproducible baseline. Relate timing briefly to your correctness tests.
 
 ## Deliverables
 
@@ -152,6 +152,12 @@ Numbers need not meet a fixed threshold; they should be reproducible enough to c
 - Tests and enough description that someone can understand how you validated correctness.
 - The performance script and generated report as above.
 - A short report: design, how you verified correctness, difficulties, optional features.
+
+## Capstone final check
+
+The course provides a small dataset and an operation checklist in the capstone folder under this assignment directory (see the README there). Load the data into your store, then implement the described sequence of operations (fluent steps plus wide operations) in your own code. There is no official student script you must run; submissions will differ in structure and naming.
+
+A reference `expected.json` is provided for self-check: after applying the same row canonicalization rule described in that README, your three output arrays should match the file. Your course may supply a helper to compare your saved output to that reference; instructors regenerate the reference when the dataset or published semantics change.
 
 ## Optional extensions
 

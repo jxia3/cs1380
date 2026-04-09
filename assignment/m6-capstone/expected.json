@@ -1,0 +1,161 @@
+{
+  "fluentCollect": [
+    {
+      "k01": "ALPHA"
+    },
+    {
+      "k01": "ALPHA"
+    },
+    {
+      "k03": "BETA"
+    },
+    {
+      "k03": "BETA"
+    },
+    {
+      "k05": "GAMMA"
+    },
+    {
+      "k05": "GAMMA"
+    },
+    {
+      "k07": "DELTA"
+    },
+    {
+      "k07": "DELTA"
+    },
+    {
+      "k08": "EPSILON"
+    },
+    {
+      "k08": "EPSILON"
+    },
+    {
+      "k10": "ZETA"
+    },
+    {
+      "k10": "ZETA"
+    },
+    {
+      "k11": "ETA"
+    },
+    {
+      "k11": "ETA"
+    },
+    {
+      "k13": "THETA"
+    },
+    {
+      "k13": "THETA"
+    },
+    {
+      "k14": "IOTA"
+    },
+    {
+      "k14": "IOTA"
+    },
+    {
+      "k16": "KAPPA"
+    },
+    {
+      "k16": "KAPPA"
+    },
+    {
+      "k17": "LAMBDA"
+    },
+    {
+      "k17": "LAMBDA"
+    },
+    {
+      "k19": "MU"
+    },
+    {
+      "k19": "MU"
+    },
+    {
+      "k20": "NU"
+    },
+    {
+      "k20": "NU"
+    },
+    {
+      "k22": "XI"
+    },
+    {
+      "k22": "XI"
+    },
+    {
+      "k23": "OMICRON"
+    },
+    {
+      "k23": "OMICRON"
+    },
+    {
+      "k25": "PI"
+    },
+    {
+      "k25": "PI"
+    },
+    {
+      "k26": "RHO"
+    },
+    {
+      "k26": "RHO"
+    },
+    {
+      "k27": "SIGMA"
+    },
+    {
+      "k27": "SIGMA"
+    },
+    {
+      "k29": "UPSILON"
+    },
+    {
+      "k29": "UPSILON"
+    },
+    {
+      "k30": "PHI"
+    },
+    {
+      "k30": "PHI"
+    }
+  ],
+  "sortByKey": [
+    {
+      "__mr_error__": "__BOUNDARIES__ is not defined"
+    },
+    {
+      "__mr_error__": "__BOUNDARIES__ is not defined"
+    },
+    {
+      "__mr_error__": "__BOUNDARIES__ is not defined"
+    },
+    {
+      "__mr_error__": "__BOUNDARIES__ is not defined"
+    },
+    {
+      "__mr_error__": "__BOUNDARIES__ is not defined"
+    }
+  ],
+  "join": [
+    {
+      "k03": [
+        " beta ",
+        " beta "
+      ]
+    },
+    {
+      "k05": [
+        "gamma",
+        "gamma"
+      ]
+    },
+    {
+      "k07": [
+        " delta",
+        " delta"
+      ]
+    }
+  ]
+}

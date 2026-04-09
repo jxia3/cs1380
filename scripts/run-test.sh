@@ -2,14 +2,14 @@
 # Run a test script with port cleanup and timeout to avoid hangs.
 #
 # Usage: ./scripts/run-test.sh [script]
-#   script: path to test script (default: t6.js)
+#   script: path to test script (default: m6/t6.js)
 #
-# Example: ./scripts/run-test.sh t6.js
+# Example: ./scripts/run-test.sh m6/t6.js
 #          ./scripts/run-test.sh t.js
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-TEST_SCRIPT="${1:-t6.js}"
+TEST_SCRIPT="${1:-m6/t6.js}"
 TIMEOUT_SEC="${TIMEOUT:-45}"
 
 cd "$ROOT_DIR"

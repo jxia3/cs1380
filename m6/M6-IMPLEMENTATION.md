@@ -67,9 +67,11 @@ distribution.all.spark
 | `distribution/all/mr.js` | MapReduce `exec`; error propagation for map/reduce/store |
 | `distribution/all/all.js` | Registers `spark` service |
 | `distribution.js` | Loads distribution; `disableLogs` / `_disableLogs` on node config |
-| `t6.js` | Manual integration tests for spark ops |
+| `m6/t6.js` | Manual integration tests for spark ops |
 | `test/test-student/m6.student.test.js` | Jest coverage for spark |
-| `p6.js` | Performance benchmark → `p6-results.html` |
+| `m6/p6.js` | Performance benchmark → `p6-results.html` at repository root |
+| `assignment/M6-SPEC.md` | Milestone handout |
+| `assignment/m6-capstone/` | Capstone dataset and expected output |
 | `scripts/kill-ports.sh` | Frees test ports (including Jest/MR ranges) before manual scripts |
 
 ## Data Model
@@ -79,20 +81,20 @@ distribution.all.spark
 
 ## Testing Strategy
 
-- **`t6.js`**: Spawn workers, load data, sequential checks (`./scripts/run-test.sh t6.js`).
+- `m6/t6.js`: Spawn workers, load data, sequential checks (`./scripts/run-test.sh m6/t6.js`).
 - **`m6.student.test.js`**: Jest suite against configured groups.
 - Prefer freeing ports via `scripts/kill-ports.sh` before long runs.
 
-## Performance Benchmarking (`p6.js`)
+## Performance Benchmarking (`m6/p6.js`)
 
 - **Setup**: Phases for worker counts 1, 2, 3 (`NODES` env). Synthetic keys `k00`…, values `v…`.
 - **Dataset sizes**: Default 100, 500, 1000, 2000, 5000 (`SIZES` env).
 - **Runs per op**: Default 2 (`RUNS` env).
-- **Operations**: collect, count, map+collect, filter+collect, flatMap+collect, sortByKey, join.
+- **Operations**: collect, count, fluent map/filter/flatMap+collect, reduceByKey, groupByKey, distinct, sortByKey, join, leftOuterJoin, union.
 - **Logging**: `require("./distribution/util/log.js"); log.disable()` **before** `require("./distribution.js")`. Spawned workers pass **`_disableLogs: true`** in node config so child processes do not flood inherited stdio (avoids backpressure hangs). **`global.nodeConfig._disableLogs = true`** on orchestrator. Optional **`P6_VERBOSE=1`** for progress lines.
-- **Timeouts**: **`P6_OP_TIMEOUT_MS`** (default 180000) per benchmark invocation prevents infinite hang if MR stalls. Shell wrapper: use adequate **`TIMEOUT`** with `./scripts/run-test.sh p6.js` (e.g. 600–900s for full default grid).
+- **Timeouts**: **`P6_OP_TIMEOUT_MS`** (default 180000) per benchmark invocation prevents infinite hang if MR stalls. Shell wrapper: use adequate **`TIMEOUT`** with `./scripts/run-test.sh m6/p6.js` (e.g. 600–900s for full default grid).
 - **Correctness**: `timeOp` propagates errors; benchmark failure stops the phase with `cb(err)`.
-- **Output**: `p6-results.html` — line charts (with point markers for single-size series), scaling chart for collect, raw data table.
+- **Output**: `p6-results.html` at repository root — line charts (with point markers for single-size series), scaling chart for collect, raw data table.
 - **Charts**: Line charts draw polylines when ≥2 points; **circles** mark each point so single-size runs are visible.
 
 ## Non-goals (unchanged)

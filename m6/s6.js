@@ -3,11 +3,11 @@
  *
  * Demonstrates the chainable RDD-style API: fromKeys(keys).map().filter().collect()
  *
- * Run with: ./scripts/run-test.sh s6.js
- * Or: node s6.js (ensure ports 1234, 2000-2002 are free)
+ * Run with: ./scripts/run-test.sh m6/s6.js
+ * Or: node m6/s6.js (ensure ports 1234, 2000-2002 are free)
  */
 
-const distribution = require("./distribution.js");
+const distribution = require("../distribution.js");
 
 const basePort = 2000;
 const nodes = [

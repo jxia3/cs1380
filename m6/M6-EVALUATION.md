@@ -59,7 +59,7 @@
 - **Joins** – **Single MR read** over deduped union of keys (`unionUniqueKeys`) instead of two full collects; semantics aligned with one value per store key.
 - **`sortByKey`** – **Always distributed** (range buckets + local sort + merge); `distributedSortThreshold` kept only for API compatibility.
 - **Errors** – `workerMap` / `workerReduce` surface user failures; **`store.get` errors** no longer silently drop keys.
-- **Benchmark (`p6.js`)** – Quiet by default; **`_disableLogs`** on spawned nodes; **`P6_OP_TIMEOUT_MS`**; **`P6_VERBOSE`**; HTML charts with **markers** so sparse series render; **`scripts/kill-ports.sh`** covers more ports.
+- Benchmark (`m6/p6.js`) – Quiet by default; `_disableLogs` on spawned nodes; `P6_OP_TIMEOUT_MS`; `P6_VERBOSE`; HTML charts with markers so sparse series render; `scripts/kill-ports.sh` covers more ports.
 
 ### Remaining tradeoffs
 
@@ -92,7 +92,7 @@
 | Improvement | Notes |
 |-------------|--------|
 | **fullOuterJoin**, **cogroup**, **range partitioner API** | Optional spec items |
-| **Performance script** | **p6.js** + `p6-results.html` satisfies measurement/reporting |
+| Performance script | `m6/p6.js` + root `p6-results.html` satisfies measurement/reporting |
 
 ---
 
@@ -115,4 +115,4 @@
 
 ### Verdict
 
-The milestone remains **substantial** for typical coursework: design (fluent API, lazy eval), implementation (serialization, fusion, distributed algorithms), and integration (Spark service over M5). The **current implementation** closes several gaps called out in earlier drafts: **distributed `sortByKey`**, **error propagation including store reads**, **distributed fluent flatMap + suffix**, **more efficient joins**, and a **robust `p6.js`** workflow. Further difficulty would come from **cross-group data**, **streaming APIs**, and **fault tolerance**—beyond the original spec’s non-goals.
+The milestone remains substantial for typical coursework: design (fluent API, lazy eval), implementation (serialization, fusion, distributed algorithms), and integration (Spark service over M5). The current implementation closes several gaps called out in earlier drafts: distributed `sortByKey`, error propagation including store reads, distributed fluent flatMap + suffix, more efficient joins, and a robust `m6/p6.js` workflow. Further difficulty would come from cross-group data, streaming APIs, and fault tolerance—beyond the original spec’s non-goals.
