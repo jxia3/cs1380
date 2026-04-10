@@ -34,5 +34,7 @@
   ],
   "keysForSort": ["k05", "k02", "k10", "k01", "k30"],
   "keysJoinA": ["k01", "k03", "k05", "k07"],
-  "keysJoinB": ["k03", "k05", "k07", "k11"]
+  "keysJoinB": ["k03", "k05", "k07", "k11"],
+  "keysForGroupByKey": ["k01", "k03", "k01", "k05", "k03"],
+  "keysForReduceByKey": ["k05", "k08", "k05", "k11", "k08"]
 }

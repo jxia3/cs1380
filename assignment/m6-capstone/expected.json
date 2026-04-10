@@ -7,12 +7,6 @@
       "k01": "ALPHA"
     },
     {
-      "k03": "BETA"
-    },
-    {
-      "k03": "BETA"
-    },
-    {
       "k05": "GAMMA"
     },
     {
@@ -31,28 +25,10 @@
       "k08": "EPSILON"
     },
     {
-      "k10": "ZETA"
-    },
-    {
-      "k10": "ZETA"
-    },
-    {
-      "k11": "ETA"
-    },
-    {
-      "k11": "ETA"
-    },
-    {
       "k13": "THETA"
     },
     {
       "k13": "THETA"
-    },
-    {
-      "k14": "IOTA"
-    },
-    {
-      "k14": "IOTA"
     },
     {
       "k16": "KAPPA"
@@ -67,40 +43,10 @@
       "k17": "LAMBDA"
     },
     {
-      "k19": "MU"
-    },
-    {
-      "k19": "MU"
-    },
-    {
-      "k20": "NU"
-    },
-    {
-      "k20": "NU"
-    },
-    {
-      "k22": "XI"
-    },
-    {
-      "k22": "XI"
-    },
-    {
       "k23": "OMICRON"
     },
     {
       "k23": "OMICRON"
-    },
-    {
-      "k25": "PI"
-    },
-    {
-      "k25": "PI"
-    },
-    {
-      "k26": "RHO"
-    },
-    {
-      "k26": "RHO"
     },
     {
       "k27": "SIGMA"
@@ -113,29 +59,23 @@
     },
     {
       "k29": "UPSILON"
-    },
-    {
-      "k30": "PHI"
-    },
-    {
-      "k30": "PHI"
     }
   ],
   "sortByKey": [
     {
-      "__mr_error__": "__BOUNDARIES__ is not defined"
+      "k01": "  alpha  "
     },
     {
-      "__mr_error__": "__BOUNDARIES__ is not defined"
+      "k02": "SKIP-drop"
     },
     {
-      "__mr_error__": "__BOUNDARIES__ is not defined"
+      "k05": "gamma"
     },
     {
-      "__mr_error__": "__BOUNDARIES__ is not defined"
+      "k10": " zeta "
     },
     {
-      "__mr_error__": "__BOUNDARIES__ is not defined"
+      "k30": "phi"
     }
   ],
   "join": [
@@ -156,6 +96,36 @@
         " delta",
         " delta"
       ]
+    }
+  ],
+  "groupByKey": [
+    {
+      "k01": [
+        "  alpha  ",
+        "  alpha  "
+      ]
+    },
+    {
+      "k03": [
+        " beta ",
+        " beta "
+      ]
+    },
+    {
+      "k05": [
+        "gamma"
+      ]
+    }
+  ],
+  "reduceByKey": [
+    {
+      "k05": 2
+    },
+    {
+      "k08": 2
+    },
+    {
+      "k11": 1
     }
   ]
 }

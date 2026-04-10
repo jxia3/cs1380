@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Compare a student capstone output JSON to assignment/m6-capstone/expected.json.
- * Student file must have keys fluentCollect, sortByKey, join (arrays).
+ * Student file must include every key in CAPSTONE_OUTPUT_KEYS (arrays).
  * Rows are canonicalized the same way as the reference generator.
  *
  * Usage: node m6/check-capstone.js path/to/output.json
@@ -9,7 +9,10 @@
 
 const fs = require("fs");
 const path = require("path");
-const {canonicalizeCapstoneResult} = require(
+const {
+  CAPSTONE_OUTPUT_KEYS,
+  canonicalizeCapstoneResult,
+} = require(
   path.join(__dirname, "..", "assignment", "m6-capstone", "reference-pipeline.js")
 );
 
@@ -30,7 +33,7 @@ try {
   process.exit(1);
 }
 
-for (const k of ["fluentCollect", "sortByKey", "join"]) {
+for (const k of CAPSTONE_OUTPUT_KEYS) {
   if (!Array.isArray(student[k])) {
     console.error(`Missing or invalid array: ${k}`);
     process.exit(1);

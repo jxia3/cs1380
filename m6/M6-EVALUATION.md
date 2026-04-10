@@ -59,7 +59,8 @@
 - **Joins** – **Single MR read** over deduped union of keys (`unionUniqueKeys`) instead of two full collects; semantics aligned with one value per store key.
 - **`sortByKey`** – **Always distributed** (range buckets + local sort + merge); `distributedSortThreshold` kept only for API compatibility.
 - **Errors** – `workerMap` / `workerReduce` surface user failures; **`store.get` errors** no longer silently drop keys.
-- Benchmark (`m6/p6.js`) – Quiet by default; `_disableLogs` on spawned nodes; `P6_OP_TIMEOUT_MS`; `P6_VERBOSE`; HTML charts with markers so sparse series render; `scripts/kill-ports.sh` covers more ports.
+- Benchmark (`m6/p6.js` + `m6/p6-html.js`) – Quiet by default; `_disableLogs` on spawned nodes; `P6_OP_TIMEOUT_MS`; `P6_VERBOSE`; HTML charts with markers so sparse series render; `scripts/kill-ports.sh` covers more ports.
+- **Structure** – `spark.js` documents `util.compile` vs variable-length fusion; **capstone** exercises a longer fluent chain (extra filter), **`groupByKey`** with repeated keys, and **`reduceByKey`** with counting semantics; handouts split into **`M6-SPEC.md`** (core) and **`M6-SPEC-CAPSTONE.md`** (includes capstone).
 
 ### Remaining tradeoffs
 

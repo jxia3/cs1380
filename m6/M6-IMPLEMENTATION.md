@@ -22,6 +22,7 @@ distribution.all.spark
 ### Function Serialization
 
 - Use `util.compile` with `eval("__PLACEHOLDER__")` to inline user functions for map, filter, fused pipelines, flatMap chains, foreach, **reduceByKey**, **sortByKey** (map + reduce with `__BOUNDARIES__` / `__ASCENDING__`).
+- **Fused RDD mappers** – Imperative ops use a **literal** function template passed to `util.compile`. Variable-length fusion needs one `"__OPi__"` placeholder per chained op; helpers `compileNarrowFusionMapper` and `compileFlatMapFusionMapper` in `spark.js` centralize that (see module comment in `distribution/all/spark.js`). Multi-value MR outputs are flattened with `flattenExpandValuesResults` (shared by imperative `flatMap`, fluent flatMap collect, and `union`).
 
 ## Implementation Phases (as built)
 
@@ -63,15 +64,17 @@ distribution.all.spark
 
 | File | Purpose |
 |------|---------|
-| `distribution/all/spark.js` | Spark service: fusion, distributed fluent flatMap, union-key joins, distributed sortByKey, helpers `unionUniqueKeys` / `indexResultsByKey` |
+| `distribution/all/spark.js` | Spark service: fusion helpers (`compileNarrowFusionMapper`, `compileFlatMapFusionMapper`), `flattenExpandValuesResults`, union-key joins, distributed sortByKey, `unionUniqueKeys` / `indexResultsByKey` |
 | `distribution/all/mr.js` | MapReduce `exec`; error propagation for map/reduce/store |
 | `distribution/all/all.js` | Registers `spark` service |
 | `distribution.js` | Loads distribution; `disableLogs` / `_disableLogs` on node config |
 | `m6/t6.js` | Manual integration tests for spark ops |
 | `test/test-student/m6.student.test.js` | Jest coverage for spark |
-| `m6/p6.js` | Performance benchmark → `p6-results.html` at repository root |
-| `assignment/M6-SPEC.md` | Milestone handout |
-| `assignment/m6-capstone/` | Capstone dataset and expected output |
+| `m6/p6.js` | Performance benchmark driver |
+| `m6/p6-html.js` | HTML report generator for `p6-results.html` |
+| `assignment/M6-SPEC.md` | Core milestone handout (no capstone section) |
+| `assignment/M6-SPEC-CAPSTONE.md` | Full handout including capstone final check |
+| `assignment/m6-capstone/` | Capstone dataset, README, `expected.json` (five outputs: fluent chain, sortByKey, join, groupByKey, reduceByKey) |
 | `scripts/kill-ports.sh` | Frees test ports (including Jest/MR ranges) before manual scripts |
 
 ## Data Model

@@ -6,7 +6,8 @@ Scripts and notes for the Spark-style milestone live here so the repository root
 |------|---------|
 | `t6.js` | Manual Spark integration tests |
 | `s6.js` | Fluent API demo |
-| `p6.js` | Performance benchmark (writes `p6-results.html` at the repository root) |
+| `p6.js` | Performance benchmark driver (writes `p6-results.html` at the repository root) |
+| `p6-html.js` | HTML report for the benchmark |
 | `generate-capstone-expected.js` | Regenerate `assignment/m6-capstone/expected.json` (instructor / CI) |
 | `check-capstone.js` | Compare student capstone JSON to `expected.json` |
 | `M6-IMPLEMENTATION.md`, `M6-EVALUATION.md` | Design / evaluation notes |

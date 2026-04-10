@@ -19,16 +19,17 @@ There is no official solution script you are required to run. Different submissi
 
 ## Operation sequence (exact semantics)
 
-Perform these steps in order. Use your Spark-style API’s lazy fluent chain for step 1 and actions / imperative methods where needed for steps 2–3.
+Perform these steps in order. Use your Spark-style API’s lazy fluent chain for step 1 and actions / imperative methods where needed for steps 2–5.
 
 ### 1. Fluent chain on `allKeys`, then collect
 
 Build a pipeline from `allKeys` with:
 
-1. filter — Keep a `(key, value)` pair only if `value` is a string and does not contain the substring `SKIP` (case-sensitive, as in JavaScript `String.prototype.includes`).
-2. map — Replace the value with `String(value).trim().toUpperCase()`; emit a single object `{ [key]: newValue }` per input (same key as in the store).
-3. flatMap — For each `(key, value)` after the map, emit two identical objects: `[{ [key]: value }, { [key]: value }]`.
-4. collect — Run the action and collect the resulting array of single-key objects. Call this array fluentCollect when comparing to `expected.json`.
+1. **filter** — Keep a `(key, value)` pair only if `value` is a string and does not contain the substring `SKIP` (case-sensitive, as in JavaScript `String.prototype.includes`).
+2. **map** — Replace the value with `String(value).trim().toUpperCase()`; emit a single object `{ [key]: newValue }` per input (same key as in the store).
+3. **flatMap** — For each `(key, value)` after the map, emit two identical objects: `[{ [key]: value }, { [key]: value }]`.
+4. **filter** — Keep a pair only if `String(value).length >= 5` (after the previous steps).
+5. **collect** — Run the action and collect the resulting array of single-key objects. Call this array **fluentCollect** when comparing to `expected.json`.
 
 ### 2. sortByKey
 
@@ -38,15 +39,29 @@ Call `sortByKey` on the key list `keysForSort` from `data.json`, with ascending 
 
 Call `join` (inner join) with `keysJoinA` and `keysJoinB` from `data.json`. Call the result join for comparison.
 
+### 4. groupByKey
+
+Call `groupByKey` on the key list `keysForGroupByKey` from `data.json` (the list may repeat keys; your implementation should aggregate all values for each distinct key). Call the result **groupByKey** for comparison.
+
+### 5. reduceByKey
+
+Call `reduceByKey` (or your API’s equivalent) with:
+
+- `keys`: `keysForReduceByKey` from `data.json` (repeated keys are allowed; each occurrence is one input row).
+- **map**: `(key, value) => [{ [key]: 1 }]` — one object per map output; the property name is the string `key` (the record key, e.g. `k05`), the value is the number `1`.
+- **reduce**: `(key, values) => ({ [key]: values.reduce((a, b) => a + b, 0) })` — sum the `1`s for that key.
+
+Call the result reduceByKey for comparison.
+
 ## Comparing to `expected.json`
 
-MR merge order can permute rows that are logically the same set. Before comparing, canonicalize each of the three arrays (`fluentCollect`, `sortByKey`, `join`):
+MR merge order can permute rows that are logically the same set. Before comparing, canonicalize each of the five arrays (`fluentCollect`, `sortByKey`, `join`, `groupByKey`, `reduceByKey`):
 
 - Sort the array of objects with a stable comparator: for each object, sort by `Object.keys(row)[0]`, then by `JSON.stringify(row[thatKey])`, so duplicate keys and nested values compare consistently.
 
-After canonicalization, your three arrays should deep-equal the three arrays in `expected.json`.
+After canonicalization, your five arrays should deep-equal the five arrays in `expected.json`.
 
-You may use `node m6/check-capstone.js <your-output.json>` if your output file has the shape `{ "fluentCollect": [...], "sortByKey": [...], "join": [...] }` (same keys as `expected.json`).
+You may use `node m6/check-capstone.js <your-output.json>` if your output file includes the same top-level keys as `expected.json` (same keys as above).
 
 ## Instructor note
 

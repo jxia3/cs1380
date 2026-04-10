@@ -1,7 +1,16 @@
 /**
  * Reference implementation of the M6 capstone operation sequence (instructor / CI).
- * Semantics must match assignment/m6-capstone/README.md and assignment/M6-SPEC.md (capstone section).
+ * Semantics must match assignment/m6-capstone/README.md and assignment/M6-SPEC-CAPSTONE.md (capstone section).
  */
+
+/** Top-level keys in expected.json / student output (order not significant). */
+const CAPSTONE_OUTPUT_KEYS = [
+  "fluentCollect",
+  "sortByKey",
+  "join",
+  "groupByKey",
+  "reduceByKey",
+];
 
 /**
  * @param {object} spark - spark service for the test group
@@ -16,6 +25,7 @@ function runCapstonePipeline(spark, data, callback) {
     .filter((key, value) => typeof value === "string" && !value.includes("SKIP"))
     .map((key, value) => ({[key]: String(value).trim().toUpperCase()}))
     .flatMap((key, value) => [{[key]: value}, {[key]: value}])
+    .filter((key, value) => String(value).length >= 5)
     .collect((err, fluentCollect) => {
       if (err) {
         callback(err, null);
@@ -31,10 +41,31 @@ function runCapstonePipeline(spark, data, callback) {
             callback(err3, null);
             return;
           }
-          callback(null, {
-            fluentCollect,
-            sortByKey: sortOut,
-            join: joinOut,
+          spark.groupByKey(data.keysForGroupByKey, (err4, groupOut) => {
+            if (err4) {
+              callback(err4, null);
+              return;
+            }
+            spark.reduceByKey(
+              {
+                keys: data.keysForReduceByKey,
+                map: (key, value) => [{[key]: 1}],
+                reduce: (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)}),
+              },
+              (err5, reduceOut) => {
+                if (err5) {
+                  callback(err5, null);
+                  return;
+                }
+                callback(null, {
+                  fluentCollect,
+                  sortByKey: sortOut,
+                  join: joinOut,
+                  groupByKey: groupOut,
+                  reduceByKey: reduceOut,
+                });
+              }
+            );
           });
         });
       });
@@ -62,14 +93,15 @@ function rowSortKey(row) {
  * @returns {object}
  */
 function canonicalizeCapstoneResult(raw) {
-  return {
-    fluentCollect: sortKeyValueRows(raw.fluentCollect),
-    sortByKey: sortKeyValueRows(raw.sortByKey),
-    join: sortKeyValueRows(raw.join),
-  };
+  const out = {};
+  for (const key of CAPSTONE_OUTPUT_KEYS) {
+    out[key] = sortKeyValueRows(raw[key]);
+  }
+  return out;
 }
 
 module.exports = {
+  CAPSTONE_OUTPUT_KEYS,
   runCapstonePipeline,
   canonicalizeCapstoneResult,
   sortKeyValueRows,

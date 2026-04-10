@@ -6,7 +6,7 @@ Extend the distributed execution engine (M5) with a richer set of data processin
 
 ## Scope
 
-The milestone includes: implementing the operations below with a usable API; verifying correctness; running a performance study with structured configurations; and submitting a short report. Details appear in the corresponding sections.
+The milestone includes: implementing the operations below with a usable API; verifying correctness; running a performance study with structured configurations; completing the capstone final check (dataset and operation sequence in [`m6-capstone/`](m6-capstone/)); and submitting a short report. Details appear in the corresponding sections.
 
 For the core implementation, you may choose:
 
@@ -154,6 +154,18 @@ Results need not hit a fixed target; aim for a reproducible baseline. Relate tim
 - Tests and enough description that someone can understand how you validated correctness.
 - The performance script and generated report as above.
 - A short report: design, how you verified correctness, difficulties, optional features.
+
+## Capstone final check
+
+The course provides a dataset and a step-by-step operation list in [`m6-capstone/README.md`](m6-capstone/README.md). Load `data.json` into your store, then implement the sequence in order:
+
+1. A lazy fluent pipeline on all record keys (filter, map, flatMap, an additional filter, then `collect`) — output fluentCollect.
+2. `sortByKey` on `keysForSort` — output sortByKey.
+3. `join` on `keysJoinA` and `keysJoinB` — output join.
+4. `groupByKey` on `keysForGroupByKey` — output groupByKey.
+5. `reduceByKey` with the map/reduce functions and key list `keysForReduceByKey` exactly as specified in the README — output reduceByKey.
+
+Canonicalize all five arrays as described there and compare to `expected.json`. There is no official student script you must run; submissions will differ in structure and naming. The repository provides `node m6/check-capstone.js <your-output.json>` for self-check; instructors regenerate `expected.json` when the dataset or published semantics change.
 
 ## Optional extensions
 

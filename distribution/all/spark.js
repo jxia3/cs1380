@@ -3,10 +3,102 @@
 /* Spark-inspired operations that extend the MapReduce framework.
    Provides filter, distinct, count, collect, and other transformations.
    User functions are inlined via util.compile so they serialize correctly.
-   Fluent RDD-like API: fromKeys(keys).map().filter().collect() with lazy eval and fusion. */
+   Fluent RDD-like API: fromKeys(keys).map().filter().collect() with lazy eval and fusion.
+
+   Serialization: workers receive map/reduce via util.compile (see ../util/compile.js).
+   The template is a real function's toString(); quoted placeholders like "__TAG__" are
+   replaced with user function source or JSON. For fused RDD pipelines, the number of
+   chained user ops is only known at runtime, so the mapper must contain one "__OPi__"
+   placeholder per op—compile cannot embed an array of functions via JSON.stringify. */
 
 const remote = require("./remote-service.js");
 const util = require("../util/util.js");
+
+/**
+ * Flatten MR results where reduce grouped multiple values per key (array vals).
+ * @param {object[]} results
+ * @returns {object[]}
+ */
+function flattenExpandValuesResults(results) {
+  return results.flatMap((r) =>
+    Object.entries(r).flatMap(([k, vals]) =>
+      [].concat(vals).map((v) => ({[k]: v}))
+    )
+  );
+}
+
+/**
+ * Narrow-only fusion: map/filter ops compiled into one mapper via per-op placeholders.
+ * @param {{type: string, fn: function}[]} ops
+ * @param {null|"count"} mode
+ * @returns {function}
+ */
+function compileNarrowFusionMapper(ops, mode) {
+  const compileValues = Object.fromEntries(ops.map((o, i) => [`__OP${i}__`, o.fn]));
+  const bodyParts = ops.map((op, i) => {
+    if (op.type === "map") {
+      return `const fn${i}=(0,eval)("__OP${i}__");const out${i}=fn${i}(k,v);obj=out${i}&&typeof out${i}==="object"?out${i}:{[k]:out${i}};const ent${i}=Object.entries(obj);if(ent${i}.length===0)return [];[k,v]=ent${i}[0];`;
+    }
+    return `const fn${i}=(0,eval)("__OP${i}__");if(!fn${i}(k,v))return [];`;
+  }).join("");
+  const returnExpr = mode === "count" ? '[{"__count__":1}]' : "[obj]";
+  const fnStr = `(key,value)=>{let obj={[key]:value};let k=key,v=value;${bodyParts}return ${returnExpr};}`;
+  return util.compile(
+    (new Function(`return ${fnStr}`))(),
+    compileValues
+  );
+}
+
+/**
+ * Fusion when the pipeline includes flatMap: prefix narrow ops, flatMap, optional suffix ops.
+ * @param {{type: string, fn: function}[]} beforeFlatMap
+ * @param {{type: string, fn: function}} flatMapOp
+ * @param {{type: string, fn: function}[]} afterFlatMap
+ * @param {null|"count"} mode
+ * @returns {function}
+ */
+function compileFlatMapFusionMapper(beforeFlatMap, flatMapOp, afterFlatMap, mode) {
+  const compileValues = {"__FM__": flatMapOp.fn};
+  let beforeParts = beforeFlatMap.map((op, i) => {
+    compileValues[`__BOP${i}__`] = op.fn;
+    if (op.type === "map") {
+      return `const fnB${i}=(0,eval)("__BOP${i}__");const outB${i}=fnB${i}(k,v);obj=outB${i}&&typeof outB${i}==="object"?outB${i}:{[k]:outB${i}};const entB${i}=Object.entries(obj);if(entB${i}.length===0)return [];[k,v]=entB${i}[0];`;
+    }
+    return `const fnB${i}=(0,eval)("__BOP${i}__");if(!fnB${i}(k,v))return [];`;
+  }).join("");
+  if (beforeParts === "") {
+    beforeParts = "let obj={[key]:value};let k=key,v=value;";
+  } else {
+    beforeParts = "let obj={[key]:value};let k=key,v=value;" + beforeParts;
+  }
+
+  let suffixCode = "";
+  for (let i = 0; i < afterFlatMap.length; i++) {
+    const op = afterFlatMap[i];
+    compileValues[`__SUF${i}__`] = op.fn;
+    if (op.type === "map") {
+      suffixCode += `batch=batch.map(function(item){const ent=Object.entries(item)[0];if(!ent)return item;let k2=ent[0],v2=ent[1];const fn=(0,eval)("__SUF${i}__");const out=fn(k2,v2);return out&&typeof out==="object"?out:{[k2]:out};});`;
+    } else if (op.type === "filter") {
+      suffixCode += `batch=batch.filter(function(item){const ent=Object.entries(item)[0];if(!ent)return false;const fn=(0,eval)("__SUF${i}__");return fn(ent[0],ent[1]);});`;
+    } else {
+      suffixCode += `batch=batch.flatMap(function(item){const ent=Object.entries(item)[0];if(!ent)return[];const fn=(0,eval)("__SUF${i}__");const arr=fn(ent[0],ent[1]);return Array.isArray(arr)?arr:[];});`;
+    }
+  }
+
+  const returnExpr = mode === "count"
+    ? "batch.map(function(){return {\"__count__\":1};})"
+    : "batch";
+
+  const fnStr =
+    `(key,value)=>{${beforeParts}` +
+    `const fm=(0,eval)("__FM__");let arr=fm(k,v);if(!Array.isArray(arr))arr=[];` +
+    `let batch=arr;${suffixCode}return ${returnExpr};}`;
+
+  return util.compile(
+    (new Function(`return ${fnStr}`))(),
+    compileValues
+  );
+}
 
 /**
  * Unique keys from two lists (stable: first seen order from keysA then keysB).
@@ -96,20 +188,7 @@ RDD.prototype._runFused = function(mode, callback) {
     return;
   }
 
-  const compileValues = Object.fromEntries(ops.map((o, i) => [`__OP${i}__`, o.fn]));
-  const bodyParts = ops.map((op, i) => {
-    if (op.type === "map") {
-      return `const fn${i}=(0,eval)("__OP${i}__");const out${i}=fn${i}(k,v);obj=out${i}&&typeof out${i}==="object"?out${i}:{[k]:out${i}};const ent${i}=Object.entries(obj);if(ent${i}.length===0)return [];[k,v]=ent${i}[0];`;
-    } else {
-      return `const fn${i}=(0,eval)("__OP${i}__");if(!fn${i}(k,v))return [];`;
-    }
-  }).join("");
-  const returnExpr = mode === "count" ? '[{"__count__":1}]' : "[obj]";
-  const fnStr = `(key,value)=>{let obj={[key]:value};let k=key,v=value;${bodyParts}return ${returnExpr};}`;
-  const mapFn = util.compile(
-    (new Function(`return ${fnStr}`))(),
-    compileValues
-  );
+  const mapFn = compileNarrowFusionMapper(ops, mode);
 
   const reduce = mode === "count"
     ? (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)})
@@ -150,46 +229,7 @@ RDD.prototype._runWithFlatMap = function(mode, callback) {
   const flatMapOp = ops[flatMapIdx];
   const afterFlatMap = ops.slice(flatMapIdx + 1);
 
-  const compileValues = {"__FM__": flatMapOp.fn};
-  let beforeParts = beforeFlatMap.map((op, i) => {
-    compileValues[`__BOP${i}__`] = op.fn;
-    if (op.type === "map") {
-      return `const fnB${i}=(0,eval)("__BOP${i}__");const outB${i}=fnB${i}(k,v);obj=outB${i}&&typeof outB${i}==="object"?outB${i}:{[k]:outB${i}};const entB${i}=Object.entries(obj);if(entB${i}.length===0)return [];[k,v]=entB${i}[0];`;
-    }
-    return `const fnB${i}=(0,eval)("__BOP${i}__");if(!fnB${i}(k,v))return [];`;
-  }).join("");
-  if (beforeParts === "") {
-    beforeParts = "let obj={[key]:value};let k=key,v=value;";
-  } else {
-    beforeParts = "let obj={[key]:value};let k=key,v=value;" + beforeParts;
-  }
-
-  let suffixCode = "";
-  for (let i = 0; i < afterFlatMap.length; i++) {
-    const op = afterFlatMap[i];
-    compileValues[`__SUF${i}__`] = op.fn;
-    if (op.type === "map") {
-      suffixCode += `batch=batch.map(function(item){const ent=Object.entries(item)[0];if(!ent)return item;let k2=ent[0],v2=ent[1];const fn=(0,eval)("__SUF${i}__");const out=fn(k2,v2);return out&&typeof out==="object"?out:{[k2]:out};});`;
-    } else if (op.type === "filter") {
-      suffixCode += `batch=batch.filter(function(item){const ent=Object.entries(item)[0];if(!ent)return false;const fn=(0,eval)("__SUF${i}__");return fn(ent[0],ent[1]);});`;
-    } else {
-      suffixCode += `batch=batch.flatMap(function(item){const ent=Object.entries(item)[0];if(!ent)return[];const fn=(0,eval)("__SUF${i}__");const arr=fn(ent[0],ent[1]);return Array.isArray(arr)?arr:[];});`;
-    }
-  }
-
-  const returnExpr = mode === "count"
-    ? "batch.map(function(){return {\"__count__\":1};})"
-    : "batch";
-
-  const fnStr =
-    `(key,value)=>{${beforeParts}` +
-    `const fm=(0,eval)("__FM__");let arr=fm(k,v);if(!Array.isArray(arr))arr=[];` +
-    `let batch=arr;${suffixCode}return ${returnExpr};}`;
-
-  const mapFn = util.compile(
-    (new Function(`return ${fnStr}`))(),
-    compileValues
-  );
+  const mapFn = compileFlatMapFusionMapper(beforeFlatMap, flatMapOp, afterFlatMap, mode);
 
   const reduce = mode === "count"
     ? (key, values) => ({[key]: values.reduce((a, b) => a + b, 0)})
@@ -217,12 +257,7 @@ RDD.prototype._runWithFlatMap = function(mode, callback) {
       callback(null, total);
       return;
     }
-    const flat = results.flatMap((r) =>
-      Object.entries(r).flatMap(([k, vals]) =>
-        [].concat(vals).map((v) => ({[k]: v}))
-      )
-    );
-    callback(null, flat);
+    callback(null, flattenExpandValuesResults(results));
   });
 };
 
@@ -323,12 +358,7 @@ function flatMap(keys, flatMapFn, callback) {
       callback(error, null);
       return;
     }
-    const flat = results.flatMap((r) =>
-      Object.entries(r).flatMap(([k, vals]) =>
-        [].concat(vals).map((v) => ({[k]: v}))
-      )
-    );
-    callback(null, flat);
+    callback(null, flattenExpandValuesResults(results));
   });
 }
 
@@ -659,12 +689,7 @@ function union(keysA, keysB, callback) {
       callback(error, null);
       return;
     }
-    const flat = results.flatMap((r) =>
-      Object.entries(r).flatMap(([k, vals]) =>
-        [].concat(vals).map((v) => ({[k]: v}))
-      )
-    );
-    callback(null, flat);
+    callback(null, flattenExpandValuesResults(results));
   });
 }
 
@@ -734,7 +759,7 @@ function sortByKey(keys, opts, callback) {
 
   const map = util.compile(
     (key, value) => {
-      const b = __BOUNDARIES__;
+      const b = "__BOUNDARIES__";
       let pid = b.findIndex((x) => key < x);
       if (pid < 0) pid = b.length;
       return [{[`__sort_${pid}`]: {key, value}}];
