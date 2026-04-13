@@ -171,3 +171,4 @@ Other directions (streaming or cross-group execution, fault-tolerant replay from
 - Lazy evaluation and fusion apply to the core API; fault tolerance is out of scope unless you take an extension that defines it.
 - Multi-dataset operations need clear tests for both inputs.
 - Favor mapping operations to M5’s map-shuffle-reduce model while respecting the distributed expectations section.
+- There may be bugs in the implementation of earlier milestones, so be careful!
