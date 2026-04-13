@@ -22,7 +22,7 @@ To qualify as a substantial improvement over M5, your implementation must:
 
 2. Use lazy evaluation for transformations: do not run MapReduce jobs or pull large results to the orchestrator until an action runs (`collect`, `count`, `first`, `take`, `reduce`, `foreach`, …). Calls such as `map`, `filter`, `flatMap`, `distinct`, `reduceByKey`, `groupByKey`, set ops, `sortByKey`, or joins on the pipeline should only record work until then. Document any narrow exception (for example a helper that materializes for debugging) so it does not substitute for the required lazy pipeline.
 
-3. Ensure user-provided functions execute correctly on remote workers. Pick a serialization strategy your engine can support and document it. Do not rely on a specific helper from starter code unless the course hands it to you explicitly.
+3. Ensure user-provided functions execute correctly on remote workers. Pick a serialization strategy your engine can support and document it. Take advantage of the serialization framework you have built, but ensure that it works correctly for potentially complex functions.
 
 4. Prefer distributed work on workers for large data. The orchestrator should not be the default place to expand, sort, or join entire datasets when the same semantics can be obtained with worker-side stages. See Distributed execution expectations.
 
